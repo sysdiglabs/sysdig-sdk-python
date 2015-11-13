@@ -1,3 +1,11 @@
+"""
+This example module shows various types of documentation available for use
+with pydoc.  To generate HTML documentation for this module issue the
+command:
+
+    pydoc -w foo
+
+"""
 import sys
 import time
 import requests
@@ -22,7 +30,10 @@ class SdcClient:
 
             j = r.json()
             if 'errors' in j:
-                self.lasterr = j['errors'][0]['message']
+                if j['errors'][0]['message']:
+                    self.lasterr = j['errors'][0]['message']
+                else:
+                    self.lasterr = j['errors'][0]['reason']
             else:
                 self.lasterr = 'status code ' + str(self.errorcode)
             return False
@@ -42,12 +53,6 @@ class SdcClient:
             return [False, self.lasterr]
         data = r.json()
         return [True, data['total']]
-
-    def getNotificationSettings(self):
-        r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
-        if not self.__checkResponse(r):
-            return [False, self.lasterr]
-        return [True, r.json()]
 
     def createAlert(self, name, description, condition, for_each, for_atelast_us, severity):
         #
@@ -97,6 +102,18 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
+    def getNotificationSettings(self):
+        r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def setNotificationSettings(self, settings):
+        r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs, data = json.dumps(settings))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
     def addEmailNotificationRecipient(self, email):
         #
         # Retirieve the user's notification settings
@@ -116,11 +133,116 @@ class SdcClient:
         #
         if not email in j['userNotification']['email']['recipients']:
             j['userNotification']['email']['recipients'].append(email)
-            print 'adding notification target ' + email
         else:
             return [False, 'notification target ' + email + ' already present']
 
-        r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs, data = json.dumps(j))
+        return self.setNotificationSettings(j)
+
+    def getExploreGroupingHierarchy(self):
+        r = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
+
+        data = r.json()
+
+        if not 'groupConfigurations' in data:
+            return [False, 'corrputed groupConfigurations API response']
+
+        gconfs = data['groupConfigurations']
+
+        for gconf in gconfs:
+            if gconf['id'] == 'explore':
+                res = []
+                items = gconf['groups'][0]['groupBy']
+
+                for item in items:
+                    res.append(item['metric'])
+
+                return [True, res]
+
+        return [False, 'corrputed groupConfigurations API response, missing "explore" entry']
+
+    def getDataRetentionInfo(self):
+        r = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def getTopologyMap(self, grouping_hierarchy, time_window_s, sampling_time_s):
+        #
+        # Craft the time interval section
+        #
+        tlines = self.getDataRetentionInfo()
+
+        for tline in tlines[1]['agents']:
+            if tline['sampling'] == sampling_time_s * 1000000:
+                timeinfo = tline
+
+        if timeinfo == None:
+            return [False, "sampling time " + str(sampling_time_s) + " not supported"]
+
+        timeinfo['from'] = timeinfo['to'] - timeinfo['sampling']
+
+        #
+        # Create the grouping hierarchy
+        #
+        gby = [{'metric': g} for g in grouping_hierarchy]
+
+        #
+        # Prepare the json
+        #
+        req_json = {
+            "format": {
+                "type": "map",
+                "exportProcess": True
+            },
+            "time": timeinfo,
+            "filter": {
+                "filters": [
+                    {
+                        "metric": "cloudProvider.tag.Name",
+                        "op": "=",
+                        "value": "frontend",
+                        "filters": None
+                    }
+                ],
+                "logic": "and"
+            },
+            "limit": {
+                "hostGroups": 20,
+                "hosts": 20,
+                "containers": 20,
+                "processes": 10
+            },
+            "group": {
+                "configuration": {
+                    "groups": [
+                        {
+                            "filters": [],
+                            "groupBy": gby
+                        }
+                    ]
+                }
+            },
+            "nodeMetrics": [
+                {
+                    "id": "cpu.used.percent",
+                    "aggregation": "timeAvg",
+                    "groupAggregation": "avg"
+                }
+            ],
+            "linkMetrics": [
+                {
+                    "id": "net.bytes.total",
+                    "aggregation": "timeAvg",
+                    "groupAggregation": "sum"
+                }
+            ]
+        }
+
+        #
+        # Fire the request
+        #
+        r = requests.post(self.url + '/api/data?format=map', headers=self.hdrs, data = json.dumps(req_json))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
