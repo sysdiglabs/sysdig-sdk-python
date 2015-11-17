@@ -34,6 +34,8 @@ class SdcClient:
                     self.lasterr = j['errors'][0]['message']
                 else:
                     self.lasterr = j['errors'][0]['reason']
+            if 'message' in j:
+                    self.lasterr = j['message']
             else:
                 self.lasterr = 'status code ' + str(self.errorcode)
             return False
@@ -140,6 +142,8 @@ class SdcClient:
 
     def getExploreGroupingHierarchy(self):
         r = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
 
         data = r.json()
 
@@ -195,17 +199,17 @@ class SdcClient:
                 "exportProcess": True
             },
             "time": timeinfo,
-            "filter": {
-                "filters": [
-                    {
-                        "metric": "cloudProvider.tag.Name",
-                        "op": "=",
-                        "value": "frontend",
-                        "filters": None
-                    }
-                ],
-                "logic": "and"
-            },
+            #"filter": {
+            #    "filters": [
+            #        {
+            #            "metric": "agent.tag.Tag",
+            #            "op": "=",
+            #            "value": "production-maintenance",
+            #            "filters": None
+            #        }
+            #    ],
+            #    "logic": "and"
+            #},
             "limit": {
                 "hostGroups": 20,
                 "hosts": 20,
