@@ -1,11 +1,3 @@
-"""
-This example module shows various types of documentation available for use
-with pydoc.  To generate HTML documentation for this module issue the
-command:
-
-    pydoc -w foo
-
-"""
 import sys
 import time
 import requests
@@ -194,50 +186,50 @@ class SdcClient:
         # Prepare the json
         #
         req_json = {
-            "format": {
-                "type": "map",
-                "exportProcess": True
+            'format': {
+                'type': 'map',
+                'exportProcess': True
             },
-            "time": timeinfo,
-            #"filter": {
-            #    "filters": [
+            'time': timeinfo,
+            #'filter': {
+            #    'filters': [
             #        {
-            #            "metric": "agent.tag.Tag",
-            #            "op": "=",
-            #            "value": "production-maintenance",
-            #            "filters": None
+            #            'metric': 'agent.tag.Tag',
+            #            'op': '=',
+            #            'value': 'production-maintenance',
+            #            'filters': None
             #        }
             #    ],
-            #    "logic": "and"
+            #    'logic': 'and'
             #},
-            "limit": {
-                "hostGroups": 20,
-                "hosts": 20,
-                "containers": 20,
-                "processes": 10
+            'limit': {
+                'hostGroups': 20,
+                'hosts': 20,
+                'containers': 20,
+                'processes': 10
             },
-            "group": {
-                "configuration": {
-                    "groups": [
+            'group': {
+                'configuration': {
+                    'groups': [
                         {
-                            "filters": [],
-                            "groupBy": gby
+                            'filters': [],
+                            'groupBy': gby
                         }
                     ]
                 }
             },
-            "nodeMetrics": [
+            'nodeMetrics': [
                 {
-                    "id": "cpu.used.percent",
-                    "aggregation": "timeAvg",
-                    "groupAggregation": "avg"
+                    'id': 'cpu.used.percent',
+                    'aggregation': 'timeAvg',
+                    'groupAggregation': 'avg'
                 }
             ],
-            "linkMetrics": [
+            'linkMetrics': [
                 {
-                    "id": "net.bytes.total",
-                    "aggregation": "timeAvg",
-                    "groupAggregation": "sum"
+                    'id': 'net.bytes.total',
+                    'aggregation': 'timeAvg',
+                    'groupAggregation': 'sum'
                 }
             ]
         }
@@ -250,3 +242,14 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
+    def getDashboards(self):
+        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def getAlerts(self):
+        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
