@@ -76,7 +76,6 @@ class SdcClient:
                 'name' : name,
                 'description' : description,
                 'enabled' : True,
-                #'filter' : 'kubernetes.namespace.name = "loris" and kubernetes.service.name = "mysql"',
                 'severity' : severity,
                 'notify' : [ 'EMAIL' ],
                 'timespan' : for_atelast_us,
@@ -253,3 +252,118 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def create_dashboard_from_template(self, newdashname, templatename, scope):
+        #
+        # Create the unique ID for this dashboard
+        #
+        baseconfid = newdashname
+        for sentry in scope:
+            baseconfid = baseconfid + sentry.keys()[0]
+            baseconfid = baseconfid + sentry.values()[0]
+
+        print baseconfid
+
+        #
+        # Get the list of dashboards from the server
+        #
+        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+
+        j = r.json()
+
+        #
+        # Find our template dashboard
+        #
+        dboard = None
+
+        for db in j['dashboards']:
+            if db['name'] == templatename:
+                dboard = db
+                break
+
+        if dboard == None:
+            print 'can\'t find dashboard ' + templatename + ' to use as a template'
+            sys.exit(0)
+
+        #
+        # Create the dashboard name
+        #
+        if newdashname:
+            dname = newdashname
+        else:
+            dname = dboard['name'] + ' for ' + service
+
+        #
+        # If this dashboard already exists, don't create it another time
+        #
+        for db in j['dashboards']:
+            if db['name'] == dname:
+                for view in db['items']:
+                    if view['groupId'][0:len(baseconfid)] == baseconfid:
+                        print 'dashboard ' + dname + ' already exists - ' + baseconfid
+                        return
+
+        #
+        # Clean up the dashboard we retireved so it's ready to be pushed
+        #
+        dboard['id'] = None
+        dboard['version'] = None
+        dboard['name'] = dname
+        dboard['isShared'] = False # make sure the dashboard is not shared
+        
+        #
+        # Assign the filter and the group ID to each view to point to this service
+        #
+        filters = []
+        gby = []
+        for sentry in scope:
+            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0]   , 'filters' : None})
+            gby.append({'metric': sentry.keys()[0]})
+
+        filter = {
+            'filters' : 
+            {
+                'logic' : 'and',
+                'filters' : filters
+            }
+        }
+
+        j = 0
+
+        for view in dboard['items']:
+            j = j + 1
+
+            #
+            # create the grouping configuration
+            #
+            confid = baseconfid + str(j)
+
+            gconf = { 'id': confid,
+                'groups': [
+                    {
+                        'groupBy': gby
+                    }
+                ]
+            }
+
+            r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
+            if not self.__checkResponse(r):
+                return [False, self.lasterr]
+
+            view['filter'] = filter
+            view['groupId'] = confid
+
+    #   print json.dumps(dboard, indent=4, separators=(',', ': '))
+
+        ddboard = {'dashboard': dboard}
+
+        #
+        # Create the new dashboard
+        #
+        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data = json.dumps(ddboard))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        else:
+            return [True, r.json()]
