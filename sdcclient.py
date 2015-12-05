@@ -22,11 +22,11 @@ class SdcClient:
 
             j = r.json()
             if 'errors' in j:
-                if j['errors'][0]['message']:
+                if 'message' in j['errors'][0]:
                     self.lasterr = j['errors'][0]['message']
                 else:
                     self.lasterr = j['errors'][0]['reason']
-            if 'message' in j:
+            elif 'message' in j:
                     self.lasterr = j['message']
             else:
                 self.lasterr = 'status code ' + str(self.errorcode)
@@ -48,7 +48,13 @@ class SdcClient:
         data = r.json()
         return [True, data['total']]
 
-    def createAlert(self, name, description, condition, for_each, for_atelast_us, severity):
+    def getAlerts(self):
+        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def createAlert(self, name, description, severity, for_atelast_us, condition, for_each = [], filter = [], annotations={}):
         #
         # Get the list of alerts from the server
         #
@@ -56,8 +62,6 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         j = r.json()
-
-        print 'Creating alert %s' % (description)
 
         #
         # If this alert already exists, don't create it again
@@ -79,13 +83,19 @@ class SdcClient:
                 'severity' : severity,
                 'notify' : [ 'EMAIL' ],
                 'timespan' : for_atelast_us,
-                'condition' : condition
+                'condition' : condition,
+                'filter': filter
             }
         }
 
         if for_each != None and for_each != []: 
-            alert_json['alert']['segmentBy'] = [ for_each ]
+            alert_json['alert']['segmentBy'] = for_each
             alert_json['alert']['segmentCondition'] = { 'type' : 'ANY' }
+
+        if annotations != None and annotations != {}:
+            alert_json['alert']['annotations'] = annotations
+
+        print alert_json
 
         #
         # Create the new alert
@@ -243,12 +253,6 @@ class SdcClient:
 
     def getDashboards(self):
         r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
-        if not self.__checkResponse(r):
-            return [False, self.lasterr]
-        return [True, r.json()]
-
-    def getAlerts(self):
-        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
