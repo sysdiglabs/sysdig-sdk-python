@@ -20,6 +20,8 @@ class SdcClient:
         if r.status_code >= 300:
             self.errorcode = r.status_code
 
+            print r.text
+            print
             j = r.json()
             if 'errors' in j:
                 if 'message' in j['errors'][0]:
@@ -251,23 +253,131 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
+    def get_views_list(self):
+        r = requests.get(self.url + '/data/drilldownDashboardDescriptors.json', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def get_view(self, name):
+        gvres = self.get_views_list()
+        if gvres[0] == False:
+            return gvres
+
+        vlist = gvres[1]['drilldownDashboardDescriptors']
+        
+        id = None
+
+        for v in vlist:
+            if v['name'] == name:
+                id = v['id']
+                break
+
+        if not id:
+            return [False, 'view ' + name + ' not found']
+
+        r = requests.get(self.url + '/data/drilldownDashboards/' + id + '.json', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
     def getDashboards(self):
         r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def create_dashboard_from_template(self, newdashname, templatename, scope):
+    def create_dashboard_from_template(self, newdashname, template, scope):
         #
         # Create the unique ID for this dashboard
         #
         baseconfid = newdashname
         for sentry in scope:
-            baseconfid = baseconfid + sentry.keys()[0]
-            baseconfid = baseconfid + sentry.values()[0]
+            baseconfid = baseconfid + str(sentry.keys()[0])
+            baseconfid = baseconfid + str(sentry.values()[0])
 
         print baseconfid
 
+        #
+        # Clean up the dashboard we retireved so it's ready to be pushed
+        #
+        template['id'] = None
+        template['version'] = None
+        template['name'] = newdashname
+        template['isShared'] = False # make sure the dashboard is not shared
+        
+        #
+        # Assign the filter and the group ID to each view to point to this service
+        #
+        filters = []
+        gby = []
+        for sentry in scope:
+            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0]   , 'filters' : None})
+            gby.append({'metric': sentry.keys()[0]})
+
+        filter = {
+            'filters' : 
+            {
+                'logic' : 'and',
+                'filters' : filters
+            }
+        }
+
+        j = 0
+
+        for chart in template['items']:
+            j = j + 1
+
+            #
+            # create the grouping configuration
+            #
+            confid = baseconfid + str(j)
+
+            gconf = { 'id': confid,
+                'groups': [
+                    {
+                        'groupBy': gby
+                    }
+                ]
+            }
+
+            r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
+            if not self.__checkResponse(r):
+                return [False, self.lasterr]
+
+            chart['filter'] = filter
+            chart['groupId'] = confid
+
+        ddboard = {'dashboard': template}
+
+        #
+        # Create the new dashboard
+        #
+        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data = json.dumps(ddboard))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        else:
+            return [True, r.json()]
+
+    def create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s):
+        #
+        # Find our template view
+        #
+        gvres = self.get_view(viewname)
+        if gvres[0] == False:
+            return gvres
+
+        view = gvres[1]['drilldownDashboard']
+
+        view['timeMode'] = {'mode' : 1}
+        view['time'] = {'last' : time_window_s * 1000000, 'sampling' : time_window_s * 1000000}
+
+        #
+        # Create the new dashboard
+        #
+        self.create_dashboard_from_template(newdashname, view, scope)
+
+    def create_dashboard_from_dasboard(self, newdashname, templatename, scope):
         #
         # Get the list of dashboards from the server
         #
@@ -291,83 +401,19 @@ class SdcClient:
             print 'can\'t find dashboard ' + templatename + ' to use as a template'
             sys.exit(0)
 
-        #
-        # Create the dashboard name
-        #
-        if newdashname:
-            dname = newdashname
-        else:
-            dname = dboard['name'] + ' for ' + service
-
+        '''
         #
         # If this dashboard already exists, don't create it another time
         #
         for db in j['dashboards']:
-            if db['name'] == dname:
+            if db['name'] == newdashname:
                 for view in db['items']:
                     if view['groupId'][0:len(baseconfid)] == baseconfid:
-                        print 'dashboard ' + dname + ' already exists - ' + baseconfid
+                        print 'dashboard ' + newdashname + ' already exists - ' + baseconfid
                         return
+        '''
 
         #
-        # Clean up the dashboard we retireved so it's ready to be pushed
+        # Create the dashboard
         #
-        dboard['id'] = None
-        dboard['version'] = None
-        dboard['name'] = dname
-        dboard['isShared'] = False # make sure the dashboard is not shared
-        
-        #
-        # Assign the filter and the group ID to each view to point to this service
-        #
-        filters = []
-        gby = []
-        for sentry in scope:
-            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0]   , 'filters' : None})
-            gby.append({'metric': sentry.keys()[0]})
-
-        filter = {
-            'filters' : 
-            {
-                'logic' : 'and',
-                'filters' : filters
-            }
-        }
-
-        j = 0
-
-        for view in dboard['items']:
-            j = j + 1
-
-            #
-            # create the grouping configuration
-            #
-            confid = baseconfid + str(j)
-
-            gconf = { 'id': confid,
-                'groups': [
-                    {
-                        'groupBy': gby
-                    }
-                ]
-            }
-
-            r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
-            if not self.__checkResponse(r):
-                return [False, self.lasterr]
-
-            view['filter'] = filter
-            view['groupId'] = confid
-
-    #   print json.dumps(dboard, indent=4, separators=(',', ': '))
-
-        ddboard = {'dashboard': dboard}
-
-        #
-        # Create the new dashboard
-        #
-        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data = json.dumps(ddboard))
-        if not self.__checkResponse(r):
-            return [False, self.lasterr]
-        else:
-            return [True, r.json()]
+        self.create_dashboard_from_template(newdashname, dboard, scope)
