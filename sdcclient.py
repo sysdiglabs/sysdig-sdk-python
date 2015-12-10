@@ -417,3 +417,19 @@ class SdcClient:
         # Create the dashboard
         #
         self.create_dashboard_from_template(newdashname, dboard, scope)
+
+    def create_dashboard_from_file(self, newdashname, filename, scope, time_window_s):
+        #
+        # Load the Dashboard
+        #
+        with open(filename) as data_file:    
+            dboard = json.load(data_file)
+
+        dboard['timeMode'] = {'mode' : 1}
+        dboard['time'] = {'last' : time_window_s * 1000000, 'sampling' : time_window_s * 1000000}
+
+        #
+        # Create the new dashboard
+        #
+        self.create_dashboard_from_template(newdashname, dboard, scope)
+
