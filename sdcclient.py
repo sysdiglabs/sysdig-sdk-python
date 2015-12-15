@@ -296,8 +296,6 @@ class SdcClient:
             baseconfid = baseconfid + str(sentry.keys()[0])
             baseconfid = baseconfid + str(sentry.values()[0])
 
-        print baseconfid
-
         #
         # Clean up the dashboard we retireved so it's ready to be pushed
         #
@@ -325,28 +323,37 @@ class SdcClient:
 
         j = 0
 
+        #
+        # create the grouping configurations for each chart
+        #
         for chart in template['items']:
-            j = j + 1
+            if len(scope) != 0:
+                j = j + 1
 
-            #
-            # create the grouping configuration
-            #
-            confid = baseconfid + str(j)
+                confid = baseconfid + str(j)
 
-            gconf = { 'id': confid,
-                'groups': [
-                    {
-                        'groupBy': gby
-                    }
-                ]
-            }
+                gconf = { 'id': confid,
+                    'groups': [
+                        {
+                            'groupBy': gby
+                        }
+                    ]
+                }
 
-            r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
-            if not self.__checkResponse(r):
-                return [False, self.lasterr]
+                r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
+                if not self.__checkResponse(r):
+                    return [False, self.lasterr]
 
-            chart['filter'] = filter
-            chart['groupId'] = confid
+                chart['filter'] = filter
+                chart['groupId'] = confid
+            else:
+                chart['filter'] = {}
+                chart['groupId'] = None
+
+        if 'annotations' in template:
+            template['annotations']['created_by_engine'] = True
+        else:
+            template['annotations'] = {'created_by_engine': True}
 
         ddboard = {'dashboard': template}
 
