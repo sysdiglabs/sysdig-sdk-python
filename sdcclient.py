@@ -288,6 +288,9 @@ class SdcClient:
         return [True, r.json()]
 
     def create_dashboard_from_template(self, newdashname, template, scope):
+        if scope == None:
+            scope = []
+
         #
         # Create the unique ID for this dashboard
         #
@@ -321,11 +324,10 @@ class SdcClient:
             }
         }
 
-        j = 0
-
         #
         # create the grouping configurations for each chart
         #
+        j = 0
         for chart in template['items']:
             if len(scope) != 0:
                 j = j + 1
@@ -347,7 +349,7 @@ class SdcClient:
                 chart['filter'] = filter
                 chart['groupId'] = confid
             else:
-                chart['filter'] = {}
+                chart['filter'] = None
                 chart['groupId'] = None
 
         if 'annotations' in template:
