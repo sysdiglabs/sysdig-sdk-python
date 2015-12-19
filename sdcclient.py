@@ -353,9 +353,9 @@ class SdcClient:
                 chart['groupId'] = None
 
         if 'annotations' in template:
-            template['annotations']['created_by_engine'] = True
+            template['annotations']['createdByEngine'] = True
         else:
-            template['annotations'] = {'created_by_engine': True}
+            template['annotations'] = {'createdByEngine': True}
 
         ddboard = {'dashboard': template}
 
