@@ -20,8 +20,6 @@ class SdcClient:
         if r.status_code >= 300:
             self.errorcode = r.status_code
 
-            print r.text
-            print
             j = r.json()
             if 'errors' in j:
                 if 'message' in j['errors'][0]:
@@ -97,8 +95,6 @@ class SdcClient:
         if annotations != None and annotations != {}:
             alert_json['alert']['annotations'] = annotations
 
-        print alert_json
-
         #
         # Create the new alert
         #
@@ -165,7 +161,7 @@ class SdcClient:
 
                 return [True, res]
 
-        return [False, 'corrputed groupConfigurations API response, missing "explore" entry']
+        return [False, 'corrupted groupConfigurations API response, missing "explore" entry']
 
     def getDataRetentionInfo(self):
         r = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
