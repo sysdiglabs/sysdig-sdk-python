@@ -20,7 +20,12 @@ class SdcClient:
         if r.status_code >= 300:
             self.errorcode = r.status_code
 
-            j = r.json()
+            try:
+               j = r.json()
+            except:
+                self.lasterr = 'status code ' + str(self.errorcode)
+                return False
+
             if 'errors' in j:
                 if 'message' in j['errors'][0]:
                     self.lasterr = j['errors'][0]['message']
