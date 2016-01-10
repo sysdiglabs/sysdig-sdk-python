@@ -4,9 +4,6 @@ import requests
 import json
 import re
 
-###############################################################################
-# The sysdig cloud client
-###############################################################################
 class SdcClient:
     userinfo = None
     n_connected_agents = None
@@ -38,7 +35,7 @@ class SdcClient:
             return False
         return True
 
-    def getUserInfo(self):
+    def get_user_info(self):
         if self.userinfo == None:
             r = requests.get(self.url + '/api/user/me', headers=self.hdrs)
             if not self.__checkResponse(r):
@@ -46,20 +43,20 @@ class SdcClient:
             self.userinfo = r.json()
         return [True, self.userinfo]
 
-    def getNConnectedAgents(self):
+    def get_n_connected_agents(self):
         r = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         data = r.json()
         return [True, data['total']]
 
-    def getAlerts(self):
+    def get_alerts(self):
         r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def createAlert(self, name, description, severity, for_atelast_us, condition, for_each = [], filter = [], annotations={}):
+    def create_alert(self, name, description, severity, for_atelast_us, condition, for_each = [], filter = [], annotations={}):
         #
         # Get the list of alerts from the server
         #
@@ -108,19 +105,19 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def getNotificationSettings(self):
+    def get_notification_settings(self):
         r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def setNotificationSettings(self, settings):
+    def set_notification_settings(self, settings):
         r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs, data = json.dumps(settings))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def addEmailNotificationRecipient(self, email):
+    def add_email_notification_recipient(self, email):
         #
         # Retirieve the user's notification settings
         #
@@ -142,9 +139,9 @@ class SdcClient:
         else:
             return [False, 'notification target ' + email + ' already present']
 
-        return self.setNotificationSettings(j)
+        return self.set_notification_settings(j)
 
-    def getExploreGroupingHierarchy(self):
+    def get_explore_grouping_hierarchy(self):
         r = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
@@ -168,17 +165,17 @@ class SdcClient:
 
         return [False, 'corrupted groupConfigurations API response, missing "explore" entry']
 
-    def getDataRetentionInfo(self):
+    def get_data_retention_info(self):
         r = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def getTopologyMap(self, grouping_hierarchy, time_window_s, sampling_time_s):
+    def get_topology_map(self, grouping_hierarchy, time_window_s, sampling_time_s):
         #
         # Craft the time interval section
         #
-        tlines = self.getDataRetentionInfo()
+        tlines = self.get_data_retention_info()
 
         for tline in tlines[1]['agents']:
             if tline['sampling'] == sampling_time_s * 1000000:
@@ -282,7 +279,7 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def getDashboards(self):
+    def get_dashboards(self):
         r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
