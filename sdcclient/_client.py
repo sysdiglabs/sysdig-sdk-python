@@ -440,3 +440,33 @@ class SdcClient:
         #
         self.create_dashboard_from_template(newdashname, dboard, scope)
 
+    '''
+        Annotations format:
+
+          "annotations": {
+          "key1": "value1",
+          "key2": "value2",
+          "key3": "value3"}
+    '''
+    def post_event(self, name, description, severity=4, host='', annotations={}):
+        edata = {
+          'event': {
+            'text': name,
+            'content': description,
+            'severity': severity,
+            'host': host
+          }
+        }
+
+#        if host != '':
+#            edata['host'] = host
+
+        if annotations != {}:
+            edata['annotations'] = annotations
+
+        print edata
+
+        r = requests.post(self.url + '/api/events/', headers=self.hdrs, data = json.dumps(edata))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
