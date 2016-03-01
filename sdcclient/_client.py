@@ -448,7 +448,7 @@ class SdcClient:
           "key2": "value2",
           "key3": "value3"}
     '''
-    def post_event(self, name, description='', severity=4, host='', tags={}):
+    def post_event(self, name, description='', severity=6, host='', tags={}):
         edata = {
           'event': {
             'name': name,

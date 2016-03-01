@@ -14,7 +14,7 @@ sdc_token = sys.argv[1]
 name = sys.argv[2]
 description = sys.argv[3]
 
-severity = 4
+severity = 6
 if len(sys.argv) < 4:
 	severity = int(sys.argv[4])
 
