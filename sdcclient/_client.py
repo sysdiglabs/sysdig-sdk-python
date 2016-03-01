@@ -448,21 +448,22 @@ class SdcClient:
           "key2": "value2",
           "key3": "value3"}
     '''
-    def post_event(self, name, description, severity=4, host='', annotations={}):
+    def post_event(self, name, description='', severity=4, host='', tags={}):
         edata = {
           'event': {
-            'text': name,
-            'content': description,
-            'severity': severity,
-            'host': host
+            'name': name,
+            'severity': severity
           }
         }
 
-#        if host != '':
-#            edata['host'] = host
+        if description != '':
+            edata['event']['description'] = description
 
-        if annotations != {}:
-            edata['annotations'] = annotations
+        if host != '':
+            edata['event']['host'] = host
+
+        if tags != {}:
+            edata['event']['tags'] = tags
 
         print edata
 

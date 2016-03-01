@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='sdcclient',
-      version='0.1',
+      version='0.2',
       description='Python client for Sysdig Cloud',
       url='http://github.com/storborg/funniest',
       author='sysdig Inc.',
