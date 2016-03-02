@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# Post a user event to Sysdig Cloud
+#
+
 import sys
 sys.path.insert(0, '../')
 from sdcclient import SdcClient
@@ -7,7 +11,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) < 4:
-    print 'usage: %s <sysdig-token> name description [severity]' % sys.argv[1]
+    print 'usage: %s <sysdig-token> name description [severity]' % sys.argv[0]
     sys.exit(0)
 
 sdc_token = sys.argv[1]
