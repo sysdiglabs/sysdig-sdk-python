@@ -471,7 +471,7 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def get_data(self, metrics, start_ts, end_ts=0, sampling_s = 60, filter='', datasource_type='host'):
+    def get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host'):
         if start_ts < 0:
             start_ts = int(time.time()) + start_ts
 
@@ -484,13 +484,14 @@ class SdcClient:
             "metrics": metrics,
             "start": start_ts * 1000000,
             "end": end_ts * 1000000,
-            "sampling" : sampling_s * 1000000,
             "dataSourceType": datasource_type,
-#            "filter": "host.mac = '0a:11:61:0a:8f:cb'"
         }
 
         if filter != '':
             reqbody['filter'] = filter
+
+        if sampling_s != 0:
+            reqbody['sampling'] = sampling_s * 1000000
 
         r = requests.post(self.url + '/api/data/', headers=self.hdrs, data = json.dumps(reqbody))
         if not self.__checkResponse(r):

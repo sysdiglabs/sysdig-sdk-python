@@ -30,8 +30,8 @@ sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
 # without segmentation.
 # The data will be aggregated as average both in time and across the hosts.
 #
-metrics = [{
-    "id": "cpu.used.percent",
+metrics = [
+    {"id": "cpu.used.percent",
     "aggregations": {
         "time": "avg",
         "group": "avg"
