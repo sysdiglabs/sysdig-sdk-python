@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
-# Print email and agent limit of the Sysdig Cloud user identified 
-# by the given token
+# Print email, current and maximum number of agents for the Sysdig Cloud user 
+# identified by the given token
 #
 
 import sys
@@ -23,18 +23,24 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token, 'https://app.sysdigcloud.com')
 
 #
-# Post the event
+# Get the required info
 #
 res = sdclient.get_user_info()
 
-#
-# Return the result
-#
 if res[0]:
 	uinfo = res[1]
 else:
 	print res[1]
 	sys.exit(0)
 
+res = sdclient.get_n_connected_agents()
+
+if res[0]:
+	nagents = res[1]
+else:
+	print res[1]
+	sys.exit(0)
+
 print 'User Email: ' + uinfo['user']['username']
-print 'Agent Limit: %s' % uinfo['user']['customerSettings']['plan']['maxAgents']
+print 'Current Agents: %d' % nagents
+print 'Max Agents: %s' % uinfo['user']['customerSettings']['plan']['maxAgents']

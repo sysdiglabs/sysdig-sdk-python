@@ -3,6 +3,7 @@ import time
 import requests
 import json
 import re
+import time
 
 class SdcClient:
     userinfo = None
@@ -465,9 +466,36 @@ class SdcClient:
         if tags != {}:
             edata['event']['tags'] = tags
 
-        print edata
-
         r = requests.post(self.url + '/api/events/', headers=self.hdrs, data = json.dumps(edata))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def get_data(self, metrics, start_ts, end_ts=0, sampling_s = 60, filter='', datasource_type='host'):
+        if start_ts < 0:
+            start_ts = int(time.time()) + start_ts
+
+        if end_ts < 0:
+            end_ts = int(time.time()) + end_ts
+        elif end_ts == 0:
+            end_ts = int(time.time())
+
+        start_ts = 1456885120
+        end_ts = 1456885720
+
+        reqbody = {
+            "metrics": metrics,
+            "start": start_ts * 1000000,
+            "end": end_ts * 1000000,
+            "sampling" : sampling_s * 1000000,
+            "dataSourceType": datasource_type,
+#            "filter": "host.mac = '0a:11:61:0a:8f:cb'"
+        }
+
+        if filter != '':
+            reqbody['filter'] = filter
+
+        r = requests.post(self.url + '/api/data/', headers=self.hdrs, data = json.dumps(reqbody))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
