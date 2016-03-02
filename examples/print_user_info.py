@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Print email, current and maximum number of agents for the Sysdig Cloud user 
-# identified by the given token
+# identified by the given token.
 #
 
 import sys
@@ -35,6 +35,9 @@ else:
 
 res = sdclient.get_n_connected_agents()
 
+#
+# Print the results
+#
 if res[0]:
 	nagents = res[1]
 else:

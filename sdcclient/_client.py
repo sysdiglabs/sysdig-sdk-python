@@ -480,9 +480,6 @@ class SdcClient:
         elif end_ts == 0:
             end_ts = int(time.time())
 
-        start_ts = 1456885120
-        end_ts = 1456885720
-
         reqbody = {
             "metrics": metrics,
             "start": start_ts * 1000000,
