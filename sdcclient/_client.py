@@ -57,7 +57,7 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def create_alert(self, name, description, severity, for_atelast_us, condition, for_each = [], filter = [], annotations={}):
+    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = [''], notify='', enabled=True, annotations={}):
         #
         # Get the list of alerts from the server
         #
@@ -82,21 +82,23 @@ class SdcClient:
                 'type' : 'MANUAL',
                 'name' : name,
                 'description' : description,
-                'enabled' : True,
+                'enabled' : enabled,
                 'severity' : severity,
-                'notify' : [ 'EMAIL' ],
-                'timespan' : for_atelast_us,
+                'timespan' : for_atleast_s * 1000000,
                 'condition' : condition,
                 'filter': filter
             }
         }
 
-        if for_each != None and for_each != []: 
-            alert_json['alert']['segmentBy'] = for_each
-            alert_json['alert']['segmentCondition'] = { 'type' : 'ANY' }
+        if segmentby != None and segmentby != []: 
+            alert_json['alert']['segmentBy'] = segmentby
+            alert_json['alert']['segmentCondition'] = { 'type' : segment_condition }
 
         if annotations != None and annotations != {}:
             alert_json['alert']['annotations'] = annotations
+
+        if notify != None and notify != []:
+            alert_json['alert']['notify'] = notify
 
         #
         # Create the new alert
