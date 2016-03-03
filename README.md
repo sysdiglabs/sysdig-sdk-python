@@ -35,16 +35,46 @@ For an example on how to parse this output, take a look at a simple example like
 Methods
 -------
 ####get_user_info(self)  
-**Description**: get details about the current user.  
-**Return value**: a json object containing information about the user, for example its email and the maximum number of agents it can install.  
-**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
+**Description**  
+get details about the current user.  
+**Return value**  
+a json object containing information about the user, for example its email and the maximum number of agents it can install.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_n_connected_agents(self)  
-**Description**: return the number of agents currently connected to Sysdig Cloud for the current user.  
-**Return value**: an integer number.  
-**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
+**Description**  
+return the number of agents currently connected to Sysdig Cloud for the current user.  
+**Return value**  
+an integer number.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_alerts(self)  
-**Description**: retrieves the list of alerts configured by the user.  
-**Return value**: an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
-**Example**: [examples/list_alerts.py](examples/list_alerts.py).  
+**Description**  
+retrieve the list of alerts configured by the user.  
+**Return value**  
+an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
+**Example**  
+[examples/list_alerts.py](examples/list_alerts.py).  
+
+#### create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = [''], notify='', enabled=True, annotations={}):
+**arguments**: 
+- name: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
+- description: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
+- severity: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
+- for_atleast_s: the number of consecutive seconds the condition must be satisfied for the alert to fire. 
+- condition: the alert 
+- segmentby
+- segment_condition
+- filter
+- notify
+- enabled
+- annotations  
+
+**Description**  
+create a threshold-based alert.  
+**Return value**  
+a json object describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
+**Example**  
+[examples/create_alerts.py](examples/create_alerts.py).  
