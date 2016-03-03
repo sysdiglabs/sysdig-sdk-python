@@ -37,9 +37,14 @@ Methods
 ####get_user_info(self)  
 **Description**: get details about the current user.  
 **Return value**: a json object containing information about the user, for example its email and the maximum number of agents it can install.  
-**Example**: [print_user_info.py](examples/print_user_info.py).  
+**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_n_connected_agents(self)  
 **Description**: return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Return value**: an integer number.  
-**Example**: [print_user_info.py](examples/print_user_info.py).  
+**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
+
+####get_alerts(self)  
+**Description**: retrieves the list of alerts configured by the user.  
+**Return value**: an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
+**Example**: [examples/list_alerts.py](examples/list_alerts.py).  
