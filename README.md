@@ -35,16 +35,58 @@ For an example on how to parse this output, take a look at a simple example like
 Methods
 -------
 ####get_user_info(self)  
-**Description**: get details about the current user.  
-**Return value**: a json object containing information about the user, for example its email and the maximum number of agents it can install.  
-**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
+**Description**  
+get details about the current user.  
+**Return value**  
+a json object containing information about the user, for example its email and the maximum number of agents it can install.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_n_connected_agents(self)  
-**Description**: return the number of agents currently connected to Sysdig Cloud for the current user.  
-**Return value**: an integer number.  
-**Example**: [examples/print_user_info.py](examples/print_user_info.py).  
+**Description**  
+return the number of agents currently connected to Sysdig Cloud for the current user.  
+**Return value**  
+an integer number.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_alerts(self)  
-**Description**: retrieves the list of alerts configured by the user.  
-**Return value**: an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
-**Example**: [examples/list_alerts.py](examples/list_alerts.py).  
+**Description**  
+retrieve the list of alerts configured by the user.  
+**Return value**  
+an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
+**Example**  
+[examples/list_alerts.py](examples/list_alerts.py).  
+
+#### create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
+**Description**  
+create a threshold-based alert.  
+**arguments**: 
+- **name**: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
+- **description**: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
+- **severity**: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
+- **for_atleast_s**: the number of consecutive seconds the condition must be satisfied for the alert to fire. 
+- **condition**: the alert condition, as described here https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts
+- **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine. 
+- **segment_condition**: When _segmentby_ is specified (and therefore the alert will cover multiple entities) this field is used to determine when it will fire. In particular, you have two options for _segment_condition_: **ANY** (the alert will fire when at least one of the monitored entities satisfies the condition) and **ALL** (the alert will fire when all of the monitored entities satisfy the condition).
+- **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_
+- **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, XXX.
+- **enabled**: if True, the alert will be enabled when created.
+- **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons  
+
+**Return value**  
+a json object describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
+**Example**  
+[examples/create_alert.py](examples/create_alert.py).  
+
+#### add_email_notification_recipient(self, email)
+#### create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s)  
+#### create_dashboard_from_dasboard(self, newdashname, templatename, scope):
+#### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
+#### get_data_retention_info(self)  
+#### get_dashboards(self)  
+#### get_explore_grouping_hierarchy(self)  
+#### get_notification_settings(self)  
+#### post_event(self, name, description='', severity=6, host='', tags={}):
+#### set_notification_settings(self, settings)  
+
