@@ -57,7 +57,7 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = [''], notify='', enabled=True, annotations={}):
+    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
         #
         # Get the list of alerts from the server
         #
