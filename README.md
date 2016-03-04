@@ -72,8 +72,21 @@ create a threshold-based alert.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_
 - **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, XXX.
 - **enabled**: if True, the alert will be enabled when created.
-- **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons
+- **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons  
+
 **Return value**  
 a json object describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
+
+#### add_email_notification_recipient(self, email)
+#### create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s)  
+#### create_dashboard_from_dasboard(self, newdashname, templatename, scope):
+#### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
+#### get_data_retention_info(self)  
+#### get_dashboards(self)  
+#### get_explore_grouping_hierarchy(self)  
+#### get_notification_settings(self)  
+#### post_event(self, name, description='', severity=6, host='', tags={}):
+#### set_notification_settings(self, settings)  
+
