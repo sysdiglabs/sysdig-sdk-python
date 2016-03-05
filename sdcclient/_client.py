@@ -292,6 +292,12 @@ class SdcClient:
         if scope == None:
             scope = []
 
+        if type(scope) is str:
+            print "***" + scope
+        else:
+            if not(type(scope) is list):
+                return [False, "invalid scope format"]
+
         #
         # Create the unique ID for this dashboard
         #
@@ -329,29 +335,30 @@ class SdcClient:
         # create the grouping configurations for each chart
         #
         j = 0
-        for chart in template['items']:
-            if len(scope) != 0:
-                j = j + 1
+        if 'items' in template:
+            for chart in template['items']:
+                if len(scope) != 0:
+                    j = j + 1
 
-                confid = baseconfid + str(j)
+                    confid = baseconfid + str(j)
 
-                gconf = { 'id': confid,
-                    'groups': [
-                        {
-                            'groupBy': gby
-                        }
-                    ]
-                }
+                    gconf = { 'id': confid,
+                        'groups': [
+                            {
+                                'groupBy': gby
+                            }
+                        ]
+                    }
 
-                r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
-                if not self.__checkResponse(r):
-                    return [False, self.lasterr]
+                    r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
+                    if not self.__checkResponse(r):
+                        return [False, self.lasterr]
 
-                chart['filter'] = filter
-                chart['groupId'] = confid
-            else:
-                chart['filter'] = None
-                chart['groupId'] = None
+                    chart['filter'] = filter
+                    chart['groupId'] = confid
+                else:
+                    chart['filter'] = None
+                    chart['groupId'] = None
 
         if 'annotations' in template:
             template['annotations']['createdByEngine'] = True
@@ -369,7 +376,7 @@ class SdcClient:
         else:
             return [True, r.json()]
 
-    def create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s):
+    def create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s=2*60*60):
         #
         # Find our template view
         #
