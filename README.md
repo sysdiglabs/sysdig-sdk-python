@@ -70,7 +70,7 @@ create a threshold-based alert.
 - **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine. 
 - **segment_condition**: When _segmentby_ is specified (and therefore the alert will cover multiple entities) this field is used to determine when it will fire. In particular, you have two options for _segment_condition_: **ANY** (the alert will fire when at least one of the monitored entities satisfies the condition) and **ALL** (the alert will fire when all of the monitored entities satisfy the condition).
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_
-- **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, XXX.
+- **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, _SNS_, _PAGER_DUTY_, _SYSDIG_DUMP_.
 - **enabled**: if True, the alert will be enabled when created.
 - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons  
 
@@ -80,13 +80,33 @@ a json object describing the just created alert, with the format described at [t
 [examples/create_alert.py](examples/create_alert.py).  
 
 #### add_email_notification_recipient(self, email)
-#### create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s)  
+**Description**  
+Add a new recipient for email alert notifications.  
+**arguments**  
+- **email**: the email target to add.
+
+**Return value**  
+a json object showing the updated user notifications configuration.  
+**Example**  
+[examples/add_notification_email.py](examples/add_notification_email.py).  
+
+#### create_dashboard_from_view(self, newdashname, viewname, scope)  
+**Description**  
+Create a new dasboard using one of the Sysdig Cloud views as a template. You will be able to control what the new dasboard applies to.
+**arguments**  
+- **newdashname**: the name of the dashboard that will be created.
+- **viewname**: the name of the view to use as the template for the new dashboard.
+- **scope**: .
+
+**Return value**  
+a json object showing the updated user notifications configuration.  
+**Example**  
+[examples/add_notification_email.py](examples/add_notification_email.py).  
+
 #### create_dashboard_from_dasboard(self, newdashname, templatename, scope):
 #### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
 #### get_data_retention_info(self)  
 #### get_dashboards(self)  
 #### get_explore_grouping_hierarchy(self)  
-#### get_notification_settings(self)  
 #### post_event(self, name, description='', severity=6, host='', tags={}):
-#### set_notification_settings(self, settings)  
 
