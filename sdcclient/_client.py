@@ -293,7 +293,15 @@ class SdcClient:
             scope = []
 
         if type(scope) is str:
-            print "***" + scope
+            checks = scope.strip(' \t\n\r?!.').split(" and ")
+            scope = []
+
+            for c in checks:
+                elements = c.strip(' \t\n\r?!.').split("=")
+                if len(elements) != 2:
+                    return [False, "invalid scope format"]                    
+                print elements[0].strip(' \t\n\r?!.') + "-" + elements[1].strip(' \t\n\r?!.')
+                scope.append({elements[0].strip(' \t\n\r?!.'): elements[1].strip(' \t\n\r?!.')})
         else:
             if not(type(scope) is list):
                 return [False, "invalid scope format"]
@@ -392,7 +400,7 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        self.create_dashboard_from_template(newdashname, view, scope)
+        return self.create_dashboard_from_template(newdashname, view, scope)
 
     def create_dashboard_from_dasboard(self, newdashname, templatename, scope):
         #

@@ -12,7 +12,7 @@ from sdcclient import SdcClient
 #
 if len(sys.argv) != 2:
     print 'usage: %s <sysdig-token>' % sys.argv[0]
-    print 'You can find your token at https://app-staging2.sysdigcloud.com/#/settings/user'
+    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(0)
 
 sdc_token = sys.argv[1]
@@ -20,19 +20,20 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
+sdclient = SdcClient(sdc_token, 'https://app.sysdigcloud.com')
 
 #
 # Post the event
 #
-res = sdclient.create_dashboard_from_view("API test dasboard", "Top Processes", [{'proc.name': 'cassandra'}])
-#res = sdclient.get_views_list()
-
+res = sdclient.create_dashboard_from_view("API test dasboard 1", 
+	"Overview by Process", 
+#	[{'kubernetes.namespace.name': 'prod'}, {'proc.name': 'cassandra'}])
+	'kubernetes.namespace.name=prod and proc.name = cassandra')
 
 #
-# Return the result
+# Check the result
 #
 if res[0]:
-	print 'Recipient added successfully'
+	print 'Dashboard created successfully'
 else:
 	print res[1]
