@@ -29,7 +29,7 @@ The library exports a single class, SdcClient, that is used to connect to Sysdig
 
 ####Return Values
 Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
-- if the call was successful, it's a json object containing the generated data generated
+- if the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
 - if the call failed, it's a string descibing the error
 
 For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py) 
@@ -39,15 +39,15 @@ Methods
 ####get_user_info(self)  
 **Description**  
 get details about the current user.  
-**Return value**  
-a json object containing information about the user, for example its email and the maximum number of agents it can install.  
+**Success Return Value**  
+A dictionary containing information about the user, for example its email and the maximum number of agents it can install.  
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_n_connected_agents(self)  
 **Description**  
 return the number of agents currently connected to Sysdig Cloud for the current user.  
-**Return value**  
+**Success Return Value**  
 an integer number.  
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
@@ -55,7 +55,7 @@ an integer number.
 ####get_alerts(self)  
 **Description**  
 retrieve the list of alerts configured by the user.  
-**Return value**  
+**Success Return Value**  
 an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
 **Example**  
 [examples/list_alerts.py](examples/list_alerts.py).  
@@ -76,8 +76,8 @@ create a threshold-based alert.
 - **enabled**: if True, the alert will be enabled when created.
 - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons  
 
-**Return value**  
-a json object describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
+**Success Return Value**  
+A dictionary describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
 
@@ -87,8 +87,8 @@ Add a new recipient for email alert notifications.
 **arguments**  
 - **email**: the email target to add.
 
-**Return value**  
-a json object showing the updated user notifications configuration.  
+**Success Return Value**  
+A dictionary showing the updated user notifications configuration.  
 **Example**  
 [examples/add_notification_email.py](examples/add_notification_email.py).  
 
@@ -100,8 +100,8 @@ Create a new dasboard using one of the Sysdig Cloud views as a template. You wil
 - **viewname**: the name of the view to use as the template for the new dashboard. Thia corresponds to the name that the view has in the explore page.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 
-**Return value**  
-a json object showing the details of the new dashboard.  
+**Success Return Value**  
+A dictionary showing the details of the new dashboard.  
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
@@ -113,8 +113,8 @@ Create a new dasboard using one of the existing dashboards as a template. You wi
 - **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 
-**Return value**  
-a json object showing the details of the new dashboard.  
+**Success Return Value**  
+A dictionary showing the details of the new dashboard.  
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
@@ -129,13 +129,43 @@ This is the method you use to export metric data. It's flexible enough to offer 
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the query will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 - **datasource_type**: XXX gianluca edit this with an example or two.
 
-**Return value**  
-a json object with the requested data. Data is organized in a list of time samples, each of which includes a UTC timestamp and a list of values, whose content and order reflect what was specified in the _metrics_ argument.  
+**Success Return Value**  
+A dictionary with the requested data. Data is organized in a list of time samples, each of which includes a UTC timestamp and a list of values, whose content and order reflect what was specified in the _metrics_ argument.  
 **Examples**  
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
 
 #### get_data_retention_info(self)  
-#### get_dashboards(self)  
-#### get_explore_grouping_hierarchy(self)  
-#### post_event(self, name, description='', severity=6, host='', tags={}):
+Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().
+**Success Return Value**  
+A dictionary containing the list of available sampling intervals.  
+**Example**  
+[examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
 
+#### get_dashboards(self)  
+Return the list of dasboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
+**Success Return Value**  
+A dictionary containing the list of available sampling intervals.  
+**Example**  
+[examples/list_dashboards.py](examples/list_dashboards.py).  
+
+#### get_explore_grouping_hierarchy(self)  
+Return the user's current Explore gourping hierarchy.
+**Success Return Value**  
+A list containing the list of the user's Explore grouping criteria.  
+**Example**  
+[examples/print_explore_grouping.py](examples/print_explore_grouping.py).  
+
+#### post_event(self, name, description='', severity=6, host='', tags={}):
+**Description**  
+You can use this method you use to send an event to sysdig cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts. 
+**arguments**  
+- **name**: the name of the new event.  
+- **description**: a longer description offering detailed information about the event.
+- **severity**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+- **host**: the host generating the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
+- **tags**: a list of key-value dictionaries that can be used to tag the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
+
+**Success Return Value**  
+A dictionary describing the new event.  
+**Example**  
+[examples/post_event.py](examples/post_event.py).  
