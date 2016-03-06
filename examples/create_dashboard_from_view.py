@@ -23,19 +23,33 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token, 'https://app.sysdigcloud.com')
 
 #
-# Post the event
+# Create the new dashboard, apllying to cassandra in production
 #
-res = sdclient.create_dashboard_from_view("API test dasboard 1", 
-	"Overview by Process", 
-#	[{'kubernetes.namespace.name': 'prod'}, {'proc.name': 'cassandra'}])
-	'kubernetes.namespace.name=prod and proc.name = cassandra')
+res = sdclient.create_dashboard_from_view("API test - cassandra in prod", # The name we're giving to the new dashboard.
+	"Overview by Process", # The view we're copying.
+	'kubernetes.namespace.name=prod and proc.name = cassandra') # the filter specifying what this dasboard appies to.
 
 #
 # Check the result
 #
-print res
-sys.exit(0)
 if res[0]:
 	print 'Dashboard created successfully'
 else:
 	print res[1]
+	sys.exit(0)
+
+#
+# Make a Copy the dasboard, this time applying it to cassandra in the dev namespace
+#
+res = sdclient.create_dashboard_from_dashboard("API test - cassandra in dev", # The name we're giving to the new dashboard.
+	"API test - cassandra in prod", # The view we're copying.
+	'kubernetes.namespace.name=dev and proc.name = cassandra') # the filter specifying what this dasboard appies to.
+
+#
+# Check the result
+#
+if res[0]:
+	print 'Dashboard copied successfully'
+else:
+	print res[1]
+

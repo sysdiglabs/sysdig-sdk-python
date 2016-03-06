@@ -299,8 +299,7 @@ class SdcClient:
             for c in checks:
                 elements = c.strip(' \t\n\r?!.').split("=")
                 if len(elements) != 2:
-                    return [False, "invalid scope format"]                    
-                print elements[0].strip(' \t\n\r?!.') + "-" + elements[1].strip(' \t\n\r?!.')
+                    return [False, "invalid scope format"]
                 scope.append({elements[0].strip(' \t\n\r?!.'): elements[1].strip(' \t\n\r?!.')})
         else:
             if not(type(scope) is list):
@@ -402,7 +401,7 @@ class SdcClient:
         #
         return self.create_dashboard_from_template(newdashname, view, filter)
 
-    def create_dashboard_from_dasboard(self, newdashname, templatename, filter):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter):
         #
         # Get the list of dashboards from the server
         #
@@ -429,7 +428,7 @@ class SdcClient:
         #
         # Create the dashboard
         #
-        self.create_dashboard_from_template(newdashname, dboard, filter)
+        return self.create_dashboard_from_template(newdashname, dboard, filter)
 
     def create_dashboard_from_file(self, newdashname, filename, scope):
         #
