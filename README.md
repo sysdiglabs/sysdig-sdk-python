@@ -1,13 +1,9 @@
 python-sdcclient
 ================
 
-This is a python client API for Sysdig Cloud.
+A python client API for Sysdig Cloud.
 
-Overview
---------
-This module is a light wrapper around the sysdig cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). 
-
-In its basic form, this module can be used to call any API method and be expected to return a dict of the JSON reply.
+This module is a wrapper around the sysdig cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
 
 Installation
 ------------
@@ -18,14 +14,20 @@ Installation
     git clone https://github.com/draios/python-sdc-client.git
     pip install
 
+Quick start
+-----------
+- If you are interested in exporting metrics data from Sysdig Cloud, take a look at [examples/get_data_simple.py](examples/get_data_simple.py) and [examples/get_data_advanced.py](examples/get_data_advanced.py).
+- if you want to programmatically create an alert, refer to [examples/create_alert.py](examples/create_alert.py)
+- if you want to programmatically create a dashboard, refer to [examples/create_dashboard.py](examples/create_dashboard.py)
+
 Usage
 -----
-The [examples](examples/) directory contains a number of examples that show how to use this API to perform many common tasks.
 
 _Note:_ in order to use this API you must obtain a Sysdig Cloud token. You can get your user's token in the _Sysdig Cloud API_ section of the [settings](https://app.sysdigcloud.com/#/settings/user) page.
 
-Return Values
--------------
+The library exports a single class, SdcClient, that is used to connect to Sysdig Cloud and execute actions.
+
+####Return Values
 Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
 - if the call was successful, it's a json object containing the generated data generated
 - if the call failed, it's a string descibing the error
@@ -117,6 +119,21 @@ a json object showing the details of the new dashboard.
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
 #### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
+**Description**  
+This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export. 
+**arguments**  
+- **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in sysdig cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and containers/host. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in sysdig cloud. These entries are use to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the examples section below for ready to use code snippets.  
+- **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optinally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+- **end_ts**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+- **sampling_s**: the duration of the samples that will be returned. 0 Means that the whole data will be returned as a single sample.
+- **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the query will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
+- **datasource_type**: XXX gianluca edit this with an example or two.
+
+**Return value**  
+a json object with the requested data. Data is organized in a list of time samples, each of which includes a UTC timestamp and a list of values, whose content and order reflect what was specified in the _metrics_ argument.  
+**Examples**  
+[examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
+
 #### get_data_retention_info(self)  
 #### get_dashboards(self)  
 #### get_explore_grouping_hierarchy(self)  
