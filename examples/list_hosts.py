@@ -36,8 +36,9 @@ metrics = [{"id": "host.hostName"}]
 #       come as a single sample.
 #
 res = sdclient.get_data(metrics, # metrics list 
-    -300,   # cover the last 300 seconds...
-    0)      # ... ending now
+    -600,	# cover the last 300 seconds...
+    0,		# ... ending now...
+    600)	# ... with just one 300s sample
 
 #
 # Show the results!

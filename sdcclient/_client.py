@@ -497,6 +497,8 @@ class SdcClient:
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s * 1000000
 
+        print reqbody
+
         r = requests.post(self.url + '/api/data/', headers=self.hdrs, data = json.dumps(reqbody))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
