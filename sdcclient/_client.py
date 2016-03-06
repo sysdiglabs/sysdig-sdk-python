@@ -384,7 +384,7 @@ class SdcClient:
         else:
             return [True, r.json()]
 
-    def create_dashboard_from_view(self, newdashname, viewname, scope, time_window_s=2*60*60):
+    def create_dashboard_from_view(self, newdashname, viewname, filter):
         #
         # Find our template view
         #
@@ -395,14 +395,14 @@ class SdcClient:
         view = gvres[1]['drilldownDashboard']
 
         view['timeMode'] = {'mode' : 1}
-        view['time'] = {'last' : time_window_s * 1000000, 'sampling' : time_window_s * 1000000}
+        view['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
 
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, view, scope)
+        return self.create_dashboard_from_template(newdashname, view, filter)
 
-    def create_dashboard_from_dasboard(self, newdashname, templatename, scope):
+    def create_dashboard_from_dasboard(self, newdashname, templatename, filter):
         #
         # Get the list of dashboards from the server
         #
@@ -426,24 +426,12 @@ class SdcClient:
             print 'can\'t find dashboard ' + templatename + ' to use as a template'
             sys.exit(0)
 
-        '''
-        #
-        # If this dashboard already exists, don't create it another time
-        #
-        for db in j['dashboards']:
-            if db['name'] == newdashname:
-                for view in db['items']:
-                    if view['groupId'][0:len(baseconfid)] == baseconfid:
-                        print 'dashboard ' + newdashname + ' already exists - ' + baseconfid
-                        return
-        '''
-
         #
         # Create the dashboard
         #
-        self.create_dashboard_from_template(newdashname, dboard, scope)
+        self.create_dashboard_from_template(newdashname, dboard, filter)
 
-    def create_dashboard_from_file(self, newdashname, filename, scope, time_window_s):
+    def create_dashboard_from_file(self, newdashname, filename, scope):
         #
         # Load the Dashboard
         #
@@ -451,7 +439,7 @@ class SdcClient:
             dboard = json.load(data_file)
 
         dboard['timeMode'] = {'mode' : 1}
-        dboard['time'] = {'last' : time_window_s * 1000000, 'sampling' : time_window_s * 1000000}
+        dboard['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
 
         #
         # Create the new dashboard

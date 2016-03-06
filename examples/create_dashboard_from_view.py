@@ -33,6 +33,8 @@ res = sdclient.create_dashboard_from_view("API test dasboard 1",
 #
 # Check the result
 #
+print res
+sys.exit(0)
 if res[0]:
 	print 'Dashboard created successfully'
 else:
