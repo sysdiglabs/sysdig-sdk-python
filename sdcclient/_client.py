@@ -181,7 +181,7 @@ class SdcClient:
         tlines = self.get_data_retention_info()
 
         for tline in tlines[1]['agents']:
-            if tline['sampling'] == sampling_time_s * 1000000:
+            if tline['sampling'] == sampling_time_s:
                 timeinfo = tline
 
         if timeinfo == None:
@@ -394,7 +394,7 @@ class SdcClient:
         view = gvres[1]['drilldownDashboard']
 
         view['timeMode'] = {'mode' : 1}
-        view['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
+        view['time'] = {'last' : 2 * 60 * 60, 'sampling' : 2 * 60 * 60}
 
         #
         # Create the new dashboard
@@ -438,7 +438,7 @@ class SdcClient:
             dboard = json.load(data_file)
 
         dboard['timeMode'] = {'mode' : 1}
-        dboard['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
+        dboard['time'] = {'last' : 2 * 60 * 60, 'sampling' : 2 * 60 * 60}
 
         #
         # Create the new dashboard
@@ -485,19 +485,17 @@ class SdcClient:
             end_ts = int(time.time())
 
         reqbody = {
-            "metrics": metrics,
-            "start": start_ts * 1000000,
-            "end": end_ts * 1000000,
-            "dataSourceType": datasource_type,
+            'metrics': metrics,
+            'start': start_ts,
+            'end': end_ts,
+            'dataSourceType': datasource_type,
         }
 
         if filter != '':
             reqbody['filter'] = filter
 
         if sampling_s != 0:
-            reqbody['sampling'] = sampling_s * 1000000
-
-        print reqbody
+            reqbody['sampling'] = sampling_s
 
         r = requests.post(self.url + '/api/data/', headers=self.hdrs, data = json.dumps(reqbody))
         if not self.__checkResponse(r):
