@@ -63,7 +63,7 @@ an array of alert json objects, with the format described at [this link](https:/
 #### create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
 **Description**  
 create a threshold-based alert.  
-**arguments**: 
+**Arguments**: 
 - **name**: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
 - **description**: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
 - **severity**: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
@@ -84,7 +84,7 @@ A dictionary describing the just created alert, with the format described at [th
 #### add_email_notification_recipient(self, email)
 **Description**  
 Add a new recipient for email alert notifications.  
-**arguments**  
+**Arguments**  
 - **email**: the email target to add.
 
 **Success Return Value**  
@@ -95,7 +95,7 @@ A dictionary showing the updated user notifications configuration.
 #### create_dashboard_from_view(self, newdashname, viewname, filter)  
 **Description**  
 Create a new dasboard using one of the Sysdig Cloud views as a template. You will be able to define the scope of the new dasboard.  
-**arguments**  
+**Arguments**  
 - **newdashname**: the name of the dashboard that will be created.
 - **viewname**: the name of the view to use as the template for the new dashboard. Thia corresponds to the name that the view has in the explore page.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
@@ -108,7 +108,7 @@ A dictionary showing the details of the new dashboard.
 #### create_dashboard_from_dashboard(self, newdashname, templatename, filter):
 **Description**  
 Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
-**arguments**  
+**Arguments**  
 - **newdashname**: the name of the dashboard that will be created.
 - **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
@@ -121,7 +121,7 @@ A dictionary showing the details of the new dashboard.
 #### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
 **Description**  
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
-**arguments**  
+**Arguments**  
 - **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in sysdig cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and containers/host. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in sysdig cloud. These entries are use to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the examples section below for ready to use code snippets.  
 - **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optinally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
 - **end_ts**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
@@ -158,7 +158,7 @@ A list containing the list of the user's Explore grouping criteria.
 #### post_event(self, name, description='', severity=6, host='', tags={}):
 **Description**  
 You can use this method you use to send an event to sysdig cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
-**arguments**  
+**Arguments**  
 - **name**: the name of the new event.  
 - **description**: a longer description offering detailed information about the event.
 - **severity**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
