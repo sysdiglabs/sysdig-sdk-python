@@ -26,7 +26,7 @@ if len(sys.argv) < 4:
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Post the event

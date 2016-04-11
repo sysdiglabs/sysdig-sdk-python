@@ -12,7 +12,7 @@ from sdcclient import SdcClient
 #
 if len(sys.argv) != 3:
     print 'usage: %s <sysdig-token> email' % sys.argv[0]
-    print 'You can find your token at https://app-staging2.sysdigcloud.com/#/settings/user'
+    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(0)
 
 sdc_token = sys.argv[1]
@@ -21,7 +21,7 @@ email = sys.argv[2]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Post the event

@@ -15,7 +15,7 @@ from sdcclient import SdcClient
 #
 if len(sys.argv) != 2:
     print 'usage: %s <sysdig-token>' % sys.argv[0]
-    print 'You can find your token at https://app-staging2.sysdigcloud.com/#/settings/user'
+    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(0)
 
 sdc_token = sys.argv[1]
@@ -23,7 +23,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Create the alert.
@@ -36,7 +36,7 @@ res = sdclient.create_alert('tomcat cpu > 80% on any host',  # Alert name.
 	['host.mac', 'proc.name'], # Segmentation. We want to check this metric for every process on every machine.
 	'ANY', # in case there is more than one tomcat process, this alert will fire when a single one of them crosses the 80% threshold.
 	'proc.name = "tomcat"', # Filter. We want to receive a notification only if the name of the process meeting the condition is 'tomcat'.
-	['EMAIL'], # Notification target. We want an email to be sent. Alerts email recipients can be defined here: https://app-staging2.sysdigcloud.com/#/settings/notifications
+	['EMAIL'], # Notification target. We want an email to be sent. Alerts email recipients can be defined here: https://app.sysdigcloud.com/#/settings/notifications
 	False) # This alert will be disabled when it's created.
 
 

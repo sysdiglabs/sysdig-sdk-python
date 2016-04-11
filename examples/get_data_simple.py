@@ -24,7 +24,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging2.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Prepare the metrics list. In this case, we have just one metric: cpu.used.percent, 
