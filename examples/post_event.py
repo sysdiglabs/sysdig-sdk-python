@@ -21,7 +21,7 @@ description = sys.argv[3]
 
 severity = 6
 if len(sys.argv) < 4:
-	severity = int(sys.argv[4])
+    severity = int(sys.argv[4])
 
 #
 # Instantiate the SDC client
@@ -37,6 +37,6 @@ res = sdclient.post_event(name, description, severity)
 # Return the result
 #
 if res[0]:
-	print 'Event Posted Successfully'
+    print 'Event Posted Successfully'
 else:
-	print res[1]
+    print res[1]

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# This script shows the basics of getting data out of Sysdig Cloud by crating a 
+# This script shows the basics of getting data out of Sysdig Cloud by crating a
 # very simple request that has no filter an no segmentation.
 #
-# The request queries for the average CPU across all of the instrumented hosts for 
+# The request queries for the average CPU across all of the instrumented hosts for
 # the last 10 minutes, with 1 minute data granularity
 #
 
@@ -27,33 +27,33 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token)
 
 #
-# Prepare the metrics list. In this case, we have just one metric: cpu.used.percent, 
+# Prepare the metrics list. In this case, we have just one metric: cpu.used.percent,
 # without segmentation.
 # The data will be aggregated as average both in time and across the hosts.
 #
 metrics = [
     {"id": "cpu.used.percent",
-    "aggregations": {
-        "time": "avg",
-        "group": "avg"
-    }
-}]
+     "aggregations": {
+         "time": "avg",
+         "group": "avg"
+     }
+    }]
 
 #
 # Fire the query.
 #
-res = sdclient.get_data(metrics, # metrics list 
-    -600,   # start_ts = 600 seconds ago
-    0,      # end_ts = now
-    60)     # 1 data point per minute
+res = sdclient.get_data(metrics, # metrics list
+                        -600,   # start_ts = 600 seconds ago
+                        0,      # end_ts = now
+                        60)     # 1 data point per minute
 
 #
 # Show the result
 #
 if res[0]:
-	data = res[1]
+    data = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 print data

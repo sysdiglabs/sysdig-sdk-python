@@ -31,10 +31,10 @@ res = sdclient.get_alerts()
 # Show the list of alerts
 #
 if res[0]:
-	data = res[1]
+    data = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 for alert in data['alerts']:
     print 'enabled: %s, name: %s' % (str(alert['enabled']), alert['name'])

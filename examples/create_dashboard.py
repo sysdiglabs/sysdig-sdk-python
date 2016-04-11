@@ -29,32 +29,32 @@ sdclient = SdcClient(sdc_token)
 # Create the new dashboard, apllying to cassandra in production
 #
 res = sdclient.create_dashboard_from_view("API test - cassandra in prod", # The name we're giving to the new dashboard.
-	"Overview by Process", # The view we're copying.
-	'kubernetes.namespace.name=prod and proc.name = cassandra') # the filter specifying what this dasboard appies to.
-																# Remember that here you can use combinations of any
-																# segmentation criteria that you find in the Sysdig 
-																# Cloud explore page.
+                                          "Overview by Process", # The view we're copying.
+                                          "kubernetes.namespace.name=prod and proc.name = cassandra") # the filter specifying what this dasboard appies to.
+                                                                                                      # Remember that here you can use combinations of any
+                                                                                                      # segmentation criteria that you find in the Sysdig
+                                                                                                      # Cloud explore page.
 #
 # Check the result
 #
 if res[0]:
-	print 'Dashboard created successfully'
+    print 'Dashboard created successfully'
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 #
 # Make a Copy the just created dasboard, this time applying it to cassandra in the dev namespace
 #
 res = sdclient.create_dashboard_from_dashboard("API test - cassandra in dev", # The name we're giving to the new dashboard.
-	"API test - cassandra in prod", # The view we're copying.
-	'kubernetes.namespace.name=dev and proc.name = cassandra') # the filter specifying what this dasboard appies to.
+                                               "API test - cassandra in prod", # The view we're copying.
+                                               "kubernetes.namespace.name=dev and proc.name = cassandra") # the filter specifying what this dasboard appies to.
 
 #
 # Check the result
 #
 if res[0]:
-	print 'Dashboard copied successfully'
+    print 'Dashboard copied successfully'
 else:
-	print res[1]
+    print res[1]
 

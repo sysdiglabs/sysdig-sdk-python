@@ -32,6 +32,6 @@ res = sdclient.add_email_notification_recipient(email)
 # Return the result
 #
 if res[0]:
-	print 'Recipient added successfully'
+    print 'Recipient added successfully'
 else:
-	print res[1]
+    print res[1]

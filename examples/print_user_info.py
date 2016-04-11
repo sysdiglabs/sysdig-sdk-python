@@ -29,10 +29,10 @@ sdclient = SdcClient(sdc_token)
 res = sdclient.get_user_info()
 
 if res[0]:
-	uinfo = res[1]
+    uinfo = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 res = sdclient.get_n_connected_agents()
 
@@ -40,10 +40,10 @@ res = sdclient.get_n_connected_agents()
 # Print the results
 #
 if res[0]:
-	nagents = res[1]
+    nagents = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 print 'User Email: ' + uinfo['user']['username']
 print 'Current Agents: %d' % nagents

@@ -31,9 +31,9 @@ res = sdclient.get_data_retention_info()
 # Show the list of retention intervals
 #
 if res[0]:
-	data = res[1]
+    data = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 print data['agents']

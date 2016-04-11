@@ -31,10 +31,10 @@ res = sdclient.get_dashboards()
 # Show the list of alerts
 #
 if res[0]:
-	data = res[1]
+    data = res[1]
 else:
-	print res[1]
-	sys.exit(0)
+    print res[1]
+    sys.exit(0)
 
 for db in data['dashboards']:
     print "Name: %s, # Charts: %d" % (db['name'], len(db['items']))
