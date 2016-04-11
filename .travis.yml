@@ -7,6 +7,25 @@ python:
 before_script:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)
 script:
+- echo "Testing source version"
+- examples/create_alert.py XXX
+- examples/delete_alert.py XXX
+- examples/create_dashboard.py XXX
+- examples/delete_dashboard.py XXX
+- examples/get_data_advanced.py XXX ip-10-0-2-180.ec2.internal
+- examples/get_data_datasource.py XXX
+- examples/get_data_simple.py XXX
+- examples/list_alerts.py XXX
+- examples/list_dashboards.py XXX
+- examples/list_hosts.py XXX
+- examples/list_metrics.py XXX
+- examples/post_event.py XXX "test event name" "test event description"
+- examples/print_data_retention_info.py XXX
+- examples/print_explore_grouping.py XXX
+- examples/print_user_info.py XXX
+- echo "Testing pip version"
+- rm -rf sdcclient
+- pip install sdcclient
 - examples/create_alert.py XXX
 - examples/delete_alert.py XXX
 - examples/create_dashboard.py XXX
