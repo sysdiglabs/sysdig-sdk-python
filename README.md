@@ -150,6 +150,14 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
+#### `delete_dashboards(self, dashname))`  
+**Description**  
+Deletes a dashboard given its name.
+**Success Return Value**  
+A boolean with the status of the operation
+**Example**  
+[examples/delete_dashboard.py](examples/delete_dashboard.py).  
+
 #### `get_explore_grouping_hierarchy(self)`  
 **Description**  
 Return the user's current Explore gourping hierarchy.  

@@ -426,8 +426,8 @@ class SdcClient:
                 break
 
         if dboard is None:
-            print 'can\'t find dashboard ' + templatename + ' to use as a template'
-            sys.exit(0)
+            self.lasterr = 'can\'t find dashboard ' + templatename + ' to use as a template'
+            return [False, self.lasterr]
 
         #
         # Create the dashboard
@@ -448,6 +448,22 @@ class SdcClient:
         # Create the new dashboard
         #
         self.create_dashboard_from_template(newdashname, dboard, scope)
+
+    def delete_dashboard(self, dashname):
+        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+
+        j = r.json()
+
+
+        for db in j['dashboards']:
+            if db['name'] == dashname:
+                r = requests.delete(self.url + '/ui/dashboards/' + str(db['id']), headers=self.hdrs)
+                if not self.__checkResponse(r):
+                    return [False, self.lasterr]
+
+        return True
 
     '''
         Annotations format:
