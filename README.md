@@ -122,17 +122,17 @@ A dictionary showing the details of the new dashboard.
 **Description**  
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
 **Arguments**  
-- **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in sysdig cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and containers/host. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in sysdig cloud. These entries are use to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the examples section below for ready to use code snippets.  
+- **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in sysdig cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and containers/host. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in sysdig cloud. These entries are used to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the examples section below for ready to use code snippets.  
 - **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
 - **end_ts**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
 - **sampling_s**: the duration of the samples that will be returned. 0 Means that the whole data will be returned as a single sample.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the query will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
-- **datasource_type**: XXX gianluca edit this with an example or two.
+- **datasource_type**: specify the metric source for the request, can be `container` or `host`. Most metrics, for example `cpu.used.percent` or `memory.bytes.used`, are reported by hosts and containers. By default, metrics reported by the host are used, but if the request contains a grouping key in the metric list/filter which is container-specific (e.g. `container.name`), then the container source is used. In cases where grouping keys are missing or grouping keys apply to both hosts and containers (e.g. `tag.Name`), the datasource_type can be explicitly set to avoid any ambiguity and allow the user to select precisely what kind of data should be used for the request. [examples/get_data_datasource.py](examples/get_data_datasource.py) contains a few examples that should clarify the use of this argument.  
 
 **Success Return Value**  
 A dictionary with the requested data. Data is organized in a list of time samples, each of which includes a UTC timestamp and a list of values, whose content and order reflect what was specified in the _metrics_ argument.  
 **Examples**  
-[examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
+[examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py), [examples/get_data_datasource.py](examples/get_data_datasource.py).  
 
 #### `get_data_retention_info(self)`  
 **Description**  

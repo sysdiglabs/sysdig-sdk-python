@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Print the list of dashboards.
+# Print the list of metrics.
 #
 
 import sys
