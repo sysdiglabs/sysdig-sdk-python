@@ -30,7 +30,7 @@ The library exports a single class, SdcClient, that is used to connect to Sysdig
 ####Return Values
 Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
 - if the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
-- if the call failed, it's a string descibing the error
+- if the call failed, it's a string describing the error
 
 For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py) 
 
