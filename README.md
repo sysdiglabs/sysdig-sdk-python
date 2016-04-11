@@ -3,7 +3,7 @@ python-sdcclient
 
 A python client API for Sysdig Cloud.
 
-This module is a wrapper around the sysdig cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
+This module is a wrapper around the Sysdig Cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
 
 Installation
 ------------
@@ -17,20 +17,20 @@ Installation
 Quick start
 -----------
 - If you are interested in exporting metrics data from Sysdig Cloud, take a look at [examples/get_data_simple.py](examples/get_data_simple.py) and [examples/get_data_advanced.py](examples/get_data_advanced.py).
-- if you want to programmatically create an alert, refer to [examples/create_alert.py](examples/create_alert.py)
-- if you want to programmatically create a dashboard, refer to [examples/create_dashboard.py](examples/create_dashboard.py)
+- If you want to programmatically create an alert, refer to [examples/create_alert.py](examples/create_alert.py)
+- If you want to programmatically create a dashboard, refer to [examples/create_dashboard.py](examples/create_dashboard.py)
 
 Usage
 -----
 
 _Note:_ in order to use this API you must obtain a Sysdig Cloud token. You can get your user's token in the _Sysdig Cloud API_ section of the [settings](https://app.sysdigcloud.com/#/settings/user) page.
 
-The library exports a single class, SdcClient, that is used to connect to Sysdig Cloud and execute actions.
+The library exports a single class, `SdcClient`, that is used to connect to Sysdig Cloud and execute actions.
 
 ####Return Values
 Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
-- if the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
-- if the call failed, it's a string describing the error
+- If the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
+- If the call failed, it's a string describing the error
 
 For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py) 
 
@@ -38,7 +38,7 @@ Methods
 -------
 ####get_user_info(self)  
 **Description**  
-get details about the current user.  
+Get details about the current user.  
 **Success Return Value**  
 A dictionary containing information about the user, for example its email and the maximum number of agents it can install.  
 **Example**  
@@ -46,24 +46,24 @@ A dictionary containing information about the user, for example its email and th
 
 ####get_n_connected_agents(self)  
 **Description**  
-return the number of agents currently connected to Sysdig Cloud for the current user.  
+Return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
-an integer number.  
+An integer number.  
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
 ####get_alerts(self)  
 **Description**  
-retrieve the list of alerts configured by the user.  
+Retrieve the list of alerts configured by the user.  
 **Success Return Value**  
-an array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
+An array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
 **Example**  
 [examples/list_alerts.py](examples/list_alerts.py).  
 
 #### create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
 **Description**  
-create a threshold-based alert.  
-**Arguments**: 
+Create a threshold-based alert.  
+**Arguments**
 - **name**: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
 - **description**: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
 - **severity**: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
@@ -74,7 +74,7 @@ create a threshold-based alert.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 - **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, _SNS_, _PAGER_DUTY_, _SYSDIG_DUMP_.
 - **enabled**: if True, the alert will be enabled when created.
-- **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons  
+- **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons
 
 **Success Return Value**  
 A dictionary describing the just created alert, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts).  
@@ -123,7 +123,7 @@ A dictionary showing the details of the new dashboard.
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
 **Arguments**  
 - **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in sysdig cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and containers/host. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in sysdig cloud. These entries are use to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the examples section below for ready to use code snippets.  
-- **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optinally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+- **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
 - **end_ts**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
 - **sampling_s**: the duration of the samples that will be returned. 0 Means that the whole data will be returned as a single sample.
 - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the query will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
@@ -135,24 +135,24 @@ A dictionary with the requested data. Data is organized in a list of time sample
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
 
 #### get_data_retention_info(self)  
-**Description**
-Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().
+**Description**  
+Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().  
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
 **Example**  
 [examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
 
 #### get_dashboards(self)  
-**Description**
-Return the list of dasboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
+**Description**  
+Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.  
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
 #### get_explore_grouping_hierarchy(self)  
-**Description**
-Return the user's current Explore gourping hierarchy.
+**Description**  
+Return the user's current Explore gourping hierarchy.  
 **Success Return Value**  
 A list containing the list of the user's Explore grouping criteria.  
 **Example**  
@@ -160,7 +160,7 @@ A list containing the list of the user's Explore grouping criteria.
 
 #### post_event(self, name, description='', severity=6, host='', tags={}):
 **Description**  
-You can use this method you use to send an event to sysdig cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
+You can use this method you use to send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
 **Arguments**  
 - **name**: the name of the new event.  
 - **description**: a longer description offering detailed information about the event.
