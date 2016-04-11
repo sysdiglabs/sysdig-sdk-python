@@ -152,9 +152,9 @@ A dictionary containing the list of available sampling intervals.
 
 #### `delete_dashboards(self, dashname))`  
 **Description**  
-Deletes a dashboard given its name.
+Deletes a dashboard given its name.  
 **Success Return Value**  
-A boolean with the status of the operation
+A boolean with the status of the operation.  
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
