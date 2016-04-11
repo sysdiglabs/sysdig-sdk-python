@@ -12,7 +12,7 @@ script:
 - examples/delete_alert.py XXX
 - examples/create_dashboard.py XXX
 - examples/delete_dashboard.py XXX
-- examples/get_data_advanced.py XXX
+- examples/get_data_advanced.py XXX ip-10-0-2-180.ec2.internal
 - examples/get_data_datasource.py XXX
 - examples/get_data_simple.py XXX
 - examples/list_alerts.py XXX
