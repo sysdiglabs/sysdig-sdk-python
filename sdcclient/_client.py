@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import requests
@@ -9,10 +10,10 @@ class SdcClient:
     userinfo = None
     n_connected_agents = None
 
-    def __init__(self, token, sdc_url = 'https://app.sysdigcloud.com'):
-        self.token = token
+    def __init__(self, token = "", sdc_url = 'https://app.sysdigcloud.com'):
+        self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
-        self.url = sdc_url
+        self.url = os.environ.get("SDC_URL", sdc_url)
    
     def __checkResponse(self, r):
         if r.status_code >= 300:
