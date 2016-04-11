@@ -13,7 +13,7 @@ from sdcclient import SdcClient
 if len(sys.argv) != 2:
     print 'usage: %s <sysdig-token>' % sys.argv[0]
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
-    sys.exit(0)
+    sys.exit(1)
 
 sdc_token = sys.argv[1]
 
@@ -25,4 +25,4 @@ sdclient = SdcClient(sdc_token)
 res = sdclient.delete_alert("tomcat cpu > 80% on any host")
 print res[1]
 if not res[0]:
-    sys.exit(0)
+    sys.exit(1)

@@ -13,7 +13,7 @@ from sdcclient import SdcClient
 if len(sys.argv) != 3:
     print 'usage: %s <sysdig-token> email' % sys.argv[0]
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
-    sys.exit(0)
+    sys.exit(1)
 
 sdc_token = sys.argv[1]
 email = sys.argv[2]
