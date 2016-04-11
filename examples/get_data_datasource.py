@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 #
-# This script shows the basics of getting data out of Sysdig Cloud by crating a
-# very simple request that has no filter an no segmentation.
-#
-# The request queries for the average CPU across all of the instrumented hosts for
-# the last 10 minutes, with 1 minute data granularity
+# This script shows the use of the datasource_type argument in the get_data request,
+# by providing a few clarifying examples
 #
 
 import sys
