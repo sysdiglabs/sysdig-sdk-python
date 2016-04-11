@@ -135,6 +135,7 @@ A dictionary with the requested data. Data is organized in a list of time sample
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
 
 #### get_data_retention_info(self)  
+**Description**
 Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
@@ -142,6 +143,7 @@ A dictionary containing the list of available sampling intervals.
 [examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
 
 #### get_dashboards(self)  
+**Description**
 Return the list of dasboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
@@ -149,6 +151,7 @@ A dictionary containing the list of available sampling intervals.
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
 #### get_explore_grouping_hierarchy(self)  
+**Description**
 Return the user's current Explore gourping hierarchy.
 **Success Return Value**  
 A list containing the list of the user's Explore grouping criteria.  
