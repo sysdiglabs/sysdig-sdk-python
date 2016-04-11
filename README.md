@@ -172,3 +172,11 @@ You can use this method you use to send an event to Sysdig Cloud. The events you
 A dictionary describing the new event.  
 **Example**  
 [examples/post_event.py](examples/post_event.py).  
+
+#### get_metrics(self)  
+**Description**  
+Return the metric list that can be used for data requests/alerts/dashboards.  
+**Success Return Value**  
+A dictionary containing the list of available metrics.  
+**Example**  
+[examples/list_metrics.py](examples/list_metrics.py).  

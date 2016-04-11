@@ -504,3 +504,9 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def get_metrics(self):
+        r = requests.get(self.url + '/api/data/metrics', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
