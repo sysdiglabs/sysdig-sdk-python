@@ -36,7 +36,7 @@ For an example on how to parse this output, take a look at a simple example like
 
 Methods
 -------
-####get_user_info(self)  
+#### `get_user_info(self)`  
 **Description**  
 Get details about the current user.  
 **Success Return Value**  
@@ -44,7 +44,7 @@ A dictionary containing information about the user, for example its email and th
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
-####get_n_connected_agents(self)  
+#### `get_n_connected_agents(self)`  
 **Description**  
 Return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
@@ -52,7 +52,7 @@ An integer number.
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
-####get_alerts(self)  
+#### `get_alerts(self)`  
 **Description**  
 Retrieve the list of alerts configured by the user.  
 **Success Return Value**  
@@ -60,7 +60,7 @@ An array of alert json objects, with the format described at [this link](https:/
 **Example**  
 [examples/list_alerts.py](examples/list_alerts.py).  
 
-#### create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
+#### `create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={})`
 **Description**  
 Create a threshold-based alert.  
 **Arguments**
@@ -81,7 +81,7 @@ A dictionary describing the just created alert, with the format described at [th
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
 
-#### add_email_notification_recipient(self, email)
+#### `add_email_notification_recipient(self, email)`
 **Description**  
 Add a new recipient for email alert notifications.  
 **Arguments**  
@@ -92,7 +92,7 @@ A dictionary showing the updated user notifications configuration.
 **Example**  
 [examples/add_notification_email.py](examples/add_notification_email.py).  
 
-#### create_dashboard_from_view(self, newdashname, viewname, filter)  
+#### `create_dashboard_from_view(self, newdashname, viewname, filter)`  
 **Description**  
 Create a new dasboard using one of the Sysdig Cloud views as a template. You will be able to define the scope of the new dasboard.  
 **Arguments**  
@@ -105,7 +105,7 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### create_dashboard_from_dashboard(self, newdashname, templatename, filter):
+#### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
 **Description**  
 Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
 **Arguments**  
@@ -118,7 +118,7 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')  
+#### `get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')`  
 **Description**  
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
 **Arguments**  
@@ -134,7 +134,7 @@ A dictionary with the requested data. Data is organized in a list of time sample
 **Examples**  
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py).  
 
-#### get_data_retention_info(self)  
+#### `get_data_retention_info(self)`  
 **Description**  
 Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().  
 **Success Return Value**  
@@ -142,7 +142,7 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
 
-#### get_dashboards(self)  
+#### `get_dashboards(self)`  
 **Description**  
 Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.  
 **Success Return Value**  
@@ -150,7 +150,7 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
-#### get_explore_grouping_hierarchy(self)  
+#### `get_explore_grouping_hierarchy(self)`  
 **Description**  
 Return the user's current Explore gourping hierarchy.  
 **Success Return Value**  
@@ -158,7 +158,7 @@ A list containing the list of the user's Explore grouping criteria.
 **Example**  
 [examples/print_explore_grouping.py](examples/print_explore_grouping.py).  
 
-#### post_event(self, name, description='', severity=6, host='', tags={}):
+#### `post_event(self, name, description='', severity=6, host='', tags={})`
 **Description**  
 You can use this method you use to send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
 **Arguments**  
@@ -173,7 +173,7 @@ A dictionary describing the new event.
 **Example**  
 [examples/post_event.py](examples/post_event.py).  
 
-#### get_metrics(self)  
+#### `get_metrics(self)`  
 **Description**  
 Return the metric list that can be used for data requests/alerts/dashboards.  
 **Success Return Value**  
