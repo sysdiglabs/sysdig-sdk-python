@@ -1,26 +1,24 @@
 import os
 import sys
-import time
-import requests
 import json
-import re
-import time
+import requests
 
 class SdcClient:
     userinfo = None
     n_connected_agents = None
+    lasterr = None
 
-    def __init__(self, token = "", sdc_url = 'https://app.sysdigcloud.com'):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com'):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         self.url = os.environ.get("SDC_URL", sdc_url)
-   
+
     def __checkResponse(self, r):
         if r.status_code >= 300:
-            self.errorcode = r.status_code
+            errorcode = r.status_code
 
             try:
-               j = r.json()
+                j = r.json()
             except:
                 self.lasterr = 'status code ' + str(self.errorcode)
                 return False
@@ -31,14 +29,14 @@ class SdcClient:
                 else:
                     self.lasterr = j['errors'][0]['reason']
             elif 'message' in j:
-                    self.lasterr = j['message']
+                self.lasterr = j['message']
             else:
                 self.lasterr = 'status code ' + str(self.errorcode)
             return False
         return True
 
     def get_user_info(self):
-        if self.userinfo == None:
+        if self.userinfo is None:
             r = requests.get(self.url + '/api/user/me', headers=self.hdrs)
             if not self.__checkResponse(r):
                 return [False, self.lasterr]
@@ -58,7 +56,8 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={}):
+    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
+                     segment_condition='ANY', filter='', notify='', enabled=True, annotations={}):
         #
         # Get the list of alerts from the server
         #
@@ -91,9 +90,9 @@ class SdcClient:
             }
         }
 
-        if segmentby != None and segmentby != []: 
+        if segmentby != None and segmentby != []:
             alert_json['alert']['segmentBy'] = segmentby
-            alert_json['alert']['segmentCondition'] = { 'type' : segment_condition }
+            alert_json['alert']['segmentCondition'] = {'type' : segment_condition}
 
         if annotations != None and annotations != {}:
             alert_json['alert']['annotations'] = annotations
@@ -104,7 +103,7 @@ class SdcClient:
         #
         # Create the new alert
         #
-        r = requests.post(self.url + '/api/alerts', headers=self.hdrs, data = json.dumps(alert_json))
+        r = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
@@ -116,7 +115,8 @@ class SdcClient:
         return [True, r.json()]
 
     def set_notification_settings(self, settings):
-        r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs, data = json.dumps(settings))
+        r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs,
+                         data=json.dumps(settings))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
@@ -138,7 +138,7 @@ class SdcClient:
         #
         # Add the given recipient
         #
-        if not email in j['userNotification']['email']['recipients']:
+        if email not in j['userNotification']['email']['recipients']:
             j['userNotification']['email']['recipients'].append(email)
         else:
             return [False, 'notification target ' + email + ' already present']
@@ -152,7 +152,7 @@ class SdcClient:
 
         data = r.json()
 
-        if not 'groupConfigurations' in data:
+        if 'groupConfigurations' not in data:
             return [False, 'corrputed groupConfigurations API response']
 
         gconfs = data['groupConfigurations']
@@ -185,7 +185,7 @@ class SdcClient:
             if tline['sampling'] == sampling_time_s * 1000000:
                 timeinfo = tline
 
-        if timeinfo == None:
+        if timeinfo is None:
             return [False, "sampling time " + str(sampling_time_s) + " not supported"]
 
         timeinfo['from'] = timeinfo['to'] - timeinfo['sampling']
@@ -250,7 +250,8 @@ class SdcClient:
         #
         # Fire the request
         #
-        r = requests.post(self.url + '/api/data?format=map', headers=self.hdrs, data = json.dumps(req_json))
+        r = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
+                          data=json.dumps(req_json))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
@@ -263,11 +264,11 @@ class SdcClient:
 
     def get_view(self, name):
         gvres = self.get_views_list()
-        if gvres[0] == False:
+        if gvres[0] is False:
             return gvres
 
         vlist = gvres[1]['drilldownDashboardDescriptors']
-        
+
         id = None
 
         for v in vlist:
@@ -290,7 +291,7 @@ class SdcClient:
         return [True, r.json()]
 
     def create_dashboard_from_template(self, newdashname, template, scope):
-        if scope == None:
+        if scope is None:
             scope = []
 
         if type(scope) is str:
@@ -321,18 +322,19 @@ class SdcClient:
         template['version'] = None
         template['name'] = newdashname
         template['isShared'] = False # make sure the dashboard is not shared
-        
+
         #
         # Assign the filter and the group ID to each view to point to this service
         #
         filters = []
         gby = []
         for sentry in scope:
-            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0]   , 'filters' : None})
+            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0],
+                            'filters' : None})
             gby.append({'metric': sentry.keys()[0]})
 
         filter = {
-            'filters' : 
+            'filters' :
             {
                 'logic' : 'and',
                 'filters' : filters
@@ -350,15 +352,16 @@ class SdcClient:
 
                     confid = baseconfid + str(j)
 
-                    gconf = { 'id': confid,
-                        'groups': [
-                            {
-                                'groupBy': gby
+                    gconf = {'id': confid,
+                             'groups': [
+                                 {
+                                     'groupBy': gby
+                                 }
+                             ]
                             }
-                        ]
-                    }
 
-                    r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs, data = json.dumps(gconf))
+                    r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs,
+                                      data=json.dumps(gconf))
                     if not self.__checkResponse(r):
                         return [False, self.lasterr]
 
@@ -378,7 +381,7 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data = json.dumps(ddboard))
+        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps(ddboard))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         else:
@@ -389,7 +392,7 @@ class SdcClient:
         # Find our template view
         #
         gvres = self.get_view(viewname)
-        if gvres[0] == False:
+        if gvres[0] is False:
             return gvres
 
         view = gvres[1]['drilldownDashboard']
@@ -422,7 +425,7 @@ class SdcClient:
                 dboard = db
                 break
 
-        if dboard == None:
+        if dboard is None:
             print 'can\'t find dashboard ' + templatename + ' to use as a template'
             sys.exit(0)
 
@@ -435,7 +438,7 @@ class SdcClient:
         #
         # Load the Dashboard
         #
-        with open(filename) as data_file:    
+        with open(filename) as data_file:
             dboard = json.load(data_file)
 
         dboard['timeMode'] = {'mode' : 1}
@@ -456,11 +459,11 @@ class SdcClient:
     '''
     def post_event(self, name, description='', severity=6, host='', tags={}):
         edata = {
-          'event': {
-            'name': name,
-            'severity': severity
-          }
-        }
+            'event': {
+                'name': name,
+                'severity': severity
+                }
+            }
 
         if description != '':
             edata['event']['description'] = description
@@ -471,12 +474,13 @@ class SdcClient:
         if tags != {}:
             edata['event']['tags'] = tags
 
-        r = requests.post(self.url + '/api/events/', headers=self.hdrs, data = json.dumps(edata))
+        r = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host'):
+    def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
+                 filter='', datasource_type='host'):
         reqbody = {
             'metrics': metrics,
             'dataSourceType': datasource_type,
@@ -496,7 +500,7 @@ class SdcClient:
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
 
-        r = requests.post(self.url + '/api/data/', headers=self.hdrs, data = json.dumps(reqbody))
+        r = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
