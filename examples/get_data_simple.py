@@ -7,8 +7,9 @@
 # the last 10 minutes, with 1 minute data granularity
 #
 
+import os
 import sys
-sys.path.insert(0, '../')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
 #
