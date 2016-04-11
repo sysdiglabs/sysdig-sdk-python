@@ -36,29 +36,16 @@ For an example on how to parse this output, take a look at a simple example like
 
 Methods
 -------
-#### `get_user_info(self)`  
+#### `add_email_notification_recipient(self, email)`
 **Description**  
-Get details about the current user.  
-**Success Return Value**  
-A dictionary containing information about the user, for example its email and the maximum number of agents it can install.  
-**Example**  
-[examples/print_user_info.py](examples/print_user_info.py).  
+Add a new recipient for email alert notifications.  
+**Arguments**  
+- **email**: the email target to add.
 
-#### `get_n_connected_agents(self)`  
-**Description**  
-Return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
-An integer number.  
+A dictionary showing the updated user notifications configuration.  
 **Example**  
-[examples/print_user_info.py](examples/print_user_info.py).  
-
-#### `get_alerts(self)`  
-**Description**  
-Retrieve the list of alerts configured by the user.  
-**Success Return Value**  
-An array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
-**Example**  
-[examples/list_alerts.py](examples/list_alerts.py).  
+[examples/add_notification_email.py](examples/add_notification_email.py).  
 
 #### `create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={})`
 **Description**  
@@ -81,16 +68,18 @@ A dictionary describing the just created alert, with the format described at [th
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
 
-#### `add_email_notification_recipient(self, email)`
+#### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
 **Description**  
-Add a new recipient for email alert notifications.  
+Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
 **Arguments**  
-- **email**: the email target to add.
+- **newdashname**: the name of the dashboard that will be created.
+- **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
+- **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 
 **Success Return Value**  
-A dictionary showing the updated user notifications configuration.  
+A dictionary showing the details of the new dashboard.  
 **Example**  
-[examples/add_notification_email.py](examples/add_notification_email.py).  
+[examples/create_dashboard.py](examples/create_dashboard.py).  
 
 #### `create_dashboard_from_view(self, newdashname, viewname, filter)`  
 **Description**  
@@ -105,18 +94,21 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
+#### `delete_dashboards(self, dashname))`  
 **Description**  
-Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
-**Arguments**  
-- **newdashname**: the name of the dashboard that will be created.
-- **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
-- **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
-
+Deletes a dashboard given its name.  
 **Success Return Value**  
-A dictionary showing the details of the new dashboard.  
+A boolean with the status of the operation.  
 **Example**  
-[examples/create_dashboard.py](examples/create_dashboard.py).  
+[examples/delete_dashboard.py](examples/delete_dashboard.py).  
+
+#### `get_alerts(self)`  
+**Description**  
+Retrieve the list of alerts configured by the user.  
+**Success Return Value**  
+An array of alert json objects, with the format described at [this link](https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts).  
+**Example**  
+[examples/list_alerts.py](examples/list_alerts.py).  
 
 #### `get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')`  
 **Description**  
@@ -150,14 +142,6 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
-#### `delete_dashboards(self, dashname))`  
-**Description**  
-Deletes a dashboard given its name.  
-**Success Return Value**  
-A boolean with the status of the operation.  
-**Example**  
-[examples/delete_dashboard.py](examples/delete_dashboard.py).  
-
 #### `get_explore_grouping_hierarchy(self)`  
 **Description**  
 Return the user's current Explore gourping hierarchy.  
@@ -165,6 +149,30 @@ Return the user's current Explore gourping hierarchy.
 A list containing the list of the user's Explore grouping criteria.  
 **Example**  
 [examples/print_explore_grouping.py](examples/print_explore_grouping.py).  
+
+#### `get_metrics(self)`  
+**Description**  
+Return the metric list that can be used for data requests/alerts/dashboards.  
+**Success Return Value**  
+A dictionary containing the list of available metrics.  
+**Example**  
+[examples/list_metrics.py](examples/list_metrics.py).  
+
+#### `get_n_connected_agents(self)`  
+**Description**  
+Return the number of agents currently connected to Sysdig Cloud for the current user.  
+**Success Return Value**  
+An integer number.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
+
+#### `get_user_info(self)`  
+**Description**  
+Get details about the current user.  
+**Success Return Value**  
+A dictionary containing information about the user, for example its email and the maximum number of agents it can install.  
+**Example**  
+[examples/print_user_info.py](examples/print_user_info.py).  
 
 #### `post_event(self, name, description='', severity=6, host='', tags={})`
 **Description**  
@@ -180,11 +188,3 @@ You can use this method you use to send an event to Sysdig Cloud. The events you
 A dictionary describing the new event.  
 **Example**  
 [examples/post_event.py](examples/post_event.py).  
-
-#### `get_metrics(self)`  
-**Description**  
-Return the metric list that can be used for data requests/alerts/dashboards.  
-**Success Return Value**  
-A dictionary containing the list of available metrics.  
-**Example**  
-[examples/list_metrics.py](examples/list_metrics.py).  
