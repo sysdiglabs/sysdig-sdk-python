@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# This example shows how to delete a dashboard
+# This example shows how to delete an alert
 #
 
 import sys
@@ -22,12 +22,7 @@ sdc_token = sys.argv[1]
 #
 sdclient = SdcClient(sdc_token)
 
-res = sdclient.delete_dashboard("API test - cassandra in prod")
-print res[1]
-if not res[0]:
-    sys.exit(0)
-
-res = sdclient.delete_dashboard("API test - cassandra in dev")
+res = sdclient.delete_alert("tomcat cpu > 80% on any host")
 print res[1]
 if not res[0]:
     sys.exit(0)

@@ -94,11 +94,19 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### `delete_dashboards(self, dashname))`  
+#### `delete_alert(self, name)`  
+**Description**  
+Deletes an alert given its name.  
+**Success Return Value**  
+A string with the number of alerts deleted.  
+**Example**  
+[examples/delete_alert.py](examples/delete_alert.py).  
+
+#### `delete_dashboard(self, dashname)`  
 **Description**  
 Deletes a dashboard given its name.  
 **Success Return Value**  
-A boolean with the status of the operation.  
+A string with the number of dashboards deleted.  
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
@@ -126,14 +134,6 @@ A dictionary with the requested data. Data is organized in a list of time sample
 **Examples**  
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py), [examples/get_data_datasource.py](examples/get_data_datasource.py).  
 
-#### `get_data_retention_info(self)`  
-**Description**  
-Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().  
-**Success Return Value**  
-A dictionary containing the list of available sampling intervals.  
-**Example**  
-[examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
-
 #### `get_dashboards(self)`  
 **Description**  
 Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.  
@@ -141,6 +141,14 @@ Return the list of dashboards available under the given user account. This inclu
 A dictionary containing the list of available sampling intervals.  
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
+
+#### `get_data_retention_info(self)`  
+**Description**  
+Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().  
+**Success Return Value**  
+A dictionary containing the list of available sampling intervals.  
+**Example**  
+[examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
 
 #### `get_explore_grouping_hierarchy(self)`  
 **Description**  

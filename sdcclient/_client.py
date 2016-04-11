@@ -20,7 +20,7 @@ class SdcClient:
             try:
                 j = r.json()
             except:
-                self.lasterr = 'status code ' + str(self.errorcode)
+                self.lasterr = 'status code ' + str(errorcode)
                 return False
 
             if 'errors' in j:
@@ -31,7 +31,7 @@ class SdcClient:
             elif 'message' in j:
                 self.lasterr = j['message']
             else:
-                self.lasterr = 'status code ' + str(self.errorcode)
+                self.lasterr = 'status code ' + str(errorcode)
             return False
         return True
 
@@ -107,6 +107,26 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def delete_alert(self, name):
+        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        j = r.json()
+
+        deleted = 0
+
+        for db in j['alerts']:
+            if 'name' in db:
+                if db['name'] == name:
+                    r = requests.delete(self.url + '/api/alerts/' + str(db['id']), headers=self.hdrs)
+                    if not self.__checkResponse(r):
+                        return [False, self.lasterr]
+                    deleted += 1
+
+        if deleted == 0:
+            return [False, "alert not found"]
+        return [True, "alerts deleted: " + str(deleted)]
 
     def get_notification_settings(self):
         r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
@@ -456,14 +476,18 @@ class SdcClient:
 
         j = r.json()
 
+        deleted = 0
 
         for db in j['dashboards']:
             if db['name'] == dashname:
                 r = requests.delete(self.url + '/ui/dashboards/' + str(db['id']), headers=self.hdrs)
                 if not self.__checkResponse(r):
                     return [False, self.lasterr]
+                deleted += 1
 
-        return True
+        if deleted == 0:
+            return [False, "dashboard not found"]
+        return [True, "dashboards deleted: " + str(deleted)]
 
     '''
         Annotations format:
