@@ -5,6 +5,8 @@ env:
 python:
 - '2.6'
 - '2.7'
+before_script:
+- export PYTHONPATH=$PYTHONPATH:$(pwd)
 script:
 - examples/create_alert.py XXX
 - examples/delete_alert.py XXX
