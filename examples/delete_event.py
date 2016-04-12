@@ -37,9 +37,9 @@ if not res[0]:
 # Delete the first event among the returned ones
 #
 for event in res[1]['events']:
-	print "Deleting event " + json.dumps(event)
+	print "Deleting event " + event['name']
 
-	res = sdclient.delete_event(event['id'])
+	res = sdclient.delete_event(event)
 
 	if not res[0]:
 		print res[1]

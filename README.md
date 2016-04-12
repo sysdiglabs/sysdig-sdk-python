@@ -104,7 +104,7 @@ Deletes an alert.
 - **alert**: the alert object as returned by `get_alerts()`.
 
 **Success Return Value**  
-A string with the number of alerts deleted.  
+`None`.  
 **Example**  
 [examples/delete_alert.py](examples/delete_alert.py).  
 
@@ -119,11 +119,11 @@ Deletes a dashboard.
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
-#### `delete_event(self, event_id)`  
+#### `delete_event(self, event)`  
 **Description**  
-Deletes an event given its id.  
+Deletes an event.  
 **Arguments**  
-- **event_id**: id of the event to be deleted.
+- **event**: the event object as returned by `get_events()`.
 
 **Success Return Value**  
 `None`.  

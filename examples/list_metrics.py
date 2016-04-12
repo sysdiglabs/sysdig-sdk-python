@@ -37,4 +37,5 @@ else:
     print res[1]
     sys.exit(1)
 
-print data
+for metric_id, metric in data.iteritems():
+	print "Metric name: " + metric_id + ", type: " + metric['type']

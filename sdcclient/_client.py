@@ -15,6 +15,7 @@ class SdcClient:
     def __checkResponse(self, r):
         if r.status_code >= 300:
             errorcode = r.status_code
+            self.lasterr = None
 
             try:
                 j = r.json()
@@ -25,8 +26,14 @@ class SdcClient:
             if 'errors' in j:
                 if 'message' in j['errors'][0]:
                     self.lasterr = j['errors'][0]['message']
-                else:
-                    self.lasterr = j['errors'][0]['reason']
+
+                if 'reason' in j['errors'][0]:
+                    if self.lasterr is not None:
+                        self.lasterr += ' '
+                    else:
+                        self.lasrerr = ''
+
+                    self.lasterr += j['errors'][0]['reason']
             elif 'message' in j:
                 self.lasterr = j['message']
             else:
@@ -71,6 +78,18 @@ class SdcClient:
             params['resolved'] = resolved
 
         r = requests.get(self.url + '/api/notifications', headers=self.hdrs, params=params)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def update_notification_resolution(self, notification, resolved):
+        if 'id' not in notification:
+            return [False, "Invalid notification format"]
+
+        notification['resolved'] = resolved
+        data = {'notification': notification}
+
+        r = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
@@ -530,8 +549,11 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def delete_event(self, event_id):
-        r = requests.delete(self.url + '/api/events/' + str(event_id), headers=self.hdrs)
+    def delete_event(self, event):
+        if 'id' not in event:
+            return [False, "Invalid event format"]
+
+        r = requests.delete(self.url + '/api/events/' + str(event['id']), headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, None]
