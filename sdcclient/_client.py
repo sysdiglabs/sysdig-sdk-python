@@ -496,7 +496,7 @@ class SdcClient:
           "key2": "value2",
           "key3": "value3"}
     '''
-    def post_event(self, name, description='', severity=6, host='', tags={}):
+    def post_event(self, name, description=None, severity=6, host=None, tags=None):
         edata = {
             'event': {
                 'name': name,
@@ -504,16 +504,36 @@ class SdcClient:
                 }
             }
 
-        if description != '':
+        if description is not None:
             edata['event']['description'] = description
 
-        if host != '':
+        if host is not None:
             edata['event']['host'] = host
 
-        if tags != {}:
+        if tags is not None:
             edata['event']['tags'] = tags
 
         r = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
+    def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
+        params = {}
+
+        if name is not None:
+            params['name'] = name
+
+        if from_ts is not None:
+            params['from'] = from_ts
+
+        if to_ts is not None:
+            params['to'] = to_ts
+
+        if tags is not None:
+            params['tags'] = tags
+
+        r = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]

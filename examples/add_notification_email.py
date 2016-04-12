@@ -36,3 +36,4 @@ if res[0]:
     print 'Recipient added successfully'
 else:
     print res[1]
+    sys.exit(1)

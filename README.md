@@ -151,7 +151,20 @@ Return the list of data retention intervals, with beginning and end UTC time for
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
 **Example**  
-[examples/print_data_retention_info.py](examples/print_data_retention_info.py).  
+[examples/print_data_retention_info.py](examples/print_data_retention_info.py). 
+
+#### `get_events(self, name=None, from_ts=None, to_ts=None, tags=None)` 
+**Description**  
+Returns the list of Sysdig Cloud events.
+**Arguments**  
+- **name**: filter events by name.  
+- **from_ts**: filter events created after `from_ts`.
+- **to_ts**: filter events created before `to_ts`.
+- **tags**: filter events by tags. Can be, for example `tag1 = 'value1'`
+**Success Return Value**  
+A dictionary containing the list of events.  
+**Example**  
+[examples/list_events.py](examples/list_events.py). 
 
 #### `get_explore_grouping_hierarchy(self)`  
 **Description**  
@@ -185,7 +198,7 @@ A dictionary containing information about the user, for example its email and th
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
-#### `post_event(self, name, description='', severity=6, host='', tags={})`
+#### `post_event(self, name, description=None, severity=6, host=None, tags=None)`
 **Description**  
 You can use this method you use to send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
 **Arguments**  

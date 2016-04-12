@@ -32,7 +32,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Post the event
 #
-res = sdclient.post_event(name, description, severity)
+res = sdclient.post_event(name, description, severity, tags={"tag1" : "value1"})
 
 #
 # Return the result
@@ -41,3 +41,4 @@ if res[0]:
     print 'Event Posted Successfully'
 else:
     print res[1]
+    sys.exit(1)

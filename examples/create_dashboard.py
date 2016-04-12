@@ -58,4 +58,4 @@ if res[0]:
     print 'Dashboard copied successfully'
 else:
     print res[1]
-
+    sys.exit(1)

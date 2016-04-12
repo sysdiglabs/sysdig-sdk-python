@@ -43,10 +43,6 @@ res = sdclient.create_alert('tomcat cpu > 80% on any host',  # Alert name.
 #
 # Validate a print the results.
 #
-if res[0]:
-    data = res[1]
-else:
-    print res[1]
+print res[1]
+if not res[0]:
     sys.exit(1)
-
-print res
