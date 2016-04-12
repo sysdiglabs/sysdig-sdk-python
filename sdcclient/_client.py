@@ -172,7 +172,7 @@ class SdcClient:
         data = r.json()
 
         if 'groupConfigurations' not in data:
-            return [False, 'corrputed groupConfigurations API response']
+            return [False, 'corrupted groupConfigurations API response']
 
         gconfs = data['groupConfigurations']
 
@@ -537,6 +537,12 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def delete_event(self, event_id):
+        r = requests.delete(self.url + '/api/events/' + str(event_id), headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, None]
 
     def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
                  filter='', datasource_type='host'):

@@ -113,6 +113,17 @@ A string with the number of dashboards deleted.
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
+#### `delete_event(self, event_id)`  
+**Description**  
+Deletes an event given its id.  
+**Arguments**  
+- **event_id**: id of the event to be deleted.
+
+**Success Return Value**  
+`None`.  
+**Example**  
+[examples/delete_event.py](examples/delete_event.py).  
+
 #### `get_alerts(self)`  
 **Description**  
 Retrieve the list of alerts configured by the user.  
@@ -161,6 +172,7 @@ Returns the list of Sysdig Cloud events.
 - **from_ts**: filter events created after `from_ts`.
 - **to_ts**: filter events created before `to_ts`.
 - **tags**: filter events by tags. Can be, for example `tag1 = 'value1'`.  
+
 **Success Return Value**  
 A dictionary containing the list of events.  
 **Example**  

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #
-# Get user events from Sysdig Cloud
+# Delete user events from Sysdig Cloud
 #
 
+import json
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
@@ -24,37 +25,24 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token)
 
 #
-# Get the entire list of events
-#
-res = sdclient.get_events()
-
-print res[1]
-if not res[0]:
-	sys.exit(1)
-
-#
-# Get the events that match a period in time
-#
-res = sdclient.get_events(from_ts=1460365211, to_ts=1460465211)
-
-print res[1]
-if not res[0]:
-	sys.exit(1)
-
-#
 # Get the events that match a name
 #
 res = sdclient.get_events(name='test event')
 
-print res[1]
 if not res[0]:
+	print res[1]
 	sys.exit(1)
 
 #
-# Get the events that match a tag/value pair
+# Delete the first event among the returned ones
 #
-res = sdclient.get_events(tags="tag1 = 'value1'")
+for event in res[1]['events']:
+	print "Deleting event " + json.dumps(event)
 
-print res[1]
-if not res[0]:
-	sys.exit(1)
+	res = sdclient.delete_event(event['id'])
+
+	if not res[0]:
+		print res[1]
+		sys.exit(1)
+	else:
+		sys.exit(0)
