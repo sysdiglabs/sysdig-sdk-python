@@ -8,6 +8,10 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
+def print_events(data):
+    for event in data['events']:
+        print 'time: %d, name: %s, description: %s, severity: %d' % (event['timestamp'], event['name'], event['description'], event['severity'])
+
 #
 # Parse arguments
 #
@@ -28,33 +32,41 @@ sdclient = SdcClient(sdc_token)
 #
 res = sdclient.get_events()
 
-print res[1]
-if not res[0]:
-	sys.exit(1)
+if res[0]:
+    print_events(res[1])
+else:
+    print res[1]
+    sys.exit(1)
 
 #
 # Get the events that match a period in time
 #
 res = sdclient.get_events(from_ts=1460365211, to_ts=1460465211)
 
-print res[1]
-if not res[0]:
-	sys.exit(1)
+if res[0]:
+    print_events(res[1])
+else:
+    print res[1]
+    sys.exit(1)
 
 #
 # Get the events that match a name
 #
 res = sdclient.get_events(name='test event')
 
-print res[1]
-if not res[0]:
-	sys.exit(1)
+if res[0]:
+    print_events(res[1])
+else:
+    print res[1]
+    sys.exit(1)
 
 #
 # Get the events that match a tag/value pair
 #
 res = sdclient.get_events(tags="tag1 = 'value1'")
 
-print res[1]
-if not res[0]:
-	sys.exit(1)
+if res[0]:
+    print_events(res[1])
+else:
+    print res[1]
+    sys.exit(1)

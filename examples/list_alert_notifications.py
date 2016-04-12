@@ -31,31 +31,31 @@ res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.
 
 print res[1]
 if not res[0]:
-	sys.exit(1)
+    sys.exit(1)
 
 #
-# Get the notifications in the active state
+# Get the notifications in the last day and active state
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), state='ACTIVE')
 
 print res[1]
 if not res[0]:
-	sys.exit(1)
+    sys.exit(1)
 
 #
-# Get the notifications in the active state
+# Get the notifications in the last day and active state
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), state='OK')
 
 print res[1]
 if not res[0]:
-	sys.exit(1)
+    sys.exit(1)
 
 #
-# Get the resolved notifications
+# Get the notifications in the last day and resolved state
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), resolved=True)
 
 print res[1]
 if not res[0]:
-	sys.exit(1)
+    sys.exit(1)

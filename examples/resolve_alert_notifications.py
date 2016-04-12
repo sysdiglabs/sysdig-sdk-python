@@ -12,12 +12,13 @@ from sdcclient import SdcClient
 #
 # Parse arguments
 #
-if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
+if len(sys.argv) != 3:
+    print 'usage: %s <sysdig-token> <num-days-to-resolve>' % sys.argv[0]
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(1)
 
 sdc_token = sys.argv[1]
+num_days_to_resolve = sys.argv[2]
 
 #
 # Instantiate the SDC client
@@ -27,7 +28,8 @@ sdclient = SdcClient(sdc_token)
 #
 # Get the unresolved notifications in the last day
 #
-res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), resolved=False)
+res = sdclient.get_notifications(from_ts=int(time.time() - num_days_to_resolve * 86400),
+                                 to_ts=int(time.time()), resolved=False)
 
 if not res[0]:
     print res[1]

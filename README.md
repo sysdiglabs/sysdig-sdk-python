@@ -164,7 +164,7 @@ A dictionary containing the list of available sampling intervals.
 
 #### `get_data_retention_info(self)`  
 **Description**  
-Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to get_data().  
+Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to `get_data()`.  
 **Success Return Value**  
 A dictionary containing the list of available sampling intervals.  
 **Example**  
@@ -175,8 +175,8 @@ A dictionary containing the list of available sampling intervals.
 Returns the list of Sysdig Cloud events.  
 **Arguments**  
 - **name**: filter events by name.  
-- **from_ts**: filter events created after `from_ts`.
-- **to_ts**: filter events created before `to_ts`.
+- **from_ts**: filter events by start time. Timestamp format is in UTC (seconds).
+- **to_ts**: filter events by end time. Timestamp format is in UTC (seconds).
 - **tags**: filter events by tags. Can be, for example `tag1 = 'value1'`.  
 
 **Success Return Value**  
@@ -207,6 +207,32 @@ Return the number of agents currently connected to Sysdig Cloud for the current 
 An integer number.  
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
+
+#### `get_notifications(self, from_ts, to_ts, state=None, resolved=None)`
+**Description**  
+Returns the list of Sysdig Cloud alert notifications.  
+**Arguments**  
+- **from_ts**: filter events by start time. Timestamp format is in UTC (seconds). 
+- **to_ts**: filter events by start time. Timestamp format is in UTC (seconds).
+- **state**: filter events by alert state. Supported values are `OK` and `ACTIVE`.  
+- **resolved**: filter events by resolution status. Supported values are `True` and `False.
+
+**Success Return Value**  
+A dictionary containing the list of notifications.  
+**Example**  
+[examples/list_alert_notifications.py](examples/list_alert_notifications.py). 
+
+#### `update_notification_resolution(self, notification, resolved)`
+**Description**  
+Updates the resolution status of an alert notification.  
+**Arguments**  
+- **notification**: notification object as returned by `get_notifications()`. 
+- **resolved**: new resolution status. Supported values are `True` and `False.
+
+**Success Return Value**  
+The updated notification.  
+**Example**  
+[examples/resolve_alert_notifications.py](examples/resolve_alert_notifications.py). 
 
 #### `get_user_info(self)`  
 **Description**  

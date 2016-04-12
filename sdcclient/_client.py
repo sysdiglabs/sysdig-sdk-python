@@ -49,6 +49,13 @@ class SdcClient:
             self.userinfo = r.json()
         return [True, self.userinfo]
 
+    def get_connected_agents(self):
+        r = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        data = r.json()
+        return [True, data['agents']]
+
     def get_n_connected_agents(self):
         r = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
         if not self.__checkResponse(r):
@@ -589,3 +596,47 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def get_sysdig_captures(self):
+        r = requests.get(self.url + '/api/sysdig', headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()['dumps']]
+
+    def poll_sysdig_capture(self, capture):
+        if 'id' not in capture:
+            return [False, 'Invalid capture format']
+
+        r = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()['dump']]
+
+    def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
+        res = self.get_connected_agents()
+        if not res[0]:
+            return res
+
+        capture_agent = None
+
+        for agent in res[1]:
+            if hostname == agent['hostName']:
+                capture_agent = agent
+                break
+
+        if capture_agent is None:
+            return [False, hostname + ' not found']
+
+        data = {
+            'agent': capture_agent,
+            'name' : capture_name,
+            'duration': duration,
+            'folder': folder,
+            'filters': capture_filter,
+            'bucketName': ''
+        }
+
+        r = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()['dump']]
