@@ -155,12 +155,12 @@ A dictionary containing the list of available sampling intervals.
 
 #### `get_events(self, name=None, from_ts=None, to_ts=None, tags=None)` 
 **Description**  
-Returns the list of Sysdig Cloud events.
+Returns the list of Sysdig Cloud events.  
 **Arguments**  
 - **name**: filter events by name.  
 - **from_ts**: filter events created after `from_ts`.
 - **to_ts**: filter events created before `to_ts`.
-- **tags**: filter events by tags. Can be, for example `tag1 = 'value1'`
+- **tags**: filter events by tags. Can be, for example `tag1 = 'value1'`.  
 **Success Return Value**  
 A dictionary containing the list of events.  
 **Example**  

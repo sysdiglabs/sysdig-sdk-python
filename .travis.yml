@@ -18,6 +18,7 @@ script:
 - examples/list_hosts.py XXX
 - examples/list_metrics.py XXX
 - examples/post_event.py XXX "test event name" "test event description"
+- examples/list_events.py XXX
 - examples/print_data_retention_info.py XXX
 - examples/print_explore_grouping.py XXX
 - examples/print_user_info.py XXX
@@ -36,6 +37,7 @@ script:
 - examples/list_hosts.py XXX
 - examples/list_metrics.py XXX
 - examples/post_event.py XXX "test event name" "test event description"
+- examples/list_events.py XXX
 - examples/print_data_retention_info.py XXX
 - examples/print_explore_grouping.py XXX
 - examples/print_user_info.py XXX
