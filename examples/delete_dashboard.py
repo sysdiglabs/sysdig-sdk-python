@@ -23,12 +23,21 @@ sdc_token = sys.argv[1]
 #
 sdclient = SdcClient(sdc_token)
 
-res = sdclient.delete_dashboard("API test - cassandra in prod")
-print res[1]
+#
+# List the dashboards
+#
+res = sdclient.get_dashboards()
 if not res[0]:
+    print res[1]
     sys.exit(1)
 
-res = sdclient.delete_dashboard("API test - cassandra in dev")
-print res[1]
-if not res[0]:
-    sys.exit(1)
+#
+# Delete all the dashboards containing "API test"
+#
+for dashboard in res[1]['dashboards']:
+    if 'API test' in dashboard['name']:
+        print "Deleting " + dashboard['name']
+        res = sdclient.delete_dashboard(dashboard)
+        if not res[0]:
+            print res[1]
+            sys.exit(1)

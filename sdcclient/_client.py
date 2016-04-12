@@ -55,6 +55,26 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
+    def get_notifications(self, from_ts, to_ts, state=None, resolved=None):
+        params = {}
+
+        if from_ts is not None:
+            params['from'] = from_ts * 1000000
+
+        if to_ts is not None:
+            params['to'] = to_ts * 1000000
+
+        if state is not None:
+            params['state'] = state
+
+        if resolved is not None:
+            params['resolved'] = resolved
+
+        r = requests.get(self.url + '/api/notifications', headers=self.hdrs, params=params)
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        return [True, r.json()]
+
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
                      segment_condition='ANY', filter='', notify='', enabled=True, annotations={}):
         #
@@ -107,25 +127,15 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, r.json()]
 
-    def delete_alert(self, name):
-        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+    def delete_alert(self, alert):
+        if 'id' not in alert:
+            return [False, "Invalid alert format"]
+
+        r = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
-        j = r.json()
 
-        deleted = 0
-
-        for db in j['alerts']:
-            if 'name' in db:
-                if db['name'] == name:
-                    r = requests.delete(self.url + '/api/alerts/' + str(db['id']), headers=self.hdrs)
-                    if not self.__checkResponse(r):
-                        return [False, self.lasterr]
-                    deleted += 1
-
-        if deleted == 0:
-            return [False, "alert not found"]
-        return [True, "alerts deleted: " + str(deleted)]
+        return [True, None]
 
     def get_notification_settings(self):
         r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
@@ -468,34 +478,16 @@ class SdcClient:
         #
         self.create_dashboard_from_template(newdashname, dboard, scope)
 
-    def delete_dashboard(self, dashname):
-        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+    def delete_dashboard(self, dashboard):
+        if 'id' not in dashboard:
+            return [False, "Invalid dashboard format"]
+
+        r = requests.delete(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
 
-        j = r.json()
+        return [True, None]
 
-        deleted = 0
-
-        for db in j['dashboards']:
-            if db['name'] == dashname:
-                r = requests.delete(self.url + '/ui/dashboards/' + str(db['id']), headers=self.hdrs)
-                if not self.__checkResponse(r):
-                    return [False, self.lasterr]
-                deleted += 1
-
-        if deleted == 0:
-            return [False, "dashboard not found"]
-        return [True, "dashboards deleted: " + str(deleted)]
-
-    '''
-        Annotations format:
-
-          "annotations": {
-          "key1": "value1",
-          "key2": "value2",
-          "key3": "value3"}
-    '''
     def post_event(self, name, description=None, severity=6, host=None, tags=None):
         edata = {
             'event': {

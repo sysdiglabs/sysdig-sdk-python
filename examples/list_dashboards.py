@@ -29,7 +29,7 @@ sdclient = SdcClient(sdc_token)
 res = sdclient.get_dashboards()
 
 #
-# Show the list of alerts
+# Show the list of dashboards
 #
 if res[0]:
     data = res[1]

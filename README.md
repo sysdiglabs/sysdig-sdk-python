@@ -97,19 +97,25 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### `delete_alert(self, name)`  
+#### `delete_alert(self, alert)`  
 **Description**  
-Deletes an alert given its name.  
+Deletes an alert.  
+**Arguments**  
+- **alert**: the alert object as returned by `get_alerts()`.
+
 **Success Return Value**  
 A string with the number of alerts deleted.  
 **Example**  
 [examples/delete_alert.py](examples/delete_alert.py).  
 
-#### `delete_dashboard(self, dashname)`  
+#### `delete_dashboard(self, dashboard)`  
 **Description**  
-Deletes a dashboard given its name.  
+Deletes a dashboard.  
+**Arguments**  
+- **dashboard**: the dashboard object as returned by `get_dashboards()`.
+
 **Success Return Value**  
-A string with the number of dashboards deleted.  
+`None`.  
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
@@ -216,7 +222,7 @@ You can use this method you use to send an event to Sysdig Cloud. The events you
 **Arguments**  
 - **name**: the name of the new event.  
 - **description**: a longer description offering detailed information about the event.
-- **severity**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+- **severity**: severity, syslog style (from 0 to 7).
 - **host**: the host generating the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
 - **tags**: a list of key-value dictionaries that can be used to tag the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
 
