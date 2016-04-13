@@ -272,7 +272,7 @@ A dictionary containing information about the user, for example its email and th
 
 #### `poll_sysdig_capture(self, capture)`  
 **Description**  
-Fetch the updates state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with `create_sysdig_capture`.  
+Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with `create_sysdig_capture`.  
 **Arguments**  
 - **capture**: the capture object as returned by `get_sysdig_captures()` or `create_sysdig_capture()`.
 
@@ -301,7 +301,7 @@ A dictionary describing the new event.
 Updates the resolution status of an alert notification.  
 **Arguments**  
 - **notification**: notification object as returned by `get_notifications()`. 
-- **resolved**: new resolution status. Supported values are `True` and `False.
+- **resolved**: new resolution status. Supported values are `True` and `False`.
 
 **Success Return Value**  
 The updated notification.  

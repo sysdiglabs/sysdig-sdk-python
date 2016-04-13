@@ -32,11 +32,11 @@ res = sdclient.get_sysdig_captures()
 # Show the list of metrics
 #
 if res[0]:
-    data = res[1]
+    captures = res[1]['dumps']
 else:
     print res[1]
     sys.exit(1)
 
-for capture in data:
+for capture in captures:
 	print "Folder %s, Name %s, Host: %s, Size: %d, Status: %s" % \
 		(capture['folder'], capture['name'], capture['agent']['hostName'], capture['size'], capture['status'])
