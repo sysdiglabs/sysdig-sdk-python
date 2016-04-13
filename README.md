@@ -28,7 +28,20 @@ Usage
 
 _Note:_ in order to use this API you must obtain a Sysdig Cloud token. You can get your user's token in the _Sysdig Cloud API_ section of the [settings](https://app.sysdigcloud.com/#/settings/user) page.
 
-The library exports a single class, `SdcClient`, that is used to connect to Sysdig Cloud and execute actions.
+The library exports a single class, `SdcClient`, that is used to connect to Sysdig Cloud and execute actions. It can be instantiated like this:
+
+``` python
+from sdcclient import SdcClient
+
+sdc_token = "MY_API_TOKEN"
+
+#
+# Instantiate the SDC client
+#
+sdclient = SdcClient(sdc_token)
+```
+
+Once instantiated, all the methods documented below can be called on the object.
 
 ####Return Values
 Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
@@ -96,6 +109,21 @@ Create a new dasboard using one of the Sysdig Cloud views as a template. You wil
 A dictionary showing the details of the new dashboard.  
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
+
+#### `create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/')`  
+**Description**  
+Create a new sysdig capture. The capture will be immediately started.  
+**Arguments**  
+- **hostname**: the hostname of the instrumented host where the capture will be taken.
+- **capture_name**: the name of the capture.
+- **duration**: the duration of the capture, in seconds.  
+- **capture_filter**: a sysdig filter expression.  
+- **folder**: directory in the S3 bucket where the capture will be saved.
+
+**Success Return Value**  
+A dictionary showing the details of the new capture.  
+**Example**  
+[examples/create_sysdig_capture.py](examples/create_sysdig_capture.py).  
 
 #### `delete_alert(self, alert)`  
 **Description**  
@@ -200,13 +228,17 @@ A dictionary containing the list of available metrics.
 **Example**  
 [examples/list_metrics.py](examples/list_metrics.py).  
 
+#### `get_connected_agents(self)`  
+**Description**  
+Return the agents currently connected to Sysdig Cloud for the current user.  
+**Success Return Value**  
+A list of the agents with all their attributes.  
+
 #### `get_n_connected_agents(self)`  
 **Description**  
 Return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
 An integer number.  
-**Example**  
-[examples/print_user_info.py](examples/print_user_info.py).  
 
 #### `get_notifications(self, from_ts, to_ts, state=None, resolved=None)`
 **Description**  
@@ -222,17 +254,13 @@ A dictionary containing the list of notifications.
 **Example**  
 [examples/list_alert_notifications.py](examples/list_alert_notifications.py). 
 
-#### `update_notification_resolution(self, notification, resolved)`
+#### `get_sysdig_captures(self)`
 **Description**  
-Updates the resolution status of an alert notification.  
-**Arguments**  
-- **notification**: notification object as returned by `get_notifications()`. 
-- **resolved**: new resolution status. Supported values are `True` and `False.
-
+Returns the list of sysdig captures for the user.  
 **Success Return Value**  
-The updated notification.  
+A dictionary containing the list of captures.  
 **Example**  
-[examples/resolve_alert_notifications.py](examples/resolve_alert_notifications.py). 
+[examples/list_sysdig_captures.py](examples/list_sysdig_captures.py). 
 
 #### `get_user_info(self)`  
 **Description**  
@@ -241,6 +269,17 @@ Get details about the current user.
 A dictionary containing information about the user, for example its email and the maximum number of agents it can install.  
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
+
+#### `poll_sysdig_capture(self, capture)`  
+**Description**  
+Fetch the updates state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with `create_sysdig_capture`.  
+**Arguments**  
+- **capture**: the capture object as returned by `get_sysdig_captures()` or `create_sysdig_capture()`.
+
+**Success Return Value**  
+A dictionary showing the updated details of the capture. Use the `status` field to check the progress of a capture.    
+**Example**  
+[examples/create_sysdig_capture.py](examples/create_sysdig_capture.py).  
 
 #### `post_event(self, name, description=None, severity=6, host=None, tags=None)`
 **Description**  
@@ -256,3 +295,15 @@ You can use this method you use to send an event to Sysdig Cloud. The events you
 A dictionary describing the new event.  
 **Example**  
 [examples/post_event.py](examples/post_event.py).  
+
+#### `update_notification_resolution(self, notification, resolved)`
+**Description**  
+Updates the resolution status of an alert notification.  
+**Arguments**  
+- **notification**: notification object as returned by `get_notifications()`. 
+- **resolved**: new resolution status. Supported values are `True` and `False.
+
+**Success Return Value**  
+The updated notification.  
+**Example**  
+[examples/resolve_alert_notifications.py](examples/resolve_alert_notifications.py). 

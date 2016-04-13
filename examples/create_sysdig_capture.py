@@ -37,7 +37,7 @@ res = sdclient.create_sysdig_capture(hostname, capture_name, int(duration), capt
 # Show the list of metrics
 #
 if res[0]:
-    capture = res[1]
+    capture = res[1]['dump']
 else:
     print res[1]
     sys.exit(1)
@@ -45,7 +45,7 @@ else:
 while True:
     res = sdclient.poll_sysdig_capture(capture)
     if res[0]:
-        capture = res[1]
+        capture = res[1]['dump']
     else:
         print res[1]
         sys.exit(1)

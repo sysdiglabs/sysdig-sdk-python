@@ -28,7 +28,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Get the unresolved notifications in the last day
 #
-res = sdclient.get_notifications(from_ts=int(time.time() - num_days_to_resolve * 86400),
+res = sdclient.get_notifications(from_ts=int(time.time() - int(num_days_to_resolve) * 86400),
                                  to_ts=int(time.time()), resolved=False)
 
 if not res[0]:

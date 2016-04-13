@@ -601,7 +601,7 @@ class SdcClient:
         r = requests.get(self.url + '/api/sysdig', headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
-        return [True, r.json()['dumps']]
+        return [True, r.json()]
 
     def poll_sysdig_capture(self, capture):
         if 'id' not in capture:
@@ -610,7 +610,7 @@ class SdcClient:
         r = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs)
         if not self.__checkResponse(r):
             return [False, self.lasterr]
-        return [True, r.json()['dump']]
+        return [True, r.json()]
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
         res = self.get_connected_agents()
@@ -639,4 +639,4 @@ class SdcClient:
         r = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data))
         if not self.__checkResponse(r):
             return [False, self.lasterr]
-        return [True, r.json()['dump']]
+        return [True, r.json()]

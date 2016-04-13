@@ -9,6 +9,16 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
+def print_notifications(notifications):
+    for notification in notifications:
+        values = []
+        for entity in notification['entities']:
+            for value in entity['metricValues']:
+                values.append(str(value['value']))
+
+        print "#%s, State: %s, Severity: %s, Scope: %s, Condition: %s, Value: %s, Resolved: %s" % \
+            (notification['id'], notification['state'], notification['severity'], notification['filter'], notification['condition'], ','.join(values), notification['resolved'])
+
 #
 # Parse arguments
 #
@@ -29,7 +39,7 @@ sdclient = SdcClient(sdc_token)
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()))
 
-print res[1]
+print_notifications(res[1]['notifications'])
 if not res[0]:
     sys.exit(1)
 
@@ -38,7 +48,7 @@ if not res[0]:
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), state='ACTIVE')
 
-print res[1]
+print_notifications(res[1]['notifications'])
 if not res[0]:
     sys.exit(1)
 
@@ -47,7 +57,7 @@ if not res[0]:
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), state='OK')
 
-print res[1]
+print_notifications(res[1]['notifications'])
 if not res[0]:
     sys.exit(1)
 
@@ -56,6 +66,6 @@ if not res[0]:
 #
 res = sdclient.get_notifications(from_ts=int(time.time()-86400), to_ts=int(time.time()), resolved=True)
 
-print res[1]
+print_notifications(res[1]['notifications'])
 if not res[0]:
     sys.exit(1)
