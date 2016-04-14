@@ -281,14 +281,14 @@ A dictionary showing the updated details of the capture. Use the `status` field 
 **Example**  
 [examples/create_sysdig_capture.py](examples/create_sysdig_capture.py).  
 
-#### `post_event(self, name, description=None, severity=6, host=None, tags=None)`
+#### `post_event(self, name, description=None, severity=6, event_filter=None, tags=None)`
 **Description**  
 You can use this method you use to send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
 **Arguments**  
 - **name**: the name of the new event.  
 - **description**: a longer description offering detailed information about the event.
 - **severity**: severity, syslog style (from 0 to 7).
-- **host**: the host generating the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
+- **event_filter**: a Sysdig Cloud filter thet can be used for filtering/segmenting purposes in Sysdig Cloud, e.g. `host.hostName = 'ip-10-1-1-1'`.
 - **tags**: a list of key-value dictionaries that can be used to tag the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
 
 **Success Return Value**  
