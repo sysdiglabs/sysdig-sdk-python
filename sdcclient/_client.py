@@ -525,7 +525,7 @@ class SdcClient:
         if description is not None:
             edata['event']['description'] = description
 
-        if filter is not None:
+        if event_filter is not None:
             edata['event']['filter'] = event_filter
 
         if tags is not None:
