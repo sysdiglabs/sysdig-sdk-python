@@ -15,34 +15,26 @@ from sdcclient import SdcClient
 if len(sys.argv) < 3:
     print 'usage: %s <sysdig-token> <name> [description] [severity] [scope] [tags]' % sys.argv[0]
     print ' sysdig-token: You can find your token at https://app.sysdigcloud.com/#/settings/user'
-    print ' severity: syslog style (from 0 to 7)'
-    print ' scope: Sysdig Cloud format metadata to associate with the event, eg: \'host.hostName = "ip-10-1-1-1" and container.name = "foo"\''
-    print ' tags: dictionary of key-value pairs, eg: \'{"app":"my_app", "file":"text.py"}\''
+    print ' severity: syslog style from 0 (high) to 7 (low)'
+    print ' scope: metadata, in Sysdig Cloud format, of nodes to associate with the event, eg: \'host.hostName = "ip-10-1-1-1" and container.name = "foo"\''
+    print ' tags: dictionary of arbitrary key-value pairs, eg: \'{"app":"my_app", "file":"text.py"}\''
     sys.exit(1)
 
 sdc_token = sys.argv[1]
 name = sys.argv[2]
+kwargs = {}
 
-description = ''
 if len(sys.argv) > 3:
-    description = sys.argv[3]
-#    print description
+    kwargs['description'] = sys.argv[3]
 
-severity = 6
 if len(sys.argv) > 4:
-    severity = int(sys.argv[4])
-#    print severity
+    kwargs['severity'] = int(sys.argv[4])
 
-scope = ''
 if len(sys.argv) > 5:
-    scope = sys.argv[5] 
-#    scope = "'host.hostName = 'ip-10-1-1-1'"
-#    print scope
+    kwargs['event_filter'] = sys.argv[5] 
 
-tags = {}
 if len(sys.argv) > 6:
-    tags = json.loads(sys.argv[6])
-#    print json.dumps(tags)
+    kwargs['tags'] = json.loads(sys.argv[6])
     
 #
 # Instantiate the SDC client
@@ -52,7 +44,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Post the event using post_event(self, name, description=None, severity=6, event_filter=None, tags=None)
 #
-res = sdclient.post_event(name, description, severity, scope, tags)
+res = sdclient.post_event(name, **kwargs)
 
 #
 # Return the result
