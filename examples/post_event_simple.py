@@ -20,6 +20,9 @@ sdc_token = sys.argv[1]
 name = sys.argv[2]
 description = sys.argv[3]
 
+scope='host.hostName = "foo" and container.name = "bar"'
+tags={"tag1" : "value1"}
+
 severity = 6
 if len(sys.argv) < 4:
     severity = int(sys.argv[4])
@@ -32,7 +35,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Post the event
 #
-res = sdclient.post_event(name, description, severity, tags={"tag1" : "value1"})
+res = sdclient.post_event(name, description, severity, scope, tags)
 
 #
 # Return the result
