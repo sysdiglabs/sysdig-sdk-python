@@ -514,16 +514,18 @@ class SdcClient:
 
         return [True, None]
 
-    def post_event(self, name, description=None, severity=6, event_filter=None, tags=None):
+    def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
         edata = {
             'event': {
-                'name': name,
-                'severity': severity
+                'name': name
                 }
             }
 
         if description is not None:
             edata['event']['description'] = description
+            
+        if severity is not None:
+            edata['event']['severity'] = severity
 
         if event_filter is not None:
             edata['event']['filter'] = event_filter
