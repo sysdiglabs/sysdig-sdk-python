@@ -42,7 +42,7 @@ if len(sys.argv) > 6:
 sdclient = SdcClient(sdc_token)
 
 #
-# Post the event using post_event(self, name, description=None, severity=6, event_filter=None, tags=None)
+# Post the event using post_event(self, name, description=None, severity=None, event_filter=None, tags=None)
 #
 res = sdclient.post_event(name, **kwargs)
 
