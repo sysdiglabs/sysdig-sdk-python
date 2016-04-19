@@ -294,6 +294,7 @@ You can use this method you use to send an event to Sysdig Cloud. The events you
 **Success Return Value**  
 A dictionary describing the new event.  
 **Example**  
+[examples/post_event_simple.py](examples/post_event_simple.py)
 [examples/post_event.py](examples/post_event.py).  
 
 #### `update_notification_resolution(self, notification, resolved)`
