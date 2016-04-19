@@ -10,7 +10,8 @@ from sdcclient import SdcClient
 
 def print_events(data):
     for event in data['events']:
-        print 'time: %d, name: %s, description: %s, severity: %d' % (event['timestamp'], event['name'], event['description'], event['severity'])
+        severity = event['severity'] if event.get('severity') else 'not set'
+        print 'time: %d, name: %s, description: %s, severity: %s' % (event['timestamp'], event['name'], event['description'], severity)
 
 #
 # Parse arguments
