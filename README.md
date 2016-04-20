@@ -84,6 +84,53 @@ A dictionary describing the just created alert, with the format described at [th
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
 
+#### `create_dashboard(self, name)`
+**Description**
+Creates an empty dashboard. You can then add panels by using `add_dashboard_panel`.
+**Arguments**
+- **name**: the name of the dashboard that will be created.
+**Success Return Value**
+A dictionary showing the details of the new dashboard.
+**Example**
+[examples/dashboard.py](examples/dashboard.py).
+
+#### `find_dashboard_by(self, name)`
+**Description**
+Finds dashboards with the specified name. You can then delete the dashboard (with `delete_dashboard`) or edit panels (with `add_dashboard_panel` and `remove_dashboard_panel`)
+**Arguments**
+- **name**: the name of the dashboards to find.
+**Success Return Value**
+A list of dictionaries of dashboards matching the specified name.
+**Example**
+[examples/dashboard.py](examples/dashboard.py).
+
+#### `add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`
+**Description**
+Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
+**Arguments**
+- **dashboard**: dashboard to edit
+- **name**: name of the new panel
+- **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
+- **metrics**: list of metrics; Each metric must specified an `id` (e.g. `cpu.used.percent`) and if it's a value an `aggregation` dictionary with `time` and `group` to specify time aggregation and group aggregation respectively
+- **scope**: filter to apply to the panel; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
+- **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
+- **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
+- **layout**: Size and position of the panel
+**Success Return Value**
+A dictionary showing the details of the edited dashboard.
+**Example**
+[examples/dashboard.py](examples/dashboard.py).
+
+#### `remove_dashboard_panel(self, dashboard, panel_name)`
+**Description**
+Removes a panel from the dashboard. The panel to remove is identified by the specified `name`.
+**Arguments**
+- **name**: name of the panel to find and remove
+**Success Return Value**
+A dictionary showing the details of the edited dashboard.
+**Example**
+[examples/dashboard.py](examples/dashboard.py).
+
 #### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
 **Description**  
 Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
