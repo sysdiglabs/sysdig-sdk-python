@@ -199,6 +199,12 @@ An array of alert json objects, with the format described at [this link](https:/
 **Example**  
 [examples/list_alerts.py](examples/list_alerts.py).  
 
+#### `get_connected_agents(self)`  
+**Description**  
+Return the agents currently connected to Sysdig Cloud for the current user.  
+**Success Return Value**  
+A list of the agents with all their attributes.  
+
 #### `get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')`  
 **Description**  
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
@@ -260,12 +266,6 @@ Return the metric list that can be used for data requests/alerts/dashboards.
 A dictionary containing the list of available metrics.  
 **Example**  
 [examples/list_metrics.py](examples/list_metrics.py).  
-
-#### `get_connected_agents(self)`  
-**Description**  
-Return the agents currently connected to Sysdig Cloud for the current user.  
-**Success Return Value**  
-A list of the agents with all their attributes.  
 
 #### `get_n_connected_agents(self)`  
 **Description**  
