@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import copy
 
 class SdcClient:
     userinfo = None
@@ -344,6 +345,182 @@ class SdcClient:
         if not self.__checkResponse(r):
             return [False, self.lasterr]
         return [True, r.json()]
+
+    def find_dashboard_by(self, name=None):
+        r = self.get_dashboards()
+        if r[0] == False:
+            return r
+        else:
+            def filterFn(json):
+                return json['name'] == name
+            def set(dashboard_configuration):
+                return { 'dashboard': dashboard_configuration }
+
+            dashboards = map(set, filter(filterFn, r[1]['dashboards']))
+            return [True, dashboards]
+
+    def create_dashboard(self, name):
+        dashboard_configuration = {
+            'name':   name,
+            'schema': 1,
+            'items':  []
+        }
+
+        #
+        # Create the new dashboard
+        #
+        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        else:
+            return [True, r.json()]
+
+    def add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, sort_by=None, paging=None, layout=None):
+        panel_configuration = {
+            'name':                 name,
+            'showAs':               None,
+            'showAsType':           None,
+            'format':               None,
+            'metrics':              [],
+            'filter':               None,
+            'gridConfiguration':    {
+                                        'col':      1,
+                                        'row':      1,
+                                        'size_x':   12,
+                                        'size_y':   6
+                                    }
+        }
+
+        #
+        # Convert list of metrics to format used by Sysdig Cloud
+        #
+        property_names = {}
+        for i, metric in enumerate(metrics):
+            property_name = 'v' if 'aggregations' in metric else 'k'
+            property_names[metric['id']] = property_name + str(i)
+
+            panel_configuration['metrics'].append({
+                'metricId':         metric['id'],
+                'aggregation':      metric['aggregations']['time'] if 'aggregations' in metric else None,
+                'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
+                'propertyName':     property_name + str(i)
+            })
+        #
+        # Convert scope to format used by Sysdig Cloud
+        #
+        if scope != None:
+            filter_expressions = scope.strip(' \t\n\r?!.').split(" and ")
+            filters = []
+
+            for filter_expression in filter_expressions:
+                values = filter_expression.strip(' \t\n\r?!.').split("=")
+                if len(values) != 2:
+                    return [False, "invalid scope format"]
+                filters.append({
+                    'metric':   values[0].strip(' \t\n\r?!.'),
+                    'op':       '=',
+                    'value':    values[1].strip(' \t\n\r"?!.'),
+                    'filters':  None
+                })
+
+            if len(filters) > 0:
+                panel_configuration['filter'] = {
+                    'filters': {
+                        'logic':    'and',
+                        'filters':  filters
+                    }
+                }
+
+        #
+        # Configure panel type
+        #
+        if type == 'timeSeries':
+            panel_configuration['showAs'] = 'timeSeries'
+            panel_configuration['showAsType'] = 'line'
+        elif type == 'number':
+            panel_configuration['showAs'] = 'summary'
+            panel_configuration['showAsType'] = 'summary'
+        elif type == 'top':
+            panel_configuration['showAs'] = 'top'
+            panel_configuration['showAsType'] = 'bars'
+
+            if sort_by == None:
+                panel_configuration['sorting'] = [{
+                    'id':   'v0',
+                    'mode': 'desc'
+                }]
+            else:
+                panel_configuration['sorting'] = [{
+                    'id':   property_names[sort_by['metric']],
+                    'mode': sort_by['mode']
+                }]
+
+            if paging == None:
+                panel_configuration['paging'] = {
+                    'from': 0,
+                    'to':   10
+                }
+            else:
+                panel_configuration['paging'] = paging
+
+
+        #
+        # Configure layout
+        #
+        if layout != None:
+            panel_configuration['gridConfiguration'] = layout
+
+        #
+        # Clone existing dashboard...
+        #
+        dashboard_configuration = copy.deepcopy(dashboard)
+        dashboard_configuration['id'] = None
+
+        #
+        # ... and add the new panel
+        #
+        dashboard_configuration['items'].append(panel_configuration)
+
+        #
+        # Update dashboard
+        #
+        r = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
+        if not self.__checkResponse(r):
+            return [False, self.lasterr]
+        else:
+            return [True, r.json()]
+
+    def remove_dashboard_panel(self, dashboard, panel_name):
+        #
+        # Clone existing dashboard...
+        #
+        dashboard_configuration = copy.deepcopy(dashboard)
+        dashboard_configuration['id'] = None
+
+        #
+        # ... find the panel
+        #
+        def filterFn(panel):
+            return panel['name'] == panel_name
+        panels = filter(filterFn, dashboard_configuration['items'])
+
+        if len(panels) > 0:
+            #
+            # ... and remove it
+            #
+            for panel in panels:
+                dashboard_configuration['items'].remove(panel)
+
+            #
+            # Update dashboard
+            #
+            r = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
+            if not self.__checkResponse(r):
+                return [False, self.lasterr]
+            else:
+                return [True, r.json()]
+        else:
+            return [False, 'Not found']
 
     def create_dashboard_from_template(self, newdashname, template, scope):
         if scope is None:
