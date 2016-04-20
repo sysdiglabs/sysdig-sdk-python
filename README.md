@@ -85,29 +85,36 @@ A dictionary describing the just created alert, with the format described at [th
 [examples/create_alert.py](examples/create_alert.py).  
 
 #### `create_dashboard(self, name)`
-**Description**
+**Description**  
 Creates an empty dashboard. You can then add panels by using `add_dashboard_panel`.
-**Arguments**
+
+**Arguments**  
 - **name**: the name of the dashboard that will be created.
-**Success Return Value**
+
+**Success Return Value**  
 A dictionary showing the details of the new dashboard.
-**Example**
+
+**Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
 #### `find_dashboard_by(self, name)`
-**Description**
+**Description**  
 Finds dashboards with the specified name. You can then delete the dashboard (with `delete_dashboard`) or edit panels (with `add_dashboard_panel` and `remove_dashboard_panel`)
-**Arguments**
+
+**Arguments**  
 - **name**: the name of the dashboards to find.
-**Success Return Value**
+
+**Success Return Value**  
 A list of dictionaries of dashboards matching the specified name.
-**Example**
+
+**Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
 #### `add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`
-**Description**
+**Description**  
 Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
-**Arguments**
+
+**Arguments**  
 - **dashboard**: dashboard to edit
 - **name**: name of the new panel
 - **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
@@ -116,19 +123,24 @@ Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e
 - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
 - **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
 - **layout**: Size and position of the panel
-**Success Return Value**
+
+**Success Return Value**  
 A dictionary showing the details of the edited dashboard.
-**Example**
+
+**Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
 #### `remove_dashboard_panel(self, dashboard, panel_name)`
-**Description**
+**Description**  
 Removes a panel from the dashboard. The panel to remove is identified by the specified `name`.
-**Arguments**
+
+**Arguments**  
 - **name**: name of the panel to find and remove
-**Success Return Value**
+
+**Success Return Value**  
 A dictionary showing the details of the edited dashboard.
-**Example**
+
+**Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
 #### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
