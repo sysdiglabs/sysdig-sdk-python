@@ -391,6 +391,17 @@ class SdcClient:
                                     }
         }
 
+        if type == 'timeSeries':
+            #
+            # In case of a time series, the current dashboard implementation
+            # requires the timestamp to be explicitly specified as "key".
+            # However, this function uses the same abstraction of the data API
+            # that doesn't require to specify a timestamp key (you only need to
+            # specify time window and sampling)
+            #
+            metrics = copy.copy(metrics)
+            metrics.insert(0, { 'id': 'timestamp' })
+
         #
         # Convert list of metrics to format used by Sysdig Cloud
         #

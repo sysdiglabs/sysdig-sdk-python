@@ -60,7 +60,6 @@ else:
 panel_name = 'CPU Over Time'
 panel_type = 'timeSeries'
 metrics = [
-  { 'id': 'timestamp' },
   { 'id': 'kubernetes.pod.name' },
   { 'id': 'cpu.used.percent', 'aggregations': { 'time': 'avg', 'group': 'avg' } }
 ]
