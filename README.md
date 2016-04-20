@@ -52,6 +52,26 @@ For an example on how to parse this output, take a look at a simple example like
 
 Methods
 -------
+#### `add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`
+**Description**  
+Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
+
+**Arguments**  
+- **dashboard**: dashboard to edit
+- **name**: name of the new panel
+- **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
+- **metrics**: list of metrics; Each metric must specified an `id` (e.g. `cpu.used.percent`) and if it's a value an `aggregation` dictionary with `time` and `group` to specify time aggregation and group aggregation respectively
+- **scope**: filter to apply to the panel; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
+- **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
+- **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
+- **layout**: Size and position of the panel
+
+**Success Return Value**  
+A dictionary showing the details of the edited dashboard.
+
+**Example**  
+[examples/dashboard.py](examples/dashboard.py).
+
 #### `add_email_notification_recipient(self, email)`
 **Description**  
 Add a new recipient for email alert notifications.  
@@ -93,52 +113,6 @@ Creates an empty dashboard. You can then add panels by using `add_dashboard_pane
 
 **Success Return Value**  
 A dictionary showing the details of the new dashboard.
-
-**Example**  
-[examples/dashboard.py](examples/dashboard.py).
-
-#### `find_dashboard_by(self, name)`
-**Description**  
-Finds dashboards with the specified name. You can then delete the dashboard (with `delete_dashboard`) or edit panels (with `add_dashboard_panel` and `remove_dashboard_panel`)
-
-**Arguments**  
-- **name**: the name of the dashboards to find.
-
-**Success Return Value**  
-A list of dictionaries of dashboards matching the specified name.
-
-**Example**  
-[examples/dashboard.py](examples/dashboard.py).
-
-#### `add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`
-**Description**  
-Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
-
-**Arguments**  
-- **dashboard**: dashboard to edit
-- **name**: name of the new panel
-- **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
-- **metrics**: list of metrics; Each metric must specified an `id` (e.g. `cpu.used.percent`) and if it's a value an `aggregation` dictionary with `time` and `group` to specify time aggregation and group aggregation respectively
-- **scope**: filter to apply to the panel; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
-- **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
-- **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
-- **layout**: Size and position of the panel
-
-**Success Return Value**  
-A dictionary showing the details of the edited dashboard.
-
-**Example**  
-[examples/dashboard.py](examples/dashboard.py).
-
-#### `remove_dashboard_panel(self, dashboard, panel_name)`
-**Description**  
-Removes a panel from the dashboard. The panel to remove is identified by the specified `name`.
-
-**Arguments**  
-- **name**: name of the panel to find and remove
-
-**Success Return Value**  
-A dictionary showing the details of the edited dashboard.
 
 **Example**  
 [examples/dashboard.py](examples/dashboard.py).
@@ -329,6 +303,19 @@ A dictionary containing information about the user, for example its email and th
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
+#### `find_dashboard_by(self, name)`
+**Description**  
+Finds dashboards with the specified name. You can then delete the dashboard (with `delete_dashboard`) or edit panels (with `add_dashboard_panel` and `remove_dashboard_panel`)
+
+**Arguments**  
+- **name**: the name of the dashboards to find.
+
+**Success Return Value**  
+A list of dictionaries of dashboards matching the specified name.
+
+**Example**  
+[examples/dashboard.py](examples/dashboard.py).
+
 #### `poll_sysdig_capture(self, capture)`  
 **Description**  
 Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with `create_sysdig_capture`.  
@@ -355,6 +342,19 @@ A dictionary describing the new event.
 **Example**  
 [examples/post_event_simple.py](examples/post_event_simple.py)
 [examples/post_event.py](examples/post_event.py).  
+
+#### `remove_dashboard_panel(self, dashboard, panel_name)`
+**Description**  
+Removes a panel from the dashboard. The panel to remove is identified by the specified `name`.
+
+**Arguments**  
+- **name**: name of the panel to find and remove
+
+**Success Return Value**  
+A dictionary showing the details of the edited dashboard.
+
+**Example**  
+[examples/dashboard.py](examples/dashboard.py).
 
 #### `update_notification_resolution(self, notification, resolved)`
 **Description**  
