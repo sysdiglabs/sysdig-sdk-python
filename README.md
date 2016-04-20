@@ -64,7 +64,7 @@ Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e
 - **scope**: filter to apply to the panel; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
 - **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
-- **layout**: Size and position of the panel
+- **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of `row` (row position), `col` (column position), `size_x` (width), `size_y` (height).
 
 **Success Return Value**  
 A dictionary showing the details of the edited dashboard.
