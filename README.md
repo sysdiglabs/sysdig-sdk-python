@@ -52,7 +52,9 @@ For an example on how to parse this output, take a look at a simple example like
 
 Methods
 -------
-#### `add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`
+#### `add_dashboard_panel`
+**`(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, paging=None)`**
+
 **Description**  
 Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
 
@@ -72,7 +74,9 @@ A dictionary showing the details of the edited dashboard.
 **Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
-#### `add_email_notification_recipient(self, email)`
+#### `add_email_notification_recipient`
+**`(self, email)`**
+
 **Description**  
 Add a new recipient for email alert notifications.  
 **Arguments**  
@@ -83,7 +87,9 @@ A dictionary showing the updated user notifications configuration.
 **Example**  
 [examples/add_notification_email.py](examples/add_notification_email.py).  
 
-#### `create_alert(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={})`
+#### `create_alert`
+**`(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={})`**
+
 **Description**  
 Create a threshold-based alert.  
 **Arguments**
@@ -104,7 +110,9 @@ A dictionary describing the just created alert, with the format described at [th
 **Example**  
 [examples/create_alert.py](examples/create_alert.py).  
 
-#### `create_dashboard(self, name)`
+#### `create_dashboard`
+**`(self, name)`**
+
 **Description**  
 Creates an empty dashboard. You can then add panels by using `add_dashboard_panel`.
 
@@ -117,7 +125,9 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
-#### `create_dashboard_from_dashboard(self, newdashname, templatename, filter)`
+#### `create_dashboard_from_dashboard`
+**`(self, newdashname, templatename, filter)`**
+
 **Description**  
 Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
 **Arguments**  
@@ -130,7 +140,9 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### `create_dashboard_from_view(self, newdashname, viewname, filter)`  
+#### `create_dashboard_from_view`
+**`(self, newdashname, viewname, filter)`**
+
 **Description**  
 Create a new dasboard using one of the Sysdig Cloud views as a template. You will be able to define the scope of the new dasboard.  
 **Arguments**  
@@ -143,7 +155,9 @@ A dictionary showing the details of the new dashboard.
 **Example**  
 [examples/create_dashboard.py](examples/create_dashboard.py).  
 
-#### `create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/')`  
+#### `create_sysdig_capture`
+**`(self, hostname, capture_name, duration, capture_filter='', folder='/')`**
+
 **Description**  
 Create a new sysdig capture. The capture will be immediately started.  
 **Arguments**  
@@ -158,7 +172,9 @@ A dictionary showing the details of the new capture.
 **Example**  
 [examples/create_sysdig_capture.py](examples/create_sysdig_capture.py).  
 
-#### `delete_alert(self, alert)`  
+#### `delete_alert`
+**`(self, alert)`**
+
 **Description**  
 Deletes an alert.  
 **Arguments**  
@@ -169,7 +185,9 @@ Deletes an alert.
 **Example**  
 [examples/delete_alert.py](examples/delete_alert.py).  
 
-#### `delete_dashboard(self, dashboard)`  
+#### `delete_dashboard`
+**`(self, dashboard)`**
+
 **Description**  
 Deletes a dashboard.  
 **Arguments**  
@@ -180,7 +198,9 @@ Deletes a dashboard.
 **Example**  
 [examples/delete_dashboard.py](examples/delete_dashboard.py).  
 
-#### `delete_event(self, event)`  
+#### `delete_event`
+**`(self, event)`**
+
 **Description**  
 Deletes an event.  
 **Arguments**  
@@ -191,7 +211,9 @@ Deletes an event.
 **Example**  
 [examples/delete_event.py](examples/delete_event.py).  
 
-#### `get_alerts(self)`  
+#### `get_alerts`
+**`(self)`**
+
 **Description**  
 Retrieve the list of alerts configured by the user.  
 **Success Return Value**  
@@ -199,13 +221,17 @@ An array of alert json objects, with the format described at [this link](https:/
 **Example**  
 [examples/list_alerts.py](examples/list_alerts.py).  
 
-#### `get_connected_agents(self)`  
+#### `get_connected_agents`
+**`(self)`**
+
 **Description**  
 Return the agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
 A list of the agents with all their attributes.  
 
-#### `get_data(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')`  
+#### `get_data`
+**`(self, metrics, start_ts, end_ts=0, sampling_s = 0, filter='', datasource_type='host')`**
+
 **Description**  
 This is the method you use to export metric data. It's flexible enough to offer both time-series and table-based data export.  
 **Arguments**  
@@ -221,7 +247,9 @@ A dictionary with the requested data. Data is organized in a list of time sample
 **Examples**  
 [examples/get_data_simple.py](examples/get_data_simple.py), [examples/get_data_advanced.py](examples/get_data_advanced.py), [examples/list_hosts.py](examples/list_hosts.py), [examples/get_data_datasource.py](examples/get_data_datasource.py).  
 
-#### `get_dashboards(self)`  
+#### `get_dashboards`
+**`(self)`**
+
 **Description**  
 Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.  
 **Success Return Value**  
@@ -229,7 +257,9 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/list_dashboards.py](examples/list_dashboards.py).  
 
-#### `get_data_retention_info(self)`  
+#### `get_data_retention_info`
+**`(self)`**
+
 **Description**  
 Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far in time it is. This call can be used to know what precision you can expect before you make a call to `get_data()`.  
 **Success Return Value**  
@@ -237,7 +267,9 @@ A dictionary containing the list of available sampling intervals.
 **Example**  
 [examples/print_data_retention_info.py](examples/print_data_retention_info.py). 
 
-#### `get_events(self, name=None, from_ts=None, to_ts=None, tags=None)` 
+#### `get_events`
+**`(self, name=None, from_ts=None, to_ts=None, tags=None)`**
+
 **Description**  
 Returns the list of Sysdig Cloud events.  
 **Arguments**  
@@ -251,7 +283,9 @@ A dictionary containing the list of events.
 **Example**  
 [examples/list_events.py](examples/list_events.py). 
 
-#### `get_explore_grouping_hierarchy(self)`  
+#### `get_explore_grouping_hierarchy`
+**`(self)`**
+
 **Description**  
 Return the user's current Explore gourping hierarchy.  
 **Success Return Value**  
@@ -259,7 +293,9 @@ A list containing the list of the user's Explore grouping criteria.
 **Example**  
 [examples/print_explore_grouping.py](examples/print_explore_grouping.py).  
 
-#### `get_metrics(self)`  
+#### `get_metrics`
+**`(self)`**
+
 **Description**  
 Return the metric list that can be used for data requests/alerts/dashboards.  
 **Success Return Value**  
@@ -267,13 +303,17 @@ A dictionary containing the list of available metrics.
 **Example**  
 [examples/list_metrics.py](examples/list_metrics.py).  
 
-#### `get_n_connected_agents(self)`  
+#### `get_n_connected_agents`
+**`(self)`**
+
 **Description**  
 Return the number of agents currently connected to Sysdig Cloud for the current user.  
 **Success Return Value**  
 An integer number.  
 
-#### `get_notifications(self, from_ts, to_ts, state=None, resolved=None)`
+#### `get_notifications`
+**`(self, from_ts, to_ts, state=None, resolved=None)`**
+
 **Description**  
 Returns the list of Sysdig Cloud alert notifications.  
 **Arguments**  
@@ -287,7 +327,9 @@ A dictionary containing the list of notifications.
 **Example**  
 [examples/list_alert_notifications.py](examples/list_alert_notifications.py). 
 
-#### `get_sysdig_captures(self)`
+#### `get_sysdig_captures`
+**`(self)`**
+
 **Description**  
 Returns the list of sysdig captures for the user.  
 **Success Return Value**  
@@ -295,7 +337,9 @@ A dictionary containing the list of captures.
 **Example**  
 [examples/list_sysdig_captures.py](examples/list_sysdig_captures.py). 
 
-#### `get_user_info(self)`  
+#### `get_user_info`
+**`(self)`**
+
 **Description**  
 Get details about the current user.  
 **Success Return Value**  
@@ -303,7 +347,9 @@ A dictionary containing information about the user, for example its email and th
 **Example**  
 [examples/print_user_info.py](examples/print_user_info.py).  
 
-#### `find_dashboard_by(self, name)`
+#### `find_dashboard_by`
+**`(self, name)`**
+
 **Description**  
 Finds dashboards with the specified name. You can then delete the dashboard (with `delete_dashboard`) or edit panels (with `add_dashboard_panel` and `remove_dashboard_panel`)
 
@@ -316,7 +362,9 @@ A list of dictionaries of dashboards matching the specified name.
 **Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
-#### `poll_sysdig_capture(self, capture)`  
+#### `poll_sysdig_capture`
+**`(self, capture)`**
+
 **Description**  
 Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with `create_sysdig_capture`.  
 **Arguments**  
@@ -327,7 +375,9 @@ A dictionary showing the updated details of the capture. Use the `status` field 
 **Example**  
 [examples/create_sysdig_capture.py](examples/create_sysdig_capture.py).  
 
-#### `post_event(self, name, description=None, severity=None, event_filter=None, tags=None)`
+#### `post_event`
+**`(self, name, description=None, severity=None, event_filter=None, tags=None)`**
+
 **Description**  
 You can use this method you use to send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.  
 **Arguments**  
@@ -343,7 +393,9 @@ A dictionary describing the new event.
 [examples/post_event_simple.py](examples/post_event_simple.py)
 [examples/post_event.py](examples/post_event.py).  
 
-#### `remove_dashboard_panel(self, dashboard, panel_name)`
+#### `remove_dashboard_panel`
+**`(self, dashboard, panel_name)`**
+
 **Description**  
 Removes a panel from the dashboard. The panel to remove is identified by the specified `name`.
 
@@ -356,7 +408,9 @@ A dictionary showing the details of the edited dashboard.
 **Example**  
 [examples/dashboard.py](examples/dashboard.py).
 
-#### `update_notification_resolution(self, notification, resolved)`
+#### `update_notification_resolution`
+**`(self, notification, resolved)`**
+
 **Description**  
 Updates the resolution status of an alert notification.  
 **Arguments**  
