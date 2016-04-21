@@ -53,7 +53,7 @@ For an example on how to parse this output, take a look at a simple example like
 Methods
 -------
 #### `add_dashboard_panel`
-**`(self, dashboard, name, type, metrics, scope=None, layout=None, sort_by=None, limit=None)`**
+**`(self, dashboard, name, panel_type, metrics, scope=None, layout=None, sort_by=None, limit=None)`**
 
 **Description**  
 Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
@@ -61,7 +61,7 @@ Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e
 **Arguments**  
 - **dashboard**: dashboard to edit
 - **name**: name of the new panel
-- **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
+- **panel_type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
 - **metrics**:  a list of dictionaries, specifying the metrics to show in the panel, and optionally, if there is only one metric, a grouping key to segment that metric by. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in Sysdig Cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and groups of containers/hosts. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in Sysdig Cloud. Refer to the examples section below for ready to use code snippets. Note, certain panels allow certain combinations of metrics and grouping keys:
  - `timeSeries`: 1 or more metrics OR 1 metric + 1 grouping key
  - `top`: 1 or more metrics OR 1 metric + 1 grouping key
@@ -91,7 +91,7 @@ A dictionary showing the updated user notifications configuration.
 [examples/add_notification_email.py](examples/add_notification_email.py).  
 
 #### `create_alert`
-**`(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', filter = '', notify='', enabled=True, annotations={})`**
+**`(self, name, description, severity, for_atleast_s, condition, segmentby = [], segment_condition = 'ANY', user_filter = '', notify='', enabled=True, annotations={})`**
 
 **Description**  
 Create a threshold-based alert.  
@@ -103,7 +103,7 @@ Create a threshold-based alert.
 - **condition**: the alert condition, as described here https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts
 - **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine. 
 - **segment_condition**: When _segmentby_ is specified (and therefore the alert will cover multiple entities) this field is used to determine when it will fire. In particular, you have two options for _segment_condition_: **ANY** (the alert will fire when at least one of the monitored entities satisfies the condition) and **ALL** (the alert will fire when all of the monitored entities satisfy the condition).
-- **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
+- **user_filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 - **notify**: the type of notification you want this alert to generate. Options are _EMAIL_, _SNS_, _PAGER_DUTY_, _SYSDIG_DUMP_.
 - **enabled**: if True, the alert will be enabled when created.
 - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management resons

@@ -13,13 +13,13 @@ class SdcClient:
         self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         self.url = os.environ.get("SDC_URL", sdc_url)
 
-    def __checkResponse(self, r):
-        if r.status_code >= 300:
-            errorcode = r.status_code
+    def __checkResponse(self, res):
+        if res.status_code >= 300:
+            errorcode = res.status_code
             self.lasterr = None
 
             try:
-                j = r.json()
+                j = res.json()
             except:
                 self.lasterr = 'status code ' + str(errorcode)
                 return False
@@ -44,31 +44,31 @@ class SdcClient:
 
     def get_user_info(self):
         if self.userinfo is None:
-            r = requests.get(self.url + '/api/user/me', headers=self.hdrs)
-            if not self.__checkResponse(r):
+            res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
+            if not self.__checkResponse(res):
                 return [False, self.lasterr]
-            self.userinfo = r.json()
+            self.userinfo = res.json()
         return [True, self.userinfo]
 
     def get_connected_agents(self):
-        r = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        data = r.json()
+        data = res.json()
         return [True, data['agents']]
 
     def get_n_connected_agents(self):
-        r = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        data = r.json()
+        data = res.json()
         return [True, data['total']]
 
     def get_alerts(self):
-        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_notifications(self, from_ts, to_ts, state=None, resolved=None):
         params = {}
@@ -85,10 +85,10 @@ class SdcClient:
         if resolved is not None:
             params['resolved'] = resolved
 
-        r = requests.get(self.url + '/api/notifications', headers=self.hdrs, params=params)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/notifications', headers=self.hdrs, params=params)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def update_notification_resolution(self, notification, resolved):
         if 'id' not in notification:
@@ -97,20 +97,20 @@ class SdcClient:
         notification['resolved'] = resolved
         data = {'notification': notification}
 
-        r = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data))
-        if not self.__checkResponse(r):
+        res = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
-                     segment_condition='ANY', filter='', notify='', enabled=True, annotations={}):
+                     segment_condition='ANY', user_filter='', notify='', enabled=True, annotations={}):
         #
         # Get the list of alerts from the server
         #
-        r = requests.get(self.url + '/api/alerts', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/alerts', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        j = r.json()
+        j = res.json()
 
         #
         # If this alert already exists, don't create it again
@@ -132,7 +132,7 @@ class SdcClient:
                 'severity' : severity,
                 'timespan' : for_atleast_s * 1000000,
                 'condition' : condition,
-                'filter': filter
+                'filter': user_filter
             }
         }
 
@@ -149,42 +149,42 @@ class SdcClient:
         #
         # Create the new alert
         #
-        r = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def delete_alert(self, alert):
         if 'id' not in alert:
             return [False, "Invalid alert format"]
 
-        r = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
 
         return [True, None]
 
     def get_notification_settings(self):
-        r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def set_notification_settings(self, settings):
-        r = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs,
-                         data=json.dumps(settings))
-        if not self.__checkResponse(r):
+        res = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs,
+                           data=json.dumps(settings))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def add_email_notification_recipient(self, email):
         #
         # Retirieve the user's notification settings
         #
-        r = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        j = r.json()
+        j = res.json()
 
         #
         # Enable email notifications
@@ -202,11 +202,11 @@ class SdcClient:
         return self.set_notification_settings(j)
 
     def get_explore_grouping_hierarchy(self):
-        r = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
 
-        data = r.json()
+        data = res.json()
 
         if 'groupConfigurations' not in data:
             return [False, 'corrupted groupConfigurations API response']
@@ -226,10 +226,10 @@ class SdcClient:
         return [False, 'corrupted groupConfigurations API response, missing "explore" entry']
 
     def get_data_retention_info(self):
-        r = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_topology_map(self, grouping_hierarchy, time_window_s, sampling_time_s):
         #
@@ -306,17 +306,17 @@ class SdcClient:
         #
         # Fire the request
         #
-        r = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
-                          data=json.dumps(req_json))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
+                            data=json.dumps(req_json))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_views_list(self):
-        r = requests.get(self.url + '/data/drilldownDashboardDescriptors.json', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/data/drilldownDashboardDescriptors.json', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_view(self, name):
         gvres = self.get_views_list()
@@ -335,28 +335,28 @@ class SdcClient:
         if not id:
             return [False, 'view ' + name + ' not found']
 
-        r = requests.get(self.url + '/data/drilldownDashboards/' + id + '.json', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/data/drilldownDashboards/' + id + '.json', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_dashboards(self):
-        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def find_dashboard_by(self, name=None):
-        r = self.get_dashboards()
-        if r[0] == False:
-            return r
+        res = self.get_dashboards()
+        if res[0] is False:
+            return res
         else:
-            def filterFn(json):
-                return json['name'] == name
-            def set(dashboard_configuration):
-                return { 'dashboard': dashboard_configuration }
+            def filter_fn(configuration):
+                return configuration['name'] == name
+            def create_item(configuration):
+                return {'dashboard': configuration}
 
-            dashboards = map(set, filter(filterFn, r[1]['dashboards']))
+            dashboards = map(create_item, filter(filter_fn, res[1]['dashboards']))
             return [True, dashboards]
 
     def create_dashboard(self, name):
@@ -369,27 +369,27 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
         else:
-            return [True, r.json()]
+            return [True, res.json()]
 
-    def add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, sort_by=None, limit=None, layout=None):
+    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
         panel_configuration = {
             'name':                 name,
             'showAs':               None,
             'showAsType':           None,
             'metrics':              [],
             'gridConfiguration':    {
-                                        'col':      1,
-                                        'row':      1,
-                                        'size_x':   12,
-                                        'size_y':   6
-                                    }
+                'col':      1,
+                'row':      1,
+                'size_x':   12,
+                'size_y':   6
+            }
         }
 
-        if type == 'timeSeries':
+        if panel_type == 'timeSeries':
             #
             # In case of a time series, the current dashboard implementation
             # requires the timestamp to be explicitly specified as "key".
@@ -398,7 +398,7 @@ class SdcClient:
             # specify time window and sampling)
             #
             metrics = copy.copy(metrics)
-            metrics.insert(0, { 'id': 'timestamp' })
+            metrics.insert(0, {'id': 'timestamp'})
 
         #
         # Convert list of metrics to format used by Sysdig Cloud
@@ -443,7 +443,7 @@ class SdcClient:
         #
         # Configure panel type
         #
-        if type == 'timeSeries':
+        if panel_type == 'timeSeries':
             panel_configuration['showAs'] = 'timeSeries'
             panel_configuration['showAsType'] = 'line'
 
@@ -453,14 +453,14 @@ class SdcClient:
                     'to':   limit - 1
                 }
 
-        elif type == 'number':
+        elif panel_type == 'number':
             panel_configuration['showAs'] = 'summary'
             panel_configuration['showAsType'] = 'summary'
-        elif type == 'top':
+        elif panel_type == 'top':
             panel_configuration['showAs'] = 'top'
             panel_configuration['showAsType'] = 'bars'
 
-            if sort_by == None:
+            if sort_by is None:
                 panel_configuration['sorting'] = [{
                     'id':   'v0',
                     'mode': 'desc'
@@ -471,7 +471,7 @@ class SdcClient:
                     'mode': sort_by['mode']
                 }]
 
-            if limit == None:
+            if limit is None:
                 panel_configuration['paging'] = {
                     'from': 0,
                     'to':   10
@@ -503,11 +503,11 @@ class SdcClient:
         #
         # Update dashboard
         #
-        r = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
-        if not self.__checkResponse(r):
+        res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
         else:
-            return [True, r.json()]
+            return [True, res.json()]
 
     def remove_dashboard_panel(self, dashboard, panel_name):
         #
@@ -519,9 +519,9 @@ class SdcClient:
         #
         # ... find the panel
         #
-        def filterFn(panel):
+        def filter_fn(panel):
             return panel['name'] == panel_name
-        panels = filter(filterFn, dashboard_configuration['items'])
+        panels = filter(filter_fn, dashboard_configuration['items'])
 
         if len(panels) > 0:
             #
@@ -533,11 +533,11 @@ class SdcClient:
             #
             # Update dashboard
             #
-            r = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({ 'dashboard': dashboard_configuration }))
-            if not self.__checkResponse(r):
+            res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}))
+            if not self.__checkResponse(res):
                 return [False, self.lasterr]
             else:
-                return [True, r.json()]
+                return [True, res.json()]
         else:
             return [False, 'Not found']
 
@@ -611,9 +611,9 @@ class SdcClient:
                              ]
                             }
 
-                    r = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs,
-                                      data=json.dumps(gconf))
-                    if not self.__checkResponse(r):
+                    res = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs,
+                                        data=json.dumps(gconf))
+                    if not self.__checkResponse(res):
                         return [False, self.lasterr]
 
                     chart['filter'] = filter
@@ -632,11 +632,11 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        r = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps(ddboard))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps(ddboard))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
         else:
-            return [True, r.json()]
+            return [True, res.json()]
 
     def create_dashboard_from_view(self, newdashname, viewname, filter):
         #
@@ -660,11 +660,11 @@ class SdcClient:
         #
         # Get the list of dashboards from the server
         #
-        r = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
 
-        j = r.json()
+        j = res.json()
 
         #
         # Find our template dashboard
@@ -704,8 +704,8 @@ class SdcClient:
         if 'id' not in dashboard:
             return [False, "Invalid dashboard format"]
 
-        r = requests.delete(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.delete(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
 
         return [True, None]
@@ -719,7 +719,7 @@ class SdcClient:
 
         if description is not None:
             edata['event']['description'] = description
-            
+
         if severity is not None:
             edata['event']['severity'] = severity
 
@@ -729,10 +729,10 @@ class SdcClient:
         if tags is not None:
             edata['event']['tags'] = tags
 
-        r = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
         params = {}
@@ -749,17 +749,17 @@ class SdcClient:
         if tags is not None:
             params['tags'] = tags
 
-        r = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def delete_event(self, event):
         if 'id' not in event:
             return [False, "Invalid event format"]
 
-        r = requests.delete(self.url + '/api/events/' + str(event['id']), headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.delete(self.url + '/api/events/' + str(event['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
 
@@ -784,31 +784,31 @@ class SdcClient:
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
 
-        r = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_metrics(self):
-        r = requests.get(self.url + '/api/data/metrics', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def get_sysdig_captures(self):
-        r = requests.get(self.url + '/api/sysdig', headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/sysdig', headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def poll_sysdig_capture(self, capture):
         if 'id' not in capture:
             return [False, 'Invalid capture format']
 
-        r = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs)
-        if not self.__checkResponse(r):
+        res = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
         res = self.get_connected_agents()
@@ -834,7 +834,7 @@ class SdcClient:
             'bucketName': ''
         }
 
-        r = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data))
-        if not self.__checkResponse(r):
+        res = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data))
+        if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, r.json()]
+        return [True, res.json()]
