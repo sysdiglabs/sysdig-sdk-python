@@ -34,6 +34,7 @@ script:
 - pip install sdcclient
 - examples/create_alert.py XXX
 - examples/delete_alert.py XXX
+- examples/dashboard.py XXX
 - examples/create_dashboard.py XXX
 - examples/delete_dashboard.py XXX
 - examples/get_data_advanced.py XXX ip-10-0-2-180.ec2.internal
