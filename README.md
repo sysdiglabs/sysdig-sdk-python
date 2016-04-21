@@ -62,8 +62,11 @@ Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e
 - **dashboard**: dashboard to edit
 - **name**: name of the new panel
 - **type**: type of the new panel. Valid values are: `timeSeries`, `top`, `number`
-- **metrics**: list of metrics; Each metric must specified an `id` (e.g. `cpu.used.percent`) and if it's a value an `aggregation` dictionary with `time` and `group` to specify time aggregation and group aggregation respectively
-- **scope**: filter to apply to the panel; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
+- **metrics**:  a list of dictionaries, specifying the metrics to show in the panel, and optionally, if there is only one metric, a grouping key to segment that metric by. A metric is any of the entries that can be found in the _Metrics_ section of the Explore page in Sysdig Cloud. Metric entries require an _aggregations_ section specifying how to aggregate the metric across time and groups of containers/hosts. A grouping key is any of the entries that can be found in the _Show_ or _Segment By_ sections of the Explore page in Sysdig Cloud. Refer to the examples section below for ready to use code snippets. Note, certain panels allow certain combinations of metrics and grouping keys:
+ - `timeSeries`: 1 or more metrics OR 1 metric + 1 grouping key
+ - `top`: 1 or more metrics OR 1 metric + 1 grouping key
+ - `number`: 1 metric only
+- **scope**: filter to apply to the panel; must be based on metadata available in Sysdig Cloud; Example: _kubernetes.namespace.name='production' and container.image='nginx'_.
 - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of `metric` and `mode` (it can be `desc` or `asc`)
 - **paging**: Data pagination; The parameter is optional and limits the data points returned. The parameter is a dictionary of `from` and `to` with the index of the first and last point respectively
 - **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of `row` (row position), `col` (column position), `size_x` (width), `size_y` (height).
