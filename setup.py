@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='sdcclient',
-      version='0.3.0',
+      version='0.4.0',
       description='Python client for Sysdig Cloud',
       url='http://github.com/draios/python-sdc-client',
       author='sysdig Inc.',
