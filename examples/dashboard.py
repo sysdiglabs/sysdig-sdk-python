@@ -85,8 +85,8 @@ metrics = [
   { 'id': 'cpu.used.percent', 'aggregations': { 'time': 'avg', 'group': 'avg' } }
 ]
 sort_by = { 'metric': 'cpu.used.percent', 'mode': 'desc' }
-paging = { 'from': 0, 'to': 10 }
-res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_by=sort_by, paging=paging)
+limit = 10
+res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_by=sort_by, limit=limit)
 
 # Check the result
 if res[0]:

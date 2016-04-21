@@ -375,14 +375,12 @@ class SdcClient:
         else:
             return [True, r.json()]
 
-    def add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, sort_by=None, paging=None, layout=None):
+    def add_dashboard_panel(self, dashboard, name, type, metrics, scope=None, sort_by=None, limit=None, layout=None):
         panel_configuration = {
             'name':                 name,
             'showAs':               None,
             'showAsType':           None,
-            'format':               None,
             'metrics':              [],
-            'filter':               None,
             'gridConfiguration':    {
                                         'col':      1,
                                         'row':      1,
@@ -448,6 +446,13 @@ class SdcClient:
         if type == 'timeSeries':
             panel_configuration['showAs'] = 'timeSeries'
             panel_configuration['showAsType'] = 'line'
+
+            if limit != None:
+                panel_configuration['paging'] = {
+                    'from': 0,
+                    'to':   limit - 1
+                }
+
         elif type == 'number':
             panel_configuration['showAs'] = 'summary'
             panel_configuration['showAsType'] = 'summary'
@@ -466,13 +471,16 @@ class SdcClient:
                     'mode': sort_by['mode']
                 }]
 
-            if paging == None:
+            if limit == None:
                 panel_configuration['paging'] = {
                     'from': 0,
                     'to':   10
                 }
             else:
-                panel_configuration['paging'] = paging
+                panel_configuration['paging'] = {
+                    'from': 0,
+                    'to':   limit - 1
+                }
 
 
         #
