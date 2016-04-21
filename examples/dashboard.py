@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
-# TODO Description
+# This example shows various functions to create a new dashboard or find an existing on,
+# edit the content, and then delete it.
 #
 
 import os
