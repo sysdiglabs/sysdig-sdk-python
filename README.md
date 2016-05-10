@@ -1,5 +1,5 @@
-python-sdcclient
-================
+Sysdig Cloud python client library
+===
 
 [![Build Status](https://travis-ci.org/draios/python-sdc-client.png?branch=master)](https://travis-ci.org/draios/python-sdc-client)
 [![Current version on PyPI](http://img.shields.io/pypi/v/sdcclient.svg)](https://pypi.python.org/pypi/sdcclient)
