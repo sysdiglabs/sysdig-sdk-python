@@ -27,14 +27,21 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token)
 
 #
-# Create the new dashboard, apllying to cassandra in production
+# Create the new dashboard, applying to cassandra in production
 #
-res = sdclient.create_dashboard_from_view("API test - cassandra in prod", # The name we're giving to the new dashboard.
-                                          "Overview by Process", # The view we're copying.
-                                          "kubernetes.namespace.name=prod and proc.name = cassandra") # the filter specifying what this dasboard appies to.
-                                                                                                      # Remember that here you can use combinations of any
-                                                                                                      # segmentation criteria that you find in the Sysdig
-                                                                                                      # Cloud explore page.
+
+# Name for the dashboard to create
+dashboardName = "API test - cassandra in prod"
+# Name of the view to copy
+viewName = "Overview by Process"
+# Filter to apply to the new dashboard.
+# Remember that you can use combinations of any segmentation criteria you find
+# in Sysdig Cloud Explore page.
+# You can also refer to AWS tags by using "cloudProvider.tag.*" metadata or
+# agent tags by using "agent.tag.*" metadata
+dashboardFilter = "kubernetes.namespace.name = prod and proc.name = cassandra"
+
+res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
 # Check the result
 #
@@ -45,11 +52,18 @@ else:
     sys.exit(1)
 
 #
-# Make a Copy the just created dasboard, this time applying it to cassandra in the dev namespace
+# Make a Copy the just created dasboard, this time applying it to cassandra in
+# the dev namespace
 #
-res = sdclient.create_dashboard_from_dashboard("API test - cassandra in dev", # The name we're giving to the new dashboard.
-                                               "API test - cassandra in prod", # The view we're copying.
-                                               "kubernetes.namespace.name=dev and proc.name = cassandra") # the filter specifying what this dasboard appies to.
+
+# Name for the dashboard to create
+dashboardName = "API test - cassandra in dev"
+# Name of the dashboard to copy
+dashboardToCopy = "API test - cassandra in prod"
+# Filter to apply to the new dashboard. Same as above.
+dashboardFilter = "kubernetes.namespace.name = dev and proc.name = cassandra"
+
+res = sdclient.create_dashboard_from_dashboard(dashboardName, dashboardToCopy, dashboardFilter)
 
 #
 # Check the result
