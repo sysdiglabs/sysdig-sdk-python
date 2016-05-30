@@ -53,4 +53,4 @@ For an example on how to parse this output, take a look at a simple example like
 Reference
 -------
 
-Please Refer to the [Python Script Library documentation page](https://sysdig.gitbooks.io/sysdig-cloud-api/content/) for a more complete documentation of the library.
+Please Refer to the [Python Script Library documentation page](https://sysdig.gitbooks.io/sysdig-cloud-api/content/python.html) for a more complete documentation of the library.
