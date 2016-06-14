@@ -50,7 +50,7 @@ Every method in the SdcClient class returns **a list with two entries**. The fir
 
 For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py) 
 
-Reference
+Function List
 -------
 
-Please Refer to the [Python Script Library documentation page](https://sysdig.gitbooks.io/sysdig-cloud-api/content/python.html) for a more complete documentation of the library.
+Please Refer to the [Python Script Library documentation page](https://sysdig.gitbooks.io/sysdig-cloud-api/content/python/function_list.html) for the list of functions available.
