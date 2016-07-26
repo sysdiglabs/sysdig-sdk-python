@@ -34,10 +34,26 @@ metrics =   [
                 # { "id": "agent.tag.env", "aggregations": { "time": "concat", "group": "concat" } },
                 { "id": "cpu.used.percent", "aggregations": { "time": "timeAvg", "group": "avg" } }
             ]
-filter =    None                        # or None
-start =     -600                        # start timestamp, or lower than 0 for "last X seconds"
-end =       0                           # end timestamp, or 0 for "last X seconds"
-sampling =  60                          # sampling time in seconds for time series, or 0 for aggregated data
+
+#
+# Data filter or None if you want to see "everything"
+#
+filter =    None
+
+#
+# Time window:
+#   - for "from A to B": start is equal to A, end is equal to B (expressed in seconds)
+#   - for "last X seconds": start is equal to -X, end is equal to 0
+#
+start =     -600
+end =       0
+
+#
+# Sampling time:
+#   - for time series: sampling is equal to the "width" of each data point (expressed in seconds)
+#   - for aggregated data (similar to bar charts, pie charts, tables, etc.): sampling is equal to 0
+#
+sampling =  60
 
 #
 # Load data
