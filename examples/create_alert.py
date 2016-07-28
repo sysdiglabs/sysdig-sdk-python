@@ -27,6 +27,20 @@ sdc_token = sys.argv[1]
 sdclient = SdcClient(sdc_token)
 
 #
+# Find notification channels (you need IDs to create an alert).
+#
+notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
+                    {'type': 'EMAIL', 'emailRecipients': [u'kini@sysdig.com']},
+                    {'type': 'SNS', 'snsTopicARNs': [u'arn:aws:sns:us-east-1:273107874544:alarms-stg']}
+                    ]
+res = sdclient.get_notification_ids(notify_channels)
+if not res[0]:
+    print "Could not get IDs and hence not creating the alert"
+    sys.exit(-1)
+
+notification_channel_ids = res[1]
+
+#
 # Create the alert.
 #
 res = sdclient.create_alert('tomcat cpu > 80% on any host',  # Alert name.
@@ -37,7 +51,7 @@ res = sdclient.create_alert('tomcat cpu > 80% on any host',  # Alert name.
                             ['host.mac', 'proc.name'], # Segmentation. We want to check this metric for every process on every machine.
                             'ANY', # in case there is more than one tomcat process, this alert will fire when a single one of them crosses the 80% threshold.
                             'proc.name = "tomcat"', # Filter. We want to receive a notification only if the name of the process meeting the condition is 'tomcat'.
-                            ['EMAIL'], # Notification target. We want an email to be sent. Alerts email recipients can be defined here: https://app.sysdigcloud.com/#/settings/notifications
+                            notification_channel_ids,
                             False) # This alert will be disabled when it's created.
 
 #

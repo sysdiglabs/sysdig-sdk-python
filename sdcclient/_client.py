@@ -102,8 +102,39 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
+    def get_notification_ids(self, channels):
+        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs)
+
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+
+        # Should try and improve this M * N lookup
+        ids = []
+        for ch in res.json()["notificationChannels"]:
+            for c in channels:
+                if c['type'] == ch['type']:
+                    print c, ch
+                    if c['type'] == 'SNS':
+                        opt = ch['options']
+                        if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
+                            ids.append(ch['id'])
+                    elif c['type'] == 'EMAIL':
+                        opt = ch['options']
+                        if set(c['emailRecipients']) == set(opt['emailRecipients']):
+                            ids.append(ch['id'])
+                    elif c['type'] == 'PAGER_DUTY':
+                        opt = ch['options']
+                        if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
+                            ids.append(ch['id'])
+                    elif c['type'] == 'SLACK':
+                        opt = ch['options']
+                        if opt['channel'] == c['channel']:
+                            ids.append(ch['id'])
+
+        return [True, ids]
+                        
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
-                     segment_condition='ANY', user_filter='', notify='', enabled=True, annotations={}):
+                     segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
         #
         # Get the list of alerts from the server
         #
@@ -143,8 +174,8 @@ class SdcClient:
         if annotations != None and annotations != {}:
             alert_json['alert']['annotations'] = annotations
 
-        if notify != None and notify != []:
-            alert_json['alert']['notify'] = notify
+        if notify != None:
+            alert_json['alert']['notificationChannelIds'] = notify
 
         #
         # Create the new alert
