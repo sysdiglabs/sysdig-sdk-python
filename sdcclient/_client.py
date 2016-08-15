@@ -110,26 +110,32 @@ class SdcClient:
 
         # Should try and improve this M * N lookup
         ids = []
-        for ch in res.json()["notificationChannels"]:
-            for c in channels:
+        for c in channels:
+            found = False
+            for ch in res.json()["notificationChannels"]:
                 if c['type'] == ch['type']:
-                    print c, ch
                     if c['type'] == 'SNS':
                         opt = ch['options']
                         if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
+                            found = True
                             ids.append(ch['id'])
                     elif c['type'] == 'EMAIL':
                         opt = ch['options']
                         if set(c['emailRecipients']) == set(opt['emailRecipients']):
+                            found = True
                             ids.append(ch['id'])
                     elif c['type'] == 'PAGER_DUTY':
                         opt = ch['options']
                         if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
+                            found = True
                             ids.append(ch['id'])
                     elif c['type'] == 'SLACK':
                         opt = ch['options']
-                        if opt['channel'] == c['channel']:
+                        if 'channel' in opt and opt['channel'] == c['channel']:
+                            found = True
                             ids.append(ch['id'])
+            if not found:
+                return [False, "Channel not found: " + str(c)]
 
         return [True, ids]
                         
