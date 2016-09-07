@@ -4,7 +4,6 @@ import requests
 import copy
 
 class SdcClient:
-    userinfo = None
     n_connected_agents = None
     lasterr = None
 
@@ -43,12 +42,10 @@ class SdcClient:
         return True
 
     def get_user_info(self):
-        if self.userinfo is None:
-            res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
-            if not self.__checkResponse(res):
-                return [False, self.lasterr]
-            self.userinfo = res.json()
-        return [True, self.userinfo]
+        res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
 
     def get_connected_agents(self):
         res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
