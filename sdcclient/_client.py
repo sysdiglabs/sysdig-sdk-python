@@ -4,7 +4,6 @@ import requests
 import copy
 
 class SdcClient:
-    n_connected_agents = None
     lasterr = None
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com'):
