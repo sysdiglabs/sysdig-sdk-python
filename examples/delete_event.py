@@ -44,5 +44,3 @@ for event in res[1]['events']:
 	if not res[0]:
 		print res[1]
 		sys.exit(1)
-	else:
-		sys.exit(0)
