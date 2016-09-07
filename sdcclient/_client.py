@@ -88,7 +88,7 @@ class SdcClient:
 
     def update_notification_resolution(self, notification, resolved):
         if 'id' not in notification:
-            return [False, "Invalid notification format"]
+            return [False, 'Invalid notification format']
 
         notification['resolved'] = resolved
         data = {'notification': notification}
@@ -189,7 +189,7 @@ class SdcClient:
 
     def delete_alert(self, alert):
         if 'id' not in alert:
-            return [False, "Invalid alert format"]
+            return [False, 'Invalid alert format']
 
         res = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs)
         if not self.__checkResponse(res):
@@ -197,42 +197,31 @@ class SdcClient:
 
         return [True, None]
 
-    def get_notification_settings(self):
-        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
+    def create_email_notification_channel(self, channel_name, email_recipients):
+        channel_json = {
+            'notificationChannel' : {
+                'type' : 'EMAIL',
+                'name' : channel_name,
+                'enabled' : True,
+                'options' : {
+                    'emailRecipients' : email_recipients
+                }
+            }
+        }
+
+        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json))
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def set_notification_settings(self, settings):
-        res = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs,
-                           data=json.dumps(settings))
+    def delete_notification_channel(self, channel):
+        if 'id' not in channel:
+            return [False, "Invalid channel format"]
+
+        res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, res.json()]
-
-    def add_email_notification_recipient(self, email):
-        #
-        # Retirieve the user's notification settings
-        #
-        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
-        if not self.__checkResponse(res):
-            return [False, self.lasterr]
-        j = res.json()
-
-        #
-        # Enable email notifications
-        #
-        j['userNotification']['email']['enabled'] = True
-
-        #
-        # Add the given recipient
-        #
-        if email not in j['userNotification']['email']['recipients']:
-            j['userNotification']['email']['recipients'].append(email)
-        else:
-            return [False, 'notification target ' + email + ' already present']
-
-        return self.set_notification_settings(j)
+        return [True, None]
 
     def get_explore_grouping_hierarchy(self):
         res = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)

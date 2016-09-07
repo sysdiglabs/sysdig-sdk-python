@@ -29,6 +29,7 @@ script:
 - examples/print_user_info.py XXX
 - examples/list_sysdig_captures.py XXX
 - examples/create_sysdig_capture.py XXX ip-10-0-1-110.ec2.internal apicapture 10
+- examples/notification_channels.py XXX
 - echo "Testing pip version"
 - rm -rf sdcclient
 - pip install sdcclient
@@ -54,7 +55,7 @@ script:
 # - examples/print_explore_grouping.py XXX
 # - examples/print_user_info.py XXX
 # - examples/list_sysdig_captures.py XXX
-# - examples/create_sysdig_capture.py XXX ip-10-0-1-110.ec2.internal apicapture 10
+# - examples/create_sysdig_capture.py XXX ip-10-0-2-202.ec2.internal apicapture 10
 notifications:
   slack:
     secure: GJ0H2wAaW67t3+x+cCjOVLw/b+YAZjH9rebAfluCFJklJS9u+V6/qqIyiNDAkMPIcgilFyhiyOQCZYXapgthQ1ieFbZZo//mrRtuGo2wuxCAwcOx2mXAZpZ4I5b3+Q/znVqSuqkwFRid1d138z4TW7sYSIburouDX3QUNoUOy+g7VJxCFQCcqlN8LYxGJHQYdOZa9zIGCtKrOtZ/B8C1TLgXmDMwAAVNO2WzL4GiBTLCGuMsQWMTLw2Qmv1ayZPztmeDWo1C9oa7HIH8Bg2YVjssR87el28X+EqEO533mgYjPmW2/hii30WVFOUE5hMdvKeQLBvy5N3/OCch1np0RQBd8eYEtaPv38rc5L2wAnUq9G5Zzr252z7vnwSLi6lap9jWU8tOerSTEPU+jG05PnuCnufVDXVNPyiPsH6BDP4qxHmLjooNpxfe63Df7NNyUi2I3QoroLj/UzI7zZVQjJEqsTrr5BbsH4z6NTGY91+ZqobBn62+hV3ESAam0ivQgC7s2AKko0qkKyIUGjj7ozU8ebo1UpagNvKC/J9szMqtdXJgKtG8BeonyLMeN6MEEyEvcMJbB4dCcfet+1Sb9AZWnGvYVdajhVLb1HE6OrbzZyhC3KqCe06J9O5BCY9ncy+l16i7MyIfcKTibHQlxPU+Id/VijD97JSRXxnd2i4=
