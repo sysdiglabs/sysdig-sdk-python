@@ -42,6 +42,7 @@ class SdcClient:
             return False
         return True
 
+
     def get_user_info(self):
         if self.userinfo is None:
             res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
@@ -102,14 +103,12 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def get_notification_ids(self, channels):
+    def get_notification_channel_ids(self, channels):
         res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs)
-
+        ids = []
         if not self.__checkResponse(res):
             return [False, self.lasterr]
-
         # Should try and improve this M * N lookup
-        ids = []
         for ch in res.json()["notificationChannels"]:
             for c in channels:
                 if c['type'] == ch['type']:
@@ -130,9 +129,10 @@ class SdcClient:
                         opt = ch['options']
                         if opt['channel'] == c['channel']:
                             ids.append(ch['id'])
-
+        print ids
         return [True, ids]
                         
+                
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
                      segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
         #
@@ -435,8 +435,16 @@ class SdcClient:
         # Convert list of metrics to format used by Sysdig Cloud
         #
         property_names = {}
+        k_count = 0
+        v_count = 0
         for i, metric in enumerate(metrics):
             property_name = 'v' if 'aggregations' in metric else 'k'
+            if property_name == 'k':
+                i = k_count
+                k_count += 1
+            else:
+                i = v_count
+                v_count += 1
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
@@ -869,3 +877,171 @@ class SdcClient:
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
+
+    def create_user_invite(self, user_email):
+        # Look up the list of users to see if this exists, do not create if one exists
+        res = requests.get(self.url + '/api/users', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        data = res.json()
+        for user in data['users']:
+            if user['username'] == user_email:
+                return [False, 'user ' + user_email + ' already exists']
+
+        # Create the user
+        user_json = {'username' : user_email}
+        res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+    def delete_user(self, user_email):
+        res = self.get_user_ids([user_email])
+        if res[0] == False:
+            return res
+        userid = res[1][0]
+        res = requests.delete(self.url + '/api/users' + str(userid), headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, None]
+
+    def get_user(self, user_email):
+        res = requests.get(self.url + '/api/users', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        for u in res.json()['users']:
+            if u['username'] == user_email:
+                return [True, u]
+        return [False, 'User not found']
+    
+    def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
+        res = self.get_user(user_email)
+        if res[0] == False:
+            return res
+        user = res[1]
+        reqbody = {
+            'agentInstallParams': user['agentInstallParams'],
+            'roles': roles if roles else user['roles'],
+            'username': user_email,
+            'version': user['version']
+            }
+
+        if teams == None:
+            reqbody['teams'] = user['teams']
+        else:
+            t = self.get_team_ids(teams)
+            if t[0] == False:
+                return [False, 'Could not get team IDs']
+            reqbody['teams'] = t[1]
+
+        if firstName == None:
+            reqbody['firstName'] = user['firstName'] if 'firstName' in user.keys() else ''
+        else:
+            reqbody['firstName'] = firstName
+
+        if lastName == None:
+            reqbody['lastName'] = user['lastName'] if 'lastName' in user.keys() else ''
+        else:
+            reqbody['lastName'] = lastName
+        print reqbody
+        res = requests.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, 'Successfully edited user']
+
+    def get_teams(self, team_filter=''):
+        res = requests.get(self.url + '/api/teams', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        ret = filter(lambda t: team_filter in t['name'],res.json()['teams'])
+        return [True, ret]
+
+    def get_team(self, name):
+        res = self.get_teams(name)
+        if res[0] == False:
+            return res
+        for t in res[1]:
+            if t['name'] == name:
+                return [True, t]
+        return [False, 'Could not find team']
+
+    def get_team_ids(self, teams):
+        res = requests.get(self.url + '/api/teams', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        u = filter(lambda x: x['name'] in teams, res.json()['teams'])
+        return [True, map(lambda x: x['id'], u)]
+
+    def get_user_ids(self, users):
+        res = requests.get(self.url + '/api/users', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        u = filter(lambda x: x['username'] in users, res.json()['users'])
+        return [True, map(lambda x: x['id'], u)]
+
+    def create_team(self, name, users=[], filter='', description='', show='host', theme='#7BB0B2'):
+        reqbody = {
+            'name': name,
+            'description': description,
+            'theme': theme,
+            'show': show,
+            'users': users
+        }
+        if filter != '':
+            reqbody['filter'] = filter
+
+        res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+
+    def edit_team(self, name, users=None, filter=None, description=None, show=None, theme=None):
+        res = self.get_team(name)
+        if res[0] == False:
+            return res
+
+        t = res[1]
+        reqbody = {
+            'name': name,
+            'description': description if description else t['description'],
+            'theme': theme if theme else t['theme'],
+            'show': show if show else t['show'],
+            'id': t['id'],
+            'version': t['version']
+            }
+
+        # Handling for users to map user-names to IDs
+        if users != None:
+            res = self.get_user_ids(users)
+            if res[0] == False:
+                return [False, 'Could not convert user names to IDs']
+            reqbody['users'] = res[1]
+        elif 'users' in t.keys():
+            reqbody['users'] = t['users']
+        else:
+            reqbody['users'] = []
+
+        # Special handling for filters since we don't support blank filters
+        if filter != None:
+            reqbody['filter'] = filter
+        elif 'filter' in t.keys():
+            reqbody['filter'] = t['filter']
+
+        res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+    def delete_team(self, name):
+        res = self.get_team(name)
+        if res[0] == False:
+            return res
+
+        t = res[1]
+        res = requests.delete(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, None]
+
+
