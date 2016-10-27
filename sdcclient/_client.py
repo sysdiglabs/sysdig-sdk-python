@@ -786,7 +786,7 @@ class SdcClient:
         return [True, None]
 
     def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
-                 filter='', datasource_type='host'):
+                 filter='', datasource_type='host', paging=None):
         reqbody = {
             'metrics': metrics,
             'dataSourceType': datasource_type,
@@ -802,6 +802,9 @@ class SdcClient:
 
         if filter != '':
             reqbody['filter'] = filter
+
+        if paging is not None:
+            reqbody['paging'] = paging
 
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
