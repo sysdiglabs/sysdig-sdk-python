@@ -4,8 +4,6 @@ import requests
 import copy
 
 class SdcClient:
-    userinfo = None
-    n_connected_agents = None
     lasterr = None
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com'):
@@ -44,12 +42,10 @@ class SdcClient:
 
 
     def get_user_info(self):
-        if self.userinfo is None:
-            res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
-            if not self.__checkResponse(res):
-                return [False, self.lasterr]
-            self.userinfo = res.json()
-        return [True, self.userinfo]
+        res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
 
     def get_connected_agents(self):
         res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
@@ -93,7 +89,7 @@ class SdcClient:
 
     def update_notification_resolution(self, notification, resolved):
         if 'id' not in notification:
-            return [False, "Invalid notification format"]
+            return [False, 'Invalid notification format']
 
         notification['resolved'] = resolved
         data = {'notification': notification}
@@ -103,35 +99,42 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def get_notification_channel_ids(self, channels):
-        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs)
-        ids = []
-        if not self.__checkResponse(res):
-            return [False, self.lasterr]
-        # Should try and improve this M * N lookup
-        for ch in res.json()["notificationChannels"]:
+    def get_notification_ids(self, channels):
+            res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs)
+
+            if not self.__checkResponse(res):
+                return [False, self.lasterr]
+
+            # Should try and improve this M * N lookup
+            ids = []
             for c in channels:
-                if c['type'] == ch['type']:
-                    print c, ch
-                    if c['type'] == 'SNS':
-                        opt = ch['options']
-                        if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
-                            ids.append(ch['id'])
-                    elif c['type'] == 'EMAIL':
-                        opt = ch['options']
-                        if set(c['emailRecipients']) == set(opt['emailRecipients']):
-                            ids.append(ch['id'])
-                    elif c['type'] == 'PAGER_DUTY':
-                        opt = ch['options']
-                        if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
-                            ids.append(ch['id'])
-                    elif c['type'] == 'SLACK':
-                        opt = ch['options']
-                        if opt['channel'] == c['channel']:
-                            ids.append(ch['id'])
-        print ids
-        return [True, ids]
-                        
+                found = False
+                for ch in res.json()["notificationChannels"]:
+                    if c['type'] == ch['type']:
+                        if c['type'] == 'SNS':
+                            opt = ch['options']
+                            if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
+                                found = True
+                                ids.append(ch['id'])
+                        elif c['type'] == 'EMAIL':
+                            opt = ch['options']
+                            if set(c['emailRecipients']) == set(opt['emailRecipients']):
+                                found = True
+                                ids.append(ch['id'])
+                        elif c['type'] == 'PAGER_DUTY':
+                            opt = ch['options']
+                            if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
+                                found = True
+                                ids.append(ch['id'])
+                        elif c['type'] == 'SLACK':
+                            opt = ch['options']
+                            if 'channel' in opt and opt['channel'] == c['channel']:
+                                found = True
+                                ids.append(ch['id'])
+                if not found:
+                    return [False, "Channel not found: " + str(c)]
+
+            return [True, ids]                        
                 
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
                      segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
@@ -187,7 +190,7 @@ class SdcClient:
 
     def delete_alert(self, alert):
         if 'id' not in alert:
-            return [False, "Invalid alert format"]
+            return [False, 'Invalid alert format']
 
         res = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs)
         if not self.__checkResponse(res):
@@ -195,42 +198,31 @@ class SdcClient:
 
         return [True, None]
 
-    def get_notification_settings(self):
-        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
+    def create_email_notification_channel(self, channel_name, email_recipients):
+        channel_json = {
+            'notificationChannel' : {
+                'type' : 'EMAIL',
+                'name' : channel_name,
+                'enabled' : True,
+                'options' : {
+                    'emailRecipients' : email_recipients
+                }
+            }
+        }
+
+        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json))
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def set_notification_settings(self, settings):
-        res = requests.put(self.url + '/api/settings/notifications', headers=self.hdrs,
-                           data=json.dumps(settings))
+    def delete_notification_channel(self, channel):
+        if 'id' not in channel:
+            return [False, "Invalid channel format"]
+
+        res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
-        return [True, res.json()]
-
-    def add_email_notification_recipient(self, email):
-        #
-        # Retirieve the user's notification settings
-        #
-        res = requests.get(self.url + '/api/settings/notifications', headers=self.hdrs)
-        if not self.__checkResponse(res):
-            return [False, self.lasterr]
-        j = res.json()
-
-        #
-        # Enable email notifications
-        #
-        j['userNotification']['email']['enabled'] = True
-
-        #
-        # Add the given recipient
-        #
-        if email not in j['userNotification']['email']['recipients']:
-            j['userNotification']['email']['recipients'].append(email)
-        else:
-            return [False, 'notification target ' + email + ' already present']
-
-        return self.set_notification_settings(j)
+        return [True, None]
 
     def get_explore_grouping_hierarchy(self):
         res = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
@@ -803,7 +795,7 @@ class SdcClient:
         return [True, None]
 
     def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
-                 filter='', datasource_type='host'):
+                 filter='', datasource_type='host', paging=None):
         reqbody = {
             'metrics': metrics,
             'dataSourceType': datasource_type,
@@ -819,6 +811,9 @@ class SdcClient:
 
         if filter != '':
             reqbody['filter'] = filter
+
+        if paging is not None:
+            reqbody['paging'] = paging
 
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
