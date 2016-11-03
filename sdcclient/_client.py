@@ -626,6 +626,7 @@ class SdcClient:
         #
         template['id'] = None
         template['version'] = None
+        template['schema'] = 1
         template['name'] = newdashname
         template['isShared'] = False # make sure the dashboard is not shared
 
