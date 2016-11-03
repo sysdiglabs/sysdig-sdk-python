@@ -47,6 +47,14 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
+    def get_user_token(self):
+        res = requests.get(self.url + '/api/token', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        tkinfo = res.json()
+
+        return [True, tkinfo['token']['key']]
+
     def get_connected_agents(self):
         res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
         if not self.__checkResponse(res):
@@ -247,6 +255,22 @@ class SdcClient:
                 return [True, res]
 
         return [False, 'corrupted groupConfigurations API response, missing "explore" entry']
+
+    def set_explore_grouping_hierarchy(self, new_hierarchy):
+        body = {
+            'id': 'explore',
+            'groups': [{'groupBy':[]}]
+        }
+
+        for item in new_hierarchy:
+            body['groups'][0]['groupBy'].append({'metric': item})
+
+        res = requests.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
+                            data=json.dumps(body))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        else:
+            return [True, None]
 
     def get_data_retention_info(self):
         res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
@@ -1039,4 +1063,18 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, None]
 
+    def switch_user_team(self, new_team_id):
+        res = self.get_user_info()
+        if not res[0]:
+            return res
+
+        myuinfo = res[1]['user']
+        myuinfo['currentTeam'] = new_team_id
+        uid = myuinfo['id']
+
+        res = requests.put(self.url + '/api/user/' + str(uid), headers=self.hdrs, data=json.dumps(myuinfo))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        else:
+            return [True, None]
 
