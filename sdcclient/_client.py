@@ -8,7 +8,7 @@ class SdcClient:
     n_connected_agents = None
     lasterr = None
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com'):
+    def __init__(self, token="", sdc_url='https://app-staging.sysdigcloud.com'):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         self.url = os.environ.get("SDC_URL", sdc_url)
@@ -985,11 +985,21 @@ class SdcClient:
             'description': description,
             'theme': theme,
             'show': show,
-            'users': users
         }
+
+        # Map user-names to IDs
+        if users != None:
+            res = self.get_user_ids(users)
+            if res[0] == False:
+                return [False, 'Could not convert user names to IDs']
+            reqbody['users'] = res[1]
+        else:
+            reqbody['users'] = []
+
         if filter != '':
             reqbody['filter'] = filter
 
+        print reqbody
         res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody))
         if not self.__checkResponse(res):
             return [False, self.lasterr]

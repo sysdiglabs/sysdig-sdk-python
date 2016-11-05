@@ -34,7 +34,7 @@ else:
     print 'User creation succeeded'
 
 print 'Now trying to create a team with name ', team_name
-res = sdclient.create_team(team_name)
+res = sdclient.create_team(team_name, users=['createteam@sysdig.com'])
 if res[0] == False:
     print 'Team creation failed: ', res[1]
 else:
