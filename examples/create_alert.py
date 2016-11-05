@@ -30,12 +30,13 @@ sdclient = SdcClient(sdc_token)
 # Find notification channels (you need IDs to create an alert).
 #
 notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
-                    {'type': 'EMAIL', 'emailRecipients': [u'kini@sysdig.com']},
-                    {'type': 'SNS', 'snsTopicARNs': [u'arn:aws:sns:us-east-1:273107874544:alarms-stg']}
+                    {'type': 'EMAIL', 'emailRecipients': ['gianluca@sysdig.com']},
+                    {'type': 'SNS', 'snsTopicARNs': ['arn:aws:sns:us-east-1:273107874544:alarms-stg']}
                     ]
+
 res = sdclient.get_notification_ids(notify_channels)
 if not res[0]:
-    print "Could not get IDs and hence not creating the alert"
+    print "Could not get IDs and hence not creating the alert: " + res[1]
     sys.exit(-1)
 
 notification_channel_ids = res[1]
