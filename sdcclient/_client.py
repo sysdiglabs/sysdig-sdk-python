@@ -6,7 +6,7 @@ import copy
 class SdcClient:
     lasterr = None
 
-    def __init__(self, token="", sdc_url='https://app-staging.sysdigcloud.com'):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com'):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         self.url = os.environ.get("SDC_URL", sdc_url)
