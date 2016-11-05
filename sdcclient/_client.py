@@ -963,7 +963,7 @@ class SdcClient:
             reqbody['lastName'] = user['lastName'] if 'lastName' in user.keys() else ''
         else:
             reqbody['lastName'] = lastName
-        print reqbody
+
         res = requests.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody))
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -1019,7 +1019,6 @@ class SdcClient:
         if filter != '':
             reqbody['filter'] = filter
 
-        print reqbody
         res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody))
         if not self.__checkResponse(res):
             return [False, self.lasterr]
