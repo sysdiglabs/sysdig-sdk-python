@@ -406,6 +406,13 @@ class SdcClient:
             dashboards = map(create_item, filter(filter_fn, res[1]['dashboards']))
             return [True, dashboards]
 
+    def create_dashboard_with_configuration(self, configuration):
+        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': configuration}))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        else:
+            return [True, res.json()]
+
     def create_dashboard(self, name):
         dashboard_configuration = {
             'name':   name,
