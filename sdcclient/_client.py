@@ -707,7 +707,7 @@ class SdcClient:
         #
         return self.create_dashboard_from_template(newdashname, dboard, filter)
 
-    def create_dashboard_from_file(self, newdashname, filename, scope):
+    def create_dashboard_from_file(self, newdashname, filename, filter):
         #
         # Load the Dashboard
         #
@@ -720,7 +720,7 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        self.create_dashboard_from_template(newdashname, dboard, scope)
+        return self.create_dashboard_from_template(newdashname, dboard, filter)
 
     def delete_dashboard(self, dashboard):
         if 'id' not in dashboard:
