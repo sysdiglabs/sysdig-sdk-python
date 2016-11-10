@@ -603,7 +603,7 @@ class SdcClient:
         else:
             return [False, 'Not found']
 
-    def create_dashboard_from_template(self, newdashname, template, scope):
+    def create_dashboard_from_template(self, newdashname, template, scope=[], shared=False):
         if scope is None:
             scope = []
 
@@ -635,7 +635,7 @@ class SdcClient:
         template['version'] = None
         template['schema'] = 1
         template['name'] = newdashname
-        template['isShared'] = False # make sure the dashboard is not shared
+        template['isShared'] = shared # make sure the dashboard is not shared
 
         #
         # Assign the filter and the group ID to each view to point to this service
@@ -701,7 +701,7 @@ class SdcClient:
         else:
             return [True, res.json()]
 
-    def create_dashboard_from_view(self, newdashname, viewname, filter):
+    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False):
         #
         # Find our template view
         #
@@ -717,9 +717,9 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, view, filter)
+        return self.create_dashboard_from_template(newdashname, view, filter, shared)
 
-    def create_dashboard_from_dashboard(self, newdashname, templatename, filter):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False):
         #
         # Get the list of dashboards from the server
         #
@@ -746,9 +746,9 @@ class SdcClient:
         #
         # Create the dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared)
 
-    def create_dashboard_from_file(self, newdashname, filename, filter):
+    def create_dashboard_from_file(self, newdashname, filename, filter, shared=False):
         #
         # Load the Dashboard
         #
@@ -761,7 +761,7 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared)
 
     def delete_dashboard(self, dashboard):
         if 'id' not in dashboard:
