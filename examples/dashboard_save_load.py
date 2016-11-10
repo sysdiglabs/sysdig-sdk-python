@@ -44,7 +44,6 @@ else:
 # Now create the dashboard from the file. We use a filter for the Cassandra process
 # as an example.
 #
-
 dashboardFilter = "proc.name = cassandra"
 
 res = sdclient.create_dashboard_from_file('test dasboard from file', 'dashboard.json', dashboardFilter)
