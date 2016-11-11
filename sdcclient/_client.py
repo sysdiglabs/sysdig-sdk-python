@@ -1015,7 +1015,7 @@ class SdcClient:
         }
 
         # Map user-names to IDs
-        if users != None:
+        if users != None and len(users) != 0:
             res = self.get_user_ids(users)
             if res[0] == False:
                 return [False, 'Could not convert user names to IDs']
