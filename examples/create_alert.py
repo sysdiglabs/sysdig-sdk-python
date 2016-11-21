@@ -31,8 +31,12 @@ sdclient = SdcClient(sdc_token)
 #
 notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
                     {'type': 'EMAIL', 'emailRecipients': ['gianluca@sysdig.com']},
-                    {'type': 'SNS', 'snsTopicARNs': ['arn:aws:sns:us-east-1:273107874544:alarms-stg']}
+                    {'type': 'SNS', 'snsTopicARNs': ['arn:aws:sns:us-east-1:273107874544:alarms-stg']},
                     ]
+
+# Other alert channel possibilities
+#                   {'type': 'PAGER_DUTY', 'account': 'companyaccount', 'serviceName' : 'aservice'},
+#                   {'type': 'SLACK', 'channel' : 'sysdig-alerts'},
 
 res = sdclient.get_notification_ids(notify_channels)
 if not res[0]:

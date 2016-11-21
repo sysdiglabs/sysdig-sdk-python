@@ -110,6 +110,11 @@ class SdcClient:
             found = False
             for ch in res.json()["notificationChannels"]:
                 if c['type'] == ch['type']:
+                    known_types = ['SNS', 'EMAIL', 'PAGER_DUTY', 'SLACK']
+                    if not c['type'] in known_types:
+                        msg = "Channel type: %s not defined.  Known types: %s"
+                        return [False, msg % (c['type'], ", ".join(known_types))]
+
                     if c['type'] == 'SNS':
                         opt = ch['options']
                         if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
