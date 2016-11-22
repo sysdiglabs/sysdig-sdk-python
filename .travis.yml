@@ -30,7 +30,7 @@ script:
 - examples/list_sysdig_captures.py XXX
 - examples/create_sysdig_capture.py XXX ip-10-0-1-110.ec2.internal apicapture 10
 - examples/notification_channels.py XXX
-- example/user_team_mgmt.py XXX example-team example-user@example-domain.com
+- examples/user_team_mgmt.py XXX example-team example-user@example-domain.com
 - echo "Testing pip version"
 - rm -rf sdcclient
 - pip install sdcclient
