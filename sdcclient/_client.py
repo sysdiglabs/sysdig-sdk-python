@@ -603,7 +603,7 @@ class SdcClient:
         else:
             return [False, 'Not found']
 
-    def create_dashboard_from_template(self, newdashname, template, scope=[], shared=False):
+    def create_dashboard_from_template(self, newdashname, template, scope=[], shared=False, annotations={}):
         if scope is None:
             scope = []
 
@@ -686,9 +686,11 @@ class SdcClient:
                     chart['groupId'] = None
 
         if 'annotations' in template:
-            template['annotations']['createdByEngine'] = True
+            template['annotations'].update(annotations)
         else:
-            template['annotations'] = {'createdByEngine': True}
+            template['annotations'] = annotations
+
+        template['annotations']['createdByEngine'] = True
 
         ddboard = {'dashboard': template}
 
@@ -701,7 +703,7 @@ class SdcClient:
         else:
             return [True, res.json()]
 
-    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False):
+    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, annotations={}):
         #
         # Find our template view
         #
@@ -717,9 +719,9 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, view, filter, shared)
+        return self.create_dashboard_from_template(newdashname, view, filter, shared, annotations)
 
-    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, annotations={}):
         #
         # Get the list of dashboards from the server
         #
@@ -746,9 +748,9 @@ class SdcClient:
         #
         # Create the dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, annotations)
 
-    def create_dashboard_from_file(self, newdashname, filename, filter, shared=False):
+    def create_dashboard_from_file(self, newdashname, filename, filter, shared=False, annotations={}):
         #
         # Load the Dashboard
         #
@@ -761,7 +763,7 @@ class SdcClient:
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, annotations)
 
     def delete_dashboard(self, dashboard):
         if 'id' not in dashboard:
