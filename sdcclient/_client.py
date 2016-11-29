@@ -863,3 +863,20 @@ class SdcClient:
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
+
+    def get_agents_config(self):
+        res = requests.get(self.url + '/api/agents/config', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        data = res.json()
+        return [True, data]
+
+    def set_agents_config(self, config):
+        res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+    def clear_agents_config(self):
+        data = {'files' : []}
+        self.set_agents_config(data)
