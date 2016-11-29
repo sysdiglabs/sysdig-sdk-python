@@ -1113,3 +1113,17 @@ class SdcClient:
     def clear_agents_config(self):
         data = {'files' : []}
         self.set_agents_config(data)
+
+    def get_user_api_token(self, username, teamname):
+        res = self.get_team(teamname)
+        if res[0] == False:
+            return res
+
+        t = res[1]
+
+        res = requests.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        data = res.json()
+        return [True, data['token']['key']]
+
