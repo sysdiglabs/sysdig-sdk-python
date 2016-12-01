@@ -436,7 +436,7 @@ class SdcClient:
                 k_count += 1
             else:
                 i = v_count
-                i_count += 1
+                v_count += 1
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
