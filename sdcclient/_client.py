@@ -426,8 +426,17 @@ class SdcClient:
         # Convert list of metrics to format used by Sysdig Cloud
         #
         property_names = {}
+        k_count = 0
+        v_count = 0
         for i, metric in enumerate(metrics):
             property_name = 'v' if 'aggregations' in metric else 'k'
+
+            if property_name == 'k':
+                i = k_count
+                k_count += 1
+            else:
+                i = v_count
+                i_count += 1
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
