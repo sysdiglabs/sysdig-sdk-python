@@ -126,9 +126,14 @@ class SdcClient:
                                 ids.append(ch['id'])
                         elif c['type'] == 'EMAIL':
                             opt = ch['options']
-                            if set(c['emailRecipients']) == set(opt['emailRecipients']):
-                                found = True
-                                ids.append(ch['id'])
+                            if 'emailRecipients' in c:
+                                if set(c['emailRecipients']) == set(opt['emailRecipients']):
+                                    found = True
+                                    ids.append(ch['id'])
+                            elif 'name' in c:
+                                if c['name'] == ch['name']:
+                                    found = True
+                                    ids.append(ch['id'])
                         elif c['type'] == 'PAGER_DUTY':
                             opt = ch['options']
                             if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
