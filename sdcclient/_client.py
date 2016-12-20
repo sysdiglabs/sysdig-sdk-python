@@ -1043,7 +1043,8 @@ class SdcClient:
         return [True, res.json()]
 
 
-    def edit_team(self, name, users=None, filter=None, description=None, show=None, theme=None):
+    def edit_team(self, name, users=None, filter=None, description=None, show=None, theme=None,
+                  perm_capture=None, perm_custom_events=None, perm_aws_data=None):
         res = self.get_team(name)
         if res[0] == False:
             return res
@@ -1054,6 +1055,9 @@ class SdcClient:
             'description': description if description else t['description'],
             'theme': theme if theme else t['theme'],
             'show': show if show else t['show'],
+            'canUseSysdigCapture': perm_capture if perm_capture else t['canUseSysdigCapture'],
+            'canUseCustomEvents': perm_custom_events if perm_custom_events else t['canUseCustomEvents'],
+            'canUseAwsMetrics': perm_aws_data if perm_aws_data else t['canUseAwsMetrics'],
             'id': t['id'],
             'version': t['version']
             }
