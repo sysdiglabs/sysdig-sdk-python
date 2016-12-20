@@ -1013,12 +1013,16 @@ class SdcClient:
         u = filter(lambda x: x['username'] in users, res.json()['users'])
         return [True, map(lambda x: x['id'], u)]
 
-    def create_team(self, name, users=[], filter='', description='', show='host', theme='#7BB0B2'):
+    def create_team(self, name, users=[], filter='', description='', show='host', theme='#7BB0B2',
+                    perm_capture=False, perm_custom_events=False, perm_aws_data=False):
         reqbody = {
             'name': name,
             'description': description,
             'theme': theme,
             'show': show,
+            'canUseSysdigCapture': perm_capture,
+            'canUseCustomEvents': perm_custom_events,
+            'canUseAwsMetrics': perm_aws_data,
         }
 
         # Map user-names to IDs
