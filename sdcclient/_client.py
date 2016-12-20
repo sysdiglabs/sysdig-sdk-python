@@ -228,6 +228,24 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
+    def get_notification_channel(self, id):
+
+        res = requests.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()['notificationChannel']]
+
+    def update_notification_channel(self, channel):
+        if 'id' not in channel:
+            return [False, "Invalid channel format"]
+
+        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({ "notificationChannel": channel }))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def delete_notification_channel(self, channel):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
