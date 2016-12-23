@@ -151,6 +151,28 @@ class SdcClient:
                 
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
                      segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
+        '''**Description**  
+            Create a threshold-based alert.  
+
+        **Arguments**
+            - **name**: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
+            - **description**: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
+            - **severity**: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
+            - **for_atleast_s**: the number of consecutive seconds the condition must be satisfied for the alert to fire. 
+            - **condition**: the alert condition, as described here https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts
+            - **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine. 
+            - **segment_condition**: When *segmentby* is specified (and therefore the alert will cover multiple entities) this field is used to determine when it will fire. In particular, you have two options for *segment_condition*: **ANY** (the alert will fire when at least one of the monitored entities satisfies the condition) and **ALL** (the alert will fire when all of the monitored entities satisfy the condition).
+            - **user_filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **notify**: the type of notification you want this alert to generate. Options are *EMAIL*, *SNS*, *PAGER_DUTY*, *SYSDIG_DUMP*.
+            - **enabled**: if True, the alert will be enabled when created.
+            - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management reasons
+        
+        **Success Return Value**  
+            A dictionary describing the just created alert, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts>`_
+
+        **Example**  
+            `examples/create_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_alert.py>`_  
+        '''
         #
         # Get the list of alerts from the server
         #
@@ -437,6 +459,19 @@ class SdcClient:
             return [True, res.json()]
 
     def create_dashboard(self, name):
+        '''
+        **Description**  
+            Creates an empty dashboard. You can then add panels by using ``add_dashboard_panel``.
+        
+        **Arguments**  
+            - **name**: the name of the dashboard that will be created.
+        
+        **Success Return Value**  
+            A dictionary showing the details of the new dashboard.
+        
+        **Example**  
+            `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
+        '''
         dashboard_configuration = {
             'name':   name,
             'schema': 1,
@@ -453,6 +488,28 @@ class SdcClient:
             return [True, res.json()]
 
     def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
+        """**Description**
+            Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
+        
+        **Arguments**  
+            - **dashboard**: dashboard to edit
+            - **name**: name of the new panel
+            - **panel_type**: type of the new panel. Valid values are: ``timeSeries``, ``top``, ``number``
+            - **metrics**:  a list of dictionaries, specifying the metrics to show in the panel, and optionally, if there is only one metric, a grouping key to segment that metric by. A metric is any of the entries that can be found in the *Metrics* section of the Explore page in Sysdig Cloud. Metric entries require an *aggregations* section specifying how to aggregate the metric across time and groups of containers/hosts. A grouping key is any of the entries that can be found in the *Show* or *Segment By* sections of the Explore page in Sysdig Cloud. Refer to the examples section below for ready to use code snippets. Note, certain panels allow certain combinations of metrics and grouping keys:
+                - ``timeSeries``: 1 or more metrics OR 1 metric + 1 grouping key
+                - ``top``: 1 or more metrics OR 1 metric + 1 grouping key
+                - ``number``: 1 metric only
+            - **scope**: filter to apply to the panel; must be based on metadata available in Sysdig Cloud; Example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of ``metric`` and ``mode`` (it can be ``desc`` or ``asc``)
+            - **limit**: This parameter sets the limit on the number of lines/bars shown in a ``timeSeries`` or ``top`` panel. In the case of more entities being available than the limit, the top entities according to the sort will be shown. The default value is 10 for ``top`` panels (for ``timeSeries`` the default is defined by Sysdig Cloud itself). Note that increasing the limit above 10 is not officially supported and may cause performance and rendering issues
+            - **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of ``row`` (row position), ``col`` (column position), ``size_x`` (width), ``size_y`` (height).
+        
+        **Success Return Value**  
+            A dictionary showing the details of the edited dashboard.
+        
+        **Example**  
+            `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
+        """
         panel_configuration = {
             'name':                 name,
             'showAs':               None,
@@ -745,6 +802,22 @@ class SdcClient:
         return self.create_dashboard_from_template(newdashname, view, filter, shared, annotations)
 
     def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, annotations={}):
+        '''**Description**  
+            Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
+
+        **Arguments**  
+            - **newdashname**: the name of the dashboard that will be created.
+            - **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
+            - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **shared**: if set to True, the new dashboard will be a shared one.
+            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
+        
+        **Success Return Value**  
+            A dictionary showing the details of the new dashboard.  
+
+        **Example**  
+            `examples/create_dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_dashboard.py>`_
+        '''
         #
         # Get the list of dashboards from the server
         #
@@ -774,6 +847,23 @@ class SdcClient:
         return self.create_dashboard_from_template(newdashname, dboard, filter, shared, annotations)
 
     def create_dashboard_from_file(self, newdashname, filename, filter, shared=False, annotations={}):
+        '''
+        **Description**  
+            Create a new dasboard using a dashboard template saved to disk.  
+
+        **Arguments**  
+            - **newdashname**: the name of the dashboard that will be created.
+            - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~sdcclient._client.SdcClient.get_dashboards`
+            - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **shared**: if set to True, the new dashboard will be a shared one.
+            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
+        
+        **Success Return Value**  
+            A dictionary showing the details of the new dashboard.  
+
+        **Example**  
+            `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
+        '''
         #
         # Load the Dashboard
         #
