@@ -56,6 +56,12 @@ class SdcClient:
         return [True, tkinfo['token']['key']]
 
     def get_connected_agents(self):
+        '''**Description**
+            Return the agents currently connected to Sysdig Cloud for the current user.
+
+        **Success Return Value**
+            A list of the agents with all their attributes.
+        '''
         res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -70,6 +76,15 @@ class SdcClient:
         return [True, data['total']]
 
     def get_alerts(self):
+        '''**Description**
+            Retrieve the list of alerts configured by the user.
+
+        **Success Return Value**
+            An array of alert JSON objects, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts>`__
+
+        **Example**
+            `examples/list_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_alerts.py>`_
+        '''
         res = requests.get(self.url + '/api/alerts', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -147,31 +162,31 @@ class SdcClient:
                 if not found:
                     return [False, "Channel not found: " + str(c)]
 
-            return [True, ids]                        
-                
+            return [True, ids]
+
     def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
                      segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
-        '''**Description**  
-            Create a threshold-based alert.  
+        '''**Description**
+            Create a threshold-based alert.
 
         **Arguments**
             - **name**: the alert name. This will appear in the Sysdig Cloud UI and in notification emails.
             - **description**: the alert description. This will appear in the Sysdig Cloud UI and in notification emails.
             - **severity**: syslog-encoded alert severity. This is a number from 0 to 7 where 0 means 'emergency' and 7 is 'debug'.
-            - **for_atleast_s**: the number of consecutive seconds the condition must be satisfied for the alert to fire. 
+            - **for_atleast_s**: the number of consecutive seconds the condition must be satisfied for the alert to fire.
             - **condition**: the alert condition, as described here https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts
-            - **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine. 
+            - **segmentby**: a list of Sysdig Cloud segmentation criteria that can be used to apply the alert to multiple entities. For example, segmenting a CPU alert by ['host.mac', 'proc.name'] allows to apply it to any process in any machine.
             - **segment_condition**: When *segmentby* is specified (and therefore the alert will cover multiple entities) this field is used to determine when it will fire. In particular, you have two options for *segment_condition*: **ANY** (the alert will fire when at least one of the monitored entities satisfies the condition) and **ALL** (the alert will fire when all of the monitored entities satisfy the condition).
             - **user_filter**: a boolean expression combining Sysdig Cloud segmentation criteria that makes it possible to reduce the scope of the alert. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **notify**: the type of notification you want this alert to generate. Options are *EMAIL*, *SNS*, *PAGER_DUTY*, *SYSDIG_DUMP*.
             - **enabled**: if True, the alert will be enabled when created.
             - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management reasons
-        
-        **Success Return Value**  
-            A dictionary describing the just created alert, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts>`_
 
-        **Example**  
-            `examples/create_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_alert.py>`_  
+        **Success Return Value**
+            A dictionary describing the just created alert, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts>`__
+
+        **Example**
+            `examples/create_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_alert.py>`_
         '''
         #
         # Get the list of alerts from the server
@@ -224,6 +239,18 @@ class SdcClient:
         return [True, res.json()]
 
     def delete_alert(self, alert):
+        '''**Description**
+            Deletes an alert.
+
+        **Arguments**
+            - **alert**: the alert object as returned by :func:`~sdcclient._client.SdcClient.get_alerts`.
+
+        **Success Return Value**
+            ``None``.
+
+        **Example**
+            `examples/delete_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_alert.py>`_
+        '''
         if 'id' not in alert:
             return [False, 'Invalid alert format']
 
@@ -433,12 +460,33 @@ class SdcClient:
         return [True, res.json()]
 
     def get_dashboards(self):
+        '''**Description**
+            Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
+
+        **Success Return Value**
+            A dictionary containing the list of available sampling intervals.
+
+        **Example**
+            `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
+        '''
         res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
     def find_dashboard_by(self, name=None):
+        '''**Description**
+            Finds dashboards with the specified name. You can then delete the dashboard (with :func:`~sdcclient._client.SdcClient.delete_dashboard`) or edit panels (with :func:`~sdcclient._client.SdcClient.add_dashboard_panel` and :func:`~sdcclient._client.SdcClient.remove_dashboard_panel`)
+
+        **Arguments**
+            - **name**: the name of the dashboards to find.
+
+        **Success Return Value**
+            A list of dictionaries of dashboards matching the specified name.
+
+        **Example**
+            `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
+        '''
         res = self.get_dashboards()
         if res[0] is False:
             return res
@@ -460,16 +508,16 @@ class SdcClient:
 
     def create_dashboard(self, name):
         '''
-        **Description**  
+        **Description**
             Creates an empty dashboard. You can then add panels by using ``add_dashboard_panel``.
-        
-        **Arguments**  
+
+        **Arguments**
             - **name**: the name of the dashboard that will be created.
-        
-        **Success Return Value**  
+
+        **Success Return Value**
             A dictionary showing the details of the new dashboard.
-        
-        **Example**  
+
+        **Example**
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
         '''
         dashboard_configuration = {
@@ -490,8 +538,8 @@ class SdcClient:
     def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
         """**Description**
             Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
-        
-        **Arguments**  
+
+        **Arguments**
             - **dashboard**: dashboard to edit
             - **name**: name of the new panel
             - **panel_type**: type of the new panel. Valid values are: ``timeSeries``, ``top``, ``number``
@@ -503,11 +551,11 @@ class SdcClient:
             - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of ``metric`` and ``mode`` (it can be ``desc`` or ``asc``)
             - **limit**: This parameter sets the limit on the number of lines/bars shown in a ``timeSeries`` or ``top`` panel. In the case of more entities being available than the limit, the top entities according to the sort will be shown. The default value is 10 for ``top`` panels (for ``timeSeries`` the default is defined by Sysdig Cloud itself). Note that increasing the limit above 10 is not officially supported and may cause performance and rendering issues
             - **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of ``row`` (row position), ``col`` (column position), ``size_x`` (width), ``size_y`` (height).
-        
-        **Success Return Value**  
+
+        **Success Return Value**
             A dictionary showing the details of the edited dashboard.
-        
-        **Example**  
+
+        **Example**
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
         """
         panel_configuration = {
@@ -784,6 +832,22 @@ class SdcClient:
             return [True, res.json()]
 
     def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, annotations={}):
+        '''**Description**
+            Create a new dasboard using one of the Sysdig Cloud views as a template. You will be able to define the scope of the new dashboard.
+
+        **Arguments**
+            - **newdashname**: the name of the dashboard that will be created.
+            - **viewname**: the name of the view to use as the template for the new dashboard. This corresponds to the name that the view has in the Explore page.
+            - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **shared**: if set to True, the new dashboard will be a shared one.
+            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
+
+        **Success Return Value**
+            A dictionary showing the details of the new dashboard.
+
+        **Example**
+            `examples/create_dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_dashboard.py>`_
+        '''
         #
         # Find our template view
         #
@@ -802,20 +866,20 @@ class SdcClient:
         return self.create_dashboard_from_template(newdashname, view, filter, shared, annotations)
 
     def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, annotations={}):
-        '''**Description**  
-            Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.  
+        '''**Description**
+            Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.
 
-        **Arguments**  
+        **Arguments**
             - **newdashname**: the name of the dashboard that will be created.
             - **viewname**: the name of the dasboard to use as the template, as it appears in the Sysdig Cloud dashboard page.
             - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
-        
-        **Success Return Value**  
-            A dictionary showing the details of the new dashboard.  
 
-        **Example**  
+        **Success Return Value**
+            A dictionary showing the details of the new dashboard.
+
+        **Example**
             `examples/create_dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_dashboard.py>`_
         '''
         #
@@ -848,20 +912,20 @@ class SdcClient:
 
     def create_dashboard_from_file(self, newdashname, filename, filter, shared=False, annotations={}):
         '''
-        **Description**  
-            Create a new dasboard using a dashboard template saved to disk.  
+        **Description**
+            Create a new dasboard using a dashboard template saved to disk.
 
-        **Arguments**  
+        **Arguments**
             - **newdashname**: the name of the dashboard that will be created.
             - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~sdcclient._client.SdcClient.get_dashboards`
             - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
-        
-        **Success Return Value**  
-            A dictionary showing the details of the new dashboard.  
 
-        **Example**  
+        **Success Return Value**
+            A dictionary showing the details of the new dashboard.
+
+        **Example**
             `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
         '''
         #
@@ -879,6 +943,18 @@ class SdcClient:
         return self.create_dashboard_from_template(newdashname, dboard, filter, shared, annotations)
 
     def delete_dashboard(self, dashboard):
+        '''**Description**
+            Deletes a dashboard.
+
+        **Arguments**
+            - **dashboard**: the dashboard object as returned by :func:`~sdcclient._client.SdcClient.get_dashboards`.
+
+        **Success Return Value**
+            `None`.
+
+        **Example**
+            `examples/delete_dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_dashboard.py>`_
+        '''
         if 'id' not in dashboard:
             return [False, "Invalid dashboard format"]
 
@@ -933,6 +1009,18 @@ class SdcClient:
         return [True, res.json()]
 
     def delete_event(self, event):
+        '''**Description**
+            Deletes an event.
+
+        **Arguments**
+            - **event**: the event object as returned by :func:`~sdcclient._client.SdcClient.get_events`.
+
+        **Success Return Value**
+            `None`.
+
+        **Example**
+            `examples/delete_event.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_event.py>`_
+        '''
         if 'id' not in event:
             return [False, "Invalid event format"]
 
@@ -943,6 +1031,27 @@ class SdcClient:
 
     def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
                  filter='', datasource_type='host', paging=None):
+        '''**Description**
+            Export metric data (both time-series and table-based).
+
+        **Arguments**
+            - **metrics**: a list of dictionaries, specifying the metrics and grouping keys that the query will return. A metric is any of the entries that can be found in the *Metrics* section of the Explore page in Sysdig Cloud. Metric entries require an *aggregations* section specifying how to aggregate the metric across time and containers/hosts. A grouping key is any of the entries that can be found in the *Show* or *Segment By* sections of the Explore page in Sysdig Cloud. These entries are used to apply single or hierarchical segmentation to the returned data and don't require the aggregations section. Refer to the Example link below for ready-to-use code snippets.
+            - **start_ts**: the UTC time (in seconds) of the beginning of the data window. A negative value can be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+            - **end_ts**: the UTC time (in seconds) of the end of the data window, or 0 to indicate "now". A negative value can also be optionally used to indicate a relative time in the past from now. For example, -3600 means "one hour ago".
+            - **sampling_s**: the duration of the samples that will be returned. 0 means that the whole data will be returned as a single sample.
+            - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria that defines what the query will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
+            - **datasource_type**: specify the metric source for the request, can be ``container`` or ``host``. Most metrics, for example ``cpu.used.percent`` or ``memory.bytes.used``, are reported by both hosts and containers. By default, host metrics are used, but if the request contains a container-specific grouping key in the metric list/filter (e.g. ``container.name``), then the container source is used. In cases where grouping keys are missing or apply to both hosts and containers (e.g. ``tag.Name``), *datasource_type* can be explicitly set to avoid any ambiguity and allow the user to select precisely what kind of data should be used for the request. `examples/get_data_datasource.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_datasource.py>`_ contains a few examples that should clarify the use of this argument.
+            - **paging**:
+
+        **Success Return Value**
+            A dictionary with the requested data. Data is organized in a list of time samples, each of which includes a UTC timestamp and a list of values, whose content and order reflect what was specified in the *metrics* argument.
+
+        **Examples**
+            - `examples/get_data_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_simple.py>`_
+            - `examples/get_data_advanced.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_advanced.py>`_
+            - `examples/list_hosts.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_hosts.py>`_
+            - `examples/get_data_datasource.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_datasource.py>`_
+        '''
         reqbody = {
             'metrics': metrics,
             'dataSourceType': datasource_type,
@@ -992,6 +1101,22 @@ class SdcClient:
         return [True, res.json()]
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
+        '''**Description**
+            Create a new sysdig capture. The capture will be immediately started.
+
+        **Arguments**
+            - **hostname**: the hostname of the instrumented host where the capture will be taken.
+            - **capture_name**: the name of the capture.
+            - **duration**: the duration of the capture, in seconds.
+            - **capture_filter**: a sysdig filter expression.
+            - **folder**: directory in the S3 bucket where the capture will be saved.
+
+        **Success Return Value**
+            A dictionary showing the details of the new capture.
+
+        **Example**
+            `examples/create_sysdig_capture.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_sysdig_capture.py>`_
+        '''
         res = self.get_connected_agents()
         if not res[0]:
             return res
@@ -1021,6 +1146,18 @@ class SdcClient:
         return [True, res.json()]
 
     def create_user_invite(self, user_email):
+        '''**Description**
+            Invites a new user to use Sysdig Cloud. This should result in an email notification to the specified address.
+
+        **Arguments**
+            - **user_email**: the email address of the user that will be invited to use Sysdig Cloud
+
+        **Success Return Value**
+            The newly created user.
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         # Look up the list of users to see if this exists, do not create if one exists
         res = requests.get(self.url + '/api/users', headers=self.hdrs)
         if not self.__checkResponse(res):
@@ -1038,6 +1175,15 @@ class SdcClient:
         return [True, res.json()]
 
     def delete_user(self, user_email):
+        '''**Description**
+            Deletes a user from Sysdig Cloud.
+
+        **Arguments**
+            - **user_email**: the email address of the user that will be deleted from Sysdig Cloud
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         res = self.get_user_ids([user_email])
         if res[0] == False:
             return res
@@ -1055,7 +1201,7 @@ class SdcClient:
             if u['username'] == user_email:
                 return [True, u]
         return [False, 'User not found']
-    
+
     def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
         res = self.get_user(user_email)
         if res[0] == False:
@@ -1123,6 +1269,26 @@ class SdcClient:
 
     def create_team(self, name, users=[], filter='', description='', show='host', theme='#7BB0B2',
                     perm_capture=False, perm_custom_events=False, perm_aws_data=False):
+        '''**Description**
+            Creates a new team
+
+        **Arguments**
+            - **name**: the name of the team to create.
+            - **users**: list of user names to add to the team.
+            - **filter**: the scope that this team is able to access within Sysdig Cloud.
+            - **description**: describes the team that will be created.
+            - **show**: possible values are *host*, *container*.
+            - **theme**: the color theme that Sysdig Cloud will use when displaying the team.
+            - **perm_capture**: if True, this team will be allowed to take sysdig captures.
+            - **perm_custom_events**: if True, this team will be allowed to view all custom events from every user and agent.
+            - **perm_aws_data**: if True, this team will have access to all AWS metrics and tags, regardless of the team's scope.
+
+        **Success Return Value**
+            The newly created team.
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         reqbody = {
             'name': name,
             'description': description,
@@ -1153,6 +1319,26 @@ class SdcClient:
 
     def edit_team(self, name, users=None, filter=None, description=None, show=None, theme=None,
                   perm_capture=None, perm_custom_events=None, perm_aws_data=None):
+        '''**Description**
+           Edits an existing team. All arguments are optional. Team settings for any arguments unspecified will remain at their current settings.
+
+        **Arguments**
+            - **name**: the name of the team to edit.
+            - **users**: list of user names that should now be members of the team.
+            - **filter**: the scope that this team is able to access within Sysdig Cloud.
+            - **description**: describes the team that will be created.
+            - **show**: possible values are *host*, *container*.
+            - **theme**: the color theme that Sysdig Cloud will use when displaying the team.
+            - **perm_capture**: if True, this team will be allowed to take sysdig captures.
+            - **perm_custom_events**: if True, this team will be allowed to view all custom events from every user and agent.
+            - **perm_aws_data**: if True, this team will have access to all AWS metrics and tags, regardless of the team's scope.
+
+        **Success Return Value**
+            The edited team.
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         res = self.get_team(name)
         if res[0] == False:
             return res
@@ -1193,6 +1379,15 @@ class SdcClient:
         return [True, res.json()]
 
     def delete_team(self, name):
+        '''**Description**
+            Deletes a team from Sysdig Cloud.
+
+        **Arguments**
+            - **name**: the name of the team that will be deleted from Sysdig Cloud
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         res = self.get_team(name)
         if res[0] == False:
             return res
