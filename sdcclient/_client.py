@@ -42,12 +42,27 @@ class SdcClient:
 
 
     def get_user_info(self):
+        '''**Description**
+            Get details about the current user.
+
+        **Success Return Value**
+            A dictionary containing information about the user, for example its email and the maximum number of agents it can install.
+
+        **Example**
+            `examples/print_user_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_user_info.py>`_
+        '''
         res = requests.get(self.url + '/api/user/me', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
     def get_user_token(self):
+        '''**Description**
+            Return the API token of the current user.
+
+        **Success Return Value**
+            A string containing the user token.
+        '''
         res = requests.get(self.url + '/api/token', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -69,6 +84,12 @@ class SdcClient:
         return [True, data['agents']]
 
     def get_n_connected_agents(self):
+        '''**Description**
+            Return the number of agents currently connected to Sysdig Cloud for the current user.
+
+        **Success Return Value**
+            An integer number.
+        '''
         res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -80,7 +101,7 @@ class SdcClient:
             Retrieve the list of alerts configured by the user.
 
         **Success Return Value**
-            An array of alert JSON objects, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts>`__
+            An array of alert dictionaries, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/get_api_alerts>`__
 
         **Example**
             `examples/list_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_alerts.py>`_
@@ -91,6 +112,21 @@ class SdcClient:
         return [True, res.json()]
 
     def get_notifications(self, from_ts, to_ts, state=None, resolved=None):
+        '''**Description**
+            Returns the list of Sysdig Cloud alert notifications.
+
+        **Arguments**
+            - **from_ts**: filter events by start time. Timestamp format is in UTC (seconds).
+            - **to_ts**: filter events by start time. Timestamp format is in UTC (seconds).
+            - **state**: filter events by alert state. Supported values are ``OK`` and ``ACTIVE``.
+            - **resolved**: filter events by resolution status. Supported values are ``True`` and ``False``.
+
+        **Success Return Value**
+            A dictionary containing the list of notifications.
+
+        **Example**
+            `examples/list_alert_notifications.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_alert_notifications.py>`_
+        '''
         params = {}
 
         if from_ts is not None:
@@ -111,6 +147,19 @@ class SdcClient:
         return [True, res.json()]
 
     def update_notification_resolution(self, notification, resolved):
+        '''**Description**
+            Updates the resolution status of an alert notification.
+
+        **Arguments**
+            - **notification**: notification object as returned by :func:`~sdcclient._client.SdcClient.get_notifications`.
+            - **resolved**: new resolution status. Supported values are ``True`` and ``False``.
+
+        **Success Return Value**
+            The updated notification.
+
+        **Example**
+            `examples/resolve_alert_notifications.py <https://github.com/draios/python-sdc-client/blob/master/examples/resolve_alert_notifications.py>`_
+        '''
         if 'id' not in notification:
             return [False, 'Invalid notification format']
 
@@ -243,7 +292,7 @@ class SdcClient:
             Deletes an alert.
 
         **Arguments**
-            - **alert**: the alert object as returned by :func:`~sdcclient._client.SdcClient.get_alerts`.
+            - **alert**: the alert dictionary as returned by :func:`~sdcclient._client.SdcClient.get_alerts`.
 
         **Success Return Value**
             ``None``.
@@ -305,6 +354,15 @@ class SdcClient:
         return [True, None]
 
     def get_explore_grouping_hierarchy(self):
+        '''**Description**
+            Return the user's current grouping hierarchy as visible in the Explore tab of Sysdig Cloud.
+
+        **Success Return Value**
+            A list containing the list of the user's Explore grouping criteria.
+
+        **Example**
+            `examples/print_explore_grouping.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_explore_grouping.py>`_
+        '''
         res = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -329,6 +387,12 @@ class SdcClient:
         return [False, 'corrupted groupConfigurations API response, missing "explore" entry']
 
     def set_explore_grouping_hierarchy(self, new_hierarchy):
+        '''**Description**
+            Changes the grouping hierarchy in the Explore panel of the current user.
+
+        **Arguments**
+            - **new_hierarchy**: a list of sysdig segmentation metrics indicating the new grouping hierarchy.
+        '''
         body = {
             'id': 'explore',
             'groups': [{'groupBy':[]}]
@@ -345,6 +409,15 @@ class SdcClient:
             return [True, None]
 
     def get_data_retention_info(self):
+        '''**Description**
+            Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far back in time it is. This call can be used to know what precision you can expect before you make a call to :func:`~sdcclient._client.SdcClient.get_data`.
+
+        **Success Return Value**
+            A dictionary containing the list of available sampling intervals.
+
+        **Example**
+            `examples/print_data_retention_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_data_retention_info.py>`_
+        '''
         res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -700,6 +773,18 @@ class SdcClient:
             return [True, res.json()]
 
     def remove_dashboard_panel(self, dashboard, panel_name):
+        '''**Description**
+            Removes a panel from the dashboard. The panel to remove is identified by the specified ``name``.
+
+        **Arguments**
+            - **name**: name of the panel to find and remove
+
+        **Success Return Value**
+            A dictionary showing the details of the edited dashboard.
+
+        **Example**
+            `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
+        '''
         #
         # Clone existing dashboard...
         #
@@ -965,6 +1050,23 @@ class SdcClient:
         return [True, None]
 
     def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
+        '''**Description**
+            Send an event to Sysdig Cloud. The events you post are available in the Events tab in the Sysdig Cloud UI and can be overlied to charts.
+
+        **Arguments**
+            - **name**: the name of the new event.
+            - **description**: a longer description offering detailed information about the event.
+            - **severity**: syslog style from 0 (high) to 7 (low).
+            - **event_filter**: metadata, in Sysdig Cloud format, of nodes to associate with the event, e.g. ``host.hostName = 'ip-10-1-1-1' and container.name = 'foo'``.
+            - **tags**: a list of key-value dictionaries that can be used to tag the event. Can be used for filtering/segmenting purposes in Sysdig Cloud.
+
+        **Success Return Value**
+            A dictionary describing the new event.
+
+        **Examples**
+            - `examples/post_event_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event_simple.py>`_
+            - `examples/post_event.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event.py>`_
+        '''
         edata = {
             'event': {
                 'name': name
@@ -989,6 +1091,21 @@ class SdcClient:
         return [True, res.json()]
 
     def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
+        '''**Description**
+            Returns the list of Sysdig Cloud events.
+
+        **Arguments**
+            - **name**: filter events by name.
+            - **from_ts**: filter events by start time. Timestamp format is in UTC (seconds).
+            - **to_ts**: filter events by end time. Timestamp format is in UTC (seconds).
+            - **tags**: filter events by tags. Can be, for example ``tag1 = 'value1'``.
+
+        **Success Return Value**
+            A dictionary containing the list of events.
+
+        **Example**
+            `examples/list_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_events.py>`_
+        '''
         params = {}
 
         if name is not None:
@@ -1080,18 +1197,48 @@ class SdcClient:
         return [True, res.json()]
 
     def get_metrics(self):
+        '''**Description**
+            Return the metric list that can be used for data requests/alerts/dashboards.
+
+        **Success Return Value**
+            A dictionary containing the list of available metrics.
+
+        **Example**
+            `examples/list_metrics.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_metrics.py>`_
+        '''
         res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
     def get_sysdig_captures(self):
+        '''**Description**
+            Returns the list of sysdig captures for the user.
+
+        **Success Return Value**
+            A dictionary containing the list of captures.
+
+        **Example**
+            `examples/list_sysdig_captures.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_sysdig_captures.py>`_
+        '''
         res = requests.get(self.url + '/api/sysdig', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
     def poll_sysdig_capture(self, capture):
+        '''**Description**
+            Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with :func:`~sdcclient._client.SdcClient.create_sysdig_capture`.
+
+        **Arguments**
+            - **capture**: the capture object as returned by :func:`~sdcclient._client.SdcClient.get_sysdig_captures` or :func:`~sdcclient._client.SdcClient.create_sysdig_capture`.
+
+        **Success Return Value**
+            A dictionary showing the updated details of the capture. Use the ``status`` field to check the progress of a capture.
+
+        **Example**
+            `examples/create_sysdig_capture.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_sysdig_capture.py>`_
+        '''
         if 'id' not in capture:
             return [False, 'Invalid capture format']
 
@@ -1238,6 +1385,15 @@ class SdcClient:
         return [True, 'Successfully edited user']
 
     def get_teams(self, team_filter=''):
+        '''**Description**
+            Return the set of teams that match the filter specified. The *team_filter* should be a substring of the names of the teams to be returned.
+
+        **Arguments**
+            - **team_filter**: the team filter to match when returning the list of teams
+
+        **Success Return Value**
+            The teams that match the filter.
+        '''
         res = requests.get(self.url + '/api/teams', headers=self.hdrs)
         if not self.__checkResponse(res):
             return [False, self.lasterr]
@@ -1245,6 +1401,18 @@ class SdcClient:
         return [True, ret]
 
     def get_team(self, name):
+        '''**Description**
+            Return the team with the specified team name, if it is present.
+
+        **Arguments**
+            - **name**: the name of the team to return
+
+        **Success Return Value**
+            The requested team.
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
         res = self.get_teams(name)
         if res[0] == False:
             return res
@@ -1399,6 +1567,12 @@ class SdcClient:
         return [True, None]
 
     def switch_user_team(self, new_team_id):
+        '''**Description**
+            Switches the current user context to the specified team. In other words, this function makes it possible to start operating in the context of a different team without having to use the token of that team.
+
+        **Arguments**
+            - **new_team_id**: the numeric ID of the team (such as returned by :func:`~sdcclient._client.SdcClient.get_team_ids`) to switch to.
+        '''
         res = self.get_user_info()
         if not res[0]:
             return res

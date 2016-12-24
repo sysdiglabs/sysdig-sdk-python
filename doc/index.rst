@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Python Script Library
-=====================
+Sysdig Cloud Python Script Library
+==================================
 
 * :ref:`genindex`
 * :ref:`search`
