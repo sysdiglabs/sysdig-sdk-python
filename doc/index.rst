@@ -13,6 +13,7 @@ Sysdig Cloud Python Script Library
 
 Function List
 =============
-.. autoclass:: sdcclient._client.SdcClient
+.. py:module:: sdcclient
+.. autoclass:: SdcClient
    :members:
    :undoc-members:
