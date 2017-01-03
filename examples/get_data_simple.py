@@ -57,7 +57,7 @@ sampling =  60
 #
 # Paging (from and to included; by default you get from=0 to=9)
 #
-paging = { "from": 0, "to": 4 }
+paging = { "from": 0, "to": 9 }
 
 #
 # Load data
