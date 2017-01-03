@@ -151,7 +151,7 @@ class SdcClient:
             Updates the resolution status of an alert notification.
 
         **Arguments**
-            - **notification**: notification object as returned by :func:`~sdcclient._client.SdcClient.get_notifications`.
+            - **notification**: notification object as returned by :func:`~SdcClient.get_notifications`.
             - **resolved**: new resolution status. Supported values are ``True`` and ``False``.
 
         **Success Return Value**
@@ -292,7 +292,7 @@ class SdcClient:
             Deletes an alert.
 
         **Arguments**
-            - **alert**: the alert dictionary as returned by :func:`~sdcclient._client.SdcClient.get_alerts`.
+            - **alert**: the alert dictionary as returned by :func:`~SdcClient.get_alerts`.
 
         **Success Return Value**
             ``None``.
@@ -410,7 +410,7 @@ class SdcClient:
 
     def get_data_retention_info(self):
         '''**Description**
-            Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far back in time it is. This call can be used to know what precision you can expect before you make a call to :func:`~sdcclient._client.SdcClient.get_data`.
+            Return the list of data retention intervals, with beginning and end UTC time for each of them. Sysdig Cloud performs rollups of the data it stores. This means that data is stored at different time granularities depending on how far back in time it is. This call can be used to know what precision you can expect before you make a call to :func:`~SdcClient.get_data`.
 
         **Success Return Value**
             A dictionary containing the list of available sampling intervals.
@@ -549,7 +549,7 @@ class SdcClient:
 
     def find_dashboard_by(self, name=None):
         '''**Description**
-            Finds dashboards with the specified name. You can then delete the dashboard (with :func:`~sdcclient._client.SdcClient.delete_dashboard`) or edit panels (with :func:`~sdcclient._client.SdcClient.add_dashboard_panel` and :func:`~sdcclient._client.SdcClient.remove_dashboard_panel`)
+            Finds dashboards with the specified name. You can then delete the dashboard (with :func:`~SdcClient.delete_dashboard`) or edit panels (with :func:`~SdcClient.add_dashboard_panel` and :func:`~SdcClient.remove_dashboard_panel`)
 
         **Arguments**
             - **name**: the name of the dashboards to find.
@@ -1002,7 +1002,7 @@ class SdcClient:
 
         **Arguments**
             - **newdashname**: the name of the dashboard that will be created.
-            - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~sdcclient._client.SdcClient.get_dashboards`
+            - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~SdcClient.get_dashboards`
             - **filter**: a boolean expression combining Sysdig Cloud segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
@@ -1032,7 +1032,7 @@ class SdcClient:
             Deletes a dashboard.
 
         **Arguments**
-            - **dashboard**: the dashboard object as returned by :func:`~sdcclient._client.SdcClient.get_dashboards`.
+            - **dashboard**: the dashboard object as returned by :func:`~SdcClient.get_dashboards`.
 
         **Success Return Value**
             `None`.
@@ -1130,7 +1130,7 @@ class SdcClient:
             Deletes an event.
 
         **Arguments**
-            - **event**: the event object as returned by :func:`~sdcclient._client.SdcClient.get_events`.
+            - **event**: the event object as returned by :func:`~SdcClient.get_events`.
 
         **Success Return Value**
             `None`.
@@ -1228,10 +1228,10 @@ class SdcClient:
 
     def poll_sysdig_capture(self, capture):
         '''**Description**
-            Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with :func:`~sdcclient._client.SdcClient.create_sysdig_capture`.
+            Fetch the updated state of a sysdig capture. Can be used to poll the status of a capture that has been previously created and started with :func:`~SdcClient.create_sysdig_capture`.
 
         **Arguments**
-            - **capture**: the capture object as returned by :func:`~sdcclient._client.SdcClient.get_sysdig_captures` or :func:`~sdcclient._client.SdcClient.create_sysdig_capture`.
+            - **capture**: the capture object as returned by :func:`~SdcClient.get_sysdig_captures` or :func:`~SdcClient.create_sysdig_capture`.
 
         **Success Return Value**
             A dictionary showing the updated details of the capture. Use the ``status`` field to check the progress of a capture.
@@ -1571,7 +1571,7 @@ class SdcClient:
             Switches the current user context to the specified team. In other words, this function makes it possible to start operating in the context of a different team without having to use the token of that team.
 
         **Arguments**
-            - **new_team_id**: the numeric ID of the team (such as returned by :func:`~sdcclient._client.SdcClient.get_team_ids`) to switch to.
+            - **new_team_id**: the numeric ID of the team (such as returned by :func:`~SdcClient.get_team_ids`) to switch to.
         '''
         res = self.get_user_info()
         if not res[0]:
