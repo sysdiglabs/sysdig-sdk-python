@@ -6,6 +6,8 @@
 Sysdig Cloud Python Script Library
 ==================================
 
+This page documents the functions available in the `Python Script Library <https://sysdig.gitbooks.io/sysdig-cloud-api/content/python.html>`_ for `Sysdig Cloud <https://sysdig.com/>`_. It is is a wrapper around the `Sysdig Cloud API <https://sysdig.gitbooks.io/sysdig-cloud-api/content/>`_.
+
 * :ref:`genindex`
 * :ref:`search`
 

@@ -166,7 +166,7 @@ def linkcode_resolve(domain, info):
     if domain != 'py' or not info['module']:
         return None
     #tag = 'master' if 'dev' in release else ('v' + release)
-    url = "https://github.com/draios/python-sdc-client/blob/teams-api/sdcclient/_client.py"
+    url = "https://github.com/draios/python-sdc-client/blob/master/sdcclient/_client.py"
     try:
         return url + '#L%d' % find_line()
     except Exception:
