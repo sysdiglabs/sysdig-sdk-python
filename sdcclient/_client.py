@@ -663,6 +663,7 @@ class SdcClient:
         v_count = 0
         for i, metric in enumerate(metrics):
             property_name = 'v' if 'aggregations' in metric else 'k'
+
             if property_name == 'k':
                 i = k_count
                 k_count += 1

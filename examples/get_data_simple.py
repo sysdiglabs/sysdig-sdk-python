@@ -29,8 +29,7 @@ sdclient = SdcClient(sdc_token)
 # You just need to specify the ID for keys, and ID with aggregation for values.
 #
 metrics =   [
-                # { "id": "agent.tag.team" },
-                # { "id": "kubernetes.pod.label.name" },
+                # { "id": "container.id" },
                 # { "id": "agent.tag.env", "aggregations": { "time": "concat", "group": "concat" } },
                 { "id": "cpu.used.percent", "aggregations": { "time": "timeAvg", "group": "avg" } }
             ]
@@ -56,9 +55,14 @@ end =       0
 sampling =  60
 
 #
+# Paging (from and to included; by default you get from=0 to=9)
+#
+paging = { "from": 0, "to": 9 }
+
+#
 # Load data
 #
-res = sdclient.get_data(metrics, start, end, sampling, filter = filter)
+res = sdclient.get_data(metrics, start, end, sampling, filter = filter, paging = paging)
 
 #
 # Show the result
