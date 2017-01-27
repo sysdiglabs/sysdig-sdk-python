@@ -15,7 +15,7 @@ Installation
 
 #### Manual
     git clone https://github.com/draios/python-sdc-client.git
-    pip install
+    pip install git+https://github.com/draios/python-sdc-client.git#egg=sdcclient
 
 Quick start
 -----------
