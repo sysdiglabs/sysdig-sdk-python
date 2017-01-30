@@ -54,3 +54,26 @@ Function List
 -------------
 
 Please Refer to the [Python Script Library documentation page](http://python-sdc-client.readthedocs.io/en/latest/) for the list of functions available.
+
+Transitioning from python to REST
+---------------------------------
+
+If your goal is to interact with the REST API directly, you can get there from the python library by logging the actions it takes.  This is useful because a full documentation of the REST API has not yet been created; and also provides a complete example of a working sequence.
+
+- Use or modify an example, or write a new script against the python sdcclient module.
+- Log the http requests made by the script.
+
+To log all the requests made by your script in significant detail, add to your script:
+
+``` python
+import logging
+httplib.HTTPConnection.debuglevel = 1
+
+logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+```
+
+Then run as normal.
