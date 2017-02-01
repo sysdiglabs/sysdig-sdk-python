@@ -7,6 +7,7 @@ import os
 import sys
 import zipfile
 import json
+import shutil
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
@@ -20,26 +21,17 @@ def cleanup_dir(path):
     if os.path.exists(path) == False:
         return
     if os.path.isdir(path) == False:
-        print 'Provided path is not a directory'
-        sys.exit(-1)
+        print('Provided path is not a directory')
+        sys.exit(1)
 
-    for file in os.listdir(path):
-        file_path = os.path.join(path, file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-            else:
-                print 'Cannot clean the provided directory due to delete failure on %s' % file_path
-        except Exception as e:
-            print(e)
-    os.rmdir(path)
+    shutil.rmtree(path)
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> <file-name>' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> <file-name>' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -49,7 +41,7 @@ sysdig_dashboard_dir = 'sysdig-dashboard-dir'
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, sdc_url='https://app-staging.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Fire the request.
@@ -62,28 +54,30 @@ res = sdclient.get_dashboards()
 if res[0]:
     data = res[1]
 else:
-    print res[1]
+    print(res[1])
     sys.exit(1)
-
-
-# Clean up any state in the tmp directory
-cleanup_dir(sysdig_dashboard_dir)
-
-# Creating sysdig dashboard directory to store dashboards
-if not os.path.exists(sysdig_dashboard_dir):
-    os.makedirs(sysdig_dashboard_dir)
-
-
-for db in data['dashboards']:
-    file_path = os.path.join(sysdig_dashboard_dir, str(db['id']))
-    f = open(file_path, 'w')
-    f.write(json.dumps(db))
-    print "Name: %s, # Charts: %d" % (db['name'], len(db['items']))
-
-
-zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
-zipdir(sysdig_dashboard_dir, zipf)
-zipf.close()
 
 # Clean up any state in the directory
 cleanup_dir(sysdig_dashboard_dir)
+
+try:
+    # Creating sysdig dashboard directory to store dashboards
+    if not os.path.exists(sysdig_dashboard_dir):
+        os.makedirs(sysdig_dashboard_dir)
+
+
+    for db in data['dashboards']:
+        file_path = os.path.join(sysdig_dashboard_dir, str(db['id']))
+        with open(file_path, 'wb') as f:
+            f.write(json.dumps(db))
+        print("Dashboard name: %s, # Charts: %d" % (db['name'], len(db['items'])))
+
+
+    zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+    zipdir(sysdig_dashboard_dir, zipf)
+    zipf.close()
+
+    print("Finished writing dashboard data in zip format to %s" % dashboard_state_file)
+finally:
+    # Clean up any state in the directory
+    cleanup_dir(sysdig_dashboard_dir)
