@@ -11,7 +11,7 @@ script:
 - examples/dashboard.py XXX
 - examples/create_dashboard.py XXX
 - examples/delete_dashboard.py XXX
-- examples/get_data_advanced.py XXX ip-10-0-1-213.ec2.internal
+- examples/get_data_advanced.py XXX ip-10-0-1-110.ec2.internal
 - examples/get_data_datasource.py XXX
 - examples/get_data_simple.py XXX
 - examples/list_alerts.py XXX
@@ -28,7 +28,7 @@ script:
 - examples/print_explore_grouping.py XXX
 - examples/print_user_info.py XXX
 - examples/list_sysdig_captures.py XXX
-- examples/create_sysdig_capture.py XXX ip-10-0-1-213.ec2.internal apicapture 10
+- examples/create_sysdig_capture.py XXX ip-10-0-1-110.ec2.internal apicapture 10
 - examples/notification_channels.py XXX
 - examples/user_team_mgmt.py XXX example-team example-user@example-domain.com
 - echo "Testing pip version"
