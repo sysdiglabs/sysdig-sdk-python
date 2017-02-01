@@ -58,15 +58,16 @@ Please Refer to the [Python Script Library documentation page](http://python-sdc
 Transitioning from python to REST
 ---------------------------------
 
-If your goal is to interact with the REST API directly, you can get there from the python library by logging the actions it takes.  This is useful because a full documentation of the REST API has not yet been created; and also provides a complete example of a working sequence.
+If your goal is to interact with the REST API directly, you can use this python client library to easily understand the REST interactions by logging the actions it takes.  This is useful because full documentation of the REST API has not yet been created; and also provides a complete example of known working operations.
 
 - Use or modify an example, or write a new script against the python sdcclient module.
-- Log the http requests made by the script.
+- Log the HTTP requests made by the script.
 
 To log all the requests made by your script in significant detail, add to your script:
 
 ``` python
 import logging
+import httplib
 httplib.HTTPConnection.debuglevel = 1
 
 logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
