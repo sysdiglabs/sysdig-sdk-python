@@ -166,6 +166,8 @@ class SdcClient:
         notification['resolved'] = resolved
         data = {'notification': notification}
 
+        print 'Notification to be resolved:'
+        print json.dumps(data, sort_keys=True, indent=4)
         res = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data))
         if not self.__checkResponse(res):
             return [False, self.lasterr]
