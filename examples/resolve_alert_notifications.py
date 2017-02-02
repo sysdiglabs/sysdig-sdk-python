@@ -52,6 +52,7 @@ notifications = res[1]['notifications']
 
 print "Resolving " + str(len(notifications)) + " notifications"
 for notification in notifications:
+    notification.pop('nonNullFilter', None)
     res = sdclient.update_notification_resolution(notification, True)
     if not res[0]:
         print res[1]
