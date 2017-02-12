@@ -37,7 +37,7 @@ notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
 res = sdclient.get_notification_ids(notify_channels)
 if not res[0]:
     print "Could not get IDs and hence not creating the alert: " + res[1]
-    sys.exit(-1)
+    sys.exit(1)
 
 notification_channel_ids = res[1]
 

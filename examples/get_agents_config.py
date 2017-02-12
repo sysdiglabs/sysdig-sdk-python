@@ -25,7 +25,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging.sysdigcloud.com')
+sdclient = SdcClient(sdc_token)
 
 #
 # Get the configuration
