@@ -9,6 +9,16 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
+import logging
+import httplib
+httplib.HTTPConnection.debuglevel = 1
+
+logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
 #
 # Parse arguments
 #
@@ -42,6 +52,7 @@ notifications = res[1]['notifications']
 
 print "Resolving " + str(len(notifications)) + " notifications"
 for notification in notifications:
+    notification.pop('nonNullFilter', None)
     res = sdclient.update_notification_resolution(notification, True)
     if not res[0]:
         print res[1]
