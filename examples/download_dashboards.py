@@ -79,7 +79,7 @@ for db in data['dashboards']:
     f = open(file_path, 'w')
     f.write(json.dumps(db))
     print "Name: %s, # Charts: %d" % (db['name'], len(db['items']))
-
+    f.close()
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
 zipdir(sysdig_dashboard_dir, zipf)
