@@ -49,7 +49,7 @@ sysdig_dashboard_dir = 'sysdig-dashboard-dir'
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, sdc_url='https://app-staging.sysdigcloud.com')
+sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
 
 #
 # Fire the request.
