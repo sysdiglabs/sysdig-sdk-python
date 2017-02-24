@@ -1616,6 +1616,32 @@ class SdcClient:
         data = {'files' : []}
         self.set_agents_config(data)
 
+    def get_falco_rules(self):
+        res = requests.get(self.url + '/api/agents/falco_rules', headers=self.hdrs)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        data = res.json()
+        return [True, data]
+
+    def set_falco_rules_content_raw(self, raw_payload):
+        res = requests.put(self.url + '/api/agents/falco_rules', headers=self.hdrs, data=json.dumps(raw_payload))
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+    def set_falco_rules_content(self, filter, rules_content):
+        payload = { "files" : [ { "filter": filter, "content": rules_content} ] }
+        return self.set_falco_rules_content_raw(payload)
+
+    def set_falco_rules_filename(self, filter, rules_filename):
+        with open(rules_filename, 'r') as f:
+            rules_content = f.read()
+            return self.set_falco_rules_content(filter, rules_content)
+
+    def clear_falco_rules(self):
+        data = {'files' : []}
+        return self.set_falco_rules_content_raw(data)
+
     def get_user_api_token(self, username, teamname):
         res = self.get_team(teamname)
         if res[0] == False:
