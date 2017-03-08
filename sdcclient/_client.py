@@ -4,6 +4,16 @@ import requests
 import copy
 
 class SdcClient:
+    '''Interact with the Sysdig Cloud API.
+
+    **Arguments**
+        - **token**: A Sysdig Cloud API token from the *Sysdig Cloud API* section of the `Settings <https://app.sysdigcloud.com/#/settings/user>`_ page.
+        - **sdc_url**: URL for contacting Sysdig Cloud API server. Set this in `On-Premises installs <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
+        - **ssl_verify**: Whether to verify certificate. Set to False if using a self-signed certificate in an `On-Premises install <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
+
+    **Returns**
+        An object for further interactions with the Sysdig Cloud API. See methods below.
+    '''
     lasterr = None
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):

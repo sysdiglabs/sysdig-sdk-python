@@ -1,12 +1,12 @@
-Sysdig Cloud python client library
+Sysdig Cloud Python client library
 ===
 
 [![Build Status](https://travis-ci.org/draios/python-sdc-client.png?branch=master)](https://travis-ci.org/draios/python-sdc-client)
 [![Current version on PyPI](http://img.shields.io/pypi/v/sdcclient.svg)](https://pypi.python.org/pypi/sdcclient)
 
-A python client API for Sysdig Cloud.
+A Python client API for Sysdig Cloud.
 
-This module is a wrapper around the Sysdig Cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
+This module is a wrapper around the Sysdig Cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install Python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
 
 Installation
 ------------
@@ -56,12 +56,28 @@ Function List
 
 Please Refer to the [Python Script Library documentation page](http://python-sdc-client.readthedocs.io/en/latest/) for the list of functions available.
 
-Transitioning from python to REST
+On-Premises Installs
+--------------------
+For [On-Premises Sysdig Cloud installs](https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide), additional configuration is necessary to point to your API server rather than the default SaaS-based one, and also to easily connect when using a self-signed certificate for SSL. One way to handle this is by setting environment variables before running your Python scripts:
+
+```
+export SDC_URL='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>'
+export SDC_SSL_VERIFY='false'
+```
+
+Alternatively, you can specify the additional arguments in your Python scripts as you instantiate the SDC client:
+
+```
+sdclient = SdcClient(sdc_token, sdc_url='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>', ssl_verify=False)
+```
+
+
+Transitioning from Python to REST
 ---------------------------------
 
-If your goal is to interact with the REST API directly, you can use this python client library to understand the REST interactions by logging the actions it takes.  This is useful because full documentation of the REST API has not yet been created; and also provides a complete example of known working operations.
+If your goal is to interact with the REST API directly, you can use this Python client library to understand the REST interactions by logging the actions it takes.  This is useful because full documentation of the REST API has not yet been created; and also provides a complete example of known working operations.
 
-- Use or modify an example, or write a new script against the python sdcclient module.
+- Use or modify an example, or write a new script against the Python sdcclient module.
 - Log the HTTP requests made by the script.
 
 To log all the requests made by your script in significant detail, add to your script:
