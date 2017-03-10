@@ -223,6 +223,11 @@ class SdcClient:
                             if 'channel' in opt and opt['channel'] == c['channel']:
                                 found = True
                                 ids.append(ch['id'])
+                        elif c['type'] == 'OPSGENIE':
+                            if 'name' in c:
+                                if c['name'] == ch['name']:
+                                    found = True
+                                    ids.append(ch['id'])
                 if not found:
                     return [False, "Channel not found: " + str(c)]
 
