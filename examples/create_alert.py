@@ -30,7 +30,7 @@ sdclient = SdcClient(sdc_token)
 # Find notification channels (you need IDs to create an alert).
 #
 notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
-                    {'type': 'EMAIL', 'emailRecipients': ['gianluca@sysdig.com']},
+                    {'type': 'EMAIL', 'emailRecipients': ['demo-kube@draios.com', 'test@sysdig.com']},
                     {'type': 'SNS', 'snsTopicARNs': ['arn:aws:sns:us-east-1:273107874544:alarms-stg']}
                     ]
 
