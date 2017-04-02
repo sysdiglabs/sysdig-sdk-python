@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# This script shows the basics of getting data out of Sysdig Cloud by crating a
+# This script shows the basics of getting data out of Sysdig Cloud by creating a
 # very simple request that has no filter an no segmentation.
 #
 # The request queries for the average CPU across all of the instrumented hosts for
