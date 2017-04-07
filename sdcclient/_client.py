@@ -271,14 +271,6 @@ class SdcClient:
         j = res.json()
 
         #
-        # If this alert already exists, don't create it again
-        #
-        for db in j['alerts']:
-            if 'description' in db:
-                if db['description'] == description:
-                    return [False, 'alert ' + name + ' already exists']
-
-        #
         # Populate the alert information
         #
         alert_json = {
