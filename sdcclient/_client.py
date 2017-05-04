@@ -304,6 +304,28 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
+    def update_alert(self, alert):
+        '''**Description**
+            Update a modified threshold-based alert.
+
+        **Arguments**
+            - **alert**: one alert object from a list returned by :func:`~SdcClient.get_alerts`.
+
+        **Success Return Value**
+            The updated alert.
+
+        **Example**
+            `examples/update_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/update_alert.py>`_
+        '''
+        if 'id' not in alert:
+            return [False, "Invalid alert format"]
+
+        res = requests.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({ "alert": alert}), verify=self.ssl_verify)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def delete_alert(self, alert):
         '''**Description**
             Deletes an alert.
