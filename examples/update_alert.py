@@ -37,16 +37,21 @@ for alert in res[1]['alerts']:
         alert_found = True
         print 'Updating alert. Configuration before changing timespan, description, and notification channels:'
         print json.dumps(alert, sort_keys=True, indent=4)
-        alert['notificationChannelIds'] = alert['notificationChannelIds'][0:-1]
-        alert['description'] = 'this alert has been updated via update_alert in the python Sysdig Monitor library'
-        alert['timespan'] = 120 * 1000000    # 2 minutes
+        if 'notificationChannelIds' in alert:
+            alert['notificationChannelIds'] = alert['notificationChannelIds'][0:-1]
+        update_txt = ' (changed by update_alert)'
+        if alert['description'][-len(update_txt):] != update_txt:
+            alert['description'] = alert['description'] + update_txt
+        alert['timespan'] = alert['timespan'] * 2   # Note: Expressed in seconds * 1000000
         res_update = sdclient.update_alert(alert)
+
+        if not res_update[0]:
+            print res_update[1]
+            sys.exit(1)
 
         # Validate and print the results
         print '\nAlert after modification:'
         print json.dumps(res_update[1], sort_keys=True, indent=4)
-        if not res_update[0]:
-            sys.exit(1)
 
 if not alert_found:
     print 'Alert to be updated not found'
