@@ -1,0 +1,42 @@
+{
+            "alert" : {
+                "type" : "MANUAL",
+                "name" : "tomcat  down",
+                "description" : "triggers when host down",
+                "severity" : 2,
+                "timespan" : 300000000,
+                "condition" : "timeAvg(uptime) = 0",
+                "segmentBy" : ["host.mac"],
+                "segmentCondition" : {
+                    "type": "ANY"
+                },
+                "notificationChannels" : [ 
+                    {"type": "SLACK", "channel": "sysdig-demo2-alerts"},
+                    {"type": "SNS", "snsTopicARNs": ["arn:aws:sns:us-east-1:273107874544:alarms-stg"]},
+                    {"type": "EMAIL", "emailRecipients": ["demo-kube@draios.com", "test@sysdig.com"]}
+                ],
+                "filter": "proc.name = 'tomcat'",
+                "enabled" : false,
+                "annotations" : {}
+            },
+
+            "alert2" : {
+                "type" : "MANUAL",
+                "name" : "tomcat memory high",
+                "description" : "triggers when memory high",
+                "severity" : 2,
+                "timespan" : 300000000,
+                "condition" : "timeAvg(memory.used.percent) >= 90",
+                "segmentBy" : ["host.mac"],
+                "segmentCondition" : {
+                    "type": "ANY"
+                },
+                "notificationChannels" : [
+                    {"type": "SNS", "snsTopicARNs": ["arn:aws:sns:us-east-1:273107874544:alarms-stg"]},
+                    {"type": "EMAIL", "emailRecipients": ["demo-kube@draios.com", "test@sysdig.com"]}
+                ],
+                "filter": "proc.name = 'tomcat'",
+                "enabled" : false,
+                "annotations" : {}
+            }
+}
