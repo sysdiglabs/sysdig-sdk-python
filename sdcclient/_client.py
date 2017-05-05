@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import copy
+import sys
 
 class SdcClient:
     '''Interact with the Sysdig Cloud API.
