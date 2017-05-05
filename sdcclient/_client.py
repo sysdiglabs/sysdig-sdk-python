@@ -309,7 +309,7 @@ class SdcClient:
             Update a modified threshold-based alert.
 
         **Arguments**
-            - **alert**: one alert object from a list returned by :func:`~SdcClient.get_alerts`.
+            - **alert**: one modified alert object of the same format as those in the list returned by :func:`~SdcClient.get_alerts`.
 
         **Success Return Value**
             The updated alert.
