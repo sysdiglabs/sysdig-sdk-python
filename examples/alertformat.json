@@ -1,7 +1,7 @@
 {
             "alert" : {
                 "type" : "MANUAL",
-                "name" : "prod-env host down",
+                "name" : "tomcat  down",
                 "description" : "triggers when host down",
                 "severity" : 2,
                 "timespan" : 300000000,
@@ -11,18 +11,18 @@
                     "type": "ANY"
                 },
                 "notificationChannels" : [ 
-                    {"type": "OPSGENIE", "name": "Cloud Platform OpsGenie"},
-                    {"type": "WEBHOOK", "name": "Cloud Alert Manager"},
+                    {"type": "SLACK", "channel": "sysdig-demo2-alerts"},
+                    {"type": "SNS", "snsTopicARNs": ["arn:aws:sns:us-east-1:273107874544:alarms-stg"]},
                     {"type": "EMAIL", "emailRecipients": ["demo-kube@draios.com", "test@sysdig.com"]}
                 ],
-                "filter": "agent.tag.location='prod-env'",
+                "filter": "proc.name = 'tomcat'",
                 "enabled" : false,
                 "annotations" : {}
             },
 
             "alert2" : {
                 "type" : "MANUAL",
-                "name" : "prod-env memory high",
+                "name" : "tomcat memory high",
                 "description" : "triggers when memory high",
                 "severity" : 2,
                 "timespan" : 300000000,
@@ -32,10 +32,10 @@
                     "type": "ANY"
                 },
                 "notificationChannels" : [
-                    {"type": "OPSGENIE", "name": "Cloud Platform OpsGenie"},
-                    {"type": "WEBHOOK", "name": "Cloud Alert Manager"}
+                    {"type": "SNS", "snsTopicARNs": ["arn:aws:sns:us-east-1:273107874544:alarms-stg"]},
+                    {"type": "EMAIL", "emailRecipients": ["demo-kube@draios.com", "test@sysdig.com"]}
                 ],
-                "filter": "agent.tag.location='prod-env'",
+                "filter": "proc.name = 'tomcat'",
                 "enabled" : false,
                 "annotations" : {}
             }
