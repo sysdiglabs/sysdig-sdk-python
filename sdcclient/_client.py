@@ -304,6 +304,57 @@ class SdcClient:
             return [False, self.lasterr]
         return [True, res.json()]
 
+    def create_alert_from_jsonfile(self, filename):
+        '''**Description**
+            Create a threshold-based alert.
+
+        **Success Return Value**
+            A dictionary describing the just created alert, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts>`__
+
+        **Example**
+            `examples/create_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_alert_from_jsonfile.py>`_
+        '''
+
+        with open(filename) as file:
+            alert_json_data = json.load(file)
+        #
+        # Get the list of alerts from the server
+        #
+        res = requests.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        j = res.json()
+
+        #
+        # Populate the alert information,Create the new alert
+        #
+        for keys,values in alert_json_data.items():
+            alert_json = {}
+            alert_json["alert"] = values
+            ## Get channel ids from channel names passed in JSON data
+            res = self.get_notification_ids(alert_json['alert']['notificationChannels'])
+            if not res[0]:
+                print "Could not get IDs and hence not creating the alert, alert name:"+ alert_json['alert']['name'] +"; "+ res[1]
+                sys.exit(-1)
+            notification_channel_ids = res[1]
+
+            ##change Key from "notificationChannels" in json data to "notificationChannelIds", as required by api request
+            alert_json['alert']['notificationChannelIds'] = alert_json['alert'].pop("notificationChannels")
+
+            ## chage value of 'notificationChannelIds' from channel_name to channel_ids, as required by api request
+            alert_json['alert']['notificationChannelIds'] = notification_channel_ids
+
+            ##create alert
+            res = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json), verify=self.ssl_verify)
+            if not self.__checkResponse(res):
+                #return [False, self.lasterr]
+                print(self.lasterr)
+            else:
+                print(res.json())
+                print("\n")
+
+        return [True]
+
     def delete_alert(self, alert):
         '''**Description**
             Deletes an alert.

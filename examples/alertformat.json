@@ -1,0 +1,42 @@
+{
+            "alert" : {
+                "type" : "MANUAL",
+                "name" : "prod-env host down",
+                "description" : "triggers when host down",
+                "severity" : 2,
+                "timespan" : 300000000,
+                "condition" : "timeAvg(uptime) = 0",
+                "segmentBy" : ["host.mac"],
+                "segmentCondition" : {
+                    "type": "ANY"
+                },
+                "notificationChannels" : [ 
+                    {"type": "OPSGENIE", "name": "Cloud Platform OpsGenie"},
+                    {"type": "WEBHOOK", "name": "Cloud Alert Manager"},
+                    {"type": "EMAIL", "emailRecipients": ["demo-kube@draios.com", "test@sysdig.com"]}
+                ],
+                "filter": "agent.tag.location='prod-env'",
+                "enabled" : false,
+                "annotations" : {}
+            },
+
+            "alert2" : {
+                "type" : "MANUAL",
+                "name" : "prod-env memory high",
+                "description" : "triggers when memory high",
+                "severity" : 2,
+                "timespan" : 300000000,
+                "condition" : "timeAvg(memory.used.percent) >= 90",
+                "segmentBy" : ["host.mac"],
+                "segmentCondition" : {
+                    "type": "ANY"
+                },
+                "notificationChannels" : [
+                    {"type": "OPSGENIE", "name": "Cloud Platform OpsGenie"},
+                    {"type": "WEBHOOK", "name": "Cloud Alert Manager"}
+                ],
+                "filter": "agent.tag.location='prod-env'",
+                "enabled" : false,
+                "annotations" : {}
+            }
+}
