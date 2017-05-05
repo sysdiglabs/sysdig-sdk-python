@@ -238,8 +238,9 @@ class SdcClient:
 
             return [True, ids]
 
-    def create_alert(self, name, description, severity, for_atleast_s, condition, segmentby=[],
-                     segment_condition='ANY', user_filter='', notify=None, enabled=True, annotations={}):
+    def create_alert(self, name=None, description=None, severity=None, for_atleast_s=None, condition=None,
+                     segmentby=[], segment_condition='ANY', user_filter='', notify=None, enabled=True,
+                     annotations={}, alert_obj=None):
         '''**Description**
             Create a threshold-based alert.
 
@@ -255,6 +256,7 @@ class SdcClient:
             - **notify**: the type of notification you want this alert to generate. Options are *EMAIL*, *SNS*, *PAGER_DUTY*, *SYSDIG_DUMP*.
             - **enabled**: if True, the alert will be enabled when created.
             - **annotations**: an optional dictionary of custom properties that you can associate to this alert for automation or management reasons
+            - **alert_obj**: an optional fully-formed Alert object of the format returned in an "alerts" list by :func:`~SdcClient.get_alerts` This is an alternative to creating the Alert using the individiual parameters listed above.
 
         **Success Return Value**
             A dictionary describing the just created alert, with the format described at `this link <https://app.sysdigcloud.com/apidocs/#!/Alerts/post_api_alerts>`__
@@ -270,31 +272,43 @@ class SdcClient:
             return [False, self.lasterr]
         j = res.json()
 
-        #
-        # Populate the alert information
-        #
-        alert_json = {
-            'alert' : {
-                'type' : 'MANUAL',
-                'name' : name,
-                'description' : description,
-                'enabled' : enabled,
-                'severity' : severity,
-                'timespan' : for_atleast_s * 1000000,
-                'condition' : condition,
-                'filter': user_filter
+        if alert_obj is None:
+            if None in (name, description, severity, for_atleast_s, condition):
+                return [False, 'Must specify a full Alert object or all parameters: name, description, severity, for_atleast_s, condition']
+            else:
+                #
+                # Populate the alert information
+                #
+                alert_json = {
+                    'alert' : {
+                        'type' : 'MANUAL',
+                        'name' : name,
+                        'description' : description,
+                        'enabled' : enabled,
+                        'severity' : severity,
+                        'timespan' : for_atleast_s * 1000000,
+                        'condition' : condition,
+                        'filter': user_filter
+                    }
+                }
+
+                if segmentby != None and segmentby != []:
+                    alert_json['alert']['segmentBy'] = segmentby
+                    alert_json['alert']['segmentCondition'] = {'type' : segment_condition}
+
+                if annotations != None and annotations != {}:
+                    alert_json['alert']['annotations'] = annotations
+
+                if notify != None:
+                    alert_json['alert']['notificationChannelIds'] = notify
+        else:
+            # The REST API enforces "Alert ID and version must be null", so remove them if present,
+            # since these would have been there in a dump from the list_alerts.py example.
+            alert_obj.pop('id', None)
+            alert_obj.pop('version', None)
+            alert_json = {
+                'alert' : alert_obj
             }
-        }
-
-        if segmentby != None and segmentby != []:
-            alert_json['alert']['segmentBy'] = segmentby
-            alert_json['alert']['segmentCondition'] = {'type' : segment_condition}
-
-        if annotations != None and annotations != {}:
-            alert_json['alert']['annotations'] = annotations
-
-        if notify != None:
-            alert_json['alert']['notificationChannelIds'] = notify
 
         #
         # Create the new alert
