@@ -28,16 +28,23 @@ sdclient = SdcClient(sdc_token)
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'r')
 
+
+dashboard_conf_items = ['showAsType', 'filterRoot', 'linkMetrics',
+                        'singleTimeNavigation', 'gridConfiguration', 'responsive',
+                        'nodesNoiseFilter', 'compareWith', 'format', 'linksNoiseFilter',
+                        'filterProcesses', 'isLegendExpanded', 'inhertitTimeNavigation',
+                        'schema', 'sortAscending', 'mapDataLimit', 'metrics', 'filterExtNodes',
+                        'sorting', 'name', 'sourceExploreView', 'items', 'showAs', 'eventsFilter',
+                        'timeMode', 'isShared', 'sourceDrilldownView']
+
 for info in zipf.infolist():
     data = zipf.read(info.filename)
-    dboard = json.loads(data)
-    
-    dboard['timeMode'] = {'mode' : 1}
-    dboard['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
-
-    # Single filter support for all restored dashboards
-    # TODO: add support to get filter from saved dashboard
-    dashboardFilter = "proc.name = cassandra"
-    res = sdclient.create_dashboard_from_template(dboard['name'] + '-restored', dboard, dashboardFilter)
+    j = json.loads(data)
+    k = {}
+    for item in j.keys():
+        if item in dashboard_conf_items:
+            k[item] = j[item]
+     
+    res = sdclient.create_dashboard_with_configuration(k)
     if res[0] == False:
         print "Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res[1])
