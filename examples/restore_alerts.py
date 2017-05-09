@@ -28,6 +28,7 @@ sdclient = SdcClient(sdc_token)
 with open(alerts_dump_file, 'r') as f:
     j = json.load(f)
     for a in j['alerts']:
+        a['description'] += ' (created via restore_alerts.py)'
         res = sdclient.create_alert(alert_obj=a)
         if not res[0]:
             print res[1]
