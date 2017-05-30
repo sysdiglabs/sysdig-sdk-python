@@ -27,7 +27,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Get the events that match a name
 #
-res = sdclient.get_events(name='test event')
+res = sdclient.get_events(name='test_event_name')
 
 if not res[0]:
 	print res[1]
