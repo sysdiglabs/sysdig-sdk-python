@@ -29,7 +29,7 @@ script:
 - examples/print_explore_grouping.py XXX
 - examples/print_user_info.py XXX
 - examples/list_sysdig_captures.py XXX
-- examples/create_sysdig_capture.py XXX ip-10-0-1-140.ec2.internal apicapture 10
+- examples/create_sysdig_capture.py XXX ip-10-0-1-115.ec2.internal apicapture 10
 - examples/notification_channels.py XXX
 - examples/user_team_mgmt.py XXX example-team example-user@example-domain.com
 - echo "Testing pip version"
