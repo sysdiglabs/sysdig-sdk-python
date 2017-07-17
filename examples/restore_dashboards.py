@@ -35,7 +35,7 @@ dashboard_conf_items = ['showAsType', 'filterRoot', 'linkMetrics',
                         'filterProcesses', 'isLegendExpanded', 'inhertitTimeNavigation',
                         'schema', 'sortAscending', 'mapDataLimit', 'metrics', 'filterExtNodes',
                         'sorting', 'name', 'sourceExploreView', 'items', 'showAs', 'eventsFilter',
-                        'timeMode', 'isShared', 'sourceDrilldownView']
+                        'timeMode', 'isShared', 'sourceDrilldownView', 'filterExpression']
 
 for info in zipf.infolist():
     data = zipf.read(info.filename)
