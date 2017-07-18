@@ -38,6 +38,9 @@ if res[0]:
     if not("files" in res[1]) or len(res[1]["files"]) == 0:
         print "No current auto configuration"
     else:
+        print "Current contents of config file:"
+        print "--------------------------------"
         print res[1]["files"][0]["content"]
+        print "--------------------------------"
 else:
     print res[1]
