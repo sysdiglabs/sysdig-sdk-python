@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Get the sysdig cloud agents configuration as a json file and print it on the screen.
+# Get the sysdig cloud agents configuration as yaml and print it on the screen.
 # Agents configuration settings can be managed in a centralized way through the API
 # This script downloads the settings and its result can be edited and the used from
 # the set_agents_config script.
@@ -8,7 +8,6 @@
 
 import os
 import sys
-import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
@@ -36,6 +35,6 @@ res = sdclient.get_agents_config()
 # Return the result
 #
 if res[0]:
-        print json.dumps(res[1], indent=2)
+        print res[1]["files"][0]["content"]
 else:
     print res[1]
