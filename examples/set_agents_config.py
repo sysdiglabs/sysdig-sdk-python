@@ -33,7 +33,7 @@ with open(sys.argv[2]) as cfile:
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, 'https://app-staging.sysdigcloud.com')
+sdclient = SdcClient(sdc_token, 'https://app.sysdigcloud.com')
 
 json = {"files": [{"filter": "*", "content": yaml_conf}]}
 
