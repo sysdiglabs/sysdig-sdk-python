@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import copy
+import datetime
 
 class _SdcCommon(object):
     '''Interact with the Sysdig Monitor/Secure API.
@@ -1711,3 +1712,73 @@ class SdMonClient(_SdcCommon):
 SdcClient = SdMonClient
 
 class SdSecureClient(_SdcCommon):
+
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
+        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify)
+
+        self.customer_id = None
+
+    def _get_falco_rules(self, kind):
+        res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+        data = res.json()
+        return [True, data]
+
+    def get_system_falco_rules(self):
+        return self._get_falco_rules("system")
+
+    def get_user_falco_rules(self):
+        return self._get_falco_rules("user")
+
+    def _set_falco_rules(self, kind, rules_content):
+        payload = self._get_falco_rules(kind)
+
+        if not payload[0]:
+            return payload
+
+        payload[1]["{}RulesFile".format(kind)]["content"] = rules_content
+
+        res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, data=json.dumps(payload[1]))
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()]
+
+    def set_system_falco_rules(self, rules_content):
+        return self._set_falco_rules("system", rules_content)
+
+    def set_user_falco_rules(self, rules_content):
+        return self._set_falco_rules("user", rules_content)
+
+    def _get_policy_events_int(self, ctx):
+        res = requests.get(self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit']), headers=self.hdrs)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        # Increment the offset by limit
+        ctx['offset'] += ctx['limit']
+
+        return [True, {"ctx": ctx, "data": res.json()}]
+
+    def get_policy_events_range(self, from_sec, to_sec):
+        ctx = {"from": int(from_sec) * 1000000,
+               "to": int(to_sec) * 1000000,
+               "offset": 0,
+               "limit": 1000}
+
+        return self._get_policy_events_int(ctx)
+
+    def get_policy_events_duration(self, duration_sec):
+        epoch = datetime.datetime.utcfromtimestamp(0)
+
+        to_ts = (datetime.datetime.utcnow()-epoch).total_seconds() * 1000 * 1000
+        from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
+        ctx = {"to": to_ts,
+               "from": from_ts,
+               "offset": 0,
+               "limit": 1000}
+
+        return self._get_policy_events_int(ctx)
+
+    def get_more_policy_events(self, ctx):
+        return self._get_policy_events_int(ctx)
