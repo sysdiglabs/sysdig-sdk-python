@@ -1,63 +1,67 @@
 language: python
-env:
-  global:
-    secure: h6qCuQnKi7fIzR53XqePRg2Hh0NrypqLyvYlJ+GEegEIP2PsPEwXMXZbswD7r+P4zsx7z2mBbR6VVYcjm1s0Zlf8RM2CNJ6IluAzDsg5Er7X7MAPaDEsfGJohZiTOPJvJNOV1BU7Qc4Y8Sqmd5ujVIJ4pL67oMegtmD36QBUAr7ERNrzbDXnPupIkcU/vf3z3vvCnH7/DIyP5hs1P+OAsgHY49bBMXxMEeMYQc0rtCN3F9yCmqh2f1mfEPouQnegKwcVFf3H08WQhYulAyNtrN0kcipMwF9+7cpLWtVyVMKepXvxXC0ltbaUTUqjvg5Op8WLOTG2xwXRdj6Fi985JPCvmsnX9teWT8WyxMex8ig7BVpontPajrhZJPfPWqj+oypqu8GMo/G0xD0uBGIVkadIQI4DQC1xFjKBBwntLdukeOApiAMhBEQtjQ5tO8vZw3kXifBdRHVuVHUjW6Lxd2R0xCKI0ZUmNggDaidsDRSU0C0HmHPHJELfGVm9Ohbsc01dYGiPczplV7Nxc4OKiPBZ5cvoKyNZFmM7ABtMKfGZR9PFv3A+6zzjnqIbHVdszzKN6ODKeotdVRt/VV7cMwZknwUqf7+fE/pjaHGpQ5ubX8wxhPzyxfcJHzKzYklFGCT8Rv/+VooYWJaKyjZ/e63fsjRTfTX84KRpSdWe4U8=
+services:
+  - docker
 python:
 - '2.7'
+install:
+  - sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
+  - pip install pyyaml requests
 script:
 - echo "Testing source version"
-- examples/create_alert.py XXX
-- examples/update_alert.py XXX
-- examples/delete_alert.py XXX
-- examples/dashboard.py XXX
-- examples/create_dashboard.py XXX
-- examples/delete_dashboard.py XXX
-- examples/get_data_advanced.py XXX ip-10-0-1-140.ec2.internal
-- examples/get_data_datasource.py XXX
-- examples/get_data_simple.py XXX
-- examples/list_alerts.py XXX
-- examples/list_alert_notifications.py XXX
-- examples/resolve_alert_notifications.py XXX 1
-- examples/list_dashboards.py XXX
-- examples/list_hosts.py XXX
-- examples/list_metrics.py XXX
-- examples/post_event.py XXX "test_event_name" -d "test event description"
-- examples/post_event_simple.py XXX "test_event_name" "test event description"
-- examples/list_events.py XXX
-- examples/delete_event.py XXX
-- examples/print_data_retention_info.py XXX
-- examples/print_explore_grouping.py XXX
-- examples/print_user_info.py XXX
-- examples/list_sysdig_captures.py XXX
-- examples/create_sysdig_capture.py XXX ip-10-0-1-115.ec2.internal apicapture 10
-- examples/notification_channels.py XXX
-- examples/user_team_mgmt.py XXX example-team example-user@example-domain.com
+- examples/create_alert.py $DEMO_KUBE_API_TOKEN
+- examples/update_alert.py $DEMO_KUBE_API_TOKEN
+- examples/delete_alert.py $DEMO_KUBE_API_TOKEN
+- examples/dashboard.py $DEMO_KUBE_API_TOKEN
+- examples/create_dashboard.py $DEMO_KUBE_API_TOKEN
+- examples/delete_dashboard.py $DEMO_KUBE_API_TOKEN
+- examples/get_data_advanced.py $DEMO_KUBE_API_TOKEN ip-10-0-1-140.ec2.internal
+- examples/get_data_datasource.py $DEMO_KUBE_API_TOKEN
+- examples/get_data_simple.py $DEMO_KUBE_API_TOKEN
+- examples/list_alerts.py $DEMO_KUBE_API_TOKEN
+- examples/list_alert_notifications.py $DEMO_KUBE_API_TOKEN
+- examples/resolve_alert_notifications.py $DEMO_KUBE_API_TOKEN 1
+- examples/list_dashboards.py $DEMO_KUBE_API_TOKEN
+- examples/list_hosts.py $DEMO_KUBE_API_TOKEN
+- examples/list_metrics.py $DEMO_KUBE_API_TOKEN
+- examples/post_event.py $DEMO_KUBE_API_TOKEN "test_event_name" -d "test event description"
+- examples/post_event_simple.py $DEMO_KUBE_API_TOKEN "test_event_name" "test event description"
+- examples/list_events.py $DEMO_KUBE_API_TOKEN
+- examples/delete_event.py $DEMO_KUBE_API_TOKEN
+- examples/print_data_retention_info.py $DEMO_KUBE_API_TOKEN
+- examples/print_explore_grouping.py $DEMO_KUBE_API_TOKEN
+- examples/print_user_info.py $DEMO_KUBE_API_TOKEN
+- examples/list_sysdig_captures.py $DEMO_KUBE_API_TOKEN
+- examples/create_sysdig_capture.py $DEMO_KUBE_API_TOKEN ip-10-0-1-115.ec2.internal apicapture 10
+- examples/notification_channels.py $DEMO_KUBE_API_TOKEN
+- examples/user_team_mgmt.py $DEMO_KUBE_API_TOKEN example-team example-user@example-domain.com
+- unset SDC_TOKEN
+- bash test/test_secure_apis.sh
 - echo "Testing pip version"
 - rm -rf sdcclient
 - pip install sdcclient
-# - examples/create_alert.py XXX
-# - examples/delete_alert.py XXX
-# - examples/dashboard.py XXX
-# - examples/create_dashboard.py XXX
-# - examples/delete_dashboard.py XXX
-# - examples/get_data_advanced.py XXX ip-10-0-2-180.ec2.internal
-# - examples/get_data_datasource.py XXX
-# - examples/get_data_simple.py XXX
-# - examples/list_alerts.py XXX
-# - examples/list_alert_notifications.py XXX
-# - examples/resolve_alert_notifications.py XXX 1
-# - examples/list_dashboards.py XXX
-# - examples/list_hosts.py XXX
-# - examples/list_metrics.py XXX
-# - examples/post_event.py XXX "test event name" -d "test event description"
-# - examples/post_event_simple.py XXX "test event name" "test event description"
-# - examples/list_events.py XXX
-# - examples/delete_event.py XXX
-# - examples/print_data_retention_info.py XXX
-# - examples/print_explore_grouping.py XXX
-# - examples/print_user_info.py XXX
-# - examples/list_sysdig_captures.py XXX
-# - examples/create_sysdig_capture.py XXX ip-10-0-2-202.ec2.internal apicapture 10
+# - examples/create_alert.py $DEMO_KUBE_API_TOKEN
+# - examples/delete_alert.py $DEMO_KUBE_API_TOKEN
+# - examples/dashboard.py $DEMO_KUBE_API_TOKEN
+# - examples/create_dashboard.py $DEMO_KUBE_API_TOKEN
+# - examples/delete_dashboard.py $DEMO_KUBE_API_TOKEN
+# - examples/get_data_advanced.py $DEMO_KUBE_API_TOKEN ip-10-0-2-180.ec2.internal
+# - examples/get_data_datasource.py $DEMO_KUBE_API_TOKEN
+# - examples/get_data_simple.py $DEMO_KUBE_API_TOKEN
+# - examples/list_alerts.py $DEMO_KUBE_API_TOKEN
+# - examples/list_alert_notifications.py $DEMO_KUBE_API_TOKEN
+# - examples/resolve_alert_notifications.py $DEMO_KUBE_API_TOKEN 1
+# - examples/list_dashboards.py $DEMO_KUBE_API_TOKEN
+# - examples/list_hosts.py $DEMO_KUBE_API_TOKEN
+# - examples/list_metrics.py $DEMO_KUBE_API_TOKEN
+# - examples/post_event.py $DEMO_KUBE_API_TOKEN "test event name" -d "test event description"
+# - examples/post_event_simple.py $DEMO_KUBE_API_TOKEN "test event name" "test event description"
+# - examples/list_events.py $DEMO_KUBE_API_TOKEN
+# - examples/delete_event.py $DEMO_KUBE_API_TOKEN
+# - examples/print_data_retention_info.py $DEMO_KUBE_API_TOKEN
+# - examples/print_explore_grouping.py $DEMO_KUBE_API_TOKEN
+# - examples/print_user_info.py $DEMO_KUBE_API_TOKEN
+# - examples/list_sysdig_captures.py $DEMO_KUBE_API_TOKEN
+# - examples/create_sysdig_capture.py $DEMO_KUBE_API_TOKEN ip-10-0-2-202.ec2.internal apicapture 10
 notifications:
   slack:
     secure: GJ0H2wAaW67t3+x+cCjOVLw/b+YAZjH9rebAfluCFJklJS9u+V6/qqIyiNDAkMPIcgilFyhiyOQCZYXapgthQ1ieFbZZo//mrRtuGo2wuxCAwcOx2mXAZpZ4I5b3+Q/znVqSuqkwFRid1d138z4TW7sYSIburouDX3QUNoUOy+g7VJxCFQCcqlN8LYxGJHQYdOZa9zIGCtKrOtZ/B8C1TLgXmDMwAAVNO2WzL4GiBTLCGuMsQWMTLw2Qmv1ayZPztmeDWo1C9oa7HIH8Bg2YVjssR87el28X+EqEO533mgYjPmW2/hii30WVFOUE5hMdvKeQLBvy5N3/OCch1np0RQBd8eYEtaPv38rc5L2wAnUq9G5Zzr252z7vnwSLi6lap9jWU8tOerSTEPU+jG05PnuCnufVDXVNPyiPsH6BDP4qxHmLjooNpxfe63Df7NNyUi2I3QoroLj/UzI7zZVQjJEqsTrr5BbsH4z6NTGY91+ZqobBn62+hV3ESAam0ivQgC7s2AKko0qkKyIUGjj7ozU8ebo1UpagNvKC/J9szMqtdXJgKtG8BeonyLMeN6MEEyEvcMJbB4dCcfet+1Sb9AZWnGvYVdajhVLb1HE6OrbzZyhC3KqCe06J9O5BCY9ncy+l16i7MyIfcKTibHQlxPU+Id/VijD97JSRXxnd2i4=
