@@ -1726,9 +1726,34 @@ class SdSecureClient(_SdcCommon):
         return [True, data]
 
     def get_system_falco_rules(self):
+        '''**Description**
+            Get the system falco rules file in use for this customer. See the `Falco wiki <https://github.com/draios/falco/wiki/Falco-Rules>`_ for documentation on the falco rules format.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            The contents of the system falco rules file.
+
+        **Example**
+            `examples/get_secure_system_falco_rules.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_system_falco_rules.py>`_
+        '''
+
         return self._get_falco_rules("system")
 
     def get_user_falco_rules(self):
+        '''**Description**
+            Get the user falco rules file in use for this customer. See the `Falco wiki <https://github.com/draios/falco/wiki/Falco-Rules>`_ for documentation on the falco rules format.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            The contents of the user falco rules file.
+
+        **Example**
+            `examples/get_secure_user_falco_rules.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_user_falco_rules.py>`_
+        '''
         return self._get_falco_rules("user")
 
     def _set_falco_rules(self, kind, rules_content):
@@ -1745,9 +1770,35 @@ class SdSecureClient(_SdcCommon):
         return [True, res.json()]
 
     def set_system_falco_rules(self, rules_content):
+        '''**Description**
+            Set the system falco rules file in use for this customer. NOTE: This API endpoint can *only* be used in on-premise deployments. Generally the system falco rules file is only modified in conjunction with Sysdig support. See the `Falco wiki <https://github.com/draios/falco/wiki/Falco-Rules>`_ for documentation on the falco rules format.
+
+        **Arguments**
+            - A string containing the system falco rules.
+
+        **Success Return Value**
+            The contents of the system falco rules file that were just updated.
+
+        **Example**
+            `examples/set_secure_system_falco_rules.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_system_falco_rules.py>`_
+
+        '''
         return self._set_falco_rules("system", rules_content)
 
     def set_user_falco_rules(self, rules_content):
+        '''**Description**
+            Set the user falco rules file in use for this customer. See the `Falco wiki <https://github.com/draios/falco/wiki/Falco-Rules>`_ for documentation on the falco rules format.
+
+        **Arguments**
+            - A string containing the user falco rules.
+
+        **Success Return Value**
+            The contents of the user falco rules file that were just updated.
+
+        **Example**
+            `examples/set_secure_user_falco_rules.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_user_falco_rules.py>`_
+
+        '''
         return self._set_falco_rules("user", rules_content)
 
     def _get_policy_events_int(self, ctx):
@@ -1761,6 +1812,24 @@ class SdSecureClient(_SdcCommon):
         return [True, {"ctx": ctx, "data": res.json()}]
 
     def get_policy_events_range(self, from_sec, to_sec):
+        '''**Description**
+            Fetch all policy events that occurred in the time range [from_sec:to_sec]. This method is used in conjunction
+            with :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
+
+        **Arguments**
+            - from_sec: the start of the timerange for which to get events
+            - end_sec: the end of the timerange for which to get events
+
+        **Success Return Value**
+            An array containing:
+              - A context object that should be passed to later calls to get_more_policy_events.
+              - An array of policy events, in JSON format. See :func:`~sdcclient.SdSecureClient.get_more_policy_events`
+                for details on the contents of policy events.
+
+        **Example**
+            `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
+
+        '''
         ctx = {"from": int(from_sec) * 1000000,
                "to": int(to_sec) * 1000000,
                "offset": 0,
@@ -1769,6 +1838,23 @@ class SdSecureClient(_SdcCommon):
         return self._get_policy_events_int(ctx)
 
     def get_policy_events_duration(self, duration_sec):
+        '''**Description**
+            Fetch all policy events that occurred in the last duration_sec seconds. This method is used in conjunction with
+            :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
+
+        **Arguments**
+            - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
+
+        **Success Return Value**
+            An array containing:
+              - A context object that should be passed to later calls to get_more_policy_events.
+              - An array of policy events, in JSON format. See :func:`~sdcclient.SdSecureClient.get_more_policy_events`
+                for details on the contents of policy events.
+
+        **Example**
+            `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
+
+        '''
         epoch = datetime.datetime.utcfromtimestamp(0)
 
         to_ts = (datetime.datetime.utcnow()-epoch).total_seconds() * 1000 * 1000
@@ -1781,9 +1867,52 @@ class SdSecureClient(_SdcCommon):
         return self._get_policy_events_int(ctx)
 
     def get_more_policy_events(self, ctx):
+        '''**Description**
+            Fetch additional policy events after an initial call to :func:`~sdcclient.SdSecureClient.get_policy_events_range` /
+            :func:`~sdcclient.SdSecureClient.get_policy_events_duration` or a prior call to get_more_policy_events.
+
+        **Arguments**
+            - ctx: a context object returned from an initial call to :func:`~sdcclient.SdSecureClient.get_policy_events_range` /
+              :func:`~sdcclient.SdSecureClient.get_policy_events_duration` or a prior call to get_more_policy_events.
+
+        **Success Return Value**
+            An array containing:
+              - A context object that should be passed to later calls to get_more_policy_events()
+              - An array of policy events, in JSON format. Each policy event contains the following:
+                 - hostMac: the mac address of the machine where the event occurred
+                 - severity: a severity level from 1-7
+                 - timestamp: when the event occurred (ns since the epoch)
+                 - version: a version number for this message (currently 1)
+                 - policyId: a reference to the policy that generated this policy event
+                 - output: A string describing the event that occurred
+                 - id: a unique identifier for this policy event
+                 - isAggregated: if true, this is a combination of multiple policy events
+                 - containerId: the container in which the policy event occurred
+
+            When the number of policy events returned is 0, there are no remaining events and you can stop calling get_more_policy_events().
+
+        **Example**
+            `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
+        '''
         return self._get_policy_events_int(ctx)
 
     def create_default_policies(self):
+        '''**Description**
+            Create a set of default policies using the current system falco rules file as a reference. For every falco rule in the system
+            falco rules file, one policy will be created. The policy will take the name and description from the name and description of
+            the corresponding falco rule. If a policy already exists with the same name, no policy is added or modified. Existing
+            policies will be unchanged.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            JSON containing details on any new policies that were added.
+
+        **Example**
+            `examples/create_default_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_default_policies.py>`_
+
+        '''
         res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -1791,6 +1920,19 @@ class SdSecureClient(_SdcCommon):
         return [True, res.json()]
 
     def delete_all_policies(self):
+        '''**Description**
+            Delete all existing policies. The falco rules file is unchanged.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            The string "Policies Deleted"
+
+        **Example**
+            `examples/delete_all_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_all_policies.py>`_
+
+        '''
         res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -1798,6 +1940,19 @@ class SdSecureClient(_SdcCommon):
         return [True, "Policies Deleted"]
 
     def list_policies(self):
+        '''**Description**
+            List the current set of policies.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing the number and details of each policy.
+
+        **Example**
+            `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
+
+        '''
         res = requests.get(self.url + '/api/policies', headers=self.hdrs)
         if not self._checkResponse(res):
             return [False, self.lasterr]

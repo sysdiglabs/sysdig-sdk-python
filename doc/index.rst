@@ -16,6 +16,11 @@ This page documents the functions available in the `Python Script Library <https
 Function List
 =============
 .. py:module:: sdcclient
-.. autoclass:: SdcClient
+.. autoclass:: SdMonClient
    :members:
+   :inherited-members:
+   :undoc-members:
+.. autoclass:: SdSecureClient
+   :members:
+   :inherited-members:
    :undoc-members:
