@@ -38,6 +38,23 @@ $SCRIPTDIR/../examples/set_secure_user_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN
 $SCRIPTDIR/../examples/get_secure_user_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN > /tmp/falco_rules.yaml
 diff /tmp/falco_rules.yaml /tmp/test_apis_user_rules.yaml
 
+# Delete all policies and then get them. There should be none.
+$SCRIPTDIR/../examples/delete_all_policies.py $PYTHON_SDC_TEST_API_TOKEN
+OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"policies\": []"* ]]; then
+    echo "Unexpected output after deleting all policies"
+    exit 1
+fi
+
+# Create the default set of policies and then get them. There should
+# be 1, corresponding to the system falco rule.
+$SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
+OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"My Rule\""* ]]; then
+    echo "Unexpected output after creating default policies"
+    exit 1
+fi
+
 # Start an agent using this account's api key and trigger some events
 docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro -e ADDITIONAL_CONF="security: {enabled: true}\ncommandlines_capture: {enabled: true}\nmemdump: {enabled: true}" --shm-size=350m sysdig/agent
 

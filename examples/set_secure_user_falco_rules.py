@@ -40,7 +40,7 @@ res = sdclient.set_user_falco_rules(yaml_conf)
 # Check if everything went well
 #
 if res[0]:
-    print 'system falco rules set successfully'
+    print 'user falco rules set successfully'
 else:
     print res[1]
     sys.exit(1)

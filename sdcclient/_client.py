@@ -1782,3 +1782,24 @@ class SdSecureClient(_SdcCommon):
 
     def get_more_policy_events(self, ctx):
         return self._get_policy_events_int(ctx)
+
+    def create_default_policies(self):
+        res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def delete_all_policies(self):
+        res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, "Policies Deleted"]
+
+    def list_policies(self):
+        res = requests.get(self.url + '/api/policies', headers=self.hdrs)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
