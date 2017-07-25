@@ -1,12 +1,12 @@
-Sysdig Cloud Python client library
+Sysdig Monitor/Secure Python client library
 ===
 
 [![Build Status](https://travis-ci.org/draios/python-sdc-client.png?branch=master)](https://travis-ci.org/draios/python-sdc-client)
 [![Current version on PyPI](http://img.shields.io/pypi/v/sdcclient.svg)](https://pypi.python.org/pypi/sdcclient)
 
-A Python client API for Sysdig Cloud.
+A Python client API for Sysdig Monitor/Sysdig Secure.
 
-This module is a wrapper around the Sysdig Cloud API, which is documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install Python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
+This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs, which are documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install Python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
 
 Installation
 ------------
@@ -20,36 +20,38 @@ Installation
 
 Quick start
 -----------
-- If you are interested in exporting metrics data from Sysdig Cloud, take a look at [examples/get_data_simple.py](examples/get_data_simple.py) and [examples/get_data_advanced.py](examples/get_data_advanced.py).
+- If you are interested in exporting metrics data from Sysdig Monitor, take a look at [examples/get_data_simple.py](examples/get_data_simple.py) and [examples/get_data_advanced.py](examples/get_data_advanced.py).
 - If you want to programmatically create an alert, refer to [examples/create_alert.py](examples/create_alert.py)
 - If you want to programmatically create a dashboard, refer to [examples/create_dashboard.py](examples/create_dashboard.py)
 
 Usage
 -----
 
-_Note:_ in order to use this API you must obtain a Sysdig Cloud token. You can get your user's token in the _Sysdig Cloud API_ section of the [settings](https://app.sysdigcloud.com/#/settings/user) page.
+_Note:_ in order to use this API you must obtain a Sysdig Monitor/Secure API token. You can get your user's token in the _Sysdig Monitor API_ section of the settings page for [monitor](https://app.sysdigcloud.com/#/settings/user) or [secure](https://secure.sysdig.com/#/settings/user).
 
-The library exports a single class, `SdcClient`, that is used to connect to Sysdig Cloud and execute actions. It can be instantiated like this:
+The library exports two classes, `SdMonClient` and `SdSecureClient` that are used to connect to Sysdig Monitor/Secure and execute actions. They can be instantiated like this:
 
 ``` python
-from sdcclient import SdcClient
+from sdcclient import SdMonClient
 
-sdc_token = "MY_API_TOKEN"
+api_token = "MY_API_TOKEN"
 
 #
-# Instantiate the SDC client
+# Instantiate the Sysdig Monitor client
 #
-sdclient = SdcClient(sdc_token)
+client = SdMonClient(api_token)
 ```
+
+For backwards compatibility purposes, a third class `SdcClient` is exported which is an alias of `SdMonClient`.
 
 Once instantiated, all the methods documented below can be called on the object.
 
-####Return Values
-Every method in the SdcClient class returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
+#### Return Values
+Every method in the SdMonClient/SdSecureClient classes returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
 - If the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
 - If the call failed, it's a string describing the error
 
-For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py) 
+For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py)
 
 Function List
 -------------
@@ -58,7 +60,7 @@ Please Refer to the [Python Script Library documentation page](http://python-sdc
 
 On-Premises Installs
 --------------------
-For [On-Premises Sysdig Cloud installs](https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide), additional configuration is necessary to point to your API server rather than the default SaaS-based one, and also to easily connect when using a self-signed certificate for SSL. One way to handle this is by setting environment variables before running your Python scripts:
+For [On-Premises Sysdig Monitor installs](https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide), additional configuration is necessary to point to your API server rather than the default SaaS-based one, and also to easily connect when using a self-signed certificate for SSL. One way to handle this is by setting environment variables before running your Python scripts:
 
 ```
 export SDC_URL='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>'
@@ -68,7 +70,7 @@ export SDC_SSL_VERIFY='false'
 Alternatively, you can specify the additional arguments in your Python scripts as you instantiate the SDC client:
 
 ```
-sdclient = SdcClient(sdc_token, sdc_url='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>', ssl_verify=False)
+client = SdMonClient(api_token, sdc_url='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>', ssl_verify=False)
 ```
 
 
