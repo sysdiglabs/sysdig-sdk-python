@@ -1409,6 +1409,18 @@ class SdcClient:
                 return [True, u]
         return [False, 'User not found']
 
+    def get_users(self):
+        '''**Description**
+            Return a list containing details about all users in the Sysdig Monitor environment. The API token must have Admin rights for this to succeed.
+
+        **Success Return Value**
+            A list user objects
+        '''
+        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()['users']]
+
     def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
         res = self.get_user(user_email)
         if res[0] == False:
