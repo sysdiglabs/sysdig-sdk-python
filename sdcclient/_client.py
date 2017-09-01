@@ -1682,14 +1682,14 @@ class SdMonClient(_SdcCommon):
         return [True, res.json()]
 
     def get_falco_rules(self):
-        res = requests.get(self.url + '/api/agents/falco_rules', headers=self.hdrs)
+        res = requests.get(self.url + '/api/agents/falco_rules', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data]
 
     def set_falco_rules_content_raw(self, raw_payload):
-        res = requests.put(self.url + '/api/agents/falco_rules', headers=self.hdrs, data=json.dumps(raw_payload))
+        res = requests.put(self.url + '/api/agents/falco_rules', headers=self.hdrs, data=json.dumps(raw_payload), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
@@ -1719,7 +1719,7 @@ class SdSecureClient(_SdcCommon):
         self.customer_id = None
 
     def _get_falco_rules(self, kind):
-        res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs)
+        res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
@@ -1764,7 +1764,7 @@ class SdSecureClient(_SdcCommon):
 
         payload[1]["{}RulesFile".format(kind)]["content"] = rules_content
 
-        res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, data=json.dumps(payload[1]))
+        res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, data=json.dumps(payload[1]), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
@@ -1802,7 +1802,7 @@ class SdSecureClient(_SdcCommon):
         return self._set_falco_rules("user", rules_content)
 
     def _get_policy_events_int(self, ctx):
-        res = requests.get(self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit']), headers=self.hdrs)
+        res = requests.get(self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -1913,7 +1913,7 @@ class SdSecureClient(_SdcCommon):
             `examples/create_default_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_default_policies.py>`_
 
         '''
-        res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs)
+        res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -1933,7 +1933,7 @@ class SdSecureClient(_SdcCommon):
             `examples/delete_all_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_all_policies.py>`_
 
         '''
-        res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs)
+        res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -1953,7 +1953,7 @@ class SdSecureClient(_SdcCommon):
             `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
 
         '''
-        res = requests.get(self.url + '/api/policies', headers=self.hdrs)
+        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
