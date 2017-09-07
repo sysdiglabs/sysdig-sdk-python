@@ -1958,3 +1958,135 @@ class SdSecureClient(_SdcCommon):
             return [False, self.lasterr]
 
         return [True, res.json()]
+
+    def get_policy(self, name):
+        '''**Description**
+            Find the policy with name <name> and return its json description.
+
+        **Arguments**
+            - name: the name of the policy to fetch
+
+        **Success Return Value**
+            A JSON object containing the description of the policy. If there is no policy with
+            the given name, returns False.
+
+        **Example**
+            `examples/get_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_policy.py>`_
+
+        '''
+        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        policies = res.json()["policies"]
+
+        # Find the policy with the given name and return it.
+        for policy in policies:
+            if policy["name"] == name:
+                return [True, policy]
+
+        return [False, "No policy with name {}".format(name)]
+
+    def add_policy(self, policy_json):
+        '''**Description**
+            Add a new policy using the provided json.
+
+        **Arguments**
+            - policy_json: a description of the new policy
+
+        **Success Return Value**
+            The string "OK"
+
+        **Example**
+            `examples/add_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/add_policy.py>`_
+
+        '''
+
+        try:
+            policy_obj = json.loads(policy_json)
+        except e:
+            return [False, "policy json is not valid json"]
+
+        body = {"policy": policy_obj}
+        res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def update_policy(self, policy_json):
+        '''**Description**
+            Update an existing policy using the provided json. The 'id' field from the policy is
+            used to determine which policy to update.
+
+        **Arguments**
+            - policy_json: a description of the new policy
+
+        **Success Return Value**
+            The string "OK"
+
+        **Example**
+            `examples/update_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/update_policy.py>`_
+
+        '''
+
+        try:
+            policy_obj = json.loads(policy_json)
+        except e:
+            return [False, "policy json is not valid json"]
+
+        if not "id" in policy_obj:
+            return [False, "Policy Json does not have an 'id' field"]
+
+        body = {"policy": policy_obj}
+
+        res = requests.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def delete_policy_name(self, name):
+        '''**Description**
+            Delete the policy with the given name.
+
+        **Arguments**
+            - name: the name of the policy to delete
+
+        **Success Return Value**
+            The JSON object representing the now-deleted policy.
+
+        **Example**
+            `examples/delete_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_policy.py>`_
+
+        '''
+        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        # Find the policy with the given name and delete it
+        for policy in res.json()["policies"]:
+            if policy["name"] == name:
+                return self.delete_policy_id(policy["id"])
+
+        return [False, "No policy with name {}".format(name)]
+
+    def delete_policy_id(self, id):
+        '''**Description**
+            Delete the policy with the given id
+
+        **Arguments**
+            - id: the id of the policy to delete
+
+        **Success Return Value**
+            The JSON object representing the now-deleted policy.
+
+        **Example**
+            `examples/delete_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_policy.py>`_
+
+        '''
+        res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]

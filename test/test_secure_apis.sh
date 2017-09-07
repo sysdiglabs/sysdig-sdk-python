@@ -55,6 +55,64 @@ if [[ $OUT != *"\"name\": \"My Rule\""* ]]; then
     exit 1
 fi
 
+# Get that policy, change the name, and create a new duplicate policy.
+OUT=`$SCRIPTDIR/../examples/get_policy.py $PYTHON_SDC_TEST_API_TOKEN "My Rule"`
+MY_POLICY=$OUT
+if [[ $OUT != *"\"name\": \"My Rule\""* ]]; then
+    echo "Could not fetch policy with name \"My Rule\""
+    exit 1
+fi
+
+NEW_POLICY=`echo $MY_POLICY | sed -e "s/My Rule/Copy Of My Rule/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
+OUT=`echo $NEW_POLICY | $SCRIPTDIR/../examples/add_policy.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Copy Of My Rule\""* ]]; then
+    echo "Could not create new policy"
+    exit 1
+fi
+
+# Change the description of the new policy and update it.
+MODIFIED_POLICY=`echo $MY_POLICY | sed -e "s/My Description/My New Description/g"`
+OUT=`echo $MODIFIED_POLICY | $SCRIPTDIR/../examples/update_policy.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"description\": \"My New Description\""* ]]; then
+    echo "Could not update policy \"Copy Of My Rule\""
+    exit 1
+fi
+
+# Delete the new policy.
+OUT=`$SCRIPTDIR/../examples/delete_policy.py --name "Copy Of My Rule" $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Copy Of My Rule\""* ]]; then
+    echo "Could not delete policy \"Copy Of My Rule\""
+    exit 1
+fi
+
+OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT = *"\"name\": \"Copy Of My Rule\""* ]]; then
+    echo "After deleting policy Copy Of My Rule, policy was still present?"
+    exit 1
+fi
+
+# Make a copy again, but this time delete by id
+NEW_POLICY=`echo $MY_POLICY | sed -e "s/My Rule/Another Copy Of My Rule/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
+OUT=`echo $NEW_POLICY | $SCRIPTDIR/../examples/add_policy.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Another Copy Of My Rule\""* ]]; then
+    echo "Could not create new policy"
+    exit 1
+fi
+
+ID=`echo $OUT | grep -E -o '"id": [^,]+,' | awk '{print $2}' | awk -F, '{print $1}'`
+
+OUT=`$SCRIPTDIR/../examples/delete_policy.py --id $ID $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Another Copy Of My Rule\""* ]]; then
+    echo "Could not delete policy \"Copy Of My Rule\""
+    exit 1
+fi
+
+OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT = *"\"name\": \"Another Copy Of My Rule\""* ]]; then
+    echo "After deleting policy Another Copy Of My Rule, policy was still present?"
+    exit 1
+fi
+
 # Start an agent using this account's api key and trigger some events
 docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro -e ADDITIONAL_CONF="security: {enabled: true}\ncommandlines_capture: {enabled: true}\nmemdump: {enabled: true}" --shm-size=350m sysdig/agent
 
