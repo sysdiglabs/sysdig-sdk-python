@@ -99,7 +99,7 @@ if summarize:
     count = 0
     for val in sorted:
         count += 1
-        sys.stdout.write("{} {}".format(val[1], val[0]))
+        sys.stdout.write("{} {}\n".format(val[1], val[0]))
         if limit != 0 and count > limit:
             break
 
