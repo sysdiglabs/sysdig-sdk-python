@@ -94,7 +94,7 @@ else:
 # Time window:
 #   - for "last X seconds": start is equal to -X, end is equal to 0
 #
-start = -600
+start = -7200
 end = 0
 
 #
@@ -111,11 +111,11 @@ print row_format.format("Source", "Source Process", "Destination", "Destination 
                         "Bytes In", "Bytes Out", "Bytes", "Req In", "Req Out", "Req")
 
 while cur < fetch_limit:
-    paging = {'from': cur, 'to': cur + page_size }
+    paging = {'from': cur, 'to': cur + page_size}
     res = sdclient.get_data(metrics,
-                            -600,
+                            start,
+                            end,
                             0,
-                            600,
                             flt,
                             'host',
                             paging)
