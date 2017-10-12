@@ -612,18 +612,6 @@ class _SdcCommon(object):
             'version': user['version']
             }
 
-    def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
-        res = self.get_user(user_email)
-        if res[0] == False:
-            return res
-        user = res[1]
-        reqbody = {
-            'agentInstallParams': user['agentInstallParams'],
-            'roles': roles if roles else user['roles'],
-            'username': user_email,
-            'version': user['version']
-            }
-
         if teams == None:
             reqbody['teams'] = user['teams']
         else:
@@ -1786,7 +1774,7 @@ class SdSecureClient(_SdcCommon):
         if not payload[0]:
             return payload
 
-        payload[1]["{}RulesFile".format(kind)]["content"] = rules_content
+        payload[1]["{}RulesFile".format(kind)]["content"] = rules_content # pylint: disable=unsubscriptable-object
 
         res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, data=json.dumps(payload[1]), verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -2028,8 +2016,8 @@ class SdSecureClient(_SdcCommon):
 
         try:
             policy_obj = json.loads(policy_json)
-        except e:
-            return [False, "policy json is not valid json"]
+        except Exception as e:
+            return [False, "policy json is not valid json: {}".format(str(e))]
 
         body = {"policy": policy_obj}
         res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
@@ -2056,8 +2044,8 @@ class SdSecureClient(_SdcCommon):
 
         try:
             policy_obj = json.loads(policy_json)
-        except e:
-            return [False, "policy json is not valid json"]
+        except Exception as e:
+            return [False, "policy json is not valid json: {}".format(str(e))]
 
         if not "id" in policy_obj:
             return [False, "Policy Json does not have an 'id' field"]
