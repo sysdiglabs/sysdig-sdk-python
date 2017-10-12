@@ -1866,6 +1866,30 @@ class SdSecureClient(_SdcCommon):
 
         return self._get_policy_events_int(ctx)
 
+    def get_users(self):
+        '''**Description**
+            Return a list containing details about all users in the Sysdig Monitor environment. The API token must have Admin rights for this to succeed.
+
+        **Success Return Value**
+            A list user objects
+        '''
+        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        if not self.__checkResponse(res):
+            return [False, self.lasterr]
+        return [True, res.json()['users']]
+
+    def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
+        res = self.get_user(user_email)
+        if res[0] == False:
+            return res
+        user = res[1]
+        reqbody = {
+            'agentInstallParams': user['agentInstallParams'],
+            'roles': roles if roles else user['roles'],
+            'username': user_email,
+            'version': user['version']
+            }
+
     def get_more_policy_events(self, ctx):
         '''**Description**
             Fetch additional policy events after an initial call to :func:`~sdcclient.SdSecureClient.get_policy_events_range` /

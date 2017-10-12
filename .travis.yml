@@ -30,6 +30,7 @@ script:
 - examples/print_data_retention_info.py $DEMO_KUBE_API_TOKEN
 - examples/print_explore_grouping.py $DEMO_KUBE_API_TOKEN
 - examples/print_user_info.py $DEMO_KUBE_API_TOKEN
+- examples/list_users.py $DEMO_KUBE_API_TOKEN
 - examples/list_sysdig_captures.py $DEMO_KUBE_API_TOKEN
 - examples/create_sysdig_capture.py $DEMO_KUBE_API_TOKEN ip-10-0-1-115.ec2.internal apicapture 10
 - examples/notification_channels.py $DEMO_KUBE_API_TOKEN
