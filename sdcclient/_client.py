@@ -596,7 +596,7 @@ class _SdcCommon(object):
             A list user objects
         '''
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
-        if not self.__checkResponse(res):
+        if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()['users']]
 
