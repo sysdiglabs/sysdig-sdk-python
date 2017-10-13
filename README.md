@@ -29,25 +29,25 @@ Usage
 
 _Note:_ in order to use this API you must obtain a Sysdig Monitor/Secure API token. You can get your user's token in the _Sysdig Monitor API_ section of the settings page for [monitor](https://app.sysdigcloud.com/#/settings/user) or [secure](https://secure.sysdig.com/#/settings/user).
 
-The library exports two classes, `SdMonClient` and `SdSecureClient` that are used to connect to Sysdig Monitor/Secure and execute actions. They can be instantiated like this:
+The library exports two classes, `SdMonitorClient` and `SdSecureClient` that are used to connect to Sysdig Monitor/Secure and execute actions. They can be instantiated like this:
 
 ``` python
-from sdcclient import SdMonClient
+from sdcclient import SdMonitorClient
 
 api_token = "MY_API_TOKEN"
 
 #
 # Instantiate the Sysdig Monitor client
 #
-client = SdMonClient(api_token)
+client = SdMonitorClient(api_token)
 ```
 
-For backwards compatibility purposes, a third class `SdcClient` is exported which is an alias of `SdMonClient`.
+For backwards compatibility purposes, a third class `SdcClient` is exported which is an alias of `SdMonitorClient`.
 
 Once instantiated, all the methods documented below can be called on the object.
 
 #### Return Values
-Every method in the SdMonClient/SdSecureClient classes returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
+Every method in the SdMonitorClient/SdSecureClient classes returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
 - If the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
 - If the call failed, it's a string describing the error
 
@@ -70,7 +70,7 @@ export SDC_SSL_VERIFY='false'
 Alternatively, you can specify the additional arguments in your Python scripts as you instantiate the SDC client:
 
 ```
-client = SdMonClient(api_token, sdc_url='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>', ssl_verify=False)
+client = SdMonitorClient(api_token, sdc_url='https://<YOUR-API-SERVER-HOSTNAME-OR-IP>', ssl_verify=False)
 ```
 
 
