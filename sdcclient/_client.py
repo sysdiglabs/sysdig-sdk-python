@@ -867,10 +867,10 @@ class _SdcCommon(object):
         data = res.json()
         return [True, data['token']['key']]
 
-class SdMonClient(_SdcCommon):
+class SdMonitorClient(_SdcCommon):
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
-        super(SdMonClient, self).__init__(token, sdc_url, ssl_verify)
+        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
 
     def get_alerts(self):
         '''**Description**
@@ -1721,7 +1721,7 @@ class SdMonClient(_SdcCommon):
 
 
 # For backwards compatibility
-SdcClient = SdMonClient
+SdcClient = SdMonitorClient
 
 class SdSecureClient(_SdcCommon):
 
