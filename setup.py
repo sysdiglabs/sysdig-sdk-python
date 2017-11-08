@@ -8,5 +8,5 @@ setup(name='sdcclient',
       author_email='info@sysdig.com',
       license='MIT',
       packages=['sdcclient'],
-      install_requires=['requests'],
+      install_requires=['requests', 'pyaml'],
       zip_safe=False)
