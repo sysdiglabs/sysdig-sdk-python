@@ -18,6 +18,12 @@ Installation
     cd python-sdc-client
     python setup.py install
 
+#### One-step cmdline to create virtualenv, install client, and gain access to sample programs
+
+```
+$ virtualenv python-sdc-env && source python-sdc-env/bin/activate && pip install sdcclient && git clone https://github.com/draios/python-sdc-client && python python-sdc-client/examples/set_secure_system_falco_rules.py --help
+```
+
 Quick start
 -----------
 - If you are interested in exporting metrics data from Sysdig Monitor, take a look at [examples/get_data_simple.py](examples/get_data_simple.py) and [examples/get_data_advanced.py](examples/get_data_advanced.py).
