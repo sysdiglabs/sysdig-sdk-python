@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 #
-# This script shows an advanced Sysdig Cloud data request that leverages
+# This script shows an advanced Sysdig Monitor data request that leverages
 # filtering and segmentation.
 #
-# The request returns the last 10 minutes of CPU utilization for all of the
-# containers inside the given host, with 1 minute data granularity
+# The request returns the last 10 minutes of CPU utilization for the 5
+# busiest containers inside the given host, with 1 minute data granularity
 #
 
 import os
 import sys
+import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
@@ -34,10 +35,10 @@ sdclient = SdcClient(sdc_token)
 metrics = [
     # The first metric we request is the container name. This is a segmentation
     # metric, and you can tell by the fact that we don't specify any aggregation
-    # criteria. This entry tells Sysdig Cloud that we want to see the CPU
+    # criteria. This entry tells Sysdig Monitor that we want to see the CPU
     # utilization for each container separately.
     {"id": "container.name"},
-    # The second metric we reuest is the CPU. We aggregate it as an average.
+    # The second metric we request is the CPU. We aggregate it as an average.
     {"id": "cpu.used.percent",
      "aggregations": {
          "time": "avg",
@@ -52,18 +53,25 @@ metrics = [
 filter = "host.hostName = '%s'" % hostname
 
 #
+# Paging (from and to included; by default you get from=0 to=9)
+# Here we'll get the top 5.
+#
+paging = { "from": 0, "to": 4 }
+
+#
 # Fire the query.
 #
-res = sdclient.get_data(metrics, # metrics list
-                        -600,   # start_ts = 600 seconds ago
-                        0,      # end_ts = now
-                        60,     # 1 data point per minute
-                        filter, # The filter
-                        'container') # The source for our metrics is the container
+res = sdclient.get_data(metrics=metrics,               # List of metrics to query
+                        start_ts=-600,                 # Start of query span is 600 seconds ago
+                        end_ts=0,                      # End the query span now
+                        sampling_s=60,                 # 1 data point per minute
+                        filter=filter,                 # The filter specifying the target host
+                        paging=paging,                 # Paging to limit to just the 5 most busy
+                        datasource_type='container')   # The source for our metrics is the container
 
 #
 # Show the result!
 #
-print res[1]
+print json.dumps(res[1], sort_keys=True, indent=4)
 if not res[0]:
     sys.exit(1)
