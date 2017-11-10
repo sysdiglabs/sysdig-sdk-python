@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
-# This script shows the basics of getting data out of Sysdig Cloud by creating a
-# very simple request that has no filter an no segmentation.
+# This script shows the basics of getting data out of Sysdig Monitor by creating a
+# very simple request that has no filter and no segmentation.
 #
 # The request queries for the average CPU across all of the instrumented hosts for
 # the last 10 minutes, with 1 minute data granularity
@@ -55,14 +55,9 @@ end =       0
 sampling =  60
 
 #
-# Paging (from and to included; by default you get from=0 to=9)
-#
-paging = { "from": 0, "to": 9 }
-
-#
 # Load data
 #
-res = sdclient.get_data(metrics, start, end, sampling, filter = filter, paging = paging)
+res = sdclient.get_data(metrics, start, end, sampling, filter = filter)
 
 #
 # Show the result
