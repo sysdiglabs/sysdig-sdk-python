@@ -22,7 +22,7 @@ fi
 set -e
 
 # Get the system falco rules file. Don't validate it, just verify that it can be fetched.
-$SCRIPTDIR/../examples/get_secure_system_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN > /tmp/falco_rules.yaml
+$SCRIPTDIR/../examples/get_secure_system_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN | tee /tmp/falco_rules.yaml
 
 NOW=$(date)
 cat <<EOF > /tmp/test_apis_user_rules.yaml
@@ -111,6 +111,25 @@ if [[ $OUT = *"\"name\": \"Another Copy Of Write below binary dir\""* ]]; then
     echo "After deleting policy Another Copy Of Write below binary dir, policy was still present?"
     exit 1
 fi
+
+WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
+
+# Get the list of policy ids only, reverse the list, and set the order
+OUT=`$SCRIPTDIR/../examples/list_policies.py -o $PYTHON_SDC_TEST_API_TOKEN | jq reverse | $SCRIPTDIR/../examples/set_policy_order.py $PYTHON_SDC_TEST_API_TOKEN`
+
+if [ $? != 0 ]; then
+    echo "Could not set policy order?"
+    exit 1
+fi
+
+NEW_WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
+
+if [[ $NEW_WRITE_BELOW_BINARY_POS -lt $WRITE_BELOW_BINARY_POS ]]; then
+    echo "After reordering policies, Write Below Binary Dir policy did not move to the end?"
+    exit 1
+fi
+
+echo $OUT
 
 # Start an agent using this account's api key and trigger some events
 docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro -e ADDITIONAL_CONF="security: {enabled: true}\ncommandlines_capture: {enabled: true}\nmemdump: {enabled: true}" --shm-size=350m sysdig/agent
