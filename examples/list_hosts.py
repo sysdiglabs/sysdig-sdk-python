@@ -4,6 +4,8 @@
 # of the instrumented hosts that have been seen in the last 5 minutes.
 #
 
+import getopt
+import json
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
@@ -12,12 +14,30 @@ from sdcclient import SdcClient
 #
 # Parse arguments
 #
-if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
+def usage():
+    print 'usage: %s [-j|--json] [-d|--duration <secs>] <sysdig-token>' % sys.argv[0]
+    print '-d|--duration: List hosts seen in the last <secs> seconds'
+    print '-j|--json: Print output as json'
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(1)
 
-sdc_token = sys.argv[1]
+try:
+    opts, args = getopt.getopt(sys.argv[1:],"jd:",["json", "duration="])
+except getopt.GetoptError:
+    usage()
+
+duration = 600
+print_json = False
+for opt, arg in opts:
+    if opt in ("-d", "--duration"):
+        duration = int(arg)
+    elif opt in ("-j", "--json"):
+        print_json = True
+
+if len(args) != 1:
+    usage()
+
+sdc_token = args[0]
 
 #
 # Instantiate the SDC client
@@ -37,9 +57,9 @@ metrics = [{"id": "host.hostName"}]
 #       come as a single sample.
 #
 res = sdclient.get_data(metrics, # metrics list
-                        -600,   # cover the last 600 seconds...
+                        -duration,   # cover the last duration seconds...
                         0,      # ... ending now...
-                        600)    # ... with just one 600s sample
+                        duration)    # ... with just one durations sample
 
 #
 # Show the results!
@@ -50,4 +70,7 @@ else:
     print res[1]
     sys.exit(1)
 
-print data
+if print_json:
+    print json.dumps(data)
+else:
+    print data

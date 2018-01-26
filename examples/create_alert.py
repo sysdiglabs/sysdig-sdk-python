@@ -6,6 +6,7 @@
 #
 #
 
+import getopt
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
@@ -14,12 +15,26 @@ from sdcclient import SdcClient
 #
 # Parse arguments
 #
-if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
+def usage():
+    print 'usage: %s [-a|--alert <name>] <sysdig-token>' % sys.argv[0]
+    print '-a|--alert: Set name of alert to create'
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(1)
 
-sdc_token = sys.argv[1]
+try:
+    opts, args = getopt.getopt(sys.argv[1:],"a:",["alert="])
+except getopt.GetoptError:
+    usage()
+
+alert_name = "tomcat cpu > 80% on any host"
+for opt, arg in opts:
+    if opt in ("-a", "--alert"):
+        alert_name = arg
+
+if len(args) != 1:
+    usage()
+
+sdc_token = args[0]
 
 #
 # Instantiate the SDC client
@@ -29,8 +44,8 @@ sdclient = SdcClient(sdc_token)
 #
 # Find notification channels (you need IDs to create an alert).
 #
-notify_channels = [ {'type': 'SLACK', 'channel': 'sysdig-demo2-alerts'},
-                    {'type': 'EMAIL', 'emailRecipients': ['demo-kube@draios.com', 'test@sysdig.com']},
+notify_channels = [ {'type': 'SLACK', 'channel': '#python-sdc-test-alert'},
+                    {'type': 'EMAIL', 'emailRecipients': ['python-sdc-testing@draios.com', 'test@sysdig.com']},
                     {'type': 'SNS', 'snsTopicARNs': ['arn:aws:sns:us-east-1:273107874544:alarms-stg']}
                     ]
 
@@ -44,7 +59,7 @@ notification_channel_ids = res[1]
 #
 # Create the alert.
 #
-res = sdclient.create_alert('tomcat cpu > 80% on any host',  # Alert name.
+res = sdclient.create_alert(alert_name,  # Alert name.
                             'this alert was automatically created using the python Sysdig Cloud library', # Alert description.
                             6, # Syslog-encoded severity. 6 means 'info'.
                             60, # The alert will fire if the condition is met for at least 60 seconds.
