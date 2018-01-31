@@ -10,7 +10,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 
 from sdcclient import SdSecureClient
 
 def usage():
-    print 'usage: %s <sysdig-token> <policy name>' % sys.argv[0]
+    print 'usage: %s <sysdig-token>' % sys.argv[0]
+    print 'Reads json representing updated policy from standard input'
     print 'You can find your token at https://secure.sysdig.com/#/settings/user'
     sys.exit(1)
 

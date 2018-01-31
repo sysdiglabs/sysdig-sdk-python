@@ -3,6 +3,7 @@
 # Delete user events from Sysdig Cloud
 #
 
+import getopt
 import json
 import os
 import sys
@@ -12,12 +13,26 @@ from sdcclient import SdcClient
 #
 # Parse arguments
 #
-if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
+def usage():
+    print 'usage: %s [-e|--event <name>] <sysdig-token>' % sys.argv[0]
+    print '-e|--event: Name of event to delete'
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     sys.exit(1)
 
-sdc_token = sys.argv[1]
+try:
+    opts, args = getopt.getopt(sys.argv[1:],"e:",["event="])
+except getopt.GetoptError:
+    usage()
+
+event_name = "test_event_name"
+for opt, arg in opts:
+    if opt in ("-e", "--event"):
+        event_name = arg
+
+if len(args) != 1:
+    usage()
+
+sdc_token = args[0]
 
 #
 # Instantiate the SDC client
@@ -27,7 +42,7 @@ sdclient = SdcClient(sdc_token)
 #
 # Get the events that match a name
 #
-res = sdclient.get_events(name='test_event_name')
+res = sdclient.get_events(name=event_name)
 
 if not res[0]:
 	print res[1]

@@ -1971,6 +1971,54 @@ class SdSecureClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def get_policy_priorities(self):
+        '''**Description**
+            Get a list of policy ids in the order they will be evaluated.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object representing the list of policy ids.
+
+        **Example**
+            `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
+
+        '''
+
+        res = requests.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def set_policy_priorities(self, priorities_json):
+        '''**Description**
+            Change the policy evaluation order
+
+        **Arguments**
+            - priorities_json: a description of the new policy order.
+
+        **Success Return Value**
+            A JSON object representing the updated list of policy ids.
+
+        **Example**
+            `examples/set_policy_order.py <https://github.com/draios/python-sdc-client/blob/master/examples/set_policy_order.py>`_
+
+        '''
+
+        try:
+            priorities_obj = json.loads(priorities_json)
+        except Exception as e:
+            return [False, "priorities json is not valid json: {}".format(str(e))]
+
+        res = requests.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+
     def get_policy(self, name):
         '''**Description**
             Find the policy with name <name> and return its json description.
