@@ -48,14 +48,18 @@ else:
     print 'Team fetch succeeded'
 
 print 'Now trying to edit team ', team_name
-res = sdclient.edit_team(team_name, description='Nextgen2', users=['admin@draios.com', 'john-doe@sysdig.com'])
+memberships = {
+    'admin@draios.com': 'ROLE_TEAM_MANAGER',
+    'john-doe@sysdig.com': 'ROLE_TEAM_READ'
+}
+res = sdclient.edit_team(team_name, description='Nextgen2', memberships=memberships)
 if res[0] == False:
     print 'Could not edit team ', res[1]
 else:
     print 'Edited team to change description and add users'
 
 print 'Now trying to edit user ', user_name
-res = sdclient.edit_user(user_name, firstName='Just', lastName='Edited3', teams=[team_name], roles=['ROLE_CUSTOMER', 'ROLE_USER'])
+res = sdclient.edit_user(user_name, firstName='Just', lastName='Edited3', systemRole='ROLE_CUSTOMER')
 if res[0] == False:
     print 'Could not edit user: ', res[1]
 else:
