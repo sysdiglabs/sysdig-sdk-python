@@ -600,25 +600,17 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         return [True, res.json()['users']]
 
-    def edit_user(self, user_email, firstName=None, lastName=None, roles=None, teams=None):
+    def edit_user(self, user_email, firstName=None, lastName=None, systemRole=None):
         res = self.get_user(user_email)
         if res[0] == False:
             return res
         user = res[1]
         reqbody = {
             'agentInstallParams': user['agentInstallParams'],
-            'roles': roles if roles else user['roles'],
+            'systemRole': systemRole if systemRole else user['systemRole'],
             'username': user_email,
             'version': user['version']
             }
-
-        if teams == None:
-            reqbody['teams'] = user['teams']
-        else:
-            t = self.get_team_ids(teams)
-            if t[0] == False:
-                return [False, 'Could not get team IDs']
-            reqbody['teams'] = t[1]
 
         if firstName == None:
             reqbody['firstName'] = user['firstName'] if 'firstName' in user.keys() else ''
@@ -679,21 +671,29 @@ class _SdcCommon(object):
         u = filter(lambda x: x['name'] in teams, res.json()['teams'])
         return [True, map(lambda x: x['id'], u)]
 
-    def get_user_ids(self, users):
+    def _get_user_id_dict(self, users):
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         u = filter(lambda x: x['username'] in users, res.json()['users'])
-        return [True, map(lambda x: x['id'], u)]
+        return [True, dict((user['username'], user['id']) for user in u)]
 
-    def create_team(self, name, users=[], filter='', description='', show='host', theme='#7BB0B2',
+    def get_user_ids(self, users):
+        res = self._get_user_id_dict(users)
+        if res[0] == False:
+            return res
+        else:
+            return [True, res[1].values()]
+
+    def create_team(self, name, memberships=None, filter='', description='', show='host', theme='#7BB0B2',
                     perm_capture=False, perm_custom_events=False, perm_aws_data=False):
-        '''**Description**
+        '''
+        **Description**
             Creates a new team
 
         **Arguments**
             - **name**: the name of the team to create.
-            - **users**: list of user names to add to the team.
+            - **memberships**: dictionary of (user-name, team-role) pairs that should describe new memberships of the team.
             - **filter**: the scope that this team is able to access within Sysdig Monitor.
             - **description**: describes the team that will be created.
             - **show**: possible values are *host*, *container*.
@@ -719,11 +719,17 @@ class _SdcCommon(object):
         }
 
         # Map user-names to IDs
-        if users != None and len(users) != 0:
-            res = self.get_user_ids(users)
+        if memberships != None and len(memberships) != 0:
+            res = self._get_user_id_dict(memberships.keys())
             if res[0] == False:
-                return [False, 'Could not convert user names to IDs']
-            reqbody['users'] = res[1]
+                return [False, 'Could not fetch IDs for user names']
+            reqbody['userRoles'] = [
+                {
+                    'userId': user_id,
+                    'role': memberships[user_name]
+                }
+                for (user_name, user_id) in res[1].iteritems()
+            ]
         else:
             reqbody['users'] = []
 
@@ -735,14 +741,15 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def edit_team(self, name, users=None, filter=None, description=None, show=None, theme=None,
+    def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
                   perm_capture=None, perm_custom_events=None, perm_aws_data=None):
-        '''**Description**
+        '''
+        **Description**
            Edits an existing team. All arguments are optional. Team settings for any arguments unspecified will remain at their current settings.
 
         **Arguments**
             - **name**: the name of the team to edit.
-            - **users**: list of user names that should now be members of the team.
+            - **memberships**: dictionary of (user-name, team-role) pairs that should describe new memberships of the team.
             - **filter**: the scope that this team is able to access within Sysdig Monitor.
             - **description**: describes the team that will be created.
             - **show**: possible values are *host*, *container*.
@@ -774,16 +781,22 @@ class _SdcCommon(object):
             'version': t['version']
             }
 
-        # Handling for users to map user-names to IDs
-        if users != None:
-            res = self.get_user_ids(users)
+        # Handling for users to map (user-name, team-role) pairs to memberships
+        if memberships != None:
+            res = self._get_user_id_dict(memberships.keys())
             if res[0] == False:
                 return [False, 'Could not convert user names to IDs']
-            reqbody['users'] = res[1]
-        elif 'users' in t.keys():
-            reqbody['users'] = t['users']
+            reqbody['userRoles'] = [
+                {
+                    'userId': user_id,
+                    'role': memberships[user_name]
+                }
+                for (user_name, user_id) in res[1].iteritems()
+            ]
+        elif 'userRoles' in t.keys():
+            reqbody['userRoles'] = t['userRoles']
         else:
-            reqbody['users'] = []
+            reqbody['userRoles'] = []
 
         # Special handling for filters since we don't support blank filters
         if filter != None:
