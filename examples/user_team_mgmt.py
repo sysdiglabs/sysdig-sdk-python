@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# This example shows the different aspects of user/team management
+# This example shows the different aspects of user/team management.
 #
 
 import os
