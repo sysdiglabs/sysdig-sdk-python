@@ -34,9 +34,9 @@ user_email_domain = user_email_parts[1]
 # All users initially are part of default team.
 #
 
-admin = user_email_prefix + '+test-admin' + '@' + user_email_domain
-userA = user_email_prefix + '+test-a'     + '@' + user_email_domain
-userB = user_email_prefix + '+test-b'     + '@' + user_email_domain
+admin = user_email_prefix + '+team_mgmt-admin' + '@' + user_email_domain
+userA = user_email_prefix + '+team_mgmt-a'     + '@' + user_email_domain
+userB = user_email_prefix + '+team_mgmt-b'     + '@' + user_email_domain
 
 print 'Creating test users...'
 
