@@ -20,7 +20,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, sdc_url='http://localhost:9000')
+sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
 
 team_prefix = sys.argv[2]
 
