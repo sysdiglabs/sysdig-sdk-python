@@ -48,6 +48,7 @@ $SCRIPTDIR/../examples/list_sysdig_captures.py $PYTHON_SDC_TEST_MONITOR_API_TOKE
 $SCRIPTDIR/../examples/create_sysdig_capture.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $AGENT_HOSTNAME $CAPTURE_NAME 10
 $SCRIPTDIR/../examples/notification_channels.py -c $CHANNEL_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 $SCRIPTDIR/../examples/user_team_mgmt.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $TEAM_NAME example-user@example-domain.com
+$SCRIPTDIR/../examples/user_team_mgmt_extended.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $TEAM_NAME example-user@example-domain.com
 
 docker stop sysdig-agent
 
