@@ -537,12 +537,17 @@ class _SdcCommon(object):
 
         **Arguments**
             - **user_email**: the email address of the user that will be invited to use Sysdig Monitor
+            - **first_name**: the first name of the user being invited
+            - **last_name**: the last name of the user being invited
+            - **system_role**: system-wide privilege level for this user regardless of team. specify 'ROLE_CUSTOMER' to create an Admin. if not specified, default is a non-Admin ('ROLE_USER').
 
         **Success Return Value**
             The newly created user.
 
-        **Example**
-            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        **Examples**
+            - `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+            - `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
+
         '''
         # Look up the list of users to see if this exists, do not create if one exists
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)

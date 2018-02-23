@@ -40,21 +40,21 @@ userB = user_email_prefix + '+team_mgmt-b'     + '@' + user_email_domain
 
 print 'Creating test users...'
 
-res = sdclient.create_user_invite(admin, system_role='ROLE_CUSTOMER')
+res = sdclient.create_user_invite(admin, first_name='TestUser', last_name='Admin', system_role='ROLE_CUSTOMER')
 if res[0] is False:
     print '-- User creation failed:', res[1], '. Exiting.'
     sys.exit(1)
 else:
     print '-- User \'', admin, '\' created successfully.'
 
-res = sdclient.create_user_invite(userA)
+res = sdclient.create_user_invite(userA, first_name='TestUser', last_name='Alpha')
 if res[0] is False:
     print '-- User creation failed:', res[1], '. Exiting.'
     sys.exit(1)
 else:
     print '-- User \'', userA, '\' created successfully.'
 
-res = sdclient.create_user_invite(userB)
+res = sdclient.create_user_invite(userB, first_name='TestUser', last_name='Beta')
 if res[0] is False:
     print '-- User creation failed:', res[1], '. Exiting.'
     sys.exit(1)
