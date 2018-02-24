@@ -55,7 +55,7 @@ viewName = "Overview by Process"
 # agent tags by using "agent.tag.*" metadata
 dashboardFilter = "kubernetes.namespace.name = prod and proc.name = cassandra"
 
-print 'Creating Dashboard from View'
+print 'Creating dashboard from view'
 res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
 # Check the result
@@ -76,7 +76,7 @@ dashboardCopy = "Copy Of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
 dashboardFilter = "kubernetes.namespace.name = dev and proc.name = cassandra"
 
-print 'Creating Dashboard from Dashboard'
+print 'Creating dashboard from dashboard'
 res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)
 
 #
