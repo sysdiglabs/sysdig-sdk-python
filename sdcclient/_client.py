@@ -531,18 +531,23 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def create_user_invite(self, user_email):
+    def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         '''**Description**
             Invites a new user to use Sysdig Monitor. This should result in an email notification to the specified address.
 
         **Arguments**
             - **user_email**: the email address of the user that will be invited to use Sysdig Monitor
+            - **first_name**: the first name of the user being invited
+            - **last_name**: the last name of the user being invited
+            - **system_role**: system-wide privilege level for this user regardless of team. specify 'ROLE_CUSTOMER' to create an Admin. if not specified, default is a non-Admin ('ROLE_USER').
 
         **Success Return Value**
             The newly created user.
 
-        **Example**
-            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        **Examples**
+            - `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+            - `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
+
         '''
         # Look up the list of users to see if this exists, do not create if one exists
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
@@ -554,7 +559,17 @@ class _SdcCommon(object):
                 return [False, 'user ' + user_email + ' already exists']
 
         # Create the user
-        user_json = {'username' : user_email}
+        user_json = {'username': user_email}
+
+        if first_name is not None:
+            user_json['firstName'] = first_name
+
+        if last_name is not None:
+            user_json['lastName'] = last_name
+
+        if system_role is not None:
+            user_json['systemRole'] = system_role
+
         res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -574,7 +589,7 @@ class _SdcCommon(object):
         if res[0] == False:
             return res
         userid = res[1][0]
-        res = requests.delete(self.url + '/api/users' + str(userid), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.delete(self.url + '/api/users/' + str(userid), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
@@ -678,6 +693,13 @@ class _SdcCommon(object):
         u = filter(lambda x: x['username'] in users, res.json()['users'])
         return [True, dict((user['username'], user['id']) for user in u)]
 
+    def _get_id_user_dict(self, user_ids):
+        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+        u = filter(lambda x: x['id'] in user_ids, res.json()['users'])
+        return [True, dict((user['id'], user['username']) for user in u)]
+
     def get_user_ids(self, users):
         res = self._get_user_id_dict(users)
         if res[0] == False:
@@ -771,7 +793,6 @@ class _SdcCommon(object):
         t = res[1]
         reqbody = {
             'name': name,
-            'description': description if description else t['description'],
             'theme': theme if theme else t['theme'],
             'show': show if show else t['show'],
             'canUseSysdigCapture': perm_capture if perm_capture else t['canUseSysdigCapture'],
@@ -780,6 +801,12 @@ class _SdcCommon(object):
             'id': t['id'],
             'version': t['version']
             }
+
+        # Handling team description
+        if description is not None:
+            reqbody['description'] = description
+        elif 'description' in t.keys():
+            reqbody['description'] = t['description']
 
         # Handling for users to map (user-name, team-role) pairs to memberships
         if memberships != None:
@@ -828,6 +855,91 @@ class _SdcCommon(object):
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
+
+    def list_memberships(self, team):
+        '''
+        **Description**
+            List all memberships for specified team.
+
+        **Arguments**
+            - **team**: the name of the team for which we want to see memberships
+
+        **Result**
+            Dictionary of (user-name, team-role) pairs that should describe memberships of the team.
+
+        **Example**
+            `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
+        '''
+        res = self.get_team(team)
+        if res[0] == False:
+            return res
+
+        raw_memberships = res[1]['userRoles']
+        user_ids = map(lambda m: m['userId'], raw_memberships)
+
+        res = self._get_id_user_dict(user_ids)
+        if res[0] == False:
+            return [False, 'Could not fetch IDs for user names']
+        else:
+            id_user_dict = res[1]
+
+        return [True, dict(map(lambda m: (id_user_dict[m['userId']], m['role']), raw_memberships))]
+
+    def save_memberships(self, team, memberships):
+        '''
+        **Description**
+            Create new user team memberships or update existing ones.
+
+        **Arguments**
+            - **team**: the name of the team for which we are creating new memberships
+            - **memberships**: dictionary of (user-name, team-role) pairs that should describe new memberships
+
+        **Example**
+            `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
+        '''
+
+        res = self.list_memberships(team)
+
+        if res[0] is False:
+            return res
+
+        full_memberships = res[1]
+        full_memberships.update(memberships)
+
+        res = self.edit_team(team, full_memberships)
+
+        if res[0] is False:
+            return res
+        else:
+            return [True, None]
+
+    def remove_memberships(self, team, users):
+        '''
+        **Description**
+            Remove user memberships from specified team.
+
+        **Arguments**
+            - **team**: the name of the team from which user memberships are removed
+            - **users**: list of usernames which should be removed from team
+
+        **Example**
+            `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
+        '''
+
+        res = self.list_memberships(team)
+
+        if res[0] is False:
+            return res
+
+        old_memberships = res[1]
+        new_memberships = {k: v for k, v in old_memberships.iteritems() if k not in users}
+
+        res = self.edit_team(team, new_memberships)
+
+        if res[0] is False:
+            return res
+        else:
+            return [True, None]
 
     def switch_user_team(self, new_team_id):
         '''**Description**
