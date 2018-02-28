@@ -59,10 +59,9 @@ Every method in the SdMonitorClient/SdSecureClient classes returns **a list with
 
 For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py)
 
-Function List
--------------
-
-Please Refer to the [Python Script Library documentation page](http://python-sdc-client.readthedocs.io/en/latest/) for the list of functions available.
+Function List & Documentation
+-----------------------------
+For the list of available functions in the current `master` branch of this repo and corresponding docs, refer to the [Python Script Library documentation page](http://python-sdc-client.readthedocs.io/en/latest/). Equivalent docs for the functions in the most recent "stable" release (which is what you'd get via `pip` install, and corresponds to the most recent [release](https://github.com/draios/python-sdc-client/releases)) are located [here](http://python-sdc-client.readthedocs.io/en/stable/).
 
 On-Premises Installs
 --------------------
