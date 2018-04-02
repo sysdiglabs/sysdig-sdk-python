@@ -21,7 +21,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure-staging.sysdig.com')
+sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
 #
 # Get the configuration
