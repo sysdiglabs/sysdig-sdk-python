@@ -1978,13 +1978,14 @@ class SdSecureClient(_SdcCommon):
 
         return self._get_policy_events_int(ctx)
 
-    def get_policy_events_duration(self, duration_sec):
+    def get_policy_events_duration(self, duration_sec, sampling=None):
         '''**Description**
             Fetch all policy events that occurred in the last duration_sec seconds. This method is used in conjunction with
             :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
 
         **Arguments**
             - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
+            - sampling: Sample all policy events using *sampling* interval.
 
         **Success Return Value**
             An array containing:
@@ -2004,6 +2005,9 @@ class SdSecureClient(_SdcCommon):
                "from": from_ts,
                "offset": 0,
                "limit": 1000}
+
+        if sampling is not None:
+            ctx["sampling"] = sampling
 
         return self._get_policy_events_int(ctx)
 
