@@ -1939,7 +1939,11 @@ class SdSecureClient(_SdcCommon):
         return self._set_falco_rules("user", rules_content)
 
     def _get_policy_events_int(self, ctx):
-        res = requests.get(self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit']), headers=self.hdrs, verify=self.ssl_verify)
+        policy_events_url = self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit'])
+        if 'sampling' in ctx:
+            policy_events_url += '&sampling={:d}'.format(int(ctx['sampling']))
+
+        res = requests.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
