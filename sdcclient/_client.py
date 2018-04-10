@@ -1952,7 +1952,7 @@ class SdSecureClient(_SdcCommon):
 
         return [True, {"ctx": ctx, "data": res.json()}]
 
-    def get_policy_events_range(self, from_sec, to_sec):
+    def get_policy_events_range(self, from_sec, to_sec, sampling=None):
         '''**Description**
             Fetch all policy events that occurred in the time range [from_sec:to_sec]. This method is used in conjunction
             with :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
@@ -1960,6 +1960,7 @@ class SdSecureClient(_SdcCommon):
         **Arguments**
             - from_sec: the start of the timerange for which to get events
             - end_sec: the end of the timerange for which to get events
+            - sampling: sample all policy events using *sampling* interval.
 
         **Success Return Value**
             An array containing:
@@ -1975,6 +1976,9 @@ class SdSecureClient(_SdcCommon):
                "to": int(to_sec) * 1000000,
                "offset": 0,
                "limit": 1000}
+
+        if sampling is not None:
+            ctx["sampling"] = sampling
 
         return self._get_policy_events_int(ctx)
 
