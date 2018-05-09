@@ -628,12 +628,12 @@ class _SdcCommon(object):
             }
 
         if firstName == None:
-            reqbody['firstName'] = user['firstName'] if 'firstName' in user.keys() else ''
+            reqbody['firstName'] = user['firstName'] if 'firstName' in list(user.keys()) else ''
         else:
             reqbody['firstName'] = firstName
 
         if lastName == None:
-            reqbody['lastName'] = user['lastName'] if 'lastName' in user.keys() else ''
+            reqbody['lastName'] = user['lastName'] if 'lastName' in list(user.keys()) else ''
         else:
             reqbody['lastName'] = lastName
 
@@ -655,7 +655,7 @@ class _SdcCommon(object):
         res = requests.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        ret = filter(lambda t: team_filter in t['name'],res.json()['teams'])
+        ret = [t for t in res.json()['teams'] if team_filter in t['name']]
         return [True, ret]
 
     def get_team(self, name):
@@ -683,21 +683,21 @@ class _SdcCommon(object):
         res = requests.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        u = filter(lambda x: x['name'] in teams, res.json()['teams'])
-        return [True, map(lambda x: x['id'], u)]
+        u = [x for x in res.json()['teams'] if x['name'] in teams]
+        return [True, [x['id'] for x in u]]
 
     def _get_user_id_dict(self, users):
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        u = filter(lambda x: x['username'] in users, res.json()['users'])
+        u = [x for x in res.json()['users'] if x['username'] in users]
         return [True, dict((user['username'], user['id']) for user in u)]
 
     def _get_id_user_dict(self, user_ids):
         res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        u = filter(lambda x: x['id'] in user_ids, res.json()['users'])
+        u = [x for x in res.json()['users'] if x['id'] in user_ids]
         return [True, dict((user['id'], user['username']) for user in u)]
 
     def get_user_ids(self, users):
@@ -705,7 +705,7 @@ class _SdcCommon(object):
         if res[0] == False:
             return res
         else:
-            return [True, res[1].values()]
+            return [True, list(res[1].values())]
 
     def create_team(self, name, memberships=None, filter='', description='', show='host', theme='#7BB0B2',
                     perm_capture=False, perm_custom_events=False, perm_aws_data=False):
@@ -742,7 +742,7 @@ class _SdcCommon(object):
 
         # Map user-names to IDs
         if memberships != None and len(memberships) != 0:
-            res = self._get_user_id_dict(memberships.keys())
+            res = self._get_user_id_dict(list(memberships.keys()))
             if res[0] == False:
                 return [False, 'Could not fetch IDs for user names']
             reqbody['userRoles'] = [
@@ -750,7 +750,7 @@ class _SdcCommon(object):
                     'userId': user_id,
                     'role': memberships[user_name]
                 }
-                for (user_name, user_id) in res[1].iteritems()
+                for (user_name, user_id) in res[1].items()
             ]
         else:
             reqbody['users'] = []
@@ -805,12 +805,12 @@ class _SdcCommon(object):
         # Handling team description
         if description is not None:
             reqbody['description'] = description
-        elif 'description' in t.keys():
+        elif 'description' in list(t.keys()):
             reqbody['description'] = t['description']
 
         # Handling for users to map (user-name, team-role) pairs to memberships
         if memberships != None:
-            res = self._get_user_id_dict(memberships.keys())
+            res = self._get_user_id_dict(list(memberships.keys()))
             if res[0] == False:
                 return [False, 'Could not convert user names to IDs']
             reqbody['userRoles'] = [
@@ -818,9 +818,9 @@ class _SdcCommon(object):
                     'userId': user_id,
                     'role': memberships[user_name]
                 }
-                for (user_name, user_id) in res[1].iteritems()
+                for (user_name, user_id) in res[1].items()
             ]
-        elif 'userRoles' in t.keys():
+        elif 'userRoles' in list(t.keys()):
             reqbody['userRoles'] = t['userRoles']
         else:
             reqbody['userRoles'] = []
@@ -828,7 +828,7 @@ class _SdcCommon(object):
         # Special handling for filters since we don't support blank filters
         if filter != None:
             reqbody['filter'] = filter
-        elif 'filter' in t.keys():
+        elif 'filter' in list(t.keys()):
             reqbody['filter'] = t['filter']
 
         res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
@@ -875,7 +875,7 @@ class _SdcCommon(object):
             return res
 
         raw_memberships = res[1]['userRoles']
-        user_ids = map(lambda m: m['userId'], raw_memberships)
+        user_ids = [m['userId'] for m in raw_memberships]
 
         res = self._get_id_user_dict(user_ids)
         if res[0] == False:
@@ -883,7 +883,7 @@ class _SdcCommon(object):
         else:
             id_user_dict = res[1]
 
-        return [True, dict(map(lambda m: (id_user_dict[m['userId']], m['role']), raw_memberships))]
+        return [True, dict([(id_user_dict[m['userId']], m['role']) for m in raw_memberships])]
 
     def save_memberships(self, team, memberships):
         '''
@@ -932,7 +932,7 @@ class _SdcCommon(object):
             return res
 
         old_memberships = res[1]
-        new_memberships = {k: v for k, v in old_memberships.iteritems() if k not in users}
+        new_memberships = {k: v for k, v in old_memberships.items() if k not in users}
 
         res = self.edit_team(team, new_memberships)
 
@@ -1318,7 +1318,7 @@ class SdMonitorClient(_SdcCommon):
             def create_item(configuration):
                 return {'dashboard': configuration}
 
-            dashboards = map(create_item, filter(filter_fn, res[1]['dashboards']))
+            dashboards = list(map(create_item, list(filter(filter_fn, res[1]['dashboards']))))
             return [True, dashboards]
 
     def create_dashboard_with_configuration(self, configuration):
@@ -1549,7 +1549,7 @@ class SdMonitorClient(_SdcCommon):
         #
         def filter_fn(panel):
             return panel['name'] == panel_name
-        panels = filter(filter_fn, dashboard_configuration['items'])
+        panels = list(filter(filter_fn, dashboard_configuration['items']))
 
         if len(panels) > 0:
             #
@@ -1592,8 +1592,8 @@ class SdMonitorClient(_SdcCommon):
         #
         baseconfid = newdashname
         for sentry in scope:
-            baseconfid = baseconfid + str(sentry.keys()[0])
-            baseconfid = baseconfid + str(sentry.values()[0])
+            baseconfid = baseconfid + str(list(sentry.keys())[0])
+            baseconfid = baseconfid + str(list(sentry.values())[0])
 
         #
         # Clean up the dashboard we retireved so it's ready to be pushed
@@ -1610,9 +1610,9 @@ class SdMonitorClient(_SdcCommon):
         filters = []
         gby = []
         for sentry in scope:
-            filters.append({'metric' : sentry.keys()[0], 'op' : '=', 'value' : sentry.values()[0],
+            filters.append({'metric' : list(sentry.keys())[0], 'op' : '=', 'value' : list(sentry.values())[0],
                             'filters' : None})
-            gby.append({'metric': sentry.keys()[0]})
+            gby.append({'metric': list(sentry.keys())[0]})
 
         filter = {
             'filters' :
