@@ -135,7 +135,7 @@ class _SdcCommon(object):
                                     found = True
                                     ids.append(ch['id'])
                             elif 'name' in c:
-                                if c['name'] == ch['name']:
+                                if c['name'] == ch.get('name'):
                                     found = True
                                     ids.append(ch['id'])
                         elif c['type'] == 'PAGER_DUTY':
@@ -150,12 +150,12 @@ class _SdcCommon(object):
                                 ids.append(ch['id'])
                         elif c['type'] == 'OPSGENIE':
                             if 'name' in c:
-                                if c['name'] == ch['name']:
+                                if c['name'] == ch.get('name'):
                                     found = True
                                     ids.append(ch['id'])
                         elif c['type'] == 'WEBHOOK':
                             if 'name' in c:
-                                if c['name'] == ch['name']:
+                                if c['name'] == ch.get('name'):
                                     found = True
                                     ids.append(ch['id'])
                 if not found:
