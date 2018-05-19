@@ -45,7 +45,7 @@ else:
 # Someone might be restoring Alert configs from another environment,
 # in which case the Notification Channel IDs in the saved Alert JSON
 # is not expected to match the Notification Channel IDs in the target
-# enviornment. We'll get the list of target IDs so we can drop non-
+# environment. We'll get the list of target IDs so we can drop non-
 # matching IDs when we restore.
 #
 res = sdclient.get_notification_ids()
