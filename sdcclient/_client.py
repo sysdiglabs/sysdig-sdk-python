@@ -111,14 +111,23 @@ class _SdcCommon(object):
         data = res.json()
         return [True, data['total']]
 
-    def get_notification_ids(self, channels):
+    def get_notification_ids(self, channels=None):
             res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
 
             if not self._checkResponse(res):
                 return [False, self.lasterr]
 
-            # Should try and improve this M * N lookup
             ids = []
+
+            # If no array of channel types/names was provided to filter by,
+            # just return them all.
+            if channels is None:
+                for ch in res.json()["notificationChannels"]:
+                    ids.append(ch['id'])
+                return [True, ids]
+
+            # Return the filtered set of channels based on the provided types/names array.
+            # Should try and improve this M * N lookup
             for c in channels:
                 found = False
                 for ch in res.json()["notificationChannels"]:
