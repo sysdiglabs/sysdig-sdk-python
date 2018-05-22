@@ -112,65 +112,79 @@ class _SdcCommon(object):
         return [True, data['total']]
 
     def get_notification_ids(self, channels=None):
-            res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
+        '''**Description**
+            Get an array of all configured Notification Channel IDs, or a filtered subset of them.
 
-            if not self._checkResponse(res):
-                return [False, self.lasterr]
+        **Arguments**
+            - **channels**: an optional array of dictionaries to limit the set of Notification Channel IDs returned. If not specified, IDs for all configured Notification Channels are returned. Each dictionary contains a ``type`` field that can be one of the available types of Notification Channel (``EMAIL``, ``SNS``, ``PAGER_DUTY``, ``SLACK``, ``OPSGENIE``, ``WEBHOOK``) as well as additional elements specific to each channel type.
 
-            ids = []
+        **Success Return Value**
+            An array of Notification Channel IDs (integers).
 
-            # If no array of channel types/names was provided to filter by,
-            # just return them all.
-            if channels is None:
-                for ch in res.json()["notificationChannels"]:
-                    ids.append(ch['id'])
-                return [True, ids]
+        **Examples**
+            - `examples/create_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_alert.py>`_
+            - `examples/restore_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/restore_alerts.py>`_
+        '''
 
-            # Return the filtered set of channels based on the provided types/names array.
-            # Should try and improve this M * N lookup
-            for c in channels:
-                found = False
-                for ch in res.json()["notificationChannels"]:
-                    if c['type'] == ch['type']:
-                        if c['type'] == 'SNS':
-                            opt = ch['options']
-                            if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
-                                found = True
-                                ids.append(ch['id'])
-                        elif c['type'] == 'EMAIL':
-                            opt = ch['options']
-                            if 'emailRecipients' in c:
-                                if set(c['emailRecipients']) == set(opt['emailRecipients']):
-                                    found = True
-                                    ids.append(ch['id'])
-                            elif 'name' in c:
-                                if c['name'] == ch.get('name'):
-                                    found = True
-                                    ids.append(ch['id'])
-                        elif c['type'] == 'PAGER_DUTY':
-                            opt = ch['options']
-                            if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
-                                found = True
-                                ids.append(ch['id'])
-                        elif c['type'] == 'SLACK':
-                            opt = ch['options']
-                            if 'channel' in opt and opt['channel'] == c['channel']:
-                                found = True
-                                ids.append(ch['id'])
-                        elif c['type'] == 'OPSGENIE':
-                            if 'name' in c:
-                                if c['name'] == ch.get('name'):
-                                    found = True
-                                    ids.append(ch['id'])
-                        elif c['type'] == 'WEBHOOK':
-                            if 'name' in c:
-                                if c['name'] == ch.get('name'):
-                                    found = True
-                                    ids.append(ch['id'])
-                if not found:
-                    return [False, "Channel not found: " + str(c)]
+        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
 
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        ids = []
+
+        # If no array of channel types/names was provided to filter by,
+        # just return them all.
+        if channels is None:
+            for ch in res.json()["notificationChannels"]:
+                ids.append(ch['id'])
             return [True, ids]
+
+        # Return the filtered set of channels based on the provided types/names array.
+        # Should try and improve this M * N lookup
+        for c in channels:
+            found = False
+            for ch in res.json()["notificationChannels"]:
+                if c['type'] == ch['type']:
+                    if c['type'] == 'SNS':
+                        opt = ch['options']
+                        if set(opt['snsTopicARNs']) == set(c['snsTopicARNs']):
+                            found = True
+                            ids.append(ch['id'])
+                    elif c['type'] == 'EMAIL':
+                        opt = ch['options']
+                        if 'emailRecipients' in c:
+                            if set(c['emailRecipients']) == set(opt['emailRecipients']):
+                                found = True
+                                ids.append(ch['id'])
+                        elif 'name' in c:
+                            if c['name'] == ch.get('name'):
+                                found = True
+                                ids.append(ch['id'])
+                    elif c['type'] == 'PAGER_DUTY':
+                        opt = ch['options']
+                        if opt['account'] == c['account'] and opt['serviceName'] == c['serviceName']:
+                            found = True
+                            ids.append(ch['id'])
+                    elif c['type'] == 'SLACK':
+                        opt = ch['options']
+                        if 'channel' in opt and opt['channel'] == c['channel']:
+                            found = True
+                            ids.append(ch['id'])
+                    elif c['type'] == 'OPSGENIE':
+                        if 'name' in c:
+                            if c['name'] == ch.get('name'):
+                                found = True
+                                ids.append(ch['id'])
+                    elif c['type'] == 'WEBHOOK':
+                        if 'name' in c:
+                            if c['name'] == ch.get('name'):
+                                found = True
+                                ids.append(ch['id'])
+            if not found:
+                return [False, "Channel not found: " + str(c)]
+
+        return [True, ids]
 
     def create_email_notification_channel(self, channel_name, email_recipients):
         channel_json = {
