@@ -941,27 +941,6 @@ class _SdcCommon(object):
         else:
             return [True, None]
 
-    def switch_user_team(self, new_team_id):
-        '''**Description**
-            Switches the current user context to the specified team. In other words, this function makes it possible to start operating in the context of a different team without having to use the token of that team.
-
-        **Arguments**
-            - **new_team_id**: the numeric ID of the team (such as returned by :func:`~SdcClient.get_team_ids`) to switch to.
-        '''
-        res = self.get_user_info()
-        if not res[0]:
-            return res
-
-        myuinfo = res[1]['user']
-        myuinfo['currentTeam'] = new_team_id
-        uid = myuinfo['id']
-
-        res = requests.put(self.url + '/api/user/' + str(uid), headers=self.hdrs, data=json.dumps(myuinfo), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        else:
-            return [True, None]
-
     def get_agents_config(self):
         res = requests.get(self.url + '/api/agents/config', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
