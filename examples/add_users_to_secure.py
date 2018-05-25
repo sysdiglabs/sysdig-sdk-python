@@ -44,14 +44,12 @@ SECURE_TEAM_ROLE = 'ROLE_TEAM_EDIT'
 #
 sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
 
-res = sdclient.get_teams(SECURE_TEAM_NAME)
+res = sdclient.list_memberships(SECURE_TEAM_NAME)
 
 if res[0] == False:
-    print 'Unable to get teams: ', res[1]
+    print 'Unable to get memberships for ' + SECURE_TEAM_NAME + ' team: ', res[1]
     sys.exit(1)
-memberships = {}
-for secure_team_user in res[1][0]['userRoles']:
-    memberships[secure_team_user['userId']] = secure_team_user['role']
+memberships = res[1]
 
 res = sdclient.get_users()
 
@@ -65,14 +63,13 @@ all_users = res[1]
 # rather than ID, so convert the IDs.
 #
 for user in all_users:
-    if user['id'] in memberships:
+    if user['username'] in memberships:
         print 'Will preserve existing membership for: ' + user['username']
-        memberships[user['username']] = memberships.pop(user['id'])
     else:
         print 'Will add new member: ' + user['username']
         memberships[user['username']] = SECURE_TEAM_ROLE
 
-res = sdclient.edit_team(SECURE_TEAM_NAME, memberships=memberships)
+res = sdclient.save_memberships(SECURE_TEAM_NAME, memberships=memberships)
 if res[0] == False:
     print 'Could not edit team:', res[1], '. Exiting.'
     sys.exit(1)
