@@ -6,6 +6,8 @@
 import os
 import sys
 import json
+import datetime
+import calendar
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
@@ -41,20 +43,54 @@ else:
     print res[1]
     sys.exit(1)
 
+#
+# Someone might be restoring Alert configs from another environment,
+# in which case the Notification Channel IDs in the saved Alert JSON
+# is not expected to match the Notification Channel IDs in the target
+# environment. We'll get the list of target IDs so we can drop non-
+# matching IDs when we restore.
+#
+res = sdclient.get_notification_ids()
+if res[0]:
+    existing_notification_channel_ids = res[1]
+else:
+    print res[1]
+    sys.exit(1)
+
 created_count = 0
 updated_count = 0
 
 with open(alerts_dump_file, 'r') as f:
     j = json.load(f)
     for a in j['alerts']:
+        if 'notificationChannelIds' in a:
+            for channel_id in a['notificationChannelIds']:
+                if channel_id not in existing_notification_channel_ids:
+                    print 'Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a['name'] + '" does not exist.\n  Restoring without this ID.'
+                    a['notificationChannelIds'].remove(channel_id)
+
+        # JSON Alerts from the list_alerts.py example are in epoch time, but ones
+        # downloaded using the "Export JSON" button of the web interface are ISO
+        # timestamps in string form. If we see these fields as strings, assume
+        # they came from the web UI and convert them to epoch.
+        for timefield in ['createdOn', 'modifiedOn']:
+            if isinstance(a.get(timefield), basestring):
+                a[timefield] = calendar.timegm(datetime.datetime.strptime(a[timefield], '%Y-%m-%dT%H:%M:%S.%fZ').timetuple())
+
         if a['name'] in existing_alerts:
             a['id'] = existing_alerts[a['name']]['id']
             a['version'] = existing_alerts[a['name']]['version']
-            a['description'] += ' (updated via restore_alerts.py)'
+            if a.get('description') is None:
+                a['description'] = '(updated via restore_alerts.py)'
+            else:
+                a['description'] += ' (updated via restore_alerts.py)'
             res = sdclient.update_alert(a)
             updated_count += 1
         else:
-            a['description'] += ' (created via restore_alerts.py)'
+            if a.get('description') is None:
+                a['description'] = '(created via restore_alerts.py)'
+            else:
+                a['description'] += ' (created via restore_alerts.py)'
             res = sdclient.create_alert(alert_obj=a)
             created_count += 1
         if not res[0]:
