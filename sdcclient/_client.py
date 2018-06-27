@@ -647,6 +647,7 @@ class _SdcCommon(object):
             'agentInstallParams': user['agentInstallParams'],
             'systemRole': systemRole if systemRole else user['systemRole'],
             'username': user_email,
+            'enabled': user.get('enabled', False),
             'version': user['version']
             }
 
