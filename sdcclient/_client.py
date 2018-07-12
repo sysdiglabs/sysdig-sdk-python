@@ -116,7 +116,7 @@ class _SdcCommon(object):
             Get an array of all configured Notification Channel IDs, or a filtered subset of them.
 
         **Arguments**
-            - **channels**: an optional array of dictionaries to limit the set of Notification Channel IDs returned. If not specified, IDs for all configured Notification Channels are returned. Each dictionary contains a ``type`` field that can be one of the available types of Notification Channel (``EMAIL``, ``SNS``, ``PAGER_DUTY``, ``SLACK``, ``OPSGENIE``, ``WEBHOOK``) as well as additional elements specific to each channel type.
+            - **channels**: an optional array of dictionaries to limit the set of Notification Channel IDs returned. If not specified, IDs for all configured Notification Channels are returned. Each dictionary contains a ``type`` field that can be one of the available types of Notification Channel (``EMAIL``, ``SNS``, ``PAGER_DUTY``, ``SLACK``, ``OPSGENIE``, ``VICTOROPS``, ``WEBHOOK``) as well as additional elements specific to each channel type.
 
         **Success Return Value**
             An array of Notification Channel IDs (integers).
@@ -172,6 +172,11 @@ class _SdcCommon(object):
                             found = True
                             ids.append(ch['id'])
                     elif c['type'] == 'OPSGENIE':
+                        if 'name' in c:
+                            if c['name'] == ch.get('name'):
+                                found = True
+                                ids.append(ch['id'])
+                    elif c['type'] == 'VICTOROPS':
                         if 'name' in c:
                             if c['name'] == ch.get('name'):
                                 found = True
