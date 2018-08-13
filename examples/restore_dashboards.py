@@ -39,12 +39,18 @@ dashboard_conf_items = ['showAsType', 'filterRoot', 'linkMetrics',
 
 for info in zipf.infolist():
     data = zipf.read(info.filename)
-    j = json.loads(data)
+    try:
+        j = json.loads(data)
+    except ValueError:
+        print 'Non-JSON item found in ZIP: ' + info.filename + ' (skipping)'
+        continue
     k = {}
     for item in j.keys():
         if item in dashboard_conf_items:
             k[item] = j[item]
      
     res = sdclient.create_dashboard_with_configuration(k)
-    if res[0] == False:
+    if res[0]:
+        print 'Restored Dashboard named: ' + j['name']
+    else:
         print "Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res[1])
