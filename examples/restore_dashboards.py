@@ -13,18 +13,33 @@ from sdcclient import SdcClient
 #
 # Parse arguments
 #
-if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> <file-name>' % sys.argv[0]
+if len(sys.argv) <= 2:
+    print 'usage: %s <sysdig-token> <file-name> <backend_url> <ssl_check>' % sys.argv[0]
     print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print 'Optional: backend_url (https://app.sysdigcloud.com, https://app-staging.sysdigcloud.com)'
+    print 'Optional: ssl_check (True/False)'
     sys.exit(1)
 
 sdc_token = sys.argv[1]
 dashboard_state_file = sys.argv[2]
 
+try:
+    backend_url = sys.argv[3]
+except:
+    backend_url = 'https://app.sysdigcloud.com'
+
+try:
+    if (sys.argv[4] == "False"):
+        ssl_check = False
+    else:
+        ssl_check = True
+except:
+    ssl_check = True
+
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdcClient(sdc_token, sdc_url=backend_url, ssl_verify=ssl_check)
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'r')
 
