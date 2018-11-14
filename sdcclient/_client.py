@@ -649,7 +649,6 @@ class _SdcCommon(object):
             return res
         user = res[1]
         reqbody = {
-            'agentInstallParams': user['agentInstallParams'],
             'systemRole': systemRole if systemRole else user['systemRole'],
             'username': user_email,
             'enabled': user.get('enabled', False),
