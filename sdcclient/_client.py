@@ -1577,30 +1577,10 @@ class SdMonitorClient(_SdcCommon):
         else:
             return [False, 'Not found']
 
-    def create_dashboard_from_template(self, newdashname, template, scope=[], shared=False, annotations={}):
-        if scope is None:
-            scope = []
-
-        if type(scope) is str:
-            checks = scope.strip(' \t\n\r?!.').split(" and ")
-            scope = []
-
-            for c in checks:
-                elements = c.strip(' \t\n\r?!.').split("=")
-                if len(elements) != 2:
-                    return [False, "invalid scope format"]
-                scope.append({elements[0].strip(' \t\n\r?!.'): elements[1].strip(' \t\n\r?!.')})
-        else:
-            if not(type(scope) is list):
-                return [False, "invalid scope format"]
-
-        #
-        # Create the unique ID for this dashboard
-        #
-        baseconfid = newdashname
-        for sentry in scope:
-            baseconfid = baseconfid + str(list(sentry.keys())[0])
-            baseconfid = baseconfid + str(list(sentry.values())[0])
+    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, annotations={}):
+        if scope is not None:
+            if isinstance(scope, basestring) == False:
+                return [False, 'Invalid scope format: Expected a string']
 
         #
         # Clean up the dashboard we retireved so it's ready to be pushed
@@ -1608,56 +1588,22 @@ class SdMonitorClient(_SdcCommon):
         template['id'] = None
         template['version'] = None
         template['schema'] = 1
-        template['name'] = newdashname
+        template['name'] = dashboard_name
         template['isShared'] = shared # make sure the dashboard is not shared
+        template['isPublic'] = False # reset public sharing
+        template['publicToken'] = None
 
         #
-        # Assign the filter and the group ID to each view to point to this service
+        # set dashboard scope to the specific parameter
+        # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
         #
-        filters = []
-        gby = []
-        for sentry in scope:
-            filters.append({'metric' : list(sentry.keys())[0], 'op' : '=', 'value' : list(sentry.values())[0],
-                            'filters' : None})
-            gby.append({'metric': list(sentry.keys())[0]})
+        template['filterExpression'] = scope
 
-        filter = {
-            'filters' :
-            {
-                'logic' : 'and',
-                'filters' : filters
-            }
-        }
-
-        #
-        # create the grouping configurations for each chart
-        #
-        j = 0
         if 'items' in template:
             for chart in template['items']:
-                if len(scope) != 0:
-                    j = j + 1
-
-                    confid = baseconfid + str(j)
-
-                    gconf = {'id': confid,
-                             'groups': [
-                                 {
-                                     'groupBy': gby
-                                 }
-                             ]
-                            }
-
-                    res = requests.post(self.url + '/api/groupConfigurations', headers=self.hdrs,
-                                        data=json.dumps(gconf), verify=self.ssl_verify)
-                    if not self._checkResponse(res):
-                        return [False, self.lasterr]
-
-                    chart['filter'] = filter
-                    chart['groupId'] = confid
-                else:
-                    chart['filter'] = None
-                    chart['groupId'] = None
+                if 'overrideFilter' in chart and chart['overrideFilter'] == False:
+                    # patch frontend bug to hide scope override warning even when it's not really overridden
+                    chart['scope'] = scope
 
         if 'annotations' in template:
             template['annotations'].update(annotations)
@@ -1666,12 +1612,10 @@ class SdMonitorClient(_SdcCommon):
 
         template['annotations']['createdByEngine'] = True
 
-        ddboard = {'dashboard': template}
-
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps(ddboard), verify=self.ssl_verify)
+        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         else:
