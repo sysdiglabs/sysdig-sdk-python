@@ -1259,7 +1259,7 @@ class SdMonitorClient(_SdcCommon):
             return [True, None]
 
     def get_views_list(self):
-        res = requests.get(self.url + '/data/drilldownDashboardDescriptors.json', headers=self.hdrs,
+        res = requests.get(self.url + '/api/defaultDashboards', headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -1270,7 +1270,7 @@ class SdMonitorClient(_SdcCommon):
         if gvres[0] is False:
             return gvres
 
-        vlist = gvres[1]['drilldownDashboardDescriptors']
+        vlist = gvres[1]['defaultDashboards']
 
         id = None
 
@@ -1282,7 +1282,7 @@ class SdMonitorClient(_SdcCommon):
         if not id:
             return [False, 'view ' + name + ' not found']
 
-        res = requests.get(self.url + '/data/drilldownDashboards/' + id + '.json', headers=self.hdrs,
+        res = requests.get(self.url + '/api/defaultDashboards/' + id, headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -1645,7 +1645,7 @@ class SdMonitorClient(_SdcCommon):
         if gvres[0] is False:
             return gvres
 
-        view = gvres[1]['drilldownDashboard']
+        view = gvres[1]['defaultDashboard']
 
         view['timeMode'] = {'mode' : 1}
         view['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
