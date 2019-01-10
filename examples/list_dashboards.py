@@ -38,4 +38,4 @@ else:
     sys.exit(1)
 
 for db in data['dashboards']:
-    print "Name: %s, # Charts: %d" % (db['name'], len(db['items']))
+    print "Name: %s, # Charts: %d" % (db['name'], len(db['items'] if 'items' in db else []))
