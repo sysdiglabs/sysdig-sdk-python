@@ -1301,7 +1301,44 @@ class SdMonitorClient(_SdcCommon):
         res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        return [True, res.json()]
+        return [True, res.json()] 
+    res = sdclient.get_dashboards()
+
+    def get_single_dashboard(self): 
+        '''**Description** 
+            Return a single dashboard based on dashboard number 
+        **Success Return Value** 
+            A dictionary containing the desired dashboard 
+        '''
+        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify) 
+        data = res[1]
+
+        dashboard_number = 'dashboard#'
+
+        dashboardindex = []
+
+        #using same context as get_dashboards 
+        #appending the values to the dashboardindex
+        for db in data['dashboards']:
+            array_indices = str(db['id']) 
+            dashboardindex.append(array_indices)
+
+        #setting the dash_array_index to be the dashboard_number variable
+        dash_array_index = dashboard.index(dashboard_number)
+
+        #setting this to be the data as a whole
+        desired_dash = data["dashboards"] 
+
+        #single_dashboard now uses the index of the dashboard from above
+        single_dashboard = desired_dash[dash_array_index]
+
+        #dashboard file to write to is set based on the dashboard_number set above
+        dashboard_out_file = dashboard_number + '.json'
+
+        #write to file. w+ used to write the file if it does not exist. if it does, it will overwrite it
+        f = open(dashboard_out_file, 'w+')
+        f.write(json.dumps(single_dashboard)) 
+        f.close() 
 
     def find_dashboard_by(self, name=None):
         '''**Description**
