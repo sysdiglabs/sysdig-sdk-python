@@ -1302,8 +1302,8 @@ class SdMonitorClient(_SdcCommon):
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()] 
-    res = sdclient.get_dashboards()
-
+    
+    
     def get_single_dashboard(self): 
         '''**Description** 
             Return a single dashboard based on dashboard number 
