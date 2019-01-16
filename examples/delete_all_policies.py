@@ -27,15 +27,19 @@ sdc_token = sys.argv[1]
 #
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
-res = sdclient.delete_all_policies()
+# Get a list of policyIds
+res = sdclient.list_policies()
+policies = []
 
-#
-# Return the result
-#
-if res[0]:
-    print res[1]
-else:
+if not res[0]:
     print res[1]
     sys.exit(1)
+else:
+    policies = res[1]['policies']
 
-
+for policy in policies:
+    print "deleting policy: " + str(policy['id'])
+    res = sdclient.delete_policy_id(policy['id'])
+    if not res[0]:
+        print res[1]
+        sys.exit(1)
