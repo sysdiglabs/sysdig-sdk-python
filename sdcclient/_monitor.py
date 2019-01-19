@@ -4,6 +4,11 @@ import requests
 
 from sdcclient._common import _SdcCommon
 
+try:
+    basestring
+except NameError:
+    basestring = str
+
 
 class SdMonitorClient(_SdcCommon):
 
@@ -117,7 +122,7 @@ class SdMonitorClient(_SdcCommon):
         res = requests.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
-        j = res.json()
+        res.json()
 
         if alert_obj is None:
             if None in (name, description, severity, for_atleast_s, condition):
@@ -127,21 +132,21 @@ class SdMonitorClient(_SdcCommon):
                 # Populate the alert information
                 #
                 alert_json = {
-                    'alert' : {
-                        'type' : 'MANUAL',
-                        'name' : name,
-                        'description' : description,
-                        'enabled' : enabled,
-                        'severity' : severity,
-                        'timespan' : for_atleast_s * 1000000,
-                        'condition' : condition,
+                    'alert': {
+                        'type': 'MANUAL',
+                        'name': name,
+                        'description': description,
+                        'enabled': enabled,
+                        'severity': severity,
+                        'timespan': for_atleast_s * 1000000,
+                        'condition': condition,
                         'filter': user_filter
                     }
                 }
 
                 if segmentby != None and segmentby != []:
                     alert_json['alert']['segmentBy'] = segmentby
-                    alert_json['alert']['segmentCondition'] = {'type' : segment_condition}
+                    alert_json['alert']['segmentCondition'] = {'type': segment_condition}
 
                 if annotations != None and annotations != {}:
                     alert_json['alert']['annotations'] = annotations
@@ -154,7 +159,7 @@ class SdMonitorClient(_SdcCommon):
             alert_obj.pop('id', None)
             alert_obj.pop('version', None)
             alert_json = {
-                'alert' : alert_obj
+                'alert': alert_obj
             }
 
         #
@@ -181,7 +186,7 @@ class SdMonitorClient(_SdcCommon):
         if 'id' not in alert:
             return [False, "Invalid alert format"]
 
-        res = requests.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({ "alert": alert}), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({"alert": alert}), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -251,14 +256,14 @@ class SdMonitorClient(_SdcCommon):
         '''
         body = {
             'id': 'explore',
-            'groups': [{'groupBy':[]}]
+            'groups': [{'groupBy': []}]
         }
 
         for item in new_hierarchy:
             body['groups'][0]['groupBy'].append({'metric': item})
 
         res = requests.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
-                            data=json.dumps(body), verify=self.ssl_verify)
+                           data=json.dumps(body), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         else:
@@ -328,6 +333,7 @@ class SdMonitorClient(_SdcCommon):
         else:
             def filter_fn(configuration):
                 return configuration['name'] == name
+
             def create_item(configuration):
                 return {'dashboard': configuration}
 
@@ -357,9 +363,9 @@ class SdMonitorClient(_SdcCommon):
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
         '''
         dashboard_configuration = {
-            'name':   name,
+            'name': name,
             'schema': 1,
-            'items':  []
+            'items': []
         }
 
         #
@@ -396,15 +402,15 @@ class SdMonitorClient(_SdcCommon):
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
         """
         panel_configuration = {
-            'name':                 name,
-            'showAs':               None,
-            'showAsType':           None,
-            'metrics':              [],
-            'gridConfiguration':    {
-                'col':      1,
-                'row':      1,
-                'size_x':   12,
-                'size_y':   6
+            'name': name,
+            'showAs': None,
+            'showAsType': None,
+            'metrics': [],
+            'gridConfiguration': {
+                'col': 1,
+                'row': 1,
+                'size_x': 12,
+                'size_y': 6
             }
         }
 
@@ -437,10 +443,10 @@ class SdMonitorClient(_SdcCommon):
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
-                'metricId':         metric['id'],
-                'aggregation':      metric['aggregations']['time'] if 'aggregations' in metric else None,
+                'metricId': metric['id'],
+                'aggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
                 'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
-                'propertyName':     property_name + str(i)
+                'propertyName': property_name + str(i)
             })
         #
         # Convert scope to format used by Sysdig Monitor
@@ -454,17 +460,17 @@ class SdMonitorClient(_SdcCommon):
                 if len(values) != 2:
                     return [False, "invalid scope format"]
                 filters.append({
-                    'metric':   values[0].strip(' \t\n\r?!.'),
-                    'op':       '=',
-                    'value':    values[1].strip(' \t\n\r"?!.'),
-                    'filters':  None
+                    'metric': values[0].strip(' \t\n\r?!.'),
+                    'op': '=',
+                    'value': values[1].strip(' \t\n\r"?!.'),
+                    'filters': None
                 })
 
             if len(filters) > 0:
                 panel_configuration['filter'] = {
                     'filters': {
-                        'logic':    'and',
-                        'filters':  filters
+                        'logic': 'and',
+                        'filters': filters
                     }
                 }
 
@@ -478,7 +484,7 @@ class SdMonitorClient(_SdcCommon):
             if limit != None:
                 panel_configuration['paging'] = {
                     'from': 0,
-                    'to':   limit - 1
+                    'to': limit - 1
                 }
 
         elif panel_type == 'number':
@@ -490,26 +496,25 @@ class SdMonitorClient(_SdcCommon):
 
             if sort_by is None:
                 panel_configuration['sorting'] = [{
-                    'id':   'v0',
+                    'id': 'v0',
                     'mode': 'desc'
                 }]
             else:
                 panel_configuration['sorting'] = [{
-                    'id':   property_names[sort_by['metric']],
+                    'id': property_names[sort_by['metric']],
                     'mode': sort_by['mode']
                 }]
 
             if limit is None:
                 panel_configuration['paging'] = {
                     'from': 0,
-                    'to':   10
+                    'to': 10
                 }
             else:
                 panel_configuration['paging'] = {
                     'from': 0,
-                    'to':   limit - 1
+                    'to': limit - 1
                 }
-
 
         #
         # Configure layout
@@ -654,8 +659,8 @@ class SdMonitorClient(_SdcCommon):
 
         view = gvres[1]['defaultDashboard']
 
-        view['timeMode'] = {'mode' : 1}
-        view['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
+        view['timeMode'] = {'mode': 1}
+        view['time'] = {'last': 2 * 60 * 60 * 1000000, 'sampling': 2 * 60 * 60 * 1000000}
 
         #
         # Create the new dashboard
@@ -733,8 +738,8 @@ class SdMonitorClient(_SdcCommon):
         with open(filename) as data_file:
             dboard = json.load(data_file)
 
-        dboard['timeMode'] = {'mode' : 1}
-        dboard['time'] = {'last' : 2 * 60 * 60 * 1000000, 'sampling' : 2 * 60 * 60 * 1000000}
+        dboard['timeMode'] = {'mode': 1}
+        dboard['time'] = {'last': 2 * 60 * 60 * 1000000, 'sampling': 2 * 60 * 60 * 1000000}
 
         #
         # Create the new dashboard

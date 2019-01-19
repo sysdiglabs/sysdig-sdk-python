@@ -33,7 +33,7 @@ class _SdcCommon(object):
 
             try:
                 j = res.json()
-            except:
+            except Exception:
                 self.lasterr = 'status code ' + str(errorcode)
                 return False
 
@@ -192,12 +192,12 @@ class _SdcCommon(object):
 
     def create_email_notification_channel(self, channel_name, email_recipients):
         channel_json = {
-            'notificationChannel' : {
-                'type' : 'EMAIL',
-                'name' : channel_name,
-                'enabled' : True,
-                'options' : {
-                    'emailRecipients' : email_recipients
+            'notificationChannel': {
+                'type': 'EMAIL',
+                'name': channel_name,
+                'enabled': True,
+                'options': {
+                    'emailRecipients': email_recipients
                 }
             }
         }
@@ -219,7 +219,7 @@ class _SdcCommon(object):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
 
-        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({ "notificationChannel": channel }), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -278,7 +278,7 @@ class _SdcCommon(object):
                 'exportProcess': True
             },
             'time': timeinfo,
-            #'filter': {
+            # 'filter': {
             #    'filters': [
             #        {
             #            'metric': 'agent.tag.Tag',
@@ -288,7 +288,7 @@ class _SdcCommon(object):
             #        }
             #    ],
             #    'logic': 'and'
-            #},
+            # },
             'limit': {
                 'hostGroups': 20,
                 'hosts': 20,
@@ -351,8 +351,8 @@ class _SdcCommon(object):
         edata = {
             'event': {
                 'name': name
-                }
             }
+        }
 
         if description is not None:
             edata['event']['description'] = description
@@ -546,7 +546,7 @@ class _SdcCommon(object):
 
         data = {
             'agent': capture_agent,
-            'name' : capture_name,
+            'name': capture_name,
             'duration': duration,
             'folder': folder,
             'filters': capture_filter,
@@ -652,7 +652,7 @@ class _SdcCommon(object):
             'username': user_email,
             'enabled': user.get('enabled', False),
             'version': user['version']
-            }
+        }
 
         if firstName == None:
             reqbody['firstName'] = user['firstName'] if 'firstName' in list(user.keys()) else ''
@@ -827,7 +827,7 @@ class _SdcCommon(object):
             'canUseAwsMetrics': perm_aws_data if perm_aws_data else t['canUseAwsMetrics'],
             'id': t['id'],
             'version': t['version']
-            }
+        }
 
         # Handling team description
         if description is not None:
@@ -982,7 +982,7 @@ class _SdcCommon(object):
         return [True, res.json()]
 
     def clear_agents_config(self):
-        data = {'files' : []}
+        data = {'files': []}
         self.set_agents_config(data)
 
     def get_user_api_token(self, username, teamname):

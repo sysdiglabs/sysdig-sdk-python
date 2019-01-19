@@ -57,7 +57,7 @@ class SdSecureClient(_SdcCommon):
         if not payload[0]:
             return payload
 
-        payload[1]["{}RulesFile".format(kind)]["content"] = rules_content # pylint: disable=unsubscriptable-object
+        payload[1]["{}RulesFile".format(kind)]["content"] = rules_content  # pylint: disable=unsubscriptable-object
 
         res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, data=json.dumps(payload[1]), verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -395,7 +395,7 @@ class SdSecureClient(_SdcCommon):
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
 
-        to_ts = (datetime.datetime.utcnow()-epoch).total_seconds() * 1000 * 1000
+        to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
         from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
         ctx = {"to": to_ts,
                "from": from_ts,
@@ -537,7 +537,7 @@ class SdSecureClient(_SdcCommon):
         '''
 
         try:
-            priorities_obj = json.loads(priorities_json)
+            json.loads(priorities_json)
         except Exception as e:
             return [False, "priorities json is not valid json: {}".format(str(e))]
 
@@ -546,7 +546,6 @@ class SdSecureClient(_SdcCommon):
             return [False, self.lasterr]
 
         return [True, res.json()]
-
 
     def get_policy(self, name):
         '''**Description**
@@ -624,7 +623,7 @@ class SdSecureClient(_SdcCommon):
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
-        if not "id" in policy_obj:
+        if "id" not in policy_obj:
             return [False, "Policy Json does not have an 'id' field"]
 
         body = {"policy": policy_obj}
