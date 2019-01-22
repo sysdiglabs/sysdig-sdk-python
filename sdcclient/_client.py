@@ -1769,32 +1769,6 @@ class SdMonitorClient(_SdcCommon):
             return [False, self.lasterr]
         return [True, res.json()]
 
-    def get_falco_rules(self):
-        res = requests.get(self.url + '/api/agents/falco_rules', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        data = res.json()
-        return [True, data]
-
-    def set_falco_rules_content_raw(self, raw_payload):
-        res = requests.put(self.url + '/api/agents/falco_rules', headers=self.hdrs, data=json.dumps(raw_payload), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
-
-    def set_falco_rules_content(self, filter, rules_content):
-        payload = { "files" : [ { "filter": filter, "content": rules_content} ] }
-        return self.set_falco_rules_content_raw(payload)
-
-    def set_falco_rules_filename(self, filter, rules_filename):
-        with open(rules_filename, 'r') as f:
-            rules_content = f.read()
-            return self.set_falco_rules_content(filter, rules_content)
-
-    def clear_falco_rules(self):
-        data = {'files' : []}
-        return self.set_falco_rules_content_raw(data)
-
 
 # For backwards compatibility
 SdcClient = SdMonitorClient
