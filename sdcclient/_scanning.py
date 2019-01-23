@@ -375,6 +375,118 @@ class SdScanningClient(_SdcCommon):
     def _registry_string_is_valid(self, registry):
         return re.match(".*\\/.*", registry)
 
+    def add_policy(self, name, rules, comment="", bundleid=None):
+        '''**Description**
+            Create a new policy
+
+        **Arguments**
+            - name: The name of the policy.
+            - rules: A list of Anchore PolicyRule elements (while creating/updating a policy, new rule IDs will be created backend side)
+            - comment: A human-readable description.
+            - bundleid: Target bundle. If not specified, the currently active bundle will be used.
+
+        **Success Return Value**
+            A JSON object containing the policy description.
+        '''
+        policy = {
+            'name': name,
+            'comment': comment,
+            'rules': rules,
+            'version': '1_0'
+        }
+        if bundleid:
+            policy['policyBundleId'] = bundleid
+
+        url = self.url + '/api/scanning/v1/policies'
+        data = json.dumps(policy)
+        res = requests.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def list_policy_bundles(self, detail=False):
+        url = "{base_url}/api/scanning/v1/anchore/policies?detail={detail}".format(
+            base_url=self.url,
+            detail=str(detail))
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def list_policies(self, bundleid=None):
+        '''**Description**
+            List the current set of scanning policies.
+
+        **Arguments**
+            - bundleid: Target bundle. If not specified, the currently active bundle will be used.
+
+        **Success Return Value**
+            A JSON object containing the list of policies.
+        '''
+        url = self.url + '/api/scanning/v1/policies'
+        if bundleid:
+            url += '?bundleId=' + bundleid
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def get_policy(self, policyid, bundleid=None):
+        '''**Description**
+            Retrieve the policy with the given id in the targeted policy bundle
+
+        **Arguments**
+            - policyid: Unique identifier associated with this policy.
+            - bundleid: Target bundle. If not specified, the currently active bundle will be used.
+
+        **Success Return Value**
+            A JSON object containing the policy description.
+        '''
+        url = self.url + '/api/scanning/v1/policies/' + policyid
+        if bundleid:
+            url += '?bundleId=' + bundleid
+
+    def update_policy(self, policyid, policy_description):
+        '''**Description**
+            Update the policy with the given id
+
+        **Arguments**
+            - policyid: Unique identifier associated with this policy.
+            - policy_description: A dictionary with the policy description.
+
+        **Success Return Value**
+            A JSON object containing the policy description.
+        '''
+        url = self.url + '/api/scanning/v1/policies/' + policyid
+        data = json.dumps(policy_description)
+        res = requests.put(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def delete_policy(self, policyid, bundleid=None):
+        '''**Description**
+            Delete the policy with the given id in the targeted policy Bundle
+
+        **Arguments**
+            - policyid: Unique identifier associated with this policy.
+            - policy_description: A dictionary with the policy description.
+        '''
+        url = self.url + '/api/scanning/v1/policies/' + policyid
+        if bundleid:
+            url += '?bundleId=' + bundleid
+
+        res = requests.delete(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.text]
+
     def activate_subscription(self, subscription_type, subscription_key):
         '''**Description**
             Activate a subscription
