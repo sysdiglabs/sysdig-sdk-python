@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 #
-# This script shows how to leverage sysdig's data query API to obtain the list
-# of the instrumented hosts that have been seen in the last 5 minutes.
-# Updated 1/24/2019 - Dale J. Rodriguez
-# This script will also show the container count in addition to the hostnames in a from like this: host.name 12
+## This script shows how to leverage sysdig's data query API to obtain the list
+# of the instrumented hosts that have been seen in the last hour (`duration` variable).
+# The output will show the container count (`container.count` metric) in addition to the hostnames (`host.hostName` tag) in a from like this:
+#
+# host-1    12
+# host-2     4
+#
+# host-1    12
+# host-2     4
+#his: host.name 12
 # Where 12 is the container count and host.name is the host
 #
 import getopt
@@ -34,8 +40,13 @@ for opt, arg in opts:
         print_json = True
 sdc_token = args[0]
 #
-# Instantiate the SDC client
 #
+# Prepare the query's metrics list.
+# In this case, we have one tag (used for segmentation) and one metric::
+# host.hostName. This is a tag, to identify each item of the output.
+# container.count: This is the metric
+#
+# Instantiate the SDC client
 sdclient = SdcClient(sdc_token)
 metrics = [{"id": "host.hostName"}, {"id": "container.count","aggregations":{"time":"avg","group":"avg"}}]
 res = sdclient.get_data(
