@@ -3,6 +3,7 @@ import hashlib
 import json
 import re
 import requests
+import time
 
 try:
     from urllib.parse import quote_plus, unquote_plus
@@ -487,6 +488,113 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.text]
 
+    def add_alert(self, name, description=None, scope="", triggers={'failed': True, 'unscanned': True},
+                  enabled=False, notification_channels=[]):
+        '''**Description**
+            Create a new alert
+
+        **Arguments**
+            - name: The name of the alert.
+            - description: The descprition of the alert.
+            - scope: An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
+            - tiggers: A dict {str: bool} indicating wich triggers should be enabled/disabled. (default: {'failed': True, 'unscanned': True})
+            - enabled: Whether this alert should actually be applied.
+            - notification_channels: A list of notification channel ids.
+
+        **Success Return Value**
+            A JSON object containing the alert description.
+        '''
+        alert = {
+            'name': name,
+            'description': description,
+            'triggers': triggers,
+            'scope': scope,
+            'enabled': enabled,
+            'autoscan': True,
+            'notificationChannelIds': notification_channels,
+        }
+
+        url = self.url + '/api/scanning/v1/alerts'
+        data = json.dumps(alert)
+        res = requests.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def list_alerts(self, limit=None, cursor=None):
+        '''**Description**
+            List the current set of scanning alerts.
+
+        **Arguments**
+            - limit: Maximum number of alerts in the response.
+            - cursor: An opaque string representing the current position in the list of alerts. It's provided in the 'responseMetadata' of the list_alerts response.
+
+        **Success Return Value**
+            A JSON object containing the list of alerts.
+        '''
+        url = self.url + '/api/scanning/v1/alerts'
+        if limit:
+            url += '?limit=' + str(limit)
+            if cursor:
+                url += '&cursor=' + cursor
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def get_alert(self, alertid):
+        '''**Description**
+            Retrieve the scanning alert with the given id
+
+        **Arguments**
+            - alertid: Unique identifier associated with this alert.
+
+        **Success Return Value**
+            A JSON object containing the alert description.
+        '''
+        url = self.url + '/api/scanning/v1/alerts/' + alertid
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def update_alert(self, alertid, alert_description):
+        '''**Description**
+            Update the alert with the given id
+
+        **Arguments**
+            - alertid: Unique identifier associated with this alert.
+            - alert_description: A dictionary with the alert description.
+
+        **Success Return Value**
+            A JSON object containing the alert description.
+        '''
+        url = self.url + '/api/scanning/v1/alerts/' + alertid
+        data = json.dumps(alert_description)
+        res = requests.put(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def delete_alert(self, policyid):
+        '''**Description**
+            Delete the alert with the given id
+
+        **Arguments**
+            - alertid: Unique identifier associated with this alert.
+        '''
+        url = self.url + '/api/scanning/v1/alerts/' + policyid
+        res = requests.delete(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.text]
+
     def activate_subscription(self, subscription_type, subscription_key):
         '''**Description**
             Activate a subscription
@@ -537,6 +645,37 @@ class SdScanningClient(_SdcCommon):
         '''
         url = self.url + "/api/scanning/v1/anchore/subscriptions"
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def list_runtime(self, scope="", skip_policy_evaluation=True, start_time=None, end_time=None):
+        '''**Description**
+            List runtime containers
+
+        **Arguments**
+            - scope: An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
+            - skip_policy_evaluation: If true, no policy evaluations will be triggered for the images.
+            - start_time: Start of the time range (integer of unix time).
+            - end_time: End of the time range (integer of unix time).
+
+        **Success Return Value**
+            A JSON object representing the list of runtime containers.
+        '''
+        containers = {
+            'scope': scope,
+            'skipPolicyEvaluation': skip_policy_evaluation
+        }
+        if start_time or end_time:
+            containers['time'] = {}
+            containers['time']['from'] = int(start_time * 100000) if start_time else 0
+            end_time = end_time if end_time else time.time()
+            containers['time']['to'] = int(end_time * 1000000)
+
+        url = self.url + '/api/scanning/v1/query/containers'
+        data = json.dumps(containers)
+        res = requests.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
