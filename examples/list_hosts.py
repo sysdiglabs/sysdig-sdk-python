@@ -37,8 +37,6 @@ duration = 3600
 count = 100
 print_json = False
 for opt, arg in opts:
-    print opt
-    print arg
     if opt in ("-d", "--duration"):
         duration = int(arg)
     elif opt in ("-c", "--count"):
