@@ -456,10 +456,7 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_all_policies(self):
         '''**Description**
@@ -496,10 +493,7 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_policy_priorities(self):
         '''**Description**
@@ -517,10 +511,7 @@ class SdSecureClient(_SdcCommon):
         '''
 
         res = requests.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def set_policy_priorities(self, priorities_json):
         '''**Description**
@@ -543,10 +534,7 @@ class SdSecureClient(_SdcCommon):
             return [False, "priorities json is not valid json: {}".format(str(e))]
 
         res = requests.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_policy(self, name):
         '''**Description**
@@ -598,10 +586,7 @@ class SdSecureClient(_SdcCommon):
 
         body = {"policy": policy_obj}
         res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def update_policy(self, policy_json):
         '''**Description**
@@ -630,10 +615,7 @@ class SdSecureClient(_SdcCommon):
         body = {"policy": policy_obj}
 
         res = requests.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_policy_name(self, name):
         '''**Description**
@@ -675,7 +657,4 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)

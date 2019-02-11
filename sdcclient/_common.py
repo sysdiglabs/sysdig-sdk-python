@@ -66,9 +66,7 @@ class _SdcCommon(object):
             `examples/print_user_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_user_info.py>`_
         '''
         res = requests.get(self.url + '/api/user/me', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_user_token(self):
         '''**Description**
@@ -203,9 +201,7 @@ class _SdcCommon(object):
         }
 
         res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_notification_channel(self, id):
 
@@ -220,10 +216,7 @@ class _SdcCommon(object):
             return [False, "Invalid channel format"]
 
         res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_notification_channel(self, channel):
         if 'id' not in channel:
@@ -245,9 +238,7 @@ class _SdcCommon(object):
             `examples/print_data_retention_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_data_retention_info.py>`_
         '''
         res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_topology_map(self, grouping_hierarchy, time_window_s, sampling_time_s):
         #
@@ -326,9 +317,7 @@ class _SdcCommon(object):
         #
         res = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
                             data=json.dumps(req_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
         '''**Description**
@@ -367,9 +356,7 @@ class _SdcCommon(object):
             edata['event']['tags'] = tags
 
         res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
         '''**Description**
@@ -402,9 +389,7 @@ class _SdcCommon(object):
             params['tags'] = tags
 
         res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_event(self, event):
         '''**Description**
@@ -473,9 +458,7 @@ class _SdcCommon(object):
             reqbody['sampling'] = sampling_s
 
         res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_sysdig_captures(self):
         '''**Description**
@@ -488,9 +471,7 @@ class _SdcCommon(object):
             `examples/list_sysdig_captures.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_sysdig_captures.py>`_
         '''
         res = requests.get(self.url + '/api/sysdig', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def poll_sysdig_capture(self, capture):
         '''**Description**
@@ -509,9 +490,7 @@ class _SdcCommon(object):
             return [False, 'Invalid capture format']
 
         res = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
         '''**Description**
@@ -554,9 +533,7 @@ class _SdcCommon(object):
         }
 
         res = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         '''**Description**
@@ -598,9 +575,7 @@ class _SdcCommon(object):
             user_json['systemRole'] = system_role
 
         res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_user(self, user_email):
         '''**Description**
@@ -786,9 +761,7 @@ class _SdcCommon(object):
             reqbody['filter'] = filter
 
         res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
                   perm_capture=None, perm_custom_events=None, perm_aws_data=None):
@@ -859,9 +832,7 @@ class _SdcCommon(object):
             reqbody['filter'] = t['filter']
 
         res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_team(self, name):
         '''**Description**
@@ -977,9 +948,7 @@ class _SdcCommon(object):
 
     def set_agents_config(self, config):
         res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def clear_agents_config(self):
         data = {'files': []}
@@ -997,3 +966,9 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         data = res.json()
         return [True, data['token']['key']]
+
+    def _request_result(self, res):
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.json()
