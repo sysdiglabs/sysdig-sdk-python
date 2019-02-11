@@ -1,5 +1,5 @@
-import json
 import datetime
+import json
 import requests
 import shutil
 import os
@@ -246,7 +246,7 @@ class SdSecureClient(_SdcCommon):
         if not payload[0]:
             return payload
 
-        obj = payload[1]["{}FalcoRulesFiles".format(kind)] # pylint: disable=unsubscriptable-object
+        obj = payload[1]["{}FalcoRulesFiles".format(kind)]  # pylint: disable=unsubscriptable-object
 
         obj["tag"] = rules_files["tag"]
         obj["files"] = rules_files["files"]
