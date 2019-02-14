@@ -2,6 +2,7 @@ import json
 import datetime
 import requests
 import shutil
+import os
 
 from sdcclient._common import _SdcCommon
 
