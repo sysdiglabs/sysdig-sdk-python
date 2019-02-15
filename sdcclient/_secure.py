@@ -658,3 +658,151 @@ class SdSecureClient(_SdcCommon):
         '''
         res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
+
+    def add_compliance_task(self, name, module_name='docker-bench-security', schedule='06:00:00Z/PT12H', scope=None, enabled=True):
+        '''**Description**
+            Add a new compliance task.
+
+        **Arguments**
+            - name: The name of the task e.g. “Check Docker Compliance”.
+            - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
+            - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
+            - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
+            - enabled: Whether this task should actually run as defined by its schedule.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        task = {
+            "id": None,
+            "name": name,
+            "moduleName": module_name,
+            "enabled": enabled,
+            "scope": scope,
+            "schedule": schedule
+        }
+        res = requests.post(self.url + '/api/complianceTasks', data=json.dumps(task), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def list_compliance_tasks(self):
+        '''**Description**
+            Get the list of all compliance tasks.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON list with the representation of each compliance task.
+        '''
+        res = requests.get(self.url + '/api/complianceTasks', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_task(self, id):
+        '''**Description**
+            Get a compliance task.
+
+        **Arguments**
+            - id: the id of the compliance task to get.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        res = requests.get(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_compliance_task(self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None):
+        '''**Description**
+            Update an existing compliance task.
+
+        **Arguments**
+            - id: the id of the compliance task to be updated.
+            - name: The name of the task e.g. “Check Docker Compliance”.
+            - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
+            - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
+            - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
+            - enabled: Whether this task should actually run as defined by its schedule.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        ok, res = self.get_compliance_task(id)
+        if not ok:
+            return ok, res
+
+        task = res
+        if name is not None:
+            task["name"] = name
+        if module_name is not None:
+            task["moduleName"] = module_name
+        if schedule is not None:
+            task["schedule"] = schedule
+        if scope is not None:
+            task["scope"] = scope
+        if enabled is not None:
+            task["enabled"] = enabled
+        res = requests.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def delete_compliance_task(self, id):
+        '''**Description**
+            Delete the compliance task with the given id
+
+        **Arguments**
+            - id: the id of the compliance task to delete
+        '''
+        res = requests.delete(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, None
+
+    def list_compliance_results(self, limit=50, direction=None, cursor=None, filter=""):
+        '''**Description**
+            Get the list of all compliance tasks runs.
+
+        **Arguments**
+            - limit: Maximum number of alerts in the response.
+            - direction: the direction (PREV or NEXT) that determines which results to return in relation to cursor.
+            - cursor: An opaque string representing the current position in the list of alerts. It's provided in the 'responseMetadata' of the list_alerts response.
+            - filter: an optional case insensitive filter used to match against the completed task name and return matching results.
+
+        **Success Return Value**
+            A JSON list with the representation of each compliance task run.
+        '''
+        url = "{url}/api/complianceResults?cursor{cursor}&filter={filter}&limit={limit}{direction}".format(
+            url=self.url,
+            limit=limit,
+            direction="&direction=%s" % direction if direction else "",
+            cursor="=%d" % cursor if cursor is not None else "",
+            filter=filter)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_results(self, id):
+        '''**Description**
+            Retrieve the details for a specific compliance task run result.
+
+        **Arguments**
+            - id: the id of the compliance task run to get.
+
+        **Success Return Value**
+            A JSON representation of the compliance task run result.
+        '''
+        res = requests.get(self.url + '/api/complianceResults/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_results_csv(self, id):
+        '''**Description**
+            Retrieve the details for a specific compliance task run result in csv.
+
+        **Arguments**
+            - id: the id of the compliance task run to get.
+
+        **Success Return Value**
+            A CSV representation of the compliance task run result.
+        '''
+        res = requests.get(self.url + '/api/complianceResults/{}/csv'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.text
