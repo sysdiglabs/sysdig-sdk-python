@@ -32,7 +32,7 @@ ok, res = sdclient.get_sysdig_captures()
 # Show the list of metrics
 #
 if ok:
-    captures = res[1]['dumps']
+    captures = res['dumps']
 else:
     print(res)
     sys.exit(1)
