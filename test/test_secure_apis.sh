@@ -131,26 +131,27 @@ fi
 
 echo $OUT
 
-# Start an agent using this account's api key and trigger some events
-docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro -e ADDITIONAL_CONF="security: {enabled: true}\ncommandlines_capture: {enabled: true}\nmemdump: {enabled: true}" --shm-size=350m sysdig/agent
+# Start an agent using the testing account API key and trigger an event
+docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro --shm-size=350m sysdig/agent
 
-FOUND=0
+# make sure the agent starts sending data and the backend makes it available via API
+sleep 60
 
-for i in $(seq 10); do
-    sleep 10
-    sudo touch /bin/some-file.txt
+sudo touch /bin/some-file.txt
 
-    EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
+# make sure the agent sends the policy event and the backend makes it available via API
+sleep 60
 
-    if [[ "$EVTS" != "" ]]; then
-       FOUND=1
-       break;
-    fi
-done
+EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 90`
+
+if [[ "$EVTS" != "" ]]; then
+    FOUND=1
+fi
+
 docker logs sysdig-agent
 docker stop sysdig-agent
 
 if [[ $FOUND == 0 ]]; then
-   echo "Did not find any policy events after 10 attempts..."
+   echo "Did not find any policy events after 60 seconds of wait"
    exit 1
 fi
