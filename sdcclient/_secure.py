@@ -1,5 +1,5 @@
-import json
 import datetime
+import json
 import requests
 import shutil
 import os
@@ -13,6 +13,7 @@ class SdSecureClient(_SdcCommon):
         super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify)
 
         self.customer_id = None
+        self.product = "SDS"
 
     def _get_falco_rules(self, kind):
         res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, verify=self.ssl_verify)
@@ -246,7 +247,7 @@ class SdSecureClient(_SdcCommon):
         if not payload[0]:
             return payload
 
-        obj = payload[1]["{}FalcoRulesFiles".format(kind)] # pylint: disable=unsubscriptable-object
+        obj = payload[1]["{}FalcoRulesFiles".format(kind)]  # pylint: disable=unsubscriptable-object
 
         obj["tag"] = rules_files["tag"]
         obj["files"] = rules_files["files"]
@@ -332,9 +333,16 @@ class SdSecureClient(_SdcCommon):
         return [True, ret]
 
     def _get_policy_events_int(self, ctx):
-        policy_events_url = self.url + '/api/policyEvents?from={:d}&to={:d}&offset={}&limit={}'.format(int(ctx['from']), int(ctx['to']), ctx['offset'], ctx['limit'])
-        if 'sampling' in ctx:
-            policy_events_url += '&sampling={:d}'.format(int(ctx['sampling']))
+        policy_events_url = self.url + '/api/policyEvents{id}?from={frm:d}&to={to:d}&offset={offset}&limit={limit}{sampling}{aggregations}{scope}{filter}'.format(
+            id="/%s" % ctx["id"] if "id" in ctx else "",
+            frm=int(ctx['from']),
+            to=int(ctx['to']),
+            offset=ctx['offset'],
+            limit=ctx['limit'],
+            sampling='&sampling=%d' % int(ctx['sampling']) if "sampling" in ctx else "",
+            aggregations='&aggregations=%s' % json.dumps(ctx['aggregations']) if "aggregations" in ctx else "",
+            scope='&scopeFilter=%s' % ctx['scopeFilter'] if "scopeFilter" in ctx else "",
+            filter='&eventFilter=%s' % ctx['eventFilter'] if "eventFilter" in ctx else "")
 
         res = requests.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -345,7 +353,7 @@ class SdSecureClient(_SdcCommon):
 
         return [True, {"ctx": ctx, "data": res.json()}]
 
-    def get_policy_events_range(self, from_sec, to_sec, sampling=None):
+    def get_policy_events_range(self, from_sec, to_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
         '''**Description**
             Fetch all policy events that occurred in the time range [from_sec:to_sec]. This method is used in conjunction
             with :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
@@ -354,6 +362,9 @@ class SdSecureClient(_SdcCommon):
             - from_sec: the start of the timerange for which to get events
             - end_sec: the end of the timerange for which to get events
             - sampling: sample all policy events using *sampling* interval.
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
+            - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
 
         **Success Return Value**
             An array containing:
@@ -365,17 +376,18 @@ class SdSecureClient(_SdcCommon):
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
         '''
-        ctx = {"from": int(from_sec) * 1000000,
-               "to": int(to_sec) * 1000000,
-               "offset": 0,
-               "limit": 1000}
-
-        if sampling is not None:
-            ctx["sampling"] = sampling
-
+        options = {"from": int(from_sec) * 1000000,
+                   "to": int(to_sec) * 1000000,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
-    def get_policy_events_duration(self, duration_sec, sampling=None):
+    def get_policy_events_duration(self, duration_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
         '''**Description**
             Fetch all policy events that occurred in the last duration_sec seconds. This method is used in conjunction with
             :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
@@ -383,6 +395,9 @@ class SdSecureClient(_SdcCommon):
         **Arguments**
             - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
             - sampling: Sample all policy events using *sampling* interval.
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
+            - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
 
         **Success Return Value**
             An array containing:
@@ -395,17 +410,93 @@ class SdSecureClient(_SdcCommon):
 
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
-
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
         from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
-        ctx = {"to": to_ts,
+
+        options = {"to": to_ts,
+                   "from": from_ts,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
+        return self._get_policy_events_int(ctx)
+
+    def get_policy_events_id_range(self, id, from_sec, to_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
+        '''**Description**
+            Fetch all policy events with id that occurred in the time range [from_sec:to_sec]. This method is used in conjunction
+            with :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
+
+        **Arguments**
+            - id: the id of the policy events to fetch.
+            - from_sec: the start of the timerange for which to get events
+            - end_sec: the end of the timerange for which to get events
+            - sampling: sample all policy events using *sampling* interval.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
+            - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+
+        **Success Return Value**
+            An array containing:
+              - A context object that should be passed to later calls to get_more_policy_events.
+              - An array of policy events, in JSON format. See :func:`~sdcclient.SdSecureClient.get_more_policy_events`
+                for details on the contents of policy events.
+
+        **Example**
+            `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
+
+        '''
+        options = {"id": id,
+                   "from": int(from_sec) * 1000000,
+                   "to": int(to_sec) * 1000000,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
+        return self._get_policy_events_int(ctx)
+
+    def get_policy_events_id_duration(self, id, duration_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
+        '''**Description**
+            Fetch all policy events with id that occurred in the last duration_sec seconds. This method is used in conjunction with
+            :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
+
+        **Arguments**
+            - id: the id of the policy events to fetch.
+            - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
+            - sampling: Sample all policy events using *sampling* interval.
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
+            - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
+
+        **Success Return Value**
+            An array containing:
+              - A context object that should be passed to later calls to get_more_policy_events.
+              - An array of policy events, in JSON format. See :func:`~sdcclient.SdSecureClient.get_more_policy_events`
+                for details on the contents of policy events.
+
+        **Example**
+            `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
+
+        '''
+        epoch = datetime.datetime.utcfromtimestamp(0)
+        to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
+        from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
+
+        ctx = {"id": id,
+               "to": to_ts,
                "from": from_ts,
                "offset": 0,
-               "limit": 1000}
-
-        if sampling is not None:
-            ctx["sampling"] = sampling
-
+               "limit": 1000,
+               "sampling": sampling,
+               "aggregations": aggregations,
+               "scopeFilter": scope_filter,
+               "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_more_policy_events(self, ctx):
@@ -456,10 +547,7 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_all_policies(self):
         '''**Description**
@@ -496,10 +584,7 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_policy_priorities(self):
         '''**Description**
@@ -517,10 +602,7 @@ class SdSecureClient(_SdcCommon):
         '''
 
         res = requests.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def set_policy_priorities(self, priorities_json):
         '''**Description**
@@ -543,10 +625,7 @@ class SdSecureClient(_SdcCommon):
             return [False, "priorities json is not valid json: {}".format(str(e))]
 
         res = requests.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_policy(self, name):
         '''**Description**
@@ -598,10 +677,7 @@ class SdSecureClient(_SdcCommon):
 
         body = {"policy": policy_obj}
         res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def update_policy(self, policy_json):
         '''**Description**
@@ -630,10 +706,7 @@ class SdSecureClient(_SdcCommon):
         body = {"policy": policy_obj}
 
         res = requests.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_policy_name(self, name):
         '''**Description**
@@ -675,7 +748,150 @@ class SdSecureClient(_SdcCommon):
 
         '''
         res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
+        return self._request_result(res)
 
-        return [True, res.json()]
+    def add_compliance_task(self, name, module_name='docker-bench-security', schedule='06:00:00Z/PT12H', scope=None, enabled=True):
+        '''**Description**
+            Add a new compliance task.
+
+        **Arguments**
+            - name: The name of the task e.g. 'Check Docker Compliance'.
+            - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
+            - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
+            - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
+            - enabled: Whether this task should actually run as defined by its schedule.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        task = {
+            "id": None,
+            "name": name,
+            "moduleName": module_name,
+            "enabled": enabled,
+            "scope": scope,
+            "schedule": schedule
+        }
+        res = requests.post(self.url + '/api/complianceTasks', data=json.dumps(task), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def list_compliance_tasks(self):
+        '''**Description**
+            Get the list of all compliance tasks.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON list with the representation of each compliance task.
+        '''
+        res = requests.get(self.url + '/api/complianceTasks', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_task(self, id):
+        '''**Description**
+            Get a compliance task.
+
+        **Arguments**
+            - id: the id of the compliance task to get.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        res = requests.get(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_compliance_task(self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None):
+        '''**Description**
+            Update an existing compliance task.
+
+        **Arguments**
+            - id: the id of the compliance task to be updated.
+            - name: The name of the task e.g. 'Check Docker Compliance'.
+            - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
+            - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
+            - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
+            - enabled: Whether this task should actually run as defined by its schedule.
+
+        **Success Return Value**
+            A JSON representation of the compliance task.
+        '''
+        ok, res = self.get_compliance_task(id)
+        if not ok:
+            return ok, res
+
+        task = res
+        options = {
+            'name': name,
+            'moduleName': module_name,
+            'schedule': schedule,
+            'scope': scope,
+            'enabled': enabled
+        }
+        task.update({k: v for k, v in options.items() if v is not None})
+        res = requests.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def delete_compliance_task(self, id):
+        '''**Description**
+            Delete the compliance task with the given id
+
+        **Arguments**
+            - id: the id of the compliance task to delete
+        '''
+        res = requests.delete(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, None
+
+    def list_compliance_results(self, limit=50, direction=None, cursor=None, filter=""):
+        '''**Description**
+            Get the list of all compliance tasks runs.
+
+        **Arguments**
+            - limit: Maximum number of alerts in the response.
+            - direction: the direction (PREV or NEXT) that determines which results to return in relation to cursor.
+            - cursor: An opaque string representing the current position in the list of alerts. It's provided in the 'responseMetadata' of the list_alerts response.
+            - filter: an optional case insensitive filter used to match against the completed task name and return matching results.
+
+        **Success Return Value**
+            A JSON list with the representation of each compliance task run.
+        '''
+        url = "{url}/api/complianceResults?cursor{cursor}&filter={filter}&limit={limit}{direction}".format(
+            url=self.url,
+            limit=limit,
+            direction="&direction=%s" % direction if direction else "",
+            cursor="=%d" % cursor if cursor is not None else "",
+            filter=filter)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_results(self, id):
+        '''**Description**
+            Retrieve the details for a specific compliance task run result.
+
+        **Arguments**
+            - id: the id of the compliance task run to get.
+
+        **Success Return Value**
+            A JSON representation of the compliance task run result.
+        '''
+        res = requests.get(self.url + '/api/complianceResults/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_compliance_results_csv(self, id):
+        '''**Description**
+            Retrieve the details for a specific compliance task run result in csv.
+
+        **Arguments**
+            - id: the id of the compliance task run to get.
+
+        **Success Return Value**
+            A CSV representation of the compliance task run result.
+        '''
+        res = requests.get(self.url + '/api/complianceResults/{}/csv'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.text

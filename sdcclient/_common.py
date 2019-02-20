@@ -66,9 +66,7 @@ class _SdcCommon(object):
             `examples/print_user_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_user_info.py>`_
         '''
         res = requests.get(self.url + '/api/user/me', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_user_token(self):
         '''**Description**
@@ -203,9 +201,7 @@ class _SdcCommon(object):
         }
 
         res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_notification_channel(self, id):
 
@@ -220,10 +216,7 @@ class _SdcCommon(object):
             return [False, "Invalid channel format"]
 
         res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_notification_channel(self, channel):
         if 'id' not in channel:
@@ -245,9 +238,7 @@ class _SdcCommon(object):
             `examples/print_data_retention_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_data_retention_info.py>`_
         '''
         res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_topology_map(self, grouping_hierarchy, time_window_s, sampling_time_s):
         #
@@ -326,9 +317,7 @@ class _SdcCommon(object):
         #
         res = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
                             data=json.dumps(req_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
         '''**Description**
@@ -348,28 +337,18 @@ class _SdcCommon(object):
             - `examples/post_event_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event_simple.py>`_
             - `examples/post_event.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event.py>`_
         '''
-        edata = {
-            'event': {
-                'name': name
-            }
+        options = {
+            'name': name,
+            'description': description,
+            'severity': severity,
+            'filter': event_filter,
+            'tags': tags
         }
-
-        if description is not None:
-            edata['event']['description'] = description
-
-        if severity is not None:
-            edata['event']['severity'] = severity
-
-        if event_filter is not None:
-            edata['event']['filter'] = event_filter
-
-        if tags is not None:
-            edata['event']['tags'] = tags
-
+        edata = {
+            'event': {k: v for k, v in options.items() if v is not None}
+        }
         res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
         '''**Description**
@@ -387,24 +366,15 @@ class _SdcCommon(object):
         **Example**
             `examples/list_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_events.py>`_
         '''
-        params = {}
-
-        if name is not None:
-            params['name'] = name
-
-        if from_ts is not None:
-            params['from'] = from_ts
-
-        if to_ts is not None:
-            params['to'] = to_ts
-
-        if tags is not None:
-            params['tags'] = tags
-
+        options = {
+            'name': name,
+            'from': from_ts,
+            'to': to_ts,
+            'tags': tags
+        }
+        params = {k: v for k, v in options.items() if v is not None}
         res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_event(self, event):
         '''**Description**
@@ -473,13 +443,16 @@ class _SdcCommon(object):
             reqbody['sampling'] = sampling_s
 
         res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
-    def get_sysdig_captures(self):
+    def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
         '''**Description**
             Returns the list of sysdig captures for the user.
+
+        **Arguments**
+            - from_sec: the start of the timerange for which to get the captures
+            - end_sec: the end of the timerange for which to get the captures
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
 
         **Success Return Value**
             A dictionary containing the list of captures.
@@ -487,10 +460,14 @@ class _SdcCommon(object):
         **Example**
             `examples/list_sysdig_captures.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_sysdig_captures.py>`_
         '''
-        res = requests.get(self.url + '/api/sysdig', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        url = '{url}/api/sysdig?source={source}{frm}{to}{scopeFilter}'.format(
+            url=self.url,
+            source=self.product,
+            frm="&from=%d" % (from_sec * 10**6) if from_sec else "",
+            to="&to=%d" % (to_sec * 10**6) if to_sec else "",
+            scopeFilter="&scopeFilter=%s" % scope_filter if scope_filter else "")
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
 
     def poll_sysdig_capture(self, capture):
         '''**Description**
@@ -508,10 +485,10 @@ class _SdcCommon(object):
         if 'id' not in capture:
             return [False, 'Invalid capture format']
 
-        res = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        url = '{url}/api/sysdig/{id}?source={source}'.format(
+            url=self.url, id=capture['id'], source=self.product)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
         '''**Description**
@@ -550,13 +527,30 @@ class _SdcCommon(object):
             'duration': duration,
             'folder': folder,
             'filters': capture_filter,
-            'bucketName': ''
+            'bucketName': '',
+            'source': self.product
         }
 
         res = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def download_sysdig_capture(self, capture_id):
+        '''**Description**
+            Download a sysdig capture by id.
+
+        **Arguments**
+            - **capture_id**: the capture id to download.
+
+        **Success Return Value**
+            The bytes of the scap
+        '''
+        url = '{url}/api/sysdig/{id}/download?_product={product}'.format(
+            url=self.url, id=capture_id, product=self.product)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+            return False, self.lasterr
+
+        return True, res.content
 
     def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         '''**Description**
@@ -586,21 +580,14 @@ class _SdcCommon(object):
                 return [False, 'user ' + user_email + ' already exists']
 
         # Create the user
-        user_json = {'username': user_email}
-
-        if first_name is not None:
-            user_json['firstName'] = first_name
-
-        if last_name is not None:
-            user_json['lastName'] = last_name
-
-        if system_role is not None:
-            user_json['systemRole'] = system_role
+        options = {'username': user_email,
+                   'firstName': first_name,
+                   'lastName': last_name,
+                   'systemRole': system_role}
+        user_json = {k: v for k, v in options.items() if v is not None}
 
         res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_user(self, user_email):
         '''**Description**
@@ -786,9 +773,7 @@ class _SdcCommon(object):
             reqbody['filter'] = filter
 
         res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
                   perm_capture=None, perm_custom_events=None, perm_aws_data=None):
@@ -859,9 +844,7 @@ class _SdcCommon(object):
             reqbody['filter'] = t['filter']
 
         res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_team(self, name):
         '''**Description**
@@ -977,9 +960,7 @@ class _SdcCommon(object):
 
     def set_agents_config(self, config):
         res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def clear_agents_config(self):
         data = {'files': []}
@@ -997,3 +978,9 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         data = res.json()
         return [True, data['token']['key']]
+
+    def _request_result(self, res):
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.json()
