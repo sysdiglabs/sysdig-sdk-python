@@ -10,14 +10,16 @@ import getopt
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdSecureClient
 
+
 def usage():
-    print 'usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0]
-    print '-o|--order-only: Only display the list of policy ids in evaluation order. Suitable for use by set_policy_order.py'
-    print 'You can find your token at https://secure.sysdig.com/#/settings/user'
+    print('usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0])
+    print('-o|--order-only: Only display the list of policy ids in evaluation order. Suitable for use by set_policy_order.py')
+    print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"o",["order-only"])
+    opts, args = getopt.getopt(sys.argv[1:], "o", ["order-only"])
 except getopt.GetoptError:
     usage()
 
@@ -39,28 +41,26 @@ sdc_token = args[0]
 #
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
-res = sdclient.get_policy_priorities()
+ok, res = sdclient.get_policy_priorities()
 
-if not res[0]:
-    print res[1]
+if not ok:
+    print(res)
     sys.exit(1)
 
 # Strip the surrounding json to only keep the list of policy ids
-res[1] = res[1]['priorities']['policyIds']
+res = res['priorities']['policyIds']
 
 if not order_only:
-    priorities = res[1]
-    res = sdclient.list_policies()
-    if res[0]:
-        res[1]['policies'].sort(key=lambda p: priorities.index(p['id']))
+    priorities = res
+    ok, res = sdclient.list_policies()
+    if ok:
+        res['policies'].sort(key=lambda p: priorities.index(p['id']))
 
 #
 # Return the result
 #
-if res[0]:
-    print json.dumps(res[1], indent=2)
+if ok:
+    print(json.dumps(res, indent=2))
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
-
-

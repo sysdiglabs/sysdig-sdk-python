@@ -10,17 +10,19 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
+
 #
 # Parse arguments
 #
 def usage():
-    print 'usage: %s [-e|--event <name>] <sysdig-token>' % sys.argv[0]
-    print '-e|--event: Name of event to delete'
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s [-e|--event <name>] <sysdig-token>' % sys.argv[0])
+    print('-e|--event: Name of event to delete')
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"e:",["event="])
+    opts, args = getopt.getopt(sys.argv[1:], "e:", ["event="])
 except getopt.GetoptError:
     usage()
 
@@ -42,20 +44,19 @@ sdclient = SdcClient(sdc_token)
 #
 # Get the events that match a name
 #
-res = sdclient.get_events(name=event_name)
+ok, res = sdclient.get_events(name=event_name)
 
-if not res[0]:
-	print res[1]
-	sys.exit(1)
+if not ok:
+    print(res)
+    sys.exit(1)
 
 #
 # Delete the first event among the returned ones
 #
-for event in res[1]['events']:
-	print "Deleting event " + event['name']
+for event in res['events']:
+    print("Deleting event " + event['name'])
 
-	res = sdclient.delete_event(event)
-
-	if not res[0]:
-		print res[1]
-		sys.exit(1)
+    ok, res = sdclient.delete_event(event)
+    if not ok:
+        print(res)
+        sys.exit(1)
