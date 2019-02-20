@@ -20,15 +20,17 @@ import getopt
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdSecureClient
 
+
 def usage():
-    print 'usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0]
-    print '-s|--summarize: group policy events by sanitized output and print by frequency'
-    print '-l|--limit: with -s, only print the first <limit> outputs'
-    print 'You can find your token at https://secure.sysdig.com/#/settings/user'
+    print('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0])
+    print('-s|--summarize: group policy events by sanitized output and print by frequency')
+    print('-l|--limit: with -s, only print the first <limit> outputs')
+    print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"sl:",["summarize","limit="])
+    opts, args = getopt.getopt(sys.argv[1:], "sl:", ["summarize", "limit="])
 except getopt.GetoptError:
     usage()
 
@@ -65,9 +67,9 @@ else:
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
 if duration is not None:
-    res = sdclient.get_policy_events_duration(duration)
+    ok, res = sdclient.get_policy_events_duration(duration)
 else:
-    res = sdclient.get_policy_events_range(from_sec, to_sec)
+    ok, res = sdclient.get_policy_events_range(from_sec, to_sec)
 
 all_outputs = dict()
 
@@ -76,23 +78,23 @@ while True:
     #
     # Return the result
     #
-    if not res[0]:
-        print res[1]
+    if not ok:
+        print(res)
         sys.exit(1)
 
-    if len(res[1]['data']['policyEvents']) == 0:
+    if len(res['data']['policyEvents']) == 0:
         break
 
-    sys.stderr.write("offset={}\n".format(res[1]['ctx']['offset']))
+    sys.stderr.write("offset={}\n".format(res['ctx']['offset']))
 
-    for event in res[1]['data']['policyEvents']:
+    for event in res['data']['policyEvents']:
         if summarize:
             sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
             all_outputs[sanitize_output] = all_outputs.get(sanitize_output, 0) + 1
         else:
             sys.stdout.write(json.dumps(event) + "\n")
 
-    res = sdclient.get_more_policy_events(res[1]['ctx'])
+    ok, res = sdclient.get_more_policy_events(res['ctx'])
 
 if summarize:
     sorted = sorted(all_outputs.items(), key=operator.itemgetter(1), reverse=True)
@@ -102,4 +104,3 @@ if summarize:
         sys.stdout.write("{} {}\n".format(val[1], val[0]))
         if limit != 0 and count > limit:
             break
-

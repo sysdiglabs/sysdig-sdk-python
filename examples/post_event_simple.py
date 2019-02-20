@@ -12,16 +12,16 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) < 4:
-    print 'usage: %s <sysdig-token> name description [severity]' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> name description [severity]' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
 name = sys.argv[2]
 description = sys.argv[3]
 
-scope='host.hostName = "foo" and container.name = "bar"'
-tags={"tag1" : "value1"}
+scope = 'host.hostName = "foo" and container.name = "bar"'
+tags = {"tag1": "value1"}
 
 severity = 6
 if len(sys.argv) < 4:
@@ -35,13 +35,13 @@ sdclient = SdcClient(sdc_token)
 #
 # Post the event
 #
-res = sdclient.post_event(name, description, severity, scope, tags)
+ok, res = sdclient.post_event(name, description, severity, scope, tags)
 
 #
 # Return the result
 #
-if res[0]:
-    print 'Event Posted Successfully'
+if ok:
+    print('Event Posted Successfully')
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
