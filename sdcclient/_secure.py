@@ -376,20 +376,15 @@ class SdSecureClient(_SdcCommon):
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
         '''
-        ctx = {"from": int(from_sec) * 1000000,
-               "to": int(to_sec) * 1000000,
-               "offset": 0,
-               "limit": 1000}
-
-        if sampling is not None:
-            ctx["sampling"] = sampling
-        if aggregations is not None:
-            ctx["aggregations"] = aggregations
-        if scope_filter is not None:
-            ctx["scopeFilter"] = scope_filter
-        if event_filter is not None:
-            ctx["eventFilter"] = event_filter
-
+        options = {"from": int(from_sec) * 1000000,
+                   "to": int(to_sec) * 1000000,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_policy_events_duration(self, duration_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
@@ -415,23 +410,18 @@ class SdSecureClient(_SdcCommon):
 
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
-
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
         from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
-        ctx = {"to": to_ts,
-               "from": from_ts,
-               "offset": 0,
-               "limit": 1000}
 
-        if sampling is not None:
-            ctx["sampling"] = sampling
-        if aggregations is not None:
-            ctx["aggregations"] = aggregations
-        if scope_filter is not None:
-            ctx["scopeFilter"] = scope_filter
-        if event_filter is not None:
-            ctx["eventFilter"] = event_filter
-
+        options = {"to": to_ts,
+                   "from": from_ts,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_policy_events_id_range(self, id, from_sec, to_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
@@ -458,21 +448,16 @@ class SdSecureClient(_SdcCommon):
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
         '''
-        ctx = {"id": id,
-               "from": int(from_sec) * 1000000,
-               "to": int(to_sec) * 1000000,
-               "offset": 0,
-               "limit": 1000}
-
-        if sampling is not None:
-            ctx["sampling"] = sampling
-        if aggregations is not None:
-            ctx["aggregations"] = aggregations
-        if scope_filter is not None:
-            ctx["scopeFilter"] = scope_filter
-        if event_filter is not None:
-            ctx["eventFilter"] = event_filter
-
+        options = {"id": id,
+                   "from": int(from_sec) * 1000000,
+                   "to": int(to_sec) * 1000000,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_policy_events_id_duration(self, id, duration_sec, sampling=None, aggregations=None, scope_filter=None, event_filter=None):
@@ -499,24 +484,19 @@ class SdSecureClient(_SdcCommon):
 
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
-
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
         from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
+
         ctx = {"id": id,
                "to": to_ts,
                "from": from_ts,
                "offset": 0,
-               "limit": 1000}
-
-        if sampling is not None:
-            ctx["sampling"] = sampling
-        if aggregations is not None:
-            ctx["aggregations"] = aggregations
-        if scope_filter is not None:
-            ctx["scopeFilter"] = scope_filter
-        if event_filter is not None:
-            ctx["eventFilter"] = event_filter
-
+               "limit": 1000,
+               "sampling": sampling,
+               "aggregations": aggregations,
+               "scopeFilter": scope_filter,
+               "eventFilter": event_filter}
+        ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_more_policy_events(self, ctx):
@@ -841,16 +821,14 @@ class SdSecureClient(_SdcCommon):
             return ok, res
 
         task = res
-        if name is not None:
-            task["name"] = name
-        if module_name is not None:
-            task["moduleName"] = module_name
-        if schedule is not None:
-            task["schedule"] = schedule
-        if scope is not None:
-            task["scope"] = scope
-        if enabled is not None:
-            task["enabled"] = enabled
+        options = {
+            'name': name,
+            'moduleName': module_name,
+            'schedule': schedule,
+            'scope': scope,
+            'enabled': enabled
+        }
+        task.update({k: v for k, v in options.items() if v is not None})
         res = requests.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 

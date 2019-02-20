@@ -337,24 +337,16 @@ class _SdcCommon(object):
             - `examples/post_event_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event_simple.py>`_
             - `examples/post_event.py <https://github.com/draios/python-sdc-client/blob/master/examples/post_event.py>`_
         '''
-        edata = {
-            'event': {
-                'name': name
-            }
+        options = {
+            'name': name,
+            'description': description,
+            'severity': severity,
+            'filter': event_filter,
+            'tags': tags
         }
-
-        if description is not None:
-            edata['event']['description'] = description
-
-        if severity is not None:
-            edata['event']['severity'] = severity
-
-        if event_filter is not None:
-            edata['event']['filter'] = event_filter
-
-        if tags is not None:
-            edata['event']['tags'] = tags
-
+        edata = {
+            'event': {k: v for k, v in options.items() if v is not None}
+        }
         res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata), verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -374,20 +366,13 @@ class _SdcCommon(object):
         **Example**
             `examples/list_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_events.py>`_
         '''
-        params = {}
-
-        if name is not None:
-            params['name'] = name
-
-        if from_ts is not None:
-            params['from'] = from_ts
-
-        if to_ts is not None:
-            params['to'] = to_ts
-
-        if tags is not None:
-            params['tags'] = tags
-
+        options = {
+            'name': name,
+            'from': from_ts,
+            'to': to_ts,
+            'tags': tags
+        }
+        params = {k: v for k, v in options.items() if v is not None}
         res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -595,16 +580,11 @@ class _SdcCommon(object):
                 return [False, 'user ' + user_email + ' already exists']
 
         # Create the user
-        user_json = {'username': user_email}
-
-        if first_name is not None:
-            user_json['firstName'] = first_name
-
-        if last_name is not None:
-            user_json['lastName'] = last_name
-
-        if system_role is not None:
-            user_json['systemRole'] = system_role
+        options = {'username': user_email,
+                   'firstName': first_name,
+                   'lastName': last_name,
+                   'systemRole': system_role}
+        user_json = {k: v for k, v in options.items() if v is not None}
 
         res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json), verify=self.ssl_verify)
         return self._request_result(res)
