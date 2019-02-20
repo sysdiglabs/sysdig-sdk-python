@@ -12,17 +12,19 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
+
 #
 # Parse arguments
 #
 def usage():
-    print 'usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0]
-    print '-d|--dashboard: Set name of dashboard to create'
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0])
+    print('-d|--dashboard: Set name of dashboard to create')
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"d:",["dashboard="])
+    opts, args = getopt.getopt(sys.argv[1:], "d:", ["dashboard="])
 except getopt.GetoptError:
     usage()
 
@@ -55,15 +57,15 @@ viewName = "Overview by Process"
 # agent tags by using "agent.tag.*" metadata
 dashboardFilter = "kubernetes.namespace.name = prod and proc.name = cassandra"
 
-print 'Creating dashboard from view'
-res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
+print('Creating dashboard from view')
+ok, res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
 # Check the result
 #
-if res[0]:
-    print 'Dashboard created successfully'
+if ok:
+    print('Dashboard created successfully')
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
 
 #
@@ -76,14 +78,14 @@ dashboardCopy = "Copy Of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
 dashboardFilter = "kubernetes.namespace.name = dev and proc.name = cassandra"
 
-print 'Creating dashboard from dashboard'
-res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)
+print('Creating dashboard from dashboard')
+ok, res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)
 
 #
 # Check the result
 #
-if res[0]:
-    print 'Dashboard copied successfully'
+if ok:
+    print('Dashboard copied successfully')
 else:
-    print res[1]
+    print(res)
     sys.exit(1)

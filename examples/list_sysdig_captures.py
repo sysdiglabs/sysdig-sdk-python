@@ -12,8 +12,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -26,17 +26,17 @@ sdclient = SdcClient(sdc_token)
 #
 # Fire the request.
 #
-res = sdclient.get_sysdig_captures()
+ok, res = sdclient.get_sysdig_captures()
 
 #
 # Show the list of metrics
 #
-if res[0]:
+if ok:
     captures = res[1]['dumps']
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
 
 for capture in captures:
-	print "Folder %s, Name %s, Host: %s, Size: %d, Status: %s" % \
-		(capture['folder'], capture['name'], capture['agent']['hostName'], capture['size'], capture['status'])
+    print("Folder %s, Name %s, Host: %s, Size: %d, Status: %s" %
+          (capture['folder'], capture['name'], capture['agent']['hostName'], capture['size'], capture['status']))

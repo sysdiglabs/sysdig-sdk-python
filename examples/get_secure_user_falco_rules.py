@@ -12,8 +12,8 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
-    print 'You can find your token at https://secure.sysdig.com/#/settings/user'
+    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -26,13 +26,13 @@ sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 #
 # Get the configuration
 #
-res = sdclient.get_user_falco_rules()
+ok, res = sdclient.get_user_falco_rules()
 
 #
 # Return the result
 #
-if res[0]:
+if ok:
     sys.stdout.write(res[1]["userRulesFile"]["content"])
 else:
-    print res[1]
+    print(res)
     sys.exit(1)

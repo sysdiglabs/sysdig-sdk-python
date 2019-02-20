@@ -12,10 +12,12 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdSecureClient
 
+
 def usage():
-    print 'usage: %s <sysdig-token>' % sys.argv[0]
-    print 'You can find your token at https://secure.sysdig.com/#/settings/user'
+    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
+
 
 #
 # Parse arguments
@@ -30,15 +32,13 @@ sdc_token = sys.argv[1]
 #
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
-res = sdclient.create_default_policies()
+ok, res = sdclient.create_default_policies()
 
 #
 # Return the result
 #
-if res[0]:
-    print json.dumps(res[1], indent=2)
+if ok:
+    print(json.dumps(res, indent=2))
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
-
-
