@@ -137,7 +137,9 @@ FOUND=0
 for i in $(seq 10); do
     sleep 10
     sudo touch /bin/some-file.txt
+
     EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
+    
     if [[ "$EVTS" != "" ]]; then
        FOUND=1
        break;
@@ -145,6 +147,6 @@ for i in $(seq 10); do
 done
 
 if [[ $FOUND == 0 ]]; then
-   echo "Did not find any policy events after 60 seconds of wait"
+   echo "Did not find any policy events after 10 attempts..."
    exit 1
 fi
