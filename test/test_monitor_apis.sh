@@ -7,12 +7,6 @@ SCRIPTDIR=$(dirname $SCRIPT)
 
 export SDC_URL=https://app-staging.sysdigcloud.com
 
-# Start an agent using the testing account API key to send some data
-docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro --shm-size=350m sysdig/agent
-
-# make sure the agent starts sending data and the backend makes it available via API
-sleep 60
-
 AGENT_HOSTNAME=$(hostname -s)
 SESSION_UUID=$(head -c 32 /dev/urandom | tr -dc 'a-zA-Z0-9')
 ALERT_NAME=python-test-alert-$SESSION_UUID
@@ -51,6 +45,3 @@ date; $SCRIPTDIR/../examples/create_sysdig_capture.py $PYTHON_SDC_TEST_MONITOR_A
 date; $SCRIPTDIR/../examples/notification_channels.py -c $CHANNEL_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 date; $SCRIPTDIR/../examples/user_team_mgmt.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $TEAM_NAME example-user@example-domain.com
 date; $SCRIPTDIR/../examples/user_team_mgmt_extended.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $TEAM_NAME example-user@example-domain.com
-
-docker stop sysdig-agent
-
