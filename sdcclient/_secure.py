@@ -13,6 +13,7 @@ class SdSecureClient(_SdcCommon):
         super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify)
 
         self.customer_id = None
+        self.product = "SDS"
 
     def _get_falco_rules(self, kind):
         res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, verify=self.ssl_verify)

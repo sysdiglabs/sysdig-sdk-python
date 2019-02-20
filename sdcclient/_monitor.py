@@ -14,6 +14,7 @@ class SdMonitorClient(_SdcCommon):
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
+        self.product = "SDC"
 
     def get_alerts(self):
         '''**Description**

@@ -460,9 +460,14 @@ class _SdcCommon(object):
         res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_sysdig_captures(self):
+    def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
         '''**Description**
             Returns the list of sysdig captures for the user.
+
+        **Arguments**
+            - from_sec: the start of the timerange for which to get the captures
+            - end_sec: the end of the timerange for which to get the captures
+            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
 
         **Success Return Value**
             A dictionary containing the list of captures.
@@ -470,7 +475,13 @@ class _SdcCommon(object):
         **Example**
             `examples/list_sysdig_captures.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_sysdig_captures.py>`_
         '''
-        res = requests.get(self.url + '/api/sysdig', headers=self.hdrs, verify=self.ssl_verify)
+        url = '{url}/api/sysdig?source={source}{frm}{to}{scopeFilter}'.format(
+            url=self.url,
+            source=self.product,
+            frm="&from=%d" % (from_sec * 10**6) if from_sec else "",
+            to="&to=%d" % (to_sec * 10**6) if to_sec else "",
+            scopeFilter="&scopeFilter=%s" % scope_filter if scope_filter else "")
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def poll_sysdig_capture(self, capture):
@@ -489,7 +500,9 @@ class _SdcCommon(object):
         if 'id' not in capture:
             return [False, 'Invalid capture format']
 
-        res = requests.get(self.url + '/api/sysdig/' + str(capture['id']), headers=self.hdrs, verify=self.ssl_verify)
+        url = '{url}/api/sysdig/{id}?source={source}'.format(
+            url=self.url, id=capture['id'], source=self.product)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
@@ -529,11 +542,30 @@ class _SdcCommon(object):
             'duration': duration,
             'folder': folder,
             'filters': capture_filter,
-            'bucketName': ''
+            'bucketName': '',
+            'source': self.product
         }
 
         res = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
         return self._request_result(res)
+
+    def download_sysdig_capture(self, capture_id):
+        '''**Description**
+            Download a sysdig capture by id.
+
+        **Arguments**
+            - **capture_id**: the capture id to download.
+
+        **Success Return Value**
+            The bytes of the scap
+        '''
+        url = '{url}/api/sysdig/{id}/download?_product={product}'.format(
+            url=self.url, id=capture_id, product=self.product)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.content
 
     def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         '''**Description**
