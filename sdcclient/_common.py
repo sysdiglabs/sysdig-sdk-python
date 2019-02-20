@@ -452,7 +452,7 @@ class _SdcCommon(object):
         **Arguments**
             - from_sec: the start of the timerange for which to get the captures
             - end_sec: the end of the timerange for which to get the captures
-            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
 
         **Success Return Value**
             A dictionary containing the list of captures.

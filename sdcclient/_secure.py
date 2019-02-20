@@ -362,8 +362,8 @@ class SdSecureClient(_SdcCommon):
             - from_sec: the start of the timerange for which to get events
             - end_sec: the end of the timerange for which to get events
             - sampling: sample all policy events using *sampling* interval.
-            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it’s present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
-            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
             - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
 
         **Success Return Value**
@@ -395,8 +395,8 @@ class SdSecureClient(_SdcCommon):
         **Arguments**
             - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
             - sampling: Sample all policy events using *sampling* interval.
-            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it’s present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
-            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
             - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
 
         **Success Return Value**
@@ -434,9 +434,9 @@ class SdSecureClient(_SdcCommon):
             - from_sec: the start of the timerange for which to get events
             - end_sec: the end of the timerange for which to get events
             - sampling: sample all policy events using *sampling* interval.
-            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
             - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
-            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it’s present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
 
         **Success Return Value**
             An array containing:
@@ -469,8 +469,8 @@ class SdSecureClient(_SdcCommon):
             - id: the id of the policy events to fetch.
             - duration_sec: Fetch all policy events that have occurred in the last *duration_sec* seconds.
             - sampling: Sample all policy events using *sampling* interval.
-            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it’s present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
-            - scope_filter: this is a SysdigMonitor-like filter (e.g “container.image=ubuntu”). When provided, events are filtered by their scope, so only a subset will be returned (e.g. “container.image=ubuntu” will provide only events that have happened on an ubuntu container).
+            - aggregations: When present it specifies how to aggregate events (sampling does not need to be specified, because when it's present it automatically means events will be aggregated). This field can either be a list of scope metrics or a list of policyEvents fields but (currently) not a mix of the two. When policy events fields are specified, only these can be used= severity, agentId, containerId, policyId, ruleType.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, events are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only events that have happened on an ubuntu container).
             - event_filter: this is a SysdigMonitor-like filter (e.g. policyEvent.policyId=3). When provided, events are filtered by some of their properties. Currently the supported set of filters is policyEvent.all(which can be used just with matches, policyEvent.policyId, policyEvent.id, policyEvent.severity, policyEvent.ruleTye, policyEvent.ruleSubtype.
 
         **Success Return Value**
@@ -755,7 +755,7 @@ class SdSecureClient(_SdcCommon):
             Add a new compliance task.
 
         **Arguments**
-            - name: The name of the task e.g. “Check Docker Compliance”.
+            - name: The name of the task e.g. 'Check Docker Compliance'.
             - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
             - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
             - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
@@ -807,7 +807,7 @@ class SdSecureClient(_SdcCommon):
 
         **Arguments**
             - id: the id of the compliance task to be updated.
-            - name: The name of the task e.g. “Check Docker Compliance”.
+            - name: The name of the task e.g. 'Check Docker Compliance'.
             - module_name: The name of the module that implements this task. Separate from task name in case you want to use the same module to run separate tasks with different scopes or schedules. [ 'docker-bench-security', 'kube-bench' ]
             - schedule: The frequency at which this task should run. Expressed as an `ISO 8601 Duration <https://en.wikipedia.org/wiki/ISO_8601#Durations>`_
             - scope: The agent will only run the task on hosts matching this scope or on hosts where containers match this scope.
