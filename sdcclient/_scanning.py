@@ -17,6 +17,7 @@ class SdScanningClient(_SdcCommon):
 
     def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True):
         super(SdScanningClient, self).__init__(token, sdc_url, ssl_verify)
+        self.product = "SDS"
 
     def add_image(self, image, force=False, dockerfile=None, annotations={}, autosubscribe=True):
         '''**Description**

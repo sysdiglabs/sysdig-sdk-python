@@ -14,6 +14,7 @@ class SdMonitorClient(_SdcCommon):
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
+        self.product = "SDC"
 
     def get_alerts(self):
         '''**Description**
@@ -26,9 +27,7 @@ class SdMonitorClient(_SdcCommon):
             `examples/list_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_alerts.py>`_
         '''
         res = requests.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_notifications(self, from_ts, to_ts, state=None, resolved=None):
         '''**Description**
@@ -86,9 +85,7 @@ class SdMonitorClient(_SdcCommon):
         data = {'notification': notification}
 
         res = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def create_alert(self, name=None, description=None, severity=None, for_atleast_s=None, condition=None,
                      segmentby=[], segment_condition='ANY', user_filter='', notify=None, enabled=True,
@@ -166,9 +163,7 @@ class SdMonitorClient(_SdcCommon):
         # Create the new alert
         #
         res = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def update_alert(self, alert):
         '''**Description**
@@ -187,10 +182,7 @@ class SdMonitorClient(_SdcCommon):
             return [False, "Invalid alert format"]
 
         res = requests.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({"alert": alert}), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self._request_result(res)
 
     def delete_alert(self, alert):
         '''**Description**
@@ -295,9 +287,7 @@ class SdMonitorClient(_SdcCommon):
 
         res = requests.get(self.url + '/api/defaultDashboards/' + id, headers=self.hdrs,
                            verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def get_dashboards(self):
         '''**Description**
@@ -310,9 +300,7 @@ class SdMonitorClient(_SdcCommon):
             `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
         '''
         res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
     def find_dashboard_by(self, name=None):
         '''**Description**
@@ -343,10 +331,7 @@ class SdMonitorClient(_SdcCommon):
     def create_dashboard_with_configuration(self, configuration):
         res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': configuration}),
                             verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        else:
-            return [True, res.json()]
+        return self._request_result(res)
 
     def create_dashboard(self, name):
         '''
@@ -373,10 +358,7 @@ class SdMonitorClient(_SdcCommon):
         #
         res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                             verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        else:
-            return [True, res.json()]
+        return self._request_result(res)
 
     def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
         """**Description**
@@ -538,10 +520,7 @@ class SdMonitorClient(_SdcCommon):
         #
         res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                            verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        else:
-            return [True, res.json()]
+        return self._request_result(res)
 
     def remove_dashboard_panel(self, dashboard, panel_name):
         '''**Description**
@@ -581,10 +560,7 @@ class SdMonitorClient(_SdcCommon):
             #
             res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                                verify=self.ssl_verify)
-            if not self._checkResponse(res):
-                return [False, self.lasterr]
-            else:
-                return [True, res.json()]
+            return self._request_result(res)
         else:
             return [False, 'Not found']
 
@@ -627,10 +603,7 @@ class SdMonitorClient(_SdcCommon):
         # Create the new dashboard
         #
         res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        else:
-            return [True, res.json()]
+        return self._request_result(res)
 
     def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False, annotations={}):
         '''**Description**
@@ -779,9 +752,7 @@ class SdMonitorClient(_SdcCommon):
             `examples/list_metrics.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_metrics.py>`_
         '''
         res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, res.json()]
+        return self._request_result(res)
 
 
 # For backwards compatibility
