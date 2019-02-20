@@ -143,9 +143,6 @@ if [[ "$EVTS" != "" ]]; then
     FOUND=1
 fi
 
-docker logs sysdig-agent
-docker stop sysdig-agent
-
 if [[ $FOUND == 0 ]]; then
    echo "Did not find any policy events after 60 seconds of wait"
    exit 1
