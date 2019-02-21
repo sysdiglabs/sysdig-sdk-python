@@ -131,14 +131,12 @@ fi
 
 echo $OUT
 
-# Start an agent using this account's api key and trigger some events
-docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e COLLECTOR=collector-staging.sysdigcloud.com -e ACCESS_KEY=$PYTHON_SDC_TEST_ACCESS_KEY -v /var/run/docker.sock:/host/var/run/docker.sock  -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro -e ADDITIONAL_CONF="security: {enabled: true}\ncommandlines_capture: {enabled: true}\nmemdump: {enabled: true}" --shm-size=350m sysdig/agent
-
+# Trigger some events
 FOUND=0
 
 for i in $(seq 10); do
-    sleep 10
     sudo touch /bin/some-file.txt
+    sleep 10
 
     EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
 
@@ -147,8 +145,6 @@ for i in $(seq 10); do
        break;
     fi
 done
-docker logs sysdig-agent
-docker stop sysdig-agent
 
 if [[ $FOUND == 0 ]]; then
    echo "Did not find any policy events after 10 attempts..."
