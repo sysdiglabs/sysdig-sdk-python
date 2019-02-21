@@ -17,20 +17,22 @@ import yaml
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdSecureClient
 
+
 #
 # Parse arguments
 #
 def usage():
-    print 'usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>' % sys.argv[0]
-    print '-l|--load: load the files to set from a set of files below <path> using load_default_rules_files().'
-    print '-t|--tag: Set a tag for the set of files'
-    print '-c|--content: the (single) file to set'
-    print 'if --load is specified, neither --tag nor --content can be specified'
-    print 'You can find your token at https://secure.sysdig.com/#/settings/user'
+    print('usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>' % sys.argv[0])
+    print('-l|--load: load the files to set from a set of files below <path> using load_default_rules_files().')
+    print('-t|--tag: Set a tag for the set of files')
+    print('-c|--content: the (single) file to set')
+    print('if --load is specified, neither --tag nor --content can be specified')
+    print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"l:t:n:c:",["load=","tag=","name=","content="])
+    opts, args = getopt.getopt(sys.argv[1:], "l:t:n:c:", ["load=", "tag=", "name=", "content="])
 except getopt.GetoptError:
     usage()
 
@@ -62,12 +64,12 @@ sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
 files_obj = {}
 if load_dir != "":
-    print "Loading falco rules files from {}...".format(load_dir)
-    res = sdclient.load_default_falco_rules_files(load_dir)
-    if res[0]:
-        files_obj = res[1]
+    print("Loading falco rules files from {}...".format(load_dir))
+    ok, res = sdclient.load_default_falco_rules_files(load_dir)
+    if ok:
+        files_obj = res
     else:
-        print res[1]
+        print(res)
         sys.exit(1)
 else:
     with open(cpath, 'r') as content_file:
@@ -92,13 +94,13 @@ else:
             }]
         }
 
-res = sdclient.set_default_falco_rules_files(files_obj)
+ok, res = sdclient.set_default_falco_rules_files(files_obj)
 
 #
 # Return the result
 #
-if res[0]:
-    print 'default falco rules files set successfully'
+if ok:
+    print('default falco rules files set successfully')
 else:
-    print res[1]
+    print(res)
     sys.exit(1)

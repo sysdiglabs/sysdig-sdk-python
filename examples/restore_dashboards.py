@@ -14,8 +14,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> <file-name>' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> <file-name>' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -42,15 +42,15 @@ for info in zipf.infolist():
     try:
         j = json.loads(data)
     except ValueError:
-        print 'Non-JSON item found in ZIP: ' + info.filename + ' (skipping)'
+        print('Non-JSON item found in ZIP: ' + info.filename + ' (skipping)')
         continue
     k = {}
     for item in j.keys():
         if item in dashboard_conf_items:
             k[item] = j[item]
-     
-    res = sdclient.create_dashboard_with_configuration(k)
-    if res[0]:
-        print 'Restored Dashboard named: ' + j['name']
+
+    ok, res = sdclient.create_dashboard_with_configuration(k)
+    if ok:
+        print('Restored Dashboard named: ' + j['name'])
     else:
-        print "Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res[1])
+        print("Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res))
