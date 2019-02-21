@@ -15,8 +15,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> <file-name>' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> <file-name>' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -35,12 +35,12 @@ sdclient = SdcClient(sdc_token)
 # basis. We save them off here so we can refer to them later.
 #
 existing_alerts = {}
-res = sdclient.get_alerts()
-if res[0]:
-    for alert in res[1]['alerts']:
-        existing_alerts[alert['name']] = { 'id': alert['id'], 'version': alert['version'] }
+ok, res = sdclient.get_alerts()
+if ok:
+    for alert in res['alerts']:
+        existing_alerts[alert['name']] = {'id': alert['id'], 'version': alert['version']}
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
 
 #
@@ -50,11 +50,11 @@ else:
 # environment. We'll get the list of target IDs so we can drop non-
 # matching IDs when we restore.
 #
-res = sdclient.get_notification_ids()
-if res[0]:
-    existing_notification_channel_ids = res[1]
+ok, res = sdclient.get_notification_ids()
+if ok:
+    existing_notification_channel_ids = res
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
 
 created_count = 0
@@ -66,7 +66,7 @@ with open(alerts_dump_file, 'r') as f:
         if 'notificationChannelIds' in a:
             for channel_id in a['notificationChannelIds']:
                 if channel_id not in existing_notification_channel_ids:
-                    print 'Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a['name'] + '" does not exist.\n  Restoring without this ID.'
+                    print('Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a['name'] + '" does not exist.\n  Restoring without this ID.')
                     a['notificationChannelIds'].remove(channel_id)
 
         # JSON Alerts from the list_alerts.py example are in epoch time, but ones
@@ -74,7 +74,7 @@ with open(alerts_dump_file, 'r') as f:
         # timestamps in string form. If we see these fields as strings, assume
         # they came from the web UI and convert them to epoch.
         for timefield in ['createdOn', 'modifiedOn']:
-            if isinstance(a.get(timefield), basestring):
+            if isinstance(a.get(timefield), str):
                 a[timefield] = calendar.timegm(datetime.datetime.strptime(a[timefield], '%Y-%m-%dT%H:%M:%S.%fZ').timetuple())
 
         if a['name'] in existing_alerts:
@@ -84,18 +84,18 @@ with open(alerts_dump_file, 'r') as f:
                 a['description'] = '(updated via restore_alerts.py)'
             else:
                 a['description'] += ' (updated via restore_alerts.py)'
-            res = sdclient.update_alert(a)
+            ok, res = sdclient.update_alert(a)
             updated_count += 1
         else:
             if a.get('description') is None:
                 a['description'] = '(created via restore_alerts.py)'
             else:
                 a['description'] += ' (created via restore_alerts.py)'
-            res = sdclient.create_alert(alert_obj=a)
+            ok, res = sdclient.create_alert(alert_obj=a)
             created_count += 1
-        if not res[0]:
-            print res[1]
+        if not ok:
+            print(res)
             sys.exit(1)
 
-print ('All Alerts in ' + alerts_dump_file + ' restored successfully (' +
-      str(created_count) + ' created, ' + str(updated_count) + ' updated)')
+print(('All Alerts in ' + alerts_dump_file + ' restored successfully ('
+      + str(created_count) + ' created, ' + str(updated_count) + ' updated)'))

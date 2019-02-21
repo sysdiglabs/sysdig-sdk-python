@@ -12,8 +12,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> email' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> email' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -27,13 +27,13 @@ sdclient = SdcClient(sdc_token)
 #
 # Post the event
 #
-res = sdclient.add_email_notification_recipient(email)
+ok, res = sdclient.add_email_notification_recipient(email)
 
 #
 # Return the result
 #
-if res[0]:
-    print 'Recipient added successfully'
+if ok:
+    print('Recipient added successfully')
 else:
-    print res[1]
+    print(res)
     sys.exit(1)
