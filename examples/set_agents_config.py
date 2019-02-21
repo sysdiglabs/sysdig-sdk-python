@@ -17,8 +17,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print 'usage: %s <sysdig-token> <agent-yaml-config-file>' % sys.argv[0]
-    print 'You can find your token at https://app.sysdigcloud.com/#/settings/user'
+    print('usage: %s <sysdig-token> <agent-yaml-config-file>' % sys.argv[0])
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -40,12 +40,12 @@ json = {"files": [{"filter": "*", "content": yaml_conf}]}
 #
 # Push the configuration
 #
-res = sdclient.set_agents_config(json)
+ok, res = sdclient.set_agents_config(json)
 
 #
 # Check if everything went well
 #
-if res[0]:
-    print 'configuration set successfully'
+if ok:
+    print('configuration set successfully')
 else:
-    print res[1]
+    print(res)
