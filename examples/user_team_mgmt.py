@@ -5,7 +5,6 @@
 
 import os
 import sys
-import logging
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 #
@@ -27,12 +26,12 @@ team_name = sys.argv[2]
 user_name = sys.argv[3]
 
 print('Trying to invite a user:', user_name)
-res = sdclient.create_user_invite(user_name)
-if res[0] == False:
-    if res[1] == 'user ' + user_name + ' already exists':
-        print('User creation failed because', user_name ,'already exists. Continuing.')
+ok, res = sdclient.create_user_invite(user_name)
+if not ok:
+    if res == 'user ' + user_name + ' already exists':
+        print('User creation failed because', user_name, 'already exists. Continuing.')
     else:
-        print('User creation failed:', res[1], '. Exiting.')
+        print('User creation failed:', res, '. Exiting.')
         sys.exit(1)
 else:
     print('User creation succeeded')

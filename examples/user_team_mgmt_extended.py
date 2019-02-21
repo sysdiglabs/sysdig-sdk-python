@@ -57,7 +57,7 @@ else:
 
 ok, res = sdclient.create_user_invite(userB, first_name='TestUser', last_name='Beta')
 if not ok:
-    print('-- User creation failed:', res[1], '. Exiting.')
+    print('-- User creation failed:', res, '. Exiting.')
     sys.exit(1)
 else:
     print('-- User \'', userB, '\' created successfully.')
