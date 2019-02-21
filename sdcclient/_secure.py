@@ -895,3 +895,42 @@ class SdSecureClient(_SdcCommon):
             return False, self.lasterr
 
         return True, res.text
+
+    def list_commands_audit(self, from_sec=None, to_sec=None, scope_filter=None, command_filter=None, limit=100, offset=0):
+        '''**Description**
+            List the commands audit.
+
+        **Arguments**
+            - from_sec: the start of the timerange for which to get commands audit.
+            - end_sec: the end of the timerange for which to get commands audit.
+            - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, commands are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only commands that have happened on an ubuntu container).
+            - command_filter: this is a SysdigMonitor-like filter (e.g. command.comm="touch"). When provided, commands are filtered by some of their properties. Currently the supported set of filters is command.comm, command.cwd, command.pid, command.ppid, command.uid, command.loginshell.id, command.loginshell.distance
+            - limit: Maximum number of commands in the response.
+
+        **Success Return Value**
+            A JSON representation of the commands audit.
+        '''
+        url = "{url}/api/commands?offset={offset}&limit={limit}{from_ts}{to_ts}{scope}{commandFilter}".format(
+            url=self.url,
+            offset=offset,
+            limit=limit,
+            from_ts="&from_ts=%d" % (from_sec * 10**6) if from_sec else "",
+            to_ts="&to_ts=%d" % (to_sec * 10**6) if to_sec else "",
+            scope="&scopeFilter=" + scope_filter if scope_filter else "",
+            commandFilter="&commandFilter=" + command_filter if command_filter else "")
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_command_audit(self, id):
+        '''**Description**
+            Get a command audit.
+
+        **Arguments**
+            - id: the id of the command audit to get.
+
+        **Success Return Value**
+            A JSON representation of the command audit.
+        '''
+        url = "{url}/api/commands/{id}".format(url=self.url, id=id)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
