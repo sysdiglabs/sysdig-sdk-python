@@ -135,11 +135,11 @@ echo $OUT
 FOUND=0
 
 for i in $(seq 10); do
-    sleep 10
     sudo touch /bin/some-file.txt
+    sleep 10
 
     EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
-    
+
     if [[ "$EVTS" != "" ]]; then
        FOUND=1
        break;
