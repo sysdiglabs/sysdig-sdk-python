@@ -2,6 +2,7 @@ import datetime
 import json
 import requests
 import shutil
+import time
 import os
 
 from sdcclient._common import _SdcCommon
@@ -896,7 +897,7 @@ class SdSecureClient(_SdcCommon):
 
         return True, res.text
 
-    def list_commands_audit(self, from_sec=None, to_sec=None, scope_filter=None, command_filter=None, limit=100, offset=0):
+    def list_commands_audit(self, from_sec=None, to_sec=None, scope_filter=None, command_filter=None, limit=100, offset=0, metrics=[]):
         '''**Description**
             List the commands audit.
 
@@ -906,22 +907,29 @@ class SdSecureClient(_SdcCommon):
             - scope_filter: this is a SysdigMonitor-like filter (e.g 'container.image=ubuntu'). When provided, commands are filtered by their scope, so only a subset will be returned (e.g. 'container.image=ubuntu' will provide only commands that have happened on an ubuntu container).
             - command_filter: this is a SysdigMonitor-like filter (e.g. command.comm="touch"). When provided, commands are filtered by some of their properties. Currently the supported set of filters is command.comm, command.cwd, command.pid, command.ppid, command.uid, command.loginshell.id, command.loginshell.distance
             - limit: Maximum number of commands in the response.
+            - metrics: A list of metric values to include in the return.
 
         **Success Return Value**
             A JSON representation of the commands audit.
         '''
-        url = "{url}/api/commands?offset={offset}&limit={limit}{from_ts}{to_ts}{scope}{commandFilter}".format(
+        if to_sec is None:
+            to_sec = time.time()
+        if from_sec is None:
+            from_sec = to_sec - (24 * 60 * 60)  # 1 day
+
+        url = "{url}/api/commands?from={frm}&to={to}&offset={offset}&limit={limit}{scope}{commandFilter}{metrics}".format(
             url=self.url,
             offset=offset,
             limit=limit,
-            from_ts="&from_ts=%d" % (from_sec * 10**6) if from_sec else "",
-            to_ts="&to_ts=%d" % (to_sec * 10**6) if to_sec else "",
+            frm=int(from_sec * 10**6),
+            to=int(to_sec * 10**6),
             scope="&scopeFilter=" + scope_filter if scope_filter else "",
-            commandFilter="&commandFilter=" + command_filter if command_filter else "")
+            commandFilter="&commandFilter=" + command_filter if command_filter else "",
+            metrics="&metrics=" + json.dumps(metrics) if metrics else "")
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_command_audit(self, id):
+    def get_command_audit(self, id, metrics=[]):
         '''**Description**
             Get a command audit.
 
@@ -931,6 +939,10 @@ class SdSecureClient(_SdcCommon):
         **Success Return Value**
             A JSON representation of the command audit.
         '''
-        url = "{url}/api/commands/{id}".format(url=self.url, id=id)
+        url = "{url}/api/commands/{id}?from=0&to={to}{metrics}".format(
+            url=self.url,
+            id=id,
+            to=int(time.time() * 10**6),
+            metrics="&metrics=" + json.dumps(metrics) if metrics else "")
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
