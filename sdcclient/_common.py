@@ -108,6 +108,19 @@ class _SdcCommon(object):
         data = res.json()
         return [True, data['total']]
 
+    def list_notification_channels(self):
+        '''**Description**
+            List all configured Notification Channels
+
+        **Arguments**
+            none
+
+        **Success Return Value**
+            A JSON representation of all the notification channels
+        '''
+        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
     def get_notification_ids(self, channels=None):
         '''**Description**
             Get an array of all configured Notification Channel IDs, or a filtered subset of them.
@@ -126,7 +139,7 @@ class _SdcCommon(object):
         res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
 
         if not self._checkResponse(res):
-            return [False, self.lasterr]
+            return False, self.lasterr
 
         ids = []
 
@@ -184,9 +197,9 @@ class _SdcCommon(object):
                                 found = True
                                 ids.append(ch['id'])
             if not found:
-                return [False, "Channel not found: " + str(c)]
+                return False, "Channel not found: " + str(c)
 
-        return [True, ids]
+        return True, ids
 
     def create_email_notification_channel(self, channel_name, email_recipients):
         channel_json = {
@@ -203,13 +216,26 @@ class _SdcCommon(object):
         res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json), verify=self.ssl_verify)
         return self._request_result(res)
 
+    def create_notification_channel(self, channel):
+        channel["id"] = None
+        channel["version"] = None
+        channel["createdOn"] = None
+        channel["modifiedOn"] = None
+        channel_json = {
+            'notificationChannel': channel
+        }
+
+        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
+                            verify=self.ssl_verify)
+        return self._request_result(res)
+
     def get_notification_channel(self, id):
 
         res = requests.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
-            return [False, self.lasterr]
+            return False, self.lasterr
 
-        return [True, res.json()['notificationChannel']]
+        return True, res.json()['notificationChannel']
 
     def update_notification_channel(self, channel):
         if 'id' not in channel:
@@ -224,8 +250,8 @@ class _SdcCommon(object):
 
         res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
-            return [False, self.lasterr]
-        return [True, None]
+            return False, self.lasterr
+        return True, None
 
     def get_data_retention_info(self):
         '''**Description**
