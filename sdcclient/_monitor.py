@@ -1,6 +1,7 @@
 import json
 import copy
 import requests
+import re
 
 from sdcclient._common import _SdcCommon
 
@@ -430,31 +431,10 @@ class SdMonitorClient(_SdcCommon):
                 'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
                 'propertyName': property_name + str(i)
             })
-        #
-        # Convert scope to format used by Sysdig Monitor
-        #
-        if scope != None:
-            filter_expressions = scope.strip(' \t\n\r?!.').split(" and ")
-            filters = []
 
-            for filter_expression in filter_expressions:
-                values = filter_expression.strip(' \t\n\r?!.').split("=")
-                if len(values) != 2:
-                    return [False, "invalid scope format"]
-                filters.append({
-                    'metric': values[0].strip(' \t\n\r?!.'),
-                    'op': '=',
-                    'value': values[1].strip(' \t\n\r"?!.'),
-                    'filters': None
-                })
-
-            if len(filters) > 0:
-                panel_configuration['filter'] = {
-                    'filters': {
-                        'logic': 'and',
-                        'filters': filters
-                    }
-                }
+        panel_configuration['scope'] = scope
+        # if chart scope is equal to dashboard scope, set it as non override
+        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
 
         #
         # Configure panel type
@@ -580,17 +560,31 @@ class SdMonitorClient(_SdcCommon):
         template['isPublic'] = public
         template['publicToken'] = None
 
-        #
         # set dashboard scope to the specific parameter
-        # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
-        #
+        scopeExpression = self.convert_scope_string_to_expression(scope)
+        if scopeExpression[0] == False:
+            return scopeExpression
         template['filterExpression'] = scope
+        template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'isVariable':False}, scopeExpression[1])
 
-        if 'items' in template:
+        if 'widgets' in template and template['widgets'] is not None:
+            # Default dashboards (aka Explore views) specify panels with the property `widgets`,
+            # while custom dashboards use `items`
+            template['items'] = list(template['widgets'])
+            del template['widgets']
+
+        # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
+        if 'items' in template and template['items'] is not None:
             for chart in template['items']:
-                if 'overrideFilter' in chart and chart['overrideFilter'] == False:
+                if 'overrideFilter' not in chart:
+                    chart['overrideFilter'] = False
+
+                if chart['overrideFilter'] == False:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
+                
+                # if chart scope is equal to dashboard scope, set it as non override
+                chart['overrideFilter'] = chart['scope'] != scope
 
         if 'annotations' in template:
             template['annotations'].update(annotations)
@@ -753,6 +747,52 @@ class SdMonitorClient(_SdcCommon):
         '''
         res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
+
+    def convert_scope_string_to_expression(self, scope):
+        if scope != None:
+            expressions = []
+            string_expressions = scope.strip(' \t\n\r').split(' and ')
+            expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>.+)$')
+
+            for string_expression in string_expressions:
+                matches = expression_re.match(string_expression)
+
+                if matches == None:
+                    return [False, 'invalid scope format']
+
+                is_not = matches.group('not') != None
+
+                if matches.group('operator') == 'in':
+                    list_value = matches.group('value').strip(' ()')
+                    value_matches = re.findall('[^,]+', list_value)
+
+                    if len(value_matches) == 0:
+                        return [False, 'invalid scope list format']
+
+                    values = map(lambda v: v.strip(' "\''), value_matches)
+                else:
+                    values = [matches.group('value').strip('"\'')]
+
+                if matches.group('operator') == 'in':
+                    operator = 'in' if is_not == False else 'notIn'
+                elif matches.group('operator') == '=':
+                    operator = 'equals'
+                elif matches.group('operator') == '!=':
+                    operator = 'notEquals'
+                elif matches.group('operator') == 'contains':
+                    operator = 'contains' if is_not == False else 'notContains'
+                elif matches.group('operator') == 'starts with':
+                    operator = 'startsWith'
+
+                expressions.append({
+                    'operand': matches.group('operand'),
+                    'operator': operator,
+                    'value': values
+                })
+
+            return [True, expressions]
+        else:
+            return [True, None]
 
 
 # For backwards compatibility
