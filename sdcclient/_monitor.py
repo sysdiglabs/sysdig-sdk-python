@@ -561,7 +561,7 @@ class SdMonitorClient(_SdcCommon):
         template['publicToken'] = None
 
         # set dashboard scope to the specific parameter
-        scopeExpression = self.convert_scope_string_to_expression(scope)
+        scopeExpression = self._convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
             return scopeExpression
         template['filterExpression'] = scope
@@ -748,7 +748,15 @@ class SdMonitorClient(_SdcCommon):
         res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def convert_scope_string_to_expression(self, scope):
+    def _convert_scope_string_to_expression(self, scope):
+        '''**Description**
+            Internal function to convert a filter string to a filter object to be used with dashboards.
+        '''
+        #
+        # NOTE: The supported grammar is not perfectly aligned with the grammar supported by the Sysdig backend.
+        # Proper grammar implementation will happen soon.
+        # For practical purposes, the parsing will have equivalent results.
+        #
         if scope != None:
             expressions = []
             string_expressions = scope.strip(' \t\n\r').split(' and ')
