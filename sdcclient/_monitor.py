@@ -16,8 +16,8 @@ class SdMonitorClient(_SdcCommon):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
         self.product = "SDC"
-        self._dashboards_api_endpoint = '/ui/dashboards'
-        self._default_dashboards_api_endpoint = '/api/defaultDashboards'
+        self._dashboards_api_endpoint = '/api/v2/dashboards'
+        self._default_dashboards_api_endpoint = '/api/v2/defaultDashboards'
 
     def get_alerts(self):
         '''**Description**
@@ -332,7 +332,14 @@ class SdMonitorClient(_SdcCommon):
             return [True, dashboards]
 
     def create_dashboard_with_configuration(self, configuration):
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': configuration}),
+        # Remove id and version properties if already set
+        configuration_clone = copy.deepcopy(configuration)
+        if 'id' in configuration_clone:
+            del configuration_clone['id']
+        if 'version' in configuration_clone:
+            del configuration_clone['version']
+
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': configuration_clone}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -352,8 +359,8 @@ class SdMonitorClient(_SdcCommon):
         '''
         dashboard_configuration = {
             'name': name,
-            'schema': 1,
-            'items': []
+            'schema': 2,
+            'widgets': []
         }
 
         #
@@ -363,7 +370,7 @@ class SdMonitorClient(_SdcCommon):
                             verify=self.ssl_verify)
         return self._request_result(res)
 
-    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
+    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_direction='desc', limit=None, layout=None):
         """**Description**
             Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
 
@@ -376,7 +383,7 @@ class SdMonitorClient(_SdcCommon):
                 - ``top``: 1 or more metrics OR 1 metric + 1 grouping key
                 - ``number``: 1 metric only
             - **scope**: filter to apply to the panel; must be based on metadata available in Sysdig Monitor; Example: *kubernetes.namespace.name='production' and container.image='nginx'*.
-            - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of ``metric`` and ``mode`` (it can be ``desc`` or ``asc``)
+            - **sort_direction**: Data sorting; The parameter is optional and it's a string identifying the sorting direction (it can be ``desc`` or ``asc``)
             - **limit**: This parameter sets the limit on the number of lines/bars shown in a ``timeSeries`` or ``top`` panel. In the case of more entities being available than the limit, the top entities according to the sort will be shown. The default value is 10 for ``top`` panels (for ``timeSeries`` the default is defined by Sysdig Monitor itself). Note that increasing the limit above 10 is not officially supported and may cause performance and rendering issues
             - **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of ``row`` (row position), ``col`` (column position), ``size_x`` (width), ``size_y`` (height).
 
@@ -389,7 +396,6 @@ class SdMonitorClient(_SdcCommon):
         panel_configuration = {
             'name': name,
             'showAs': None,
-            'showAsType': None,
             'metrics': [],
             'gridConfiguration': {
                 'col': 1,
@@ -398,6 +404,14 @@ class SdMonitorClient(_SdcCommon):
                 'size_y': 6
             }
         }
+
+        #
+        # Set unique ID (incremental from 1)
+        #        
+        id = 1
+        while len(filter(lambda w: w['id'] == id, dashboard['widgets'])) > 0:
+            id += 1
+        panel_configuration['id'] = id
 
         if panel_type == 'timeSeries':
             #
@@ -428,56 +442,60 @@ class SdMonitorClient(_SdcCommon):
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
-                'metricId': metric['id'],
-                'aggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
+                'id': metric['id'],
+                'timeAggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
                 'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
                 'propertyName': property_name + str(i)
             })
 
         panel_configuration['scope'] = scope
         # if chart scope is equal to dashboard scope, set it as non override
-        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
+        panel_configuration['overrideScope'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
 
+        if 'custom_display_options' not in panel_configuration:
+            panel_configuration['custom_display_options'] = {
+                'valueLimit': {
+                    'count': 10,
+                    'direction': 'desc'
+                },
+                'histogram': {
+                    'numberOfBuckets': 10
+                },
+                'yAxisScale': 'linear',
+                'yAxisLeftDomain': {
+                    'from': 0,
+                    'to': None
+                },
+                'yAxisRightDomain': {
+                    'from': 0,
+                    'to': None
+                },
+                'xAxis': {
+                    'from': 0,
+                    'to': None
+                }
+            }
         #
         # Configure panel type
         #
         if panel_type == 'timeSeries':
             panel_configuration['showAs'] = 'timeSeries'
-            panel_configuration['showAsType'] = 'line'
 
             if limit != None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
+                panel_configuration['custom_display_options']['valueLimit'] = {
+                    'count': limit,
+                    'direction': 'desc'
                 }
 
         elif panel_type == 'number':
             panel_configuration['showAs'] = 'summary'
-            panel_configuration['showAsType'] = 'summary'
         elif panel_type == 'top':
             panel_configuration['showAs'] = 'top'
-            panel_configuration['showAsType'] = 'bars'
 
-            if sort_by is None:
-                panel_configuration['sorting'] = [{
-                    'id': 'v0',
-                    'mode': 'desc'
-                }]
-            else:
-                panel_configuration['sorting'] = [{
-                    'id': property_names[sort_by['metric']],
-                    'mode': sort_by['mode']
-                }]
-
-            if limit is None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': 10
-                }
-            else:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
+            if limit != None:
+                panel_configuration['custom_display_options']['valueLimit'] = {
+                    'count': limit,
+                    'direction': sort_direction
                 }
 
         #
@@ -490,12 +508,11 @@ class SdMonitorClient(_SdcCommon):
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
 
         #
         # ... and add the new panel
         #
-        dashboard_configuration['items'].append(panel_configuration)
+        dashboard_configuration['widgets'].append(panel_configuration)
 
         #
         # Update dashboard
@@ -521,21 +538,21 @@ class SdMonitorClient(_SdcCommon):
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
+        del dashboard_configuration['id']
 
         #
         # ... find the panel
         #
         def filter_fn(panel):
             return panel['name'] == panel_name
-        panels = list(filter(filter_fn, dashboard_configuration['items']))
+        panels = list(filter(filter_fn, dashboard_configuration['widgets']))
 
         if len(panels) > 0:
             #
             # ... and remove it
             #
             for panel in panels:
-                dashboard_configuration['items'].remove(panel)
+                dashboard_configuration['widgets'].remove(panel)
 
             #
             # Update dashboard
@@ -556,44 +573,37 @@ class SdMonitorClient(_SdcCommon):
         #
         template['id'] = None
         template['version'] = None
-        template['schema'] = 1
+        template['schema'] = 2
         template['name'] = dashboard_name
-        template['isShared'] = shared
-        template['isPublic'] = public
+        template['shared'] = shared
+        template['public'] = public
         template['publicToken'] = None
 
         # set dashboard scope to the specific parameter
         scopeExpression = self._convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
             return scopeExpression
-        template['filterExpression'] = scope
-        template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'isVariable':False}, scopeExpression[1])
-
-        if 'widgets' in template and template['widgets'] is not None:
-            # Default dashboards (aka Explore views) specify panels with the property `widgets`,
-            # while custom dashboards use `items`
-            template['items'] = list(template['widgets'])
-            del template['widgets']
+        template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'variable':False}, scopeExpression[1])
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
-        if 'items' in template and template['items'] is not None:
-            for chart in template['items']:
-                if 'overrideFilter' not in chart:
-                    chart['overrideFilter'] = False
+        if 'widgets' in template and template['widgets'] is not None:
+            for chart in template['widgets']:
+                if 'overrideScope' not in chart:
+                    chart['overrideScope'] = False
 
-                if chart['overrideFilter'] == False:
+                if chart['overrideScope'] == False:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
                 
                 # if chart scope is equal to dashboard scope, set it as non override
-                chart['overrideFilter'] = chart['scope'] != scope
+                chart['overrideScope'] = chart['scope'] != scope
 
-        if 'annotations' in template:
-            template['annotations'].update(annotations)
-        else:
-            template['annotations'] = annotations
+        # if 'annotations' in template:
+        #     template['annotations'].update(annotations)
+        # else:
+        #     template['annotations'] = annotations
 
-        template['annotations']['createdByEngine'] = True
+        # template['annotations']['createdByEngine'] = True
 
         #
         # Create the new dashboard
