@@ -16,6 +16,8 @@ class SdMonitorClient(_SdcCommon):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
         self.product = "SDC"
+        self._dashboards_api_endpoint = '/ui/dashboards'
+        self._default_dashboards_api_endpoint = '/api/defaultDashboards'
 
     def get_alerts(self):
         '''**Description**
@@ -263,7 +265,7 @@ class SdMonitorClient(_SdcCommon):
             return [True, None]
 
     def get_views_list(self):
-        res = requests.get(self.url + '/api/defaultDashboards', headers=self.hdrs,
+        res = requests.get(self.url + self._default_dashboards_api_endpoint, headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -286,7 +288,7 @@ class SdMonitorClient(_SdcCommon):
         if not id:
             return [False, 'view ' + name + ' not found']
 
-        res = requests.get(self.url + '/api/defaultDashboards/' + id, headers=self.hdrs,
+        res = requests.get(self.url + self._default_dashboards_api_endpoint + '/' + id, headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -300,7 +302,7 @@ class SdMonitorClient(_SdcCommon):
         **Example**
             `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
         '''
-        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + self._dashboards_api_endpoint, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def find_dashboard_by(self, name=None):
@@ -330,7 +332,7 @@ class SdMonitorClient(_SdcCommon):
             return [True, dashboards]
 
     def create_dashboard_with_configuration(self, configuration):
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': configuration}),
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': configuration}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -357,7 +359,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -498,7 +500,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Update dashboard
         #
-        res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -538,7 +540,7 @@ class SdMonitorClient(_SdcCommon):
             #
             # Update dashboard
             #
-            res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+            res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                                verify=self.ssl_verify)
             return self._request_result(res)
         else:
@@ -596,7 +598,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False, annotations={}):
@@ -655,7 +657,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Get the list of dashboards from the server
         #
-        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + self._dashboards_api_endpoint, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -729,7 +731,7 @@ class SdMonitorClient(_SdcCommon):
         if 'id' not in dashboard:
             return [False, "Invalid dashboard format"]
 
-        res = requests.delete(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.delete(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
