@@ -735,6 +735,15 @@ class SdMonitorClient(_SdcCommon):
 
         dashboard = loaded_object['dashboard']
 
+        if loaded_object['version'] != self._dashboards_api_version:
+            #
+            # Convert the dashboard (if possible)
+            #
+            conversion_result, dashboard = self._convert_dashboard_to_current_version(dashboard, loaded_object['version'])
+
+            if conversion_result == False:
+                return conversion_result, dashboard
+
         #
         # Create the new dashboard
         #
@@ -853,6 +862,29 @@ class SdMonitorClient(_SdcCommon):
             })
 
         return [True, expressions]
+
+    def _get_dashboard_converters(self):
+        return {
+            'v2': {
+                # 'v1': _convert_dashboard_v1_to_v2
+            }
+        }
+
+    def _convert_dashboard_to_current_version(self, dashboard, version):
+        converters_to = self._get_dashboard_converters().get(self._dashboards_api_version, None)
+        if converters_to == None:
+            return False, 'unexpected error: no dashboard converters from version {} are supported'.format(self._dashboards_api_version)
+        
+        converter = converters_to.get(version, None)
+
+        if converter == None:
+            return False, 'dashboard version {} cannot be converted to {}'.format(version, self._dashboards_api_version)
+
+        return converter(dashboard)
+
+
+def _convert_dashboard_v1_to_v2(dashboard):
+    return True, dashboard
 
 
 # For backwards compatibility
