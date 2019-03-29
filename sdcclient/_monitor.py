@@ -757,50 +757,52 @@ class SdMonitorClient(_SdcCommon):
         # Proper grammar implementation will happen soon.
         # For practical purposes, the parsing will have equivalent results.
         #
-        if scope != None:
-            expressions = []
-            string_expressions = scope.strip(' \t\n\r').split(' and ')
-            expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>.+)$')
 
-            for string_expression in string_expressions:
-                matches = expression_re.match(string_expression)
+        if scope is None or not scope:
+            return [True, []]
 
-                if matches == None:
-                    return [False, 'invalid scope format']
+        expressions = []
+        string_expressions = scope.strip(' \t\n\r').split(' and ')
+        expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>.+)$')
 
-                is_not = matches.group('not') != None
+        for string_expression in string_expressions:
+            matches = expression_re.match(string_expression)
 
-                if matches.group('operator') == 'in':
-                    list_value = matches.group('value').strip(' ()')
-                    value_matches = re.findall('[^,]+', list_value)
+            if matches is None:
+                return [False, 'invalid scope format']
 
-                    if len(value_matches) == 0:
-                        return [False, 'invalid scope list format']
+            is_not_operator = matches.group('not') is not None
 
-                    values = map(lambda v: v.strip(' "\''), value_matches)
-                else:
-                    values = [matches.group('value').strip('"\'')]
+            if matches.group('operator') == 'in':
+                list_value = matches.group('value').strip(' ()')
+                value_matches = re.findall('[^,]+', list_value)
 
-                if matches.group('operator') == 'in':
-                    operator = 'in' if is_not == False else 'notIn'
-                elif matches.group('operator') == '=':
-                    operator = 'equals'
-                elif matches.group('operator') == '!=':
-                    operator = 'notEquals'
-                elif matches.group('operator') == 'contains':
-                    operator = 'contains' if is_not == False else 'notContains'
-                elif matches.group('operator') == 'starts with':
-                    operator = 'startsWith'
+                if len(value_matches) == 0:
+                    return [False, 'invalid scope value list format']
 
-                expressions.append({
-                    'operand': matches.group('operand'),
-                    'operator': operator,
-                    'value': values
-                })
+                values = map(lambda v: v.strip(' "\''), value_matches)
+            else:
+                values = [matches.group('value').strip('"\'')]
 
-            return [True, expressions]
-        else:
-            return [True, None]
+            operator_parse_dict = {
+                'in': 'in' if not is_not_operator else 'notIn',
+                '=': 'equals',
+                '!=': 'notEquals',
+                'contains': 'contains' if not is_not_operator else 'notContains',
+                'starts with': 'startsWith'
+            }
+
+            operator = operator_parse_dict.get(matches.group('operator'), None)
+            if operator is None:
+                return [False, 'invalid scope operator']
+
+            expressions.append({
+                'operand': matches.group('operand'),
+                'operator': operator,
+                'value': values
+            })
+
+        return [True, expressions]
 
 
 # For backwards compatibility
