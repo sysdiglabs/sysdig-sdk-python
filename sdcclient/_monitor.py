@@ -759,7 +759,7 @@ class SdMonitorClient(_SdcCommon):
         with open(filename, 'w') as outf:
             json.dump({
                 'version': self._dashboards_api_version,
-                'dashboard': loaded_object
+                'dashboard': dashboard
             }, outf)
 
     def delete_dashboard(self, dashboard):
