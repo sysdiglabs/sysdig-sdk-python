@@ -757,7 +757,10 @@ class SdMonitorClient(_SdcCommon):
             `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
         '''
         with open(filename, 'w') as outf:
-            json.dump(dashboard, outf)
+            json.dump({
+                'version': self._dashboards_api_version,
+                'dashboard': loaded_object
+            }, outf)
 
     def delete_dashboard(self, dashboard):
         '''**Description**
