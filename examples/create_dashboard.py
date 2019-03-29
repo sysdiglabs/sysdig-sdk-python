@@ -55,7 +55,7 @@ viewName = "Overview by Process"
 # in Sysdig Cloud Explore page.
 # You can also refer to AWS tags by using "cloudProvider.tag.*" metadata or
 # agent tags by using "agent.tag.*" metadata
-dashboardFilter = "kubernetes.namespace.name = prod"
+dashboardFilter = "kubernetes.namespace.name = 'prod'"
 print('Creating dashboard from view')
 ok, res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
@@ -75,7 +75,7 @@ else:
 # Name of the dashboard to copy
 dashboardCopy = "Copy of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
-dashboardFilter = "kubernetes.namespace.name != prod"
+dashboardFilter = "kubernetes.namespace.name != 'prod'"
 
 print('Creating dashboard from dashboard')
 ok, res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)
