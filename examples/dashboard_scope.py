@@ -35,6 +35,10 @@ def evaluate(scope, expected):
 # simple example: tag = value
 evaluate('proc.name = "cassandra"', True)
 
+# NOTE: For now you can still leave values without quotes.
+# The API will be more strict, so please make sure you adopt the new format!
+evaluate('proc.name = cassandra', True)
+
 # other operators
 evaluate('proc.name != "cassandra"', True)
 evaluate('proc.name starts with "cassandra"', True)
@@ -57,9 +61,16 @@ evaluate(None, True)
 
 # invalid scopes will cause errors
 evaluate('proc.name == "cassandra"', False) # invalid operator
-evaluate('proc.name = "cassandra" or proc.name = "mysql"', False) # not AND'd expressions
-evaluate('proc.name in ("cassandra\', \'mysql")', False) # mismatching quotes
-evaluate('proc.name in ("cassandra", "mysql"', False) # missing parenthesis
 
 # currently, one space is required around operands and operators -- improvements will come soon
 evaluate('proc.name="cassandra"', False)
+
+#
+# The current grammer is unable to validate all errors -- in these cases, the API will fail!
+# Improvements will come soon!
+#
+# Here some errors that will not be detected by the Python library, but the API will
+#
+evaluate('proc.name = "cassandra" or proc.name = "mysql"', True) # not AND'd expressions are supported
+evaluate('proc.name in ("cassandra\', \'mysql")', True) # mismatching quotes
+evaluate('proc.name in ("cassandra", "mysql"', True) # missing parenthesis

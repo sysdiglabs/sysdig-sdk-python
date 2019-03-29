@@ -763,7 +763,7 @@ class SdMonitorClient(_SdcCommon):
 
         expressions = []
         string_expressions = scope.strip(' \t\n\r').split(' and ')
-        expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?"[^"]+"|\'[^\']+\'|\(.+\)))$')
+        expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?"[^"]+"|\'[^\']+\'|\(.+\)|.+))$')
 
         for string_expression in string_expressions:
             matches = expression_re.match(string_expression)
@@ -775,7 +775,7 @@ class SdMonitorClient(_SdcCommon):
 
             if matches.group('operator') == 'in':
                 list_value = matches.group('value').strip(' ()')
-                value_matches = re.findall('(:?\'[^\',]+\')|(:?"[^",]+")', list_value)
+                value_matches = re.findall('(:?\'[^\',]+\')|(:?"[^",]+")|(:?[,]+)', list_value)
 
                 if len(value_matches) == 0:
                     return [False, 'invalid scope value list format']
