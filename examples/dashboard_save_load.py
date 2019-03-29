@@ -34,8 +34,7 @@ if not ok:
     sys.exit(1)
 
 if len(res[u'dashboards']) > 0:
-    with open('dashboard.json', 'w') as outf:
-        json.dump(res[u'dashboards'][0], outf)
+    sdclient.save_dashboard_to_file(res[u'dashboards'][0], 'dashboard.json')
 else:
     print('the user has no dashboards. Exiting.')
     sys.exit(0)

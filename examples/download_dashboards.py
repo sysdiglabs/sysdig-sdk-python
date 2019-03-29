@@ -76,11 +76,9 @@ if not os.path.exists(sysdig_dashboard_dir):
 
 
 for db in res['dashboards']:
-    file_path = os.path.join(sysdig_dashboard_dir, str(db['id']))
-    f = open(file_path, 'w')
-    f.write(json.dumps(db))
+    sdclient.save_dashboard_to_file(db, os.path.join(sysdig_dashboard_dir, str(db['id'])))
+
     print("Name: %s, # Charts: %d" % (db['name'], len(db['widgets'])))
-    f.close()
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
 zipdir(sysdig_dashboard_dir, zipf)

@@ -18,6 +18,7 @@ class SdMonitorClientV1(SdMonitorClient):
 
     def __init__(self, token="", sdc_url='https://app-staging2.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClientV1, self).__init__(token, sdc_url, ssl_verify)
+        self._dashboards_api_version = 'v1'
         self._dashboards_api_endpoint = '/ui/dashboards'
         self._default_dashboards_api_endpoint = '/api/defaultDashboards'
 

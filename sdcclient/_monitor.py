@@ -16,8 +16,9 @@ class SdMonitorClient(_SdcCommon):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
         self.product = "SDC"
-        self._dashboards_api_endpoint = '/api/v2/dashboards'
-        self._default_dashboards_api_endpoint = '/api/v2/defaultDashboards'
+        self._dashboards_api_version = 'v2'
+        self._dashboards_api_endpoint = '/api/{}/dashboards'.format(self._dashboards_api_version)
+        self._default_dashboards_api_endpoint = '/api/{}/defaultDashboards'.format(self._dashboards_api_version)
 
     def get_alerts(self):
         '''**Description**
@@ -692,14 +693,20 @@ class SdMonitorClient(_SdcCommon):
         #
         return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public, annotations)
 
-    def create_dashboard_from_file(self, newdashname, filename, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_file(self, dashboard_name, filename, filter, shared=False, public=False, annotations={}):
         '''
         **Description**
-            Create a new dasboard using a dashboard template saved to disk.
+            Create a new dasboard using a dashboard template saved to disk. See :func:`~SdcClient.save_dashboard_to_file` to use the file to create a dashboard (usefl to create and restore backups).
+
+            The file can contain the following JSON formats:
+            1. dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            2. JSON object with the following properties:
+                * version: dashboards API version (e.g. 'v2')
+                * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
 
         **Arguments**
-            - **newdashname**: the name of the dashboard that will be created.
-            - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            - **dashboard_name**: the name of the dashboard that will be created.
+            - **filename**: name of a file containing a JSON object
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
@@ -715,15 +722,42 @@ class SdMonitorClient(_SdcCommon):
         # Load the Dashboard
         #
         with open(filename) as data_file:
-            dboard = json.load(data_file)
+            loaded_object = json.load(data_file)
 
-        dboard['timeMode'] = {'mode': 1}
-        dboard['time'] = {'last': 2 * 60 * 60 * 1000000, 'sampling': 2 * 60 * 60 * 1000000}
+        #
+        # Handle old files
+        #
+        if 'dashboard' not in loaded_object:
+            loaded_object = {
+                'version': 'v1',
+                'dashboard': loaded_object
+            }
+
+        dashboard = loaded_object['dashboard']
 
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(dashboard_name, dashboard, filter, shared, public, annotations)
+
+    def save_dashboard_to_file(self, dashboard, filename):
+        '''
+        **Description**
+            Save a dashboard to disk. See :func:`~SdcClient.create_dashboard_from_file` to use the file to create a dashboard (usefl to create and restore backups).
+
+            The file will contain a JSON object with the following properties:
+            * version: dashboards API version (e.g. 'v2')
+            * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+
+        **Arguments**
+            - **dashboard**: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            - **filename**: name of a file that will contain a JSON object
+
+        **Example**
+            `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
+        '''
+        with open(filename, 'w') as outf:
+            json.dump(dashboard, outf)
 
     def delete_dashboard(self, dashboard):
         '''**Description**
