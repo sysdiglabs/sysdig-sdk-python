@@ -23,29 +23,43 @@ sdclient = SdcClient(sdc_token)
 # NOTE: _convert_scope_string_to_expression should never be used in a user script
 # We're going to use it here just to demonstrate some scope options and some constraints
 #
-def evaluate(scope):
+def evaluate(scope, expected):
     parsed_scope = sdclient._convert_scope_string_to_expression(scope)
     print '{} is valid: {}'.format(scope, parsed_scope[0] == True)
 
+    if parsed_scope[0] != expected:
+        print('Unexpected parsing result!')
+        sys.exit(1)
+
+
 # simple example: tag = value
-evaluate('proc.name = "cassandra"')
+evaluate('proc.name = "cassandra"', True)
 
 # other operators
-evaluate('proc.name != "cassandra"')
-evaluate('proc.name starts with "cassandra"')
-evaluate('proc.name contains "cassandra"')
+evaluate('proc.name != "cassandra"', True)
+evaluate('proc.name starts with "cassandra"', True)
+evaluate('proc.name contains "cassandra"', True)
 
 # list operators
-evaluate('proc.name in ("cassandra", "mysql")')
+evaluate('proc.name in ("cassandra", "mysql")', True)
 
 # not-ed expressions
-evaluate('not proc.name starts with "cassandra"')
-evaluate('not proc.name contains "cassandra"')
-evaluate('not proc.name in ("cassandra", "mysql")')
+evaluate('not proc.name starts with "cassandra"', True)
+evaluate('not proc.name contains "cassandra"', True)
+evaluate('not proc.name in ("cassandra", "mysql")', True)
 
-# you can combine multiple expressions; note that only and-ed scopes are currently supported
-evaluate('kubernetes.service.name = "database" and proc.name = "cassandra"')
+# you can combine multiple expressions; note that only AND'd scopes are currently supported
+evaluate('kubernetes.service.name = "database" and proc.name = "cassandra"', True)
 
 # the scope can obviously be omitted in the dashboard configuration
-evaluate('')
-evaluate(None)
+evaluate('', True)
+evaluate(None, True)
+
+# invalid scopes will cause errors
+evaluate('proc.name == "cassandra"', False) # invalid operator
+evaluate('proc.name = "cassandra" or proc.name = "mysql"', False) # not AND'd expressions
+evaluate('proc.name in ("cassandra\', \'mysql")', False) # mismatching quotes
+evaluate('proc.name in ("cassandra", "mysql"', False) # missing parenthesis
+
+# currently, one space is required around operands and operators -- improvements will come soon
+evaluate('proc.name="cassandra"', False)
