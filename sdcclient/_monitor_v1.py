@@ -16,7 +16,7 @@ class SdMonitorClientV1(SdMonitorClient):
         Handles dashboards version 1 (ie. up to February 2019). For later Sysdig Monitor versions, please use :class:`~SdMonitorClient` instead.
     '''
 
-    def __init__(self, token="", sdc_url='https://app-staging2.sysdigcloud.com', ssl_verify=True):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClientV1, self).__init__(token, sdc_url, ssl_verify)
         self._dashboards_api_version = 'v1'
         self._dashboards_api_endpoint = '/ui/dashboards'
