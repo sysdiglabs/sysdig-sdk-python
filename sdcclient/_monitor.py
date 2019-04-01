@@ -597,7 +597,8 @@ class SdMonitorClient(_SdcCommon):
                     chart['scope'] = scope
                 
                 # if chart scope is equal to dashboard scope, set it as non override
-                chart['overrideScope'] = chart['scope'] != scope
+                chart_scope = chart['scope'] if 'scope' in chart else None
+                chart['overrideScope'] = chart_scope != scope
 
         # if 'annotations' in template:
         #     template['annotations'].update(annotations)
