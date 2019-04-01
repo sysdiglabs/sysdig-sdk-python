@@ -866,7 +866,7 @@ class SdMonitorClient(_SdcCommon):
     def _get_dashboard_converters(self):
         return {
             'v2': {
-                # 'v1': _convert_dashboard_v1_to_v2
+                'v1': _convert_dashboard_v1_to_v2
             }
         }
 
@@ -884,7 +884,146 @@ class SdMonitorClient(_SdcCommon):
 
 
 def _convert_dashboard_v1_to_v2(dashboard):
-    return True, dashboard
+    #
+    # Migrations
+    #
+    # Each converter function will take:
+    #   1. name of the v1 dashboard property
+    #   2. v1 dashboard configuration
+    #   3. v2 dashboard configuration
+    #
+    # Each converter will apply changes to v2 dashboard configuration according to v1
+    #
+    def keep_as_is(prop_name, old_dashboard, new_dashboard):
+        new_dashboard[prop_name] = old_dashboard[prop_name]
+    
+    def drop_it(prop_name = None, old_dashboard = None, new_dashboard = None):
+        pass
+
+    def rename_to(new_prop_name):
+        def rename(prop_name, old_dashboard, new_dashboard):
+            new_dashboard[new_prop_name] = old_dashboard[prop_name]
+
+        return rename
+
+    def convert_schema(prop_name, old_dashboard, new_dashboard):
+        new_dashboard[prop_name] = 2
+
+    def convert_scope(prop_name, old_dashboard, new_dashboard):
+        drop_it()
+
+    def convert_events_filter(prop_name, old_dashboard, new_dashboard):
+        rename_to('eventsOverlaySettings')(prop_name, old_dashboard, new_dashboard)
+
+        del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameMetrics']
+        del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameScope']
+
+    def convert_items(prop_name, old_dashboard, new_dashboard):    
+        def convert_color_coding(prop_name, old_widget, new_widget):
+            best_value = None
+            worst_value= None
+            for item in old_widget[prop_name]['thresholds']:
+                if item['color'] == 'best':
+                    best_value = item['max'] if not item['max'] else item['min']
+                elif item['color'] == 'worst':
+                    worst_value = item['min'] if not item['min'] else item['max']
+            
+            if best_value is not None and worst_value is not None:
+                new_widget[prop_name] = {
+                    'best': best_value,
+                    'worst': worst_value
+                }
+
+        def convert_display_options(prop_name, old_widget, new_widget):
+            keep_as_is(prop_name, old_widget, new_widget)
+
+            if 'yAxisScaleFactor' in new_widget[prop_name]:
+                del new_widget[prop_name]['yAxisScaleFactor']
+
+        def convert_group(prop_name, old_widget, new_widget):
+            group_by_metrics = old_widget[prop_name]['configuration']['groups'][0]['groupBy']
+            
+            migrated = []
+            for metric in group_by_metrics:
+                migrated.append({ 'labelId': metric['metric'] })
+            
+            new_widget['groupingLabelsIds'] = migrated
+
+        def convert_metrics(prop_name, old_widget, new_widget):
+            keep_as_is(prop_name, old_widget, new_widget)
+
+            for metric in new_widget[prop_name]:
+                rename_to('id')('metricId', metric, metric)
+                if 'aggregation' in metric:
+                    # timestamp metric doesn't have aggregations
+                    rename_to('timeAggregation')('aggregation', metric, metric)
+
+        widget_migrations = {
+            'colorCoding': convert_color_coding,
+            'compareToConfig': keep_as_is,
+            'customDisplayOptions': convert_display_options,
+            'gridConfiguration': keep_as_is,
+            'group': convert_group,
+            'hasTransparentBackground': rename_to('transparentBackground'),
+            'limitToScope': keep_as_is,
+            'isPanelTitleVisible': rename_to('panelTitleVisible'),
+            'markdownSource': keep_as_is,
+            'limitToScope': keep_as_is,
+            'metrics': convert_metrics,
+            'name': keep_as_is,
+            'overrideFilter': rename_to('overrideScope'),
+            'paging': drop_it,
+            'scope': keep_as_is,
+            'showAs': keep_as_is,
+            'showAsType': drop_it,
+            'sorting': drop_it,
+            'textpanelTooltip': keep_as_is,
+        }
+
+        migrated_widgets = []
+        for old_widget in old_dashboard[prop_name]:
+            migrated_widget = {}
+
+            for key in widget_migrations.keys():
+                if key in old_widget:
+                    widget_migrations[key](key, old_widget, migrated_widget)
+
+            migrated_widgets.append(migrated_widget)
+
+        
+        new_dashboard['widgets'] = migrated_widgets
+        
+        return migrated
+    
+    migrations = {
+        'autoCreated': keep_as_is,
+        'createdOn': keep_as_is,
+        'eventsFilter': convert_events_filter,
+        'filterExpression': convert_scope,
+        'id': keep_as_is,
+        'isPublic': rename_to('public'),
+        'isShared': rename_to('shared'),
+        'items': convert_items,
+        'layout': keep_as_is,
+        'modifiedOn': keep_as_is,
+        'name': keep_as_is,
+        'publicToken': drop_it,
+        'schema': convert_schema,
+        'scopeExpressionList': drop_it,
+        'teamId': keep_as_is,
+        'username': keep_as_is,
+        'version': keep_as_is,
+    }
+
+    #
+    # Apply migrations
+    #
+    migrated = {}
+    for key in migrations.keys():
+        if key in dashboard:
+            migrations[key](key, dashboard, migrated)
+
+    return True, migrated
 
 
 # For backwards compatibility
