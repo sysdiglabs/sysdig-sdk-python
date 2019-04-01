@@ -895,10 +895,22 @@ def _convert_dashboard_v1_to_v2(dashboard):
     #
     # Each converter will apply changes to v2 dashboard configuration according to v1
     #
+    def with_default(converter, default=None):
+        def fn(prop_name, old_dashboard, new_dashboard):
+            if prop_name not in old_dashboard:
+                old_dashboard[prop_name] = default
+
+            converter(prop_name, old_dashboard, new_dashboard)
+        
+        return fn
+        
     def keep_as_is(prop_name, old_dashboard, new_dashboard):
         new_dashboard[prop_name] = old_dashboard[prop_name]
     
     def drop_it(prop_name = None, old_dashboard = None, new_dashboard = None):
+        pass
+    
+    def ignore(prop_name = None, old_dashboard = None, new_dashboard = None):
         pass
 
     def rename_to(new_prop_name):
@@ -911,13 +923,17 @@ def _convert_dashboard_v1_to_v2(dashboard):
         new_dashboard[prop_name] = 2
 
     def convert_scope(prop_name, old_dashboard, new_dashboard):
-        drop_it()
+        # # TODO!
+
+        new_dashboard['scopeExpressionList'] = None
 
     def convert_events_filter(prop_name, old_dashboard, new_dashboard):
         rename_to('eventsOverlaySettings')(prop_name, old_dashboard, new_dashboard)
 
-        del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameMetrics']
-        del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameScope']
+        if 'showNotificationsDoNotFilterSameMetrics' in new_dashboard['eventsOverlaySettings']:
+            del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameMetrics']
+        if 'showNotificationsDoNotFilterSameScope' in new_dashboard['eventsOverlaySettings']:
+            del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameScope']
 
     def convert_items(prop_name, old_dashboard, new_dashboard):    
         def convert_color_coding(prop_name, old_widget, new_widget):
@@ -950,14 +966,46 @@ def _convert_dashboard_v1_to_v2(dashboard):
             
             new_widget['groupingLabelsIds'] = migrated
 
-        def convert_metrics(prop_name, old_widget, new_widget):
+        def convert_name(prop_name, old_widget, new_widget):
             keep_as_is(prop_name, old_widget, new_widget)
 
-            for metric in new_widget[prop_name]:
-                rename_to('id')('metricId', metric, metric)
-                if 'aggregation' in metric:
-                    # timestamp metric doesn't have aggregations
-                    rename_to('timeAggregation')('aggregation', metric, metric)
+            unique_id = 1
+            name = old_widget[prop_name]
+
+            for widget in old_dashboard['items']:
+                if widget == old_widget:
+                    return
+                
+                if new_widget[prop_name] == widget[prop_name]:
+                    new_widget[prop_name] = '{} ({})'.format(name, unique_id)
+                    unique_id += 1
+
+
+        def convert_metrics(prop_name, old_widget, new_widget):
+            def convert_property_name(prop_name, old_metric, new_metric):
+                keep_as_is(prop_name, old_metric, new_metric)
+                
+                if old_metric['metricId'] == 'timestamp':
+                    return 'k0'
+
+            metric_migrations = {
+                'metricId': rename_to('id'),
+                'aggregation': rename_to('timeAggregation'),
+                'groupAggregation': rename_to('groupAggregation'),
+                'propertyName': convert_property_name
+            }
+
+            migrated_metrics = []
+            for old_metric in old_widget[prop_name]:
+                migrated_metric = {}
+
+                for key in metric_migrations.keys():
+                    if key in old_metric:
+                        metric_migrations[key](key, old_metric, migrated_metric)
+
+                migrated_metrics.append(migrated_metric)
+
+            new_widget['metrics'] = migrated_metrics
 
         widget_migrations = {
             'colorCoding': convert_color_coding,
@@ -971,10 +1019,12 @@ def _convert_dashboard_v1_to_v2(dashboard):
             'markdownSource': keep_as_is,
             'limitToScope': keep_as_is,
             'metrics': convert_metrics,
-            'name': keep_as_is,
+            'name': convert_name,
             'overrideFilter': rename_to('overrideScope'),
             'paging': drop_it,
-            'scope': keep_as_is,
+
+            'scope': drop_it, # TODO !!!!
+
             'showAs': keep_as_is,
             'showAsType': drop_it,
             'sorting': drop_it,
@@ -983,7 +1033,9 @@ def _convert_dashboard_v1_to_v2(dashboard):
 
         migrated_widgets = []
         for old_widget in old_dashboard[prop_name]:
-            migrated_widget = {}
+            migrated_widget = {
+                'id': len(migrated_widgets) + 1
+            }
 
             for key in widget_migrations.keys():
                 if key in old_widget:
@@ -999,8 +1051,11 @@ def _convert_dashboard_v1_to_v2(dashboard):
     migrations = {
         'autoCreated': keep_as_is,
         'createdOn': keep_as_is,
-        'eventsFilter': convert_events_filter,
+        'eventsFilter': with_default(convert_events_filter, {
+            'filterNotificationsUserInputFilter': ''
+        }),
         'filterExpression': convert_scope,
+        'scopeExpressionList': ignore, # scope will be generated from 'filterExpression'
         'id': keep_as_is,
         'isPublic': rename_to('public'),
         'isShared': rename_to('shared'),
@@ -1010,7 +1065,6 @@ def _convert_dashboard_v1_to_v2(dashboard):
         'name': keep_as_is,
         'publicToken': drop_it,
         'schema': convert_schema,
-        'scopeExpressionList': drop_it,
         'teamId': keep_as_is,
         'username': keep_as_is,
         'version': keep_as_is,
@@ -1021,8 +1075,7 @@ def _convert_dashboard_v1_to_v2(dashboard):
     #
     migrated = {}
     for key in migrations.keys():
-        if key in dashboard:
-            migrations[key](key, dashboard, migrated)
+        migrations[key](key, copy.deepcopy(dashboard), migrated)
 
     return True, migrated
 
