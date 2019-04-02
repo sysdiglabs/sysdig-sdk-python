@@ -901,27 +901,34 @@ class SdMonitorClient(_SdcCommon):
         #
         # Each converter will apply changes to v2 dashboard configuration according to v1
         #
-        def with_default(converter, default=None):
-            def fn(prop_name, old_dashboard, new_dashboard):
-                if prop_name not in old_dashboard:
-                    old_dashboard[prop_name] = default
+        def when_set(converter):
+            def fn(prop_name, old_obj, new_obj):
+                if prop_name in old_obj and old_obj[prop_name] is not None:
+                    converter(prop_name, old_obj, new_obj)
+            
+            return fn
 
-                converter(prop_name, old_dashboard, new_dashboard)
+        def with_default(converter, default=None):
+            def fn(prop_name, old_obj, new_obj):
+                if prop_name not in old_obj:
+                    old_obj[prop_name] = default
+
+                converter(prop_name, old_obj, new_obj)
             
             return fn
             
-        def keep_as_is(prop_name, old_dashboard, new_dashboard):
-            new_dashboard[prop_name] = old_dashboard[prop_name]
+        def keep_as_is(prop_name, old_obj, new_obj):
+            new_obj[prop_name] = old_obj[prop_name]
         
-        def drop_it(prop_name = None, old_dashboard = None, new_dashboard = None):
+        def drop_it(prop_name = None, old_obj = None, new_obj = None):
             pass
         
-        def ignore(prop_name = None, old_dashboard = None, new_dashboard = None):
+        def ignore(prop_name = None, old_obj = None, new_obj = None):
             pass
 
         def rename_to(new_prop_name):
-            def rename(prop_name, old_dashboard, new_dashboard):
-                new_dashboard[new_prop_name] = old_dashboard[prop_name]
+            def rename(prop_name, old_obj, new_obj):
+                new_obj[new_prop_name] = old_obj[prop_name]
 
             return rename
 
@@ -983,19 +990,21 @@ class SdMonitorClient(_SdcCommon):
                 new_widget['groupingLabelsIds'] = migrated
 
             def convert_name(prop_name, old_widget, new_widget):
-                keep_as_is(prop_name, old_widget, new_widget)
-
+                #
+                # enforce unique name (on old dashboard, before migration)
+                #
                 unique_id = 1
                 name = old_widget[prop_name]
 
                 for widget in old_dashboard['items']:
                     if widget == old_widget:
-                        return
+                        break
                     
-                    if new_widget[prop_name] == widget[prop_name]:
-                        new_widget[prop_name] = '{} ({})'.format(name, unique_id)
+                    if old_widget[prop_name] == widget[prop_name]:
+                        old_widget[prop_name] = '{} ({})'.format(name, unique_id)
                         unique_id += 1
 
+                keep_as_is(prop_name, old_widget, new_widget)
 
             def convert_metrics(prop_name, old_widget, new_widget):
                 def convert_property_name(prop_name, old_metric, new_metric):
@@ -1024,26 +1033,26 @@ class SdMonitorClient(_SdcCommon):
                 new_widget['metrics'] = migrated_metrics
 
             widget_migrations = {
-                'colorCoding': convert_color_coding,
-                'compareToConfig': keep_as_is,
-                'customDisplayOptions': convert_display_options,
-                'gridConfiguration': keep_as_is,
-                'group': convert_group,
-                'hasTransparentBackground': rename_to('transparentBackground'),
-                'limitToScope': keep_as_is,
-                'isPanelTitleVisible': rename_to('panelTitleVisible'),
-                'markdownSource': keep_as_is,
-                'metrics': convert_metrics,
-                'name': convert_name,
+                'colorCoding': when_set(convert_color_coding),
+                'compareToConfig': when_set(keep_as_is),
+                'customDisplayOptions': with_default(convert_display_options, {}),
+                'gridConfiguration': drop_it,
+                'group': when_set(convert_group),
+                'hasTransparentBackground': when_set(rename_to('transparentBackground')),
+                'limitToScope': when_set(keep_as_is),
+                'isPanelTitleVisible': when_set(rename_to('panelTitleVisible')),
+                'markdownSource': when_set(keep_as_is),
+                'metrics': with_default(convert_metrics, []),
+                'name': with_default(convert_name, 'Panel'),
                 'overrideFilter': rename_to('overrideScope'),
                 'paging': drop_it,
 
-                'scope': keep_as_is,
+                'scope': with_default(keep_as_is, None),
 
                 'showAs': keep_as_is,
                 'showAsType': drop_it,
                 'sorting': drop_it,
-                'textpanelTooltip': keep_as_is,
+                'textpanelTooltip': when_set(keep_as_is),
             }
 
             migrated_widgets = []
@@ -1053,12 +1062,10 @@ class SdMonitorClient(_SdcCommon):
                 }
 
                 for key in widget_migrations.keys():
-                    if key in old_widget:
-                        widget_migrations[key](key, old_widget, migrated_widget)
+                    widget_migrations[key](key, old_widget, migrated_widget)
 
                 migrated_widgets.append(migrated_widget)
-
-            
+       
             new_dashboard['widgets'] = migrated_widgets
             
             return migrated
