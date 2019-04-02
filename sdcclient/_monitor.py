@@ -1046,9 +1046,7 @@ class SdMonitorClient(_SdcCommon):
                 'name': with_default(convert_name, 'Panel'),
                 'overrideFilter': rename_to('overrideScope'),
                 'paging': drop_it,
-
                 'scope': with_default(keep_as_is, None),
-
                 'showAs': keep_as_is,
                 'showAsType': drop_it,
                 'sorting': drop_it,
@@ -1058,6 +1056,7 @@ class SdMonitorClient(_SdcCommon):
             migrated_widgets = []
             for old_widget in old_dashboard[prop_name]:
                 migrated_widget = {
+                    # create unique ID
                     'id': len(migrated_widgets) + 1
                 }
 
