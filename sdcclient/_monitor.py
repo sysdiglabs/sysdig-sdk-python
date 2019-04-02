@@ -615,14 +615,7 @@ class SdMonitorClient(_SdcCommon):
         #
         res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
             
-        result = self._request_result(res)
-
-        if result[0] == False:
-            print json.dumps({'dashboard': template})
-        # else:
-        #     print json.dumps({'dashboard': template})
-        
-        return result
+        return self._request_result(res)
 
     def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False, annotations={}):
         '''**Description**
