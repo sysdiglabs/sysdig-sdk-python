@@ -564,7 +564,7 @@ class SdMonitorClient(_SdcCommon):
         else:
             return [False, 'Not found']
 
-    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False, annotations={}):
+    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False):
         if scope is not None:
             if isinstance(scope, basestring) == False:
                 return [False, 'Invalid scope format: Expected a string']
@@ -600,20 +600,13 @@ class SdMonitorClient(_SdcCommon):
                 chart_scope = chart['scope'] if 'scope' in chart else None
                 chart['overrideScope'] = chart_scope != scope
 
-        # if 'annotations' in template:
-        #     template['annotations'].update(annotations)
-        # else:
-        #     template['annotations'] = annotations
-
-        # template['annotations']['createdByEngine'] = True
-
         #
         # Create the new dashboard
         #
         res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
         return self._request_result(res)
 
-    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False):
         '''**Description**
             Create a new dasboard using one of the Sysdig Monitor views as a template. You will be able to define the scope of the new dashboard.
 
@@ -623,7 +616,6 @@ class SdMonitorClient(_SdcCommon):
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria that defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -646,9 +638,9 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, view, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(newdashname, view, filter, shared, public)
 
-    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, public=False):
         '''**Description**
             Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.
 
@@ -658,7 +650,6 @@ class SdMonitorClient(_SdcCommon):
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -692,9 +683,9 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public)
 
-    def create_dashboard_from_file(self, dashboard_name, filename, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_file(self, dashboard_name, filename, filter, shared=False, public=False):
         '''
         **Description**
             Create a new dasboard using a dashboard template saved to disk. See :func:`~SdcClient.save_dashboard_to_file` to use the file to create a dashboard (usefl to create and restore backups).
@@ -711,7 +702,6 @@ class SdMonitorClient(_SdcCommon):
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -739,7 +729,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(dashboard_name, dashboard, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(dashboard_name, dashboard, filter, shared, public)
 
     def save_dashboard_to_file(self, dashboard, filename):
         '''
