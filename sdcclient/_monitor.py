@@ -837,8 +837,8 @@ class SdMonitorClient(_SdcCommon):
 
             operator_parse_dict = {
                 'in': 'in' if not is_not_operator else 'notIn',
-                '=': 'equals',
-                '!=': 'notEquals',
+                '=': 'equals' if not is_not_operator else 'notEquals',
+                '!=': 'notEquals' if not is_not_operator else 'equals',
                 'contains': 'contains' if not is_not_operator else 'notContains',
                 'starts with': 'startsWith'
             }
