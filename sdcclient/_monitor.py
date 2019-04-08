@@ -406,14 +406,6 @@ class SdMonitorClient(_SdcCommon):
             }
         }
 
-        #
-        # Set unique ID (incremental from 1)
-        #        
-        id = 1
-        while len(filter(lambda w: w['id'] == id, dashboard['widgets'])) > 0:
-            id += 1
-        panel_configuration['id'] = id
-
         if panel_type == 'timeSeries':
             #
             # In case of a time series, the current dashboard implementation
