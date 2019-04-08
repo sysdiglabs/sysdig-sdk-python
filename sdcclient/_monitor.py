@@ -1037,10 +1037,7 @@ class SdMonitorClient(_SdcCommon):
 
             migrated_widgets = []
             for old_widget in old_dashboard[prop_name]:
-                migrated_widget = {
-                    # create unique ID
-                    'id': len(migrated_widgets) + 1
-                }
+                migrated_widget = {}
 
                 for key in widget_migrations.keys():
                     widget_migrations[key](key, old_widget, migrated_widget)
