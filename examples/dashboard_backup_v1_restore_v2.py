@@ -14,50 +14,54 @@ from sdcclient import SdMonitorClientV1
 #
 # Parse arguments
 #
-if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+if len(sys.argv) != 5:
+    print(
+        'usage: %s <sysdig-v1-url> <sysdig-v1-token> <sysdig-v2-url> <sysdig-v2-token>'
+        % sys.argv[0])
     print(
         'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     )
     sys.exit(1)
 
-sdc_token = sys.argv[1]
+sdc_v1_url = sys.argv[1]
+sdc_v1_token = sys.argv[2]
+sdc_v2_url = sys.argv[3]
+sdc_v2_token = sys.argv[4]
 
 #
 # Instantiate the SDC client
 #
-sdclient = SdMonitorClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
-sdclientV1 = SdMonitorClientV1(
-    sdc_token, sdc_url='https://app.sysdigcloud.com')
+sdclient_v2 = SdMonitorClient(sdc_v2_token, sdc_url=sdc_v2_url)
+sdclient_v1 = SdMonitorClientV1(sdc_v1_token, sdc_url=sdc_v1_url)
 
 #
 # Serialize the first user dashboard to disk
 #
-ok, res = sdclientV1.get_dashboards()
+ok, res = sdclient_v1.get_dashboards()
 
 if not ok:
     print(res)
     sys.exit(1)
 
-for item in res['dashboards']:
-    file_name = '{}.json'.format(item['id'])
+for dashboard in res['dashboards']:
+    file_name = '{}.json'.format(dashboard['id'])
     print('Saving v1 dashboard {} to file {}...'.format(
-        item['name'], file_name))
-    sdclientV1.save_dashboard_to_file(item, file_name)
+        dashboard['name'], file_name))
+    sdclient_v1.save_dashboard_to_file(dashboard, file_name)
 
     print('Importing dashboard to v2...')
-    ok, res = sdclient.create_dashboard_from_file(
-        u'import of {}'.format(item['name']),
+    ok, res = sdclient_v2.create_dashboard_from_file(
+        u'import of {}'.format(dashboard['name']),
         file_name,
         None,
-        shared=item['isShared'],
-        public=item['isPublic'])
+        shared=dashboard['isShared'],
+        public=dashboard['isPublic'])
 
     if ok:
-        print('Dashboard {} imported!'.format(item['name']))
-        sdclient.delete_dashboard(res['dashboard'])
+        print('Dashboard {} imported!'.format(dashboard['name']))
+        sdclient_v2.delete_dashboard(res['dashboard'])
     else:
-        print('Dashboard {} import failed:'.format(item['name']))
+        print('Dashboard {} import failed:'.format(dashboard['name']))
         print(res)
 
     print('\n')
