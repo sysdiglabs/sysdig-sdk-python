@@ -39,7 +39,7 @@ class SdMonitorClientV1(SdMonitorClient):
         template['publicToken'] = None
 
         # set dashboard scope to the specific parameter
-        scopeExpression = self._convert_scope_string_to_expression(scope)
+        scopeExpression = self.convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
             return scopeExpression
         template['filterExpression'] = scope
