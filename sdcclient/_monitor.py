@@ -922,7 +922,7 @@ class SdMonitorClient(_SdcCommon):
             # # TODO!
 
             scope = old_dashboard[prop_name]
-            scope_conversion = self._convert_scope_string_to_expression(scope)
+            scope_conversion = self.convert_scope_string_to_expression(scope)
 
             if scope_conversion[0]:
                 if scope_conversion[1]:
