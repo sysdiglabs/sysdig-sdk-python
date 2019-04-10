@@ -9,22 +9,15 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
 from sdcclient import SdcClient
 
-# random token, since we're not going to use the API for real
-sdc_token = "bb8754d5-025d-4b88-a815-358fba58c4be"
-
-#
-# Instantiate the SDC client
-#
-sdclient = SdcClient(sdc_token)
 
 #
 # Scopes can be passed to most of dashboard-related functions, e.g. create_dashboard_from_file.
 #
-# NOTE: _convert_scope_string_to_expression should never be used in a user script
+# NOTE: convert_scope_string_to_expression should never be used in a user script
 # We're going to use it here just to demonstrate some scope options and some constraints
 #
 def evaluate(scope, expected):
-    parsed_scope = sdclient._convert_scope_string_to_expression(scope)
+    parsed_scope = SdcClient.convert_scope_string_to_expression(scope)
     print '{} is valid: {}'.format(scope, parsed_scope[0] == True)
 
     if parsed_scope[0] != expected:
