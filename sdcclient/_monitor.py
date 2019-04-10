@@ -573,7 +573,7 @@ class SdMonitorClient(_SdcCommon):
         template['publicToken'] = None
 
         # set dashboard scope to the specific parameter
-        scopeExpression = self._convert_scope_string_to_expression(scope)
+        scopeExpression = self.convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
             return scopeExpression
         template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'variable':False}, scopeExpression[1])
@@ -780,7 +780,8 @@ class SdMonitorClient(_SdcCommon):
         res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def _convert_scope_string_to_expression(self, scope):
+    @staticmethod
+    def convert_scope_string_to_expression(scope):
         '''**Description**
             Internal function to convert a filter string to a filter object to be used with dashboards.
         '''
