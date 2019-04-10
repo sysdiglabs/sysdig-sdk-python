@@ -41,8 +41,11 @@ if not ok:
 
 for item in res['dashboards']:
     file_name = '{}.json'.format(item['id'])
+    print('Saving v1 dashboard {} to file {}...'.format(
+        item['name'], file_name))
     sdclientV1.save_dashboard_to_file(item, file_name)
 
+    print('Importing dashboard to v2...')
     ok, res = sdclient.create_dashboard_from_file(
         u'import of {}'.format(item['name']),
         file_name,
@@ -51,9 +54,10 @@ for item in res['dashboards']:
         public=item['isPublic'])
 
     if ok:
+        print('Dashboard {} imported!'.format(item['name']))
         sdclient.delete_dashboard(res['dashboard'])
     else:
-        print('=====')
+        print('Dashboard {} import failed:'.format(item['name']))
         print(res)
 
-    print('=====')
+    print('\n')
