@@ -29,7 +29,7 @@ except getopt.GetoptError:
     usage()
 
 # Name for the dashboard to create
-dashboardName = "API test - cassandra in prod"
+dashboardName = "Overview by Process"
 for opt, arg in opts:
     if opt in ("-d", "--dashboard"):
         dashboardName = arg
@@ -55,8 +55,7 @@ viewName = "Overview by Process"
 # in Sysdig Cloud Explore page.
 # You can also refer to AWS tags by using "cloudProvider.tag.*" metadata or
 # agent tags by using "agent.tag.*" metadata
-dashboardFilter = "kubernetes.namespace.name = prod and proc.name = cassandra"
-
+dashboardFilter = "kubernetes.namespace.name = prod"
 print('Creating dashboard from view')
 ok, res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
@@ -74,9 +73,9 @@ else:
 #
 
 # Name of the dashboard to copy
-dashboardCopy = "Copy Of {}".format(dashboardName)
+dashboardCopy = "Copy of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
-dashboardFilter = "kubernetes.namespace.name = dev and proc.name = cassandra"
+dashboardFilter = "kubernetes.namespace.name != prod"
 
 print('Creating dashboard from dashboard')
 ok, res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)

@@ -21,6 +21,7 @@ date; $SCRIPTDIR/../examples/create_alert.py -a $ALERT_NAME $PYTHON_SDC_TEST_MON
 date; $SCRIPTDIR/../examples/update_alert.py -a $ALERT_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 date; $SCRIPTDIR/../examples/delete_alert.py -a $ALERT_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 date; $SCRIPTDIR/../examples/dashboard.py -d $DASHBOARD_1_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
+date; $SCRIPTDIR/../examples/dashboard_scope.py
 date; $SCRIPTDIR/../examples/create_dashboard.py -d $DASHBOARD_2_NAME $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 date; $SCRIPTDIR/../examples/delete_dashboard.py -p $SESSION_UUID $PYTHON_SDC_TEST_MONITOR_API_TOKEN
 date; $SCRIPTDIR/../examples/get_data_advanced.py $PYTHON_SDC_TEST_MONITOR_API_TOKEN $AGENT_HOSTNAME
