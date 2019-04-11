@@ -1061,7 +1061,7 @@ class SdMonitorClient(_SdcCommon):
             'isPublic': rename_to('public'),
             'isShared': rename_to('shared'),
             'items': convert_items,
-            'layout': keep_as_is,
+            'layout': drop_it,
             'modifiedOn': keep_as_is,
             'name': keep_as_is,
             'publicToken': drop_it,
