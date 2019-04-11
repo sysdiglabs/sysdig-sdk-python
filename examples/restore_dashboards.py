@@ -36,6 +36,12 @@ for info in zipf.infolist():
         print('Invalid JSON file found in ZIP file ' + info.filename + ': skipping')
         continue
 
+    #
+    # Handle old files
+    #
+    if 'dashboard' in j:
+        j = j['dashboard']
+
     ok, res = sdclient.create_dashboard_with_configuration(j)
     if ok:
         print('Restored Dashboard named: ' + j['name'])
