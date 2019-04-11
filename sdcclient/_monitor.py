@@ -972,6 +972,14 @@ class SdMonitorClient(_SdcCommon):
                 
                 new_widget['groupingLabelsIds'] = migrated
 
+            def convert_override_filter(prop_name, old_widget, new_widget):
+                if old_widget['showAs'] == 'map':
+                    # override scope always true if scope is set
+                    new_widget['overrideScope'] = True
+                else:
+                    new_widget['overrideScope'] = old_widget[prop_name]
+
+
             def convert_name(prop_name, old_widget, new_widget):
                 #
                 # enforce unique name (on old dashboard, before migration)
@@ -1013,6 +1021,21 @@ class SdMonitorClient(_SdcCommon):
 
                     migrated_metrics.append(migrated_metric)
 
+                # Property name convention:
+                # timestamp: k0 (if present)
+                # other keys: k* (from 0 or 1, depending on timestamp)
+                # values: v* (from 0)
+                timestamp_key = filter(lambda m: m['id'] == 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
+                no_timestamp_keys = filter(lambda m: m['id'] != 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
+                values = filter(lambda m: 'timeAggregation' in m and m['timeAggregation'] is not None, migrated_metrics)
+                if timestamp_key:
+                    timestamp_key[0]['propertyName'] = 'k0'
+                k_offset = 1 if timestamp_key else 0
+                for i in range(0, len(no_timestamp_keys)):
+                    no_timestamp_keys[i]['propertyName'] = 'k{}'.format(i + k_offset)
+                for i in range(0, len(values)):
+                    values[i]['propertyName'] = 'v{}'.format(i)
+                    
                 new_widget['metrics'] = migrated_metrics
 
             widget_migrations = {
@@ -1027,7 +1050,7 @@ class SdMonitorClient(_SdcCommon):
                 'markdownSource': when_set(keep_as_is),
                 'metrics': with_default(convert_metrics, []),
                 'name': with_default(convert_name, 'Panel'),
-                'overrideFilter': rename_to('overrideScope'),
+                'overrideFilter': convert_override_filter,
                 'paging': drop_it,
                 'scope': with_default(keep_as_is, None),
                 'showAs': keep_as_is,
