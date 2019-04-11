@@ -38,16 +38,18 @@ class _SdcCommon(object):
                 return False
 
             if 'errors' in j:
-                if 'message' in j['errors'][0]:
-                    self.lasterr = j['errors'][0]['message']
+                error_msgs = []
+                for error in j['errors']:
+                    error_msg = []
+                    if 'message' in error:
+                        error_msg.append(error['message'])
 
-                if 'reason' in j['errors'][0]:
-                    if self.lasterr is not None:
-                        self.lasterr += ' '
-                    else:
-                        self.lasrerr = ''
+                    if 'reason' in error:
+                        error_msg.append(error['reason'])
 
-                    self.lasterr += j['errors'][0]['reason']
+                    error_msgs.append(': '.join(error_msg))
+
+                self.lasterr = '\n'.join(error_msgs)
             elif 'message' in j:
                 self.lasterr = j['message']
             else:
