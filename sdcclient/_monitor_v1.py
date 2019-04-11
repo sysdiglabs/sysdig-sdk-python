@@ -60,9 +60,10 @@ class SdMonitorClientV1(SdMonitorClient):
                 if chart['overrideFilter'] == False:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
-                
+
                 # if chart scope is equal to dashboard scope, set it as non override
-                chart['overrideFilter'] = chart['scope'] != scope
+                chart_scope = chart['scope'] if 'scope' in chart else None
+                chart['overrideFilter'] = chart_scope != scope
 
         if 'annotations' in template:
             template['annotations'].update(annotations)
@@ -269,6 +270,7 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         def filter_fn(panel):
             return panel['name'] == panel_name
+
         panels = list(filter(filter_fn, dashboard_configuration['items']))
 
         if len(panels) > 0:
