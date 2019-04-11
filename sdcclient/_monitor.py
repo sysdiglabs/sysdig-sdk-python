@@ -1019,7 +1019,7 @@ class SdMonitorClient(_SdcCommon):
                 'colorCoding': when_set(convert_color_coding),
                 'compareToConfig': when_set(keep_as_is),
                 'customDisplayOptions': with_default(convert_display_options, {}),
-                'gridConfiguration': drop_it,
+                'gridConfiguration': keep_as_is,
                 'group': when_set(convert_group),
                 'hasTransparentBackground': when_set(rename_to('transparentBackground')),
                 'limitToScope': when_set(keep_as_is),
