@@ -288,3 +288,10 @@ class SdMonitorClientV1(SdMonitorClient):
             return self._request_result(res)
         else:
             return [False, 'Not found']
+
+    def _get_dashboard_converters(self):
+        '''**Description**
+            Internal function to return dashboard converters from one version to another one.
+        '''
+        # There's not really a previous version...
+        return {}
