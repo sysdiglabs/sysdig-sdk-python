@@ -591,9 +591,13 @@ class SdMonitorClient(_SdcCommon):
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
                 
-                # if chart scope is equal to dashboard scope, set it as non override
-                chart_scope = chart['scope'] if 'scope' in chart else None
-                chart['overrideScope'] = chart_scope != scope
+                if chart['showAs'] != 'map':
+                    # if chart scope is equal to dashboard scope, set it as non override
+                    chart_scope = chart['scope'] if 'scope' in chart else None
+                    chart['overrideScope'] = chart_scope != scope
+                else:
+                    # topology panels must override the scope
+                    chart['overrideScope'] = True
 
         #
         # Create the new dashboard
@@ -968,9 +972,9 @@ class SdMonitorClient(_SdcCommon):
                 
                 migrated = []
                 for metric in group_by_metrics:
-                    migrated.append({ 'labelId': metric['metric'] })
+                    migrated.append({ 'id': metric['metric'] })
                 
-                new_widget['groupingLabelsIds'] = migrated
+                new_widget['groupingLabelIds'] = migrated
 
             def convert_override_filter(prop_name, old_widget, new_widget):
                 if old_widget['showAs'] == 'map':
