@@ -572,6 +572,13 @@ class SdMonitorClient(_SdcCommon):
         template['public'] = public
         template['publicToken'] = None
 
+        # default dashboards don't have eventsOverlaySettings property
+        # make sure to add the default set if the template doesn't include it
+        if 'eventsOverlaySettings' not in template or not template['eventsOverlaySettings']:
+            template['eventsOverlaySettings'] = {
+                'filterNotificationsUserInputFilter': ''
+            }
+
         # set dashboard scope to the specific parameter
         scopeExpression = self.convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
