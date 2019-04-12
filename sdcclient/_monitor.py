@@ -1036,18 +1036,22 @@ class SdMonitorClient(_SdcCommon):
                 # timestamp: k0 (if present)
                 # other keys: k* (from 0 or 1, depending on timestamp)
                 # values: v* (from 0)
+                sorted_metrics = []
                 timestamp_key = filter(lambda m: m['id'] == 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
                 no_timestamp_keys = filter(lambda m: m['id'] != 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
                 values = filter(lambda m: 'timeAggregation' in m and m['timeAggregation'] is not None, migrated_metrics)
                 if timestamp_key:
                     timestamp_key[0]['propertyName'] = 'k0'
+                    sorted_metrics.append(timestamp_key[0])
                 k_offset = 1 if timestamp_key else 0
                 for i in range(0, len(no_timestamp_keys)):
                     no_timestamp_keys[i]['propertyName'] = 'k{}'.format(i + k_offset)
+                    sorted_metrics.append(no_timestamp_keys[i])
                 for i in range(0, len(values)):
                     values[i]['propertyName'] = 'v{}'.format(i)
+                    sorted_metrics.append(values[i])
                     
-                new_widget['metrics'] = migrated_metrics
+                new_widget['metrics'] = sorted_metrics
 
             widget_migrations = {
                 'colorCoding': when_set(convert_color_coding),
