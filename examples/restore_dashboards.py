@@ -8,7 +8,7 @@ import sys
 import zipfile
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
@@ -24,32 +24,25 @@ dashboard_state_file = sys.argv[2]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'r')
-
-
-dashboard_conf_items = ['showAsType', 'filterRoot', 'linkMetrics',
-                        'singleTimeNavigation', 'gridConfiguration', 'responsive',
-                        'nodesNoiseFilter', 'compareWith', 'format', 'linksNoiseFilter',
-                        'filterProcesses', 'isLegendExpanded', 'inhertitTimeNavigation',
-                        'schema', 'sortAscending', 'mapDataLimit', 'metrics', 'filterExtNodes',
-                        'sorting', 'name', 'sourceExploreView', 'items', 'showAs', 'eventsFilter',
-                        'timeMode', 'isShared', 'sourceDrilldownView', 'filterExpression']
 
 for info in zipf.infolist():
     data = zipf.read(info.filename)
     try:
         j = json.loads(data)
     except ValueError:
-        print('Non-JSON item found in ZIP: ' + info.filename + ' (skipping)')
+        print('Invalid JSON file found in ZIP file ' + info.filename + ': skipping')
         continue
-    k = {}
-    for item in j.keys():
-        if item in dashboard_conf_items:
-            k[item] = j[item]
 
-    ok, res = sdclient.create_dashboard_with_configuration(k)
+    #
+    # Handle old files
+    #
+    if 'dashboard' in j:
+        j = j['dashboard']
+
+    ok, res = sdclient.create_dashboard_with_configuration(j)
     if ok:
         print('Restored Dashboard named: ' + j['name'])
     else:

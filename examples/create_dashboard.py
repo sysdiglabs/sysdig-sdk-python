@@ -10,7 +10,7 @@ import getopt
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 
 #
@@ -42,7 +42,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Create the new dashboard, applying to cassandra in production
@@ -55,7 +55,7 @@ viewName = "Overview by Process"
 # in Sysdig Cloud Explore page.
 # You can also refer to AWS tags by using "cloudProvider.tag.*" metadata or
 # agent tags by using "agent.tag.*" metadata
-dashboardFilter = "kubernetes.namespace.name = prod"
+dashboardFilter = 'proc.name = "cassandra"'
 print('Creating dashboard from view')
 ok, res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
@@ -75,7 +75,7 @@ else:
 # Name of the dashboard to copy
 dashboardCopy = "Copy of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
-dashboardFilter = "kubernetes.namespace.name != prod"
+dashboardFilter = 'proc.name != "cassandra"'
 
 print('Creating dashboard from dashboard')
 ok, res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)

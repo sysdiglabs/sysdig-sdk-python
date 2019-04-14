@@ -6,7 +6,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
@@ -21,7 +21,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Fire the request.
@@ -36,4 +36,4 @@ if not ok:
     sys.exit(1)
 
 for db in res['dashboards']:
-    print("Name: %s, # Charts: %d" % (db['name'], len(db['items'] if 'items' in db else [])))
+    print("Name: %s, # Charts: %d" % (db['name'], len(db['widgets'] if 'widgets' in db else [])))

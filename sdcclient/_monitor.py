@@ -16,6 +16,9 @@ class SdMonitorClient(_SdcCommon):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify)
         self.product = "SDC"
+        self._dashboards_api_version = 'v2'
+        self._dashboards_api_endpoint = '/api/{}/dashboards'.format(self._dashboards_api_version)
+        self._default_dashboards_api_endpoint = '/api/{}/defaultDashboards'.format(self._dashboards_api_version)
 
     def get_alerts(self):
         '''**Description**
@@ -263,7 +266,7 @@ class SdMonitorClient(_SdcCommon):
             return [True, None]
 
     def get_views_list(self):
-        res = requests.get(self.url + '/api/defaultDashboards', headers=self.hdrs,
+        res = requests.get(self.url + self._default_dashboards_api_endpoint, headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -286,7 +289,7 @@ class SdMonitorClient(_SdcCommon):
         if not id:
             return [False, 'view ' + name + ' not found']
 
-        res = requests.get(self.url + '/api/defaultDashboards/' + id, headers=self.hdrs,
+        res = requests.get(self.url + self._default_dashboards_api_endpoint + '/' + id, headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -300,7 +303,7 @@ class SdMonitorClient(_SdcCommon):
         **Example**
             `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
         '''
-        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + self._dashboards_api_endpoint, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def find_dashboard_by(self, name=None):
@@ -330,7 +333,14 @@ class SdMonitorClient(_SdcCommon):
             return [True, dashboards]
 
     def create_dashboard_with_configuration(self, configuration):
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': configuration}),
+        # Remove id and version properties if already set
+        configuration_clone = copy.deepcopy(configuration)
+        if 'id' in configuration_clone:
+            del configuration_clone['id']
+        if 'version' in configuration_clone:
+            del configuration_clone['version']
+
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': configuration_clone}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -350,18 +360,18 @@ class SdMonitorClient(_SdcCommon):
         '''
         dashboard_configuration = {
             'name': name,
-            'schema': 1,
-            'items': []
+            'schema': 2,
+            'widgets': []
         }
 
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
-    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
+    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_direction='desc', limit=None, layout=None):
         """**Description**
             Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
 
@@ -374,7 +384,7 @@ class SdMonitorClient(_SdcCommon):
                 - ``top``: 1 or more metrics OR 1 metric + 1 grouping key
                 - ``number``: 1 metric only
             - **scope**: filter to apply to the panel; must be based on metadata available in Sysdig Monitor; Example: *kubernetes.namespace.name='production' and container.image='nginx'*.
-            - **sort_by**: Data sorting; The parameter is optional and it's a dictionary of ``metric`` and ``mode`` (it can be ``desc`` or ``asc``)
+            - **sort_direction**: Data sorting; The parameter is optional and it's a string identifying the sorting direction (it can be ``desc`` or ``asc``)
             - **limit**: This parameter sets the limit on the number of lines/bars shown in a ``timeSeries`` or ``top`` panel. In the case of more entities being available than the limit, the top entities according to the sort will be shown. The default value is 10 for ``top`` panels (for ``timeSeries`` the default is defined by Sysdig Monitor itself). Note that increasing the limit above 10 is not officially supported and may cause performance and rendering issues
             - **layout**: Size and position of the panel. The dashboard layout is defined by a grid of 12 columns, each row height is equal to the column height. For example, say you want to show 2 panels at the top: one panel might be 6 x 3 (half the width, 3 rows height) located in row 1 and column 1 (top-left corner of the viewport), the second panel might be 6 x 3 located in row 1 and position 7. The location is specified by a dictionary of ``row`` (row position), ``col`` (column position), ``size_x`` (width), ``size_y`` (height).
 
@@ -387,7 +397,6 @@ class SdMonitorClient(_SdcCommon):
         panel_configuration = {
             'name': name,
             'showAs': None,
-            'showAsType': None,
             'metrics': [],
             'gridConfiguration': {
                 'col': 1,
@@ -426,56 +435,60 @@ class SdMonitorClient(_SdcCommon):
             property_names[metric['id']] = property_name + str(i)
 
             panel_configuration['metrics'].append({
-                'metricId': metric['id'],
-                'aggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
+                'id': metric['id'],
+                'timeAggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
                 'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
                 'propertyName': property_name + str(i)
             })
 
         panel_configuration['scope'] = scope
         # if chart scope is equal to dashboard scope, set it as non override
-        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
+        panel_configuration['overrideScope'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
 
+        if 'custom_display_options' not in panel_configuration:
+            panel_configuration['custom_display_options'] = {
+                'valueLimit': {
+                    'count': 10,
+                    'direction': 'desc'
+                },
+                'histogram': {
+                    'numberOfBuckets': 10
+                },
+                'yAxisScale': 'linear',
+                'yAxisLeftDomain': {
+                    'from': 0,
+                    'to': None
+                },
+                'yAxisRightDomain': {
+                    'from': 0,
+                    'to': None
+                },
+                'xAxis': {
+                    'from': 0,
+                    'to': None
+                }
+            }
         #
         # Configure panel type
         #
         if panel_type == 'timeSeries':
             panel_configuration['showAs'] = 'timeSeries'
-            panel_configuration['showAsType'] = 'line'
 
             if limit != None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
+                panel_configuration['custom_display_options']['valueLimit'] = {
+                    'count': limit,
+                    'direction': 'desc'
                 }
 
         elif panel_type == 'number':
             panel_configuration['showAs'] = 'summary'
-            panel_configuration['showAsType'] = 'summary'
         elif panel_type == 'top':
             panel_configuration['showAs'] = 'top'
-            panel_configuration['showAsType'] = 'bars'
 
-            if sort_by is None:
-                panel_configuration['sorting'] = [{
-                    'id': 'v0',
-                    'mode': 'desc'
-                }]
-            else:
-                panel_configuration['sorting'] = [{
-                    'id': property_names[sort_by['metric']],
-                    'mode': sort_by['mode']
-                }]
-
-            if limit is None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': 10
-                }
-            else:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
+            if limit != None:
+                panel_configuration['custom_display_options']['valueLimit'] = {
+                    'count': limit,
+                    'direction': sort_direction
                 }
 
         #
@@ -488,17 +501,16 @@ class SdMonitorClient(_SdcCommon):
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
 
         #
         # ... and add the new panel
         #
-        dashboard_configuration['items'].append(panel_configuration)
+        dashboard_configuration['widgets'].append(panel_configuration)
 
         #
         # Update dashboard
         #
-        res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -519,32 +531,32 @@ class SdMonitorClient(_SdcCommon):
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
+        del dashboard_configuration['id']
 
         #
         # ... find the panel
         #
         def filter_fn(panel):
             return panel['name'] == panel_name
-        panels = list(filter(filter_fn, dashboard_configuration['items']))
+        panels = list(filter(filter_fn, dashboard_configuration['widgets']))
 
         if len(panels) > 0:
             #
             # ... and remove it
             #
             for panel in panels:
-                dashboard_configuration['items'].remove(panel)
+                dashboard_configuration['widgets'].remove(panel)
 
             #
             # Update dashboard
             #
-            res = requests.put(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+            res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                                verify=self.ssl_verify)
             return self._request_result(res)
         else:
             return [False, 'Not found']
 
-    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False, annotations={}):
+    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False):
         if scope is not None:
             if isinstance(scope, basestring) == False:
                 return [False, 'Invalid scope format: Expected a string']
@@ -554,53 +566,54 @@ class SdMonitorClient(_SdcCommon):
         #
         template['id'] = None
         template['version'] = None
-        template['schema'] = 1
+        template['schema'] = 2
         template['name'] = dashboard_name
-        template['isShared'] = shared
-        template['isPublic'] = public
+        template['shared'] = shared
+        template['public'] = public
         template['publicToken'] = None
+
+        # default dashboards don't have eventsOverlaySettings property
+        # make sure to add the default set if the template doesn't include it
+        if 'eventsOverlaySettings' not in template or not template['eventsOverlaySettings']:
+            template['eventsOverlaySettings'] = {
+                'filterNotificationsUserInputFilter': ''
+            }
 
         # set dashboard scope to the specific parameter
         scopeExpression = self.convert_scope_string_to_expression(scope)
         if scopeExpression[0] == False:
             return scopeExpression
-        template['filterExpression'] = scope
-        template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'isVariable':False}, scopeExpression[1])
-
-        if 'widgets' in template and template['widgets'] is not None:
-            # Default dashboards (aka Explore views) specify panels with the property `widgets`,
-            # while custom dashboards use `items`
-            template['items'] = list(template['widgets'])
-            del template['widgets']
+        if scopeExpression[1]:
+            template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
+        else:
+            template['scopeExpressionList'] = None
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
-        if 'items' in template and template['items'] is not None:
-            for chart in template['items']:
-                if 'overrideFilter' not in chart:
-                    chart['overrideFilter'] = False
+        if 'widgets' in template and template['widgets'] is not None:
+            for chart in template['widgets']:
+                if 'overrideScope' not in chart:
+                    chart['overrideScope'] = False
 
-                if chart['overrideFilter'] == False:
+                if chart['overrideScope'] == False:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
                 
-                # if chart scope is equal to dashboard scope, set it as non override
-                chart_scope = chart['scope'] if 'scope' in chart else None
-                chart['overrideFilter'] = chart_scope != scope
-
-        if 'annotations' in template:
-            template['annotations'].update(annotations)
-        else:
-            template['annotations'] = annotations
-
-        template['annotations']['createdByEngine'] = True
+                if chart['showAs'] != 'map':
+                    # if chart scope is equal to dashboard scope, set it as non override
+                    chart_scope = chart['scope'] if 'scope' in chart else None
+                    chart['overrideScope'] = chart_scope != scope
+                else:
+                    # topology panels must override the scope
+                    chart['overrideScope'] = True
 
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + '/ui/dashboards', headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+            
         return self._request_result(res)
 
-    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False):
         '''**Description**
             Create a new dasboard using one of the Sysdig Monitor views as a template. You will be able to define the scope of the new dashboard.
 
@@ -610,7 +623,6 @@ class SdMonitorClient(_SdcCommon):
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria that defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -633,9 +645,9 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, view, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(newdashname, view, filter, shared, public)
 
-    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, public=False):
         '''**Description**
             Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.
 
@@ -645,7 +657,6 @@ class SdMonitorClient(_SdcCommon):
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -656,7 +667,7 @@ class SdMonitorClient(_SdcCommon):
         #
         # Get the list of dashboards from the server
         #
-        res = requests.get(self.url + '/ui/dashboards', headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + self._dashboards_api_endpoint, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -679,20 +690,25 @@ class SdMonitorClient(_SdcCommon):
         #
         # Create the dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public)
 
-    def create_dashboard_from_file(self, newdashname, filename, filter, shared=False, public=False, annotations={}):
+    def create_dashboard_from_file(self, dashboard_name, filename, filter, shared=False, public=False):
         '''
         **Description**
-            Create a new dasboard using a dashboard template saved to disk.
+            Create a new dasboard using a dashboard template saved to disk. See :func:`~SdcClient.save_dashboard_to_file` to use the file to create a dashboard (usefl to create and restore backups).
+
+            The file can contain the following JSON formats:
+            1. dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            2. JSON object with the following properties:
+                * version: dashboards API version (e.g. 'v2')
+                * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
 
         **Arguments**
-            - **newdashname**: the name of the dashboard that will be created.
-            - **filename**: name of a file containing a JSON object for a dashboard in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            - **dashboard_name**: the name of the dashboard that will be created.
+            - **filename**: name of a file containing a JSON object
             - **filter**: a boolean expression combining Sysdig Monitor segmentation criteria defines what the new dasboard will be applied to. For example: *kubernetes.namespace.name='production' and container.image='nginx'*.
             - **shared**: if set to True, the new dashboard will be a shared one.
             - **public**: if set to True, the new dashboard will be shared with public token.
-            - **annotations**: an optional dictionary of custom properties that you can associate to this dashboard for automation or management reasons
 
         **Success Return Value**
             A dictionary showing the details of the new dashboard.
@@ -704,15 +720,54 @@ class SdMonitorClient(_SdcCommon):
         # Load the Dashboard
         #
         with open(filename) as data_file:
-            dboard = json.load(data_file)
+            loaded_object = json.load(data_file)
 
-        dboard['timeMode'] = {'mode': 1}
-        dboard['time'] = {'last': 2 * 60 * 60 * 1000000, 'sampling': 2 * 60 * 60 * 1000000}
+        #
+        # Handle old files
+        #
+        if 'dashboard' not in loaded_object:
+            loaded_object = {
+                'version': 'v1',
+                'dashboard': loaded_object
+            }
+
+        dashboard = loaded_object['dashboard']
+
+        if loaded_object['version'] != self._dashboards_api_version:
+            #
+            # Convert the dashboard (if possible)
+            #
+            conversion_result, dashboard = self._convert_dashboard_to_current_version(dashboard, loaded_object['version'])
+
+            if conversion_result == False:
+                return conversion_result, dashboard
 
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(newdashname, dboard, filter, shared, public, annotations)
+        return self.create_dashboard_from_template(dashboard_name, dashboard, filter, shared, public)
+
+    def save_dashboard_to_file(self, dashboard, filename):
+        '''
+        **Description**
+            Save a dashboard to disk. See :func:`~SdcClient.create_dashboard_from_file` to use the file to create a dashboard (usefl to create and restore backups).
+
+            The file will contain a JSON object with the following properties:
+            * version: dashboards API version (e.g. 'v2')
+            * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+
+        **Arguments**
+            - **dashboard**: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
+            - **filename**: name of a file that will contain a JSON object
+
+        **Example**
+            `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
+        '''
+        with open(filename, 'w') as outf:
+            json.dump({
+                'version': self._dashboards_api_version,
+                'dashboard': dashboard
+            }, outf)
 
     def delete_dashboard(self, dashboard):
         '''**Description**
@@ -730,7 +785,7 @@ class SdMonitorClient(_SdcCommon):
         if 'id' not in dashboard:
             return [False, "Invalid dashboard format"]
 
-        res = requests.delete(self.url + '/ui/dashboards/' + str(dashboard['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.delete(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -806,6 +861,262 @@ class SdMonitorClient(_SdcCommon):
             })
 
         return [True, expressions]
+
+    def _get_dashboard_converters(self):
+        return {
+            'v2': {
+                'v1': self._convert_dashboard_v1_to_v2
+            }
+        }
+
+    def _convert_dashboard_to_current_version(self, dashboard, version):
+        converters_to = self._get_dashboard_converters().get(self._dashboards_api_version, None)
+        if converters_to == None:
+            return False, 'unexpected error: no dashboard converters from version {} are supported'.format(self._dashboards_api_version)
+        
+        converter = converters_to.get(version, None)
+
+        if converter == None:
+            return False, 'dashboard version {} cannot be converted to {}'.format(version, self._dashboards_api_version)
+
+        try:
+            return converter(dashboard)
+        except Exception as err:
+            return False, str(err)
+
+    def _convert_dashboard_v1_to_v2(self, dashboard):
+        #
+        # Migrations
+        #
+        # Each converter function will take:
+        #   1. name of the v1 dashboard property
+        #   2. v1 dashboard configuration
+        #   3. v2 dashboard configuration
+        #
+        # Each converter will apply changes to v2 dashboard configuration according to v1
+        #
+        def when_set(converter):
+            def fn(prop_name, old_obj, new_obj):
+                if prop_name in old_obj and old_obj[prop_name] is not None:
+                    converter(prop_name, old_obj, new_obj)
+            
+            return fn
+
+        def with_default(converter, default=None):
+            def fn(prop_name, old_obj, new_obj):
+                if prop_name not in old_obj:
+                    old_obj[prop_name] = default
+
+                converter(prop_name, old_obj, new_obj)
+            
+            return fn
+            
+        def keep_as_is(prop_name, old_obj, new_obj):
+            new_obj[prop_name] = old_obj[prop_name]
+        
+        def drop_it(prop_name = None, old_obj = None, new_obj = None):
+            pass
+        
+        def ignore(prop_name = None, old_obj = None, new_obj = None):
+            pass
+
+        def rename_to(new_prop_name):
+            def rename(prop_name, old_obj, new_obj):
+                new_obj[new_prop_name] = old_obj[prop_name]
+
+            return rename
+
+        def convert_schema(prop_name, old_dashboard, new_dashboard):
+            new_dashboard[prop_name] = 2
+
+        def convert_scope(prop_name, old_dashboard, new_dashboard):
+            # # TODO!
+
+            scope = old_dashboard[prop_name]
+            scope_conversion = self.convert_scope_string_to_expression(scope)
+
+            if scope_conversion[0]:
+                if scope_conversion[1]:
+                    new_dashboard['scopeExpressionList'] = scope_conversion[1]
+                else:
+                    # the property can be either `null` or a non-empty array
+                    new_dashboard['scopeExpressionList'] = None
+            else:
+                raise SyntaxError('scope not supported by the current grammar')
+
+        def convert_events_filter(prop_name, old_dashboard, new_dashboard):
+            rename_to('eventsOverlaySettings')(prop_name, old_dashboard, new_dashboard)
+
+            if 'showNotificationsDoNotFilterSameMetrics' in new_dashboard['eventsOverlaySettings']:
+                del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameMetrics']
+            if 'showNotificationsDoNotFilterSameScope' in new_dashboard['eventsOverlaySettings']:
+                del new_dashboard['eventsOverlaySettings']['showNotificationsDoNotFilterSameScope']
+
+        def convert_items(prop_name, old_dashboard, new_dashboard):    
+            def convert_color_coding(prop_name, old_widget, new_widget):
+                best_value = None
+                worst_value= None
+                for item in old_widget[prop_name]['thresholds']:
+                    if item['color'] == 'best':
+                        best_value = item['max'] if not item['max'] else item['min']
+                    elif item['color'] == 'worst':
+                        worst_value = item['min'] if not item['min'] else item['max']
+                
+                if best_value is not None and worst_value is not None:
+                    new_widget[prop_name] = {
+                        'best': best_value,
+                        'worst': worst_value
+                    }
+
+            def convert_display_options(prop_name, old_widget, new_widget):
+                keep_as_is(prop_name, old_widget, new_widget)
+
+                if 'yAxisScaleFactor' in new_widget[prop_name]:
+                    del new_widget[prop_name]['yAxisScaleFactor']
+
+            def convert_group(prop_name, old_widget, new_widget):
+                group_by_metrics = old_widget[prop_name]['configuration']['groups'][0]['groupBy']
+                
+                migrated = []
+                for metric in group_by_metrics:
+                    migrated.append({ 'id': metric['metric'] })
+                
+                new_widget['groupingLabelIds'] = migrated
+
+            def convert_override_filter(prop_name, old_widget, new_widget):
+                if old_widget['showAs'] == 'map':
+                    # override scope always true if scope is set
+                    new_widget['overrideScope'] = True
+                else:
+                    new_widget['overrideScope'] = old_widget[prop_name]
+
+
+            def convert_name(prop_name, old_widget, new_widget):
+                #
+                # enforce unique name (on old dashboard, before migration)
+                #
+                unique_id = 1
+                name = old_widget[prop_name]
+
+                for widget in old_dashboard['items']:
+                    if widget == old_widget:
+                        break
+                    
+                    if old_widget[prop_name] == widget[prop_name]:
+                        old_widget[prop_name] = '{} ({})'.format(name, unique_id)
+                        unique_id += 1
+
+                keep_as_is(prop_name, old_widget, new_widget)
+
+            def convert_metrics(prop_name, old_widget, new_widget):
+                def convert_property_name(prop_name, old_metric, new_metric):
+                    keep_as_is(prop_name, old_metric, new_metric)
+                    
+                    if old_metric['metricId'] == 'timestamp':
+                        return 'k0'
+
+                metric_migrations = {
+                    'metricId': rename_to('id'),
+                    'aggregation': rename_to('timeAggregation'),
+                    'groupAggregation': rename_to('groupAggregation'),
+                    'propertyName': convert_property_name
+                }
+
+                migrated_metrics = []
+                for old_metric in old_widget[prop_name]:
+                    migrated_metric = {}
+
+                    for key in metric_migrations.keys():
+                        if key in old_metric:
+                            metric_migrations[key](key, old_metric, migrated_metric)
+
+                    migrated_metrics.append(migrated_metric)
+
+                # Property name convention:
+                # timestamp: k0 (if present)
+                # other keys: k* (from 0 or 1, depending on timestamp)
+                # values: v* (from 0)
+                sorted_metrics = []
+                timestamp_key = filter(lambda m: m['id'] == 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
+                no_timestamp_keys = filter(lambda m: m['id'] != 'timestamp' and not ('timeAggregation' in m and m['timeAggregation'] is not None), migrated_metrics)
+                values = filter(lambda m: 'timeAggregation' in m and m['timeAggregation'] is not None, migrated_metrics)
+                if timestamp_key:
+                    timestamp_key[0]['propertyName'] = 'k0'
+                    sorted_metrics.append(timestamp_key[0])
+                k_offset = 1 if timestamp_key else 0
+                for i in range(0, len(no_timestamp_keys)):
+                    no_timestamp_keys[i]['propertyName'] = 'k{}'.format(i + k_offset)
+                    sorted_metrics.append(no_timestamp_keys[i])
+                for i in range(0, len(values)):
+                    values[i]['propertyName'] = 'v{}'.format(i)
+                    sorted_metrics.append(values[i])
+                    
+                new_widget['metrics'] = sorted_metrics
+
+            widget_migrations = {
+                'colorCoding': when_set(convert_color_coding),
+                'compareToConfig': when_set(keep_as_is),
+                'customDisplayOptions': with_default(convert_display_options, {}),
+                'gridConfiguration': keep_as_is,
+                'group': when_set(convert_group),
+                'hasTransparentBackground': when_set(rename_to('transparentBackground')),
+                'limitToScope': when_set(keep_as_is),
+                'isPanelTitleVisible': when_set(rename_to('panelTitleVisible')),
+                'markdownSource': when_set(keep_as_is),
+                'metrics': with_default(convert_metrics, []),
+                'name': with_default(convert_name, 'Panel'),
+                'overrideFilter': convert_override_filter,
+                'paging': drop_it,
+                'scope': with_default(keep_as_is, None),
+                'showAs': keep_as_is,
+                'showAsType': drop_it,
+                'sorting': drop_it,
+                'textpanelTooltip': when_set(keep_as_is),
+            }
+
+            migrated_widgets = []
+            for old_widget in old_dashboard[prop_name]:
+                migrated_widget = {}
+
+                for key in widget_migrations.keys():
+                    widget_migrations[key](key, old_widget, migrated_widget)
+
+                migrated_widgets.append(migrated_widget)
+       
+            new_dashboard['widgets'] = migrated_widgets
+            
+            return migrated
+        
+        migrations = {
+            'autoCreated': keep_as_is,
+            'createdOn': keep_as_is,
+            'eventsFilter': with_default(convert_events_filter, {
+                'filterNotificationsUserInputFilter': ''
+            }),
+            'filterExpression': convert_scope,
+            'scopeExpressionList': ignore, # scope will be generated from 'filterExpression'
+            'id': keep_as_is,
+            'isPublic': rename_to('public'),
+            'isShared': rename_to('shared'),
+            'items': convert_items,
+            'layout': drop_it,
+            'modifiedOn': keep_as_is,
+            'name': keep_as_is,
+            'publicToken': drop_it,
+            'schema': convert_schema,
+            'teamId': keep_as_is,
+            'username': keep_as_is,
+            'version': keep_as_is,
+        }
+
+        #
+        # Apply migrations
+        #
+        migrated = {}
+        for key in migrations.keys():
+            migrations[key](key, copy.deepcopy(dashboard), migrated)
+
+        return True, migrated
 
 
 # For backwards compatibility

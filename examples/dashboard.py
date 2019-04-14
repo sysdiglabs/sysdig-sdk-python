@@ -8,7 +8,7 @@ import getopt
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 
 #
@@ -39,7 +39,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 
 #
@@ -77,10 +77,10 @@ else:
 panel_name = 'CPU Over Time'
 panel_type = 'timeSeries'
 metrics = [
-    {'id': 'kubernetes.pod.name'},
+    {'id': 'proc.name'},
     {'id': 'cpu.used.percent', 'aggregations': {'time': 'avg', 'group': 'avg'}}
 ]
-scope = 'kubernetes.namespace.name = "dev" and kubernetes.replicationController.name = "cassandra"'
+scope = 'proc.name = "cassandra"'
 ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, scope=scope)
 
 # Check the result
@@ -101,9 +101,9 @@ metrics = [
     {'id': 'host.hostName'},
     {'id': 'cpu.used.percent', 'aggregations': {'time': 'avg', 'group': 'avg'}}
 ]
-sort_by = {'metric': 'cpu.used.percent', 'mode': 'desc'}
+sort_direction = 'desc'
 limit = 10
-ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_by=sort_by, limit=limit)
+ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_direction=sort_direction, limit=limit)
 
 # Check the result
 if ok:
@@ -137,7 +137,7 @@ else:
 #
 # Remove a panel
 #
-ok, res = sdclient.remove_dashboard_panel(dashboard_configuration, 'CPU')
+ok, res = sdclient.remove_dashboard_panel(dashboard_configuration, 'CPU Over Time')
 
 # Check the result
 if ok:

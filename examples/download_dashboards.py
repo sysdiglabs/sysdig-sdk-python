@@ -8,7 +8,7 @@ import sys
 import zipfile
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 
 def zipdir(path, ziph):
@@ -52,7 +52,7 @@ sysdig_dashboard_dir = 'sysdig-dashboard-dir'
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Fire the request.
@@ -76,11 +76,9 @@ if not os.path.exists(sysdig_dashboard_dir):
 
 
 for db in res['dashboards']:
-    file_path = os.path.join(sysdig_dashboard_dir, str(db['id']))
-    f = open(file_path, 'w')
-    f.write(json.dumps(db))
-    print("Name: %s, # Charts: %d" % (db['name'], len(db['items'])))
-    f.close()
+    sdclient.save_dashboard_to_file(db, os.path.join(sysdig_dashboard_dir, str(db['id'])))
+
+    print("Name: %s, # Charts: %d" % (db['name'], len(db['widgets'])))
 
 zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
 zipdir(sysdig_dashboard_dir, zipf)

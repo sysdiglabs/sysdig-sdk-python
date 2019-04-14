@@ -7,7 +7,7 @@ import os
 import sys
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
@@ -22,7 +22,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Serialize the first user dashboard to disk
@@ -34,8 +34,7 @@ if not ok:
     sys.exit(1)
 
 if len(res[u'dashboards']) > 0:
-    with open('dashboard.json', 'w') as outf:
-        json.dump(res[u'dashboards'][0], outf)
+    sdclient.save_dashboard_to_file(res[u'dashboards'][0], 'dashboard.json')
 else:
     print('the user has no dashboards. Exiting.')
     sys.exit(0)
@@ -44,7 +43,7 @@ else:
 # Now create the dashboard from the file. We use a filter for the Cassandra process
 # as an example.
 #
-dashboardFilter = "proc.name = cassandra"
+dashboardFilter = 'proc.name = "cassandra"'
 
 ok, res = sdclient.create_dashboard_from_file('test dasboard from file', 'dashboard.json', dashboardFilter)
 
