@@ -15,7 +15,7 @@ if [[ $? != 1 ]]; then
    exit 1
 fi
 
-if [[ "$OUT" != "Access is denied Not enough privileges to complete the action" ]]; then
+if [[ "$OUT" != "Access is denied: Not enough privileges to complete the action" ]]; then
     echo "Unexpected output from set_secure_system_falco_rules.py: $OUT"
     exit 1
 fi
