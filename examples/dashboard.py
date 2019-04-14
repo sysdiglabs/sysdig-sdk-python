@@ -103,7 +103,8 @@ metrics = [
 ]
 sort_direction = 'desc'
 limit = 10
-ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_direction=sort_direction, limit=limit)
+layout = {'col': 1, 'row': 7, 'size_x': 12, 'size_y': 6}
+ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_direction=sort_direction, limit=limit, layout=layout)
 
 # Check the result
 if ok:
@@ -122,7 +123,7 @@ panel_type = 'number'
 metrics = [
     {'id': 'cpu.used.percent', 'aggregations': {'time': 'avg', 'group': 'avg'}}
 ]
-layout = {'col': 6, 'row': 1, 'size_x': 2, 'size_y': 3}
+layout = {'col': 1, 'row': 13, 'size_x': 12, 'size_y': 6}
 ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, layout=layout)
 
 # Check the result

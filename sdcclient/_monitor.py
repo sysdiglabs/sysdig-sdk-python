@@ -361,7 +361,10 @@ class SdMonitorClient(_SdcCommon):
         dashboard_configuration = {
             'name': name,
             'schema': 2,
-            'widgets': []
+            'widgets': [],
+            'eventsOverlaySettings': {
+                'filterNotificationsUserInputFilter': ''
+            }
         }
 
         #
@@ -403,7 +406,8 @@ class SdMonitorClient(_SdcCommon):
                 'row': 1,
                 'size_x': 12,
                 'size_y': 6
-            }
+            },
+            'customDisplayOptions': {}
         }
 
         if panel_type == 'timeSeries':
@@ -531,7 +535,6 @@ class SdMonitorClient(_SdcCommon):
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        del dashboard_configuration['id']
 
         #
         # ... find the panel
