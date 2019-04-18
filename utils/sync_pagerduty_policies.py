@@ -3,6 +3,7 @@
 # Synchronize list of escalation policies with notification channels in Sysdig
 #
 import argparse
+import copy
 import json
 import os
 import sys
@@ -44,6 +45,10 @@ args = vars(parser.parse_args())
 
 
 def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
+    if not link and not unlink:
+        # by default, you're going to link accounts
+        link = True
+
     sysdig = SdMonitorClient(sysdig_token)
     pager_duty = PagerDutyAPI(pager_duty_token)
     actions_factory = ActionFactory(sysdig, pager_duty, pager_duty_id)
@@ -60,11 +65,17 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     #
     # Find PagerDuty notification channels
     #
-    pagerduty_channels = filter(lambda channel: channel['type'] == 'PAGER_DUTY',
-                                res['notificationChannels'])
+    pager_duty_channels = [channel for channel in res['notificationChannels'] if channel['type'] == 'PAGER_DUTY']
     print('Found {} PagerDuty notification {} configured in Sysdig'.format(
-        len(pagerduty_channels), pluralize('channel', len(pagerduty_channels))))
-    # print(json.dumps(pagerduty_channels, sort_keys=True, indent=4))
+        len(pager_duty_channels), pluralize('channel', len(pager_duty_channels))))
+    # print(json.dumps(pager_duty_channels, sort_keys=True, indent=4))
+
+    # Build map of notification channel -> integration key
+    def get_integration_map(acc, channel):
+        acc[channel['options']['serviceKey']] = channel
+        return acc
+
+    integration_keys = reduce(get_integration_map, pager_duty_channels, {})
 
     #
     # Get list of PagerDuty escalation policies
@@ -88,6 +99,12 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     # print(json.dumps(services, sort_keys=True, indent=4))
 
     #
+    # Get Sysdig vendor configuration
+    #
+    sysdig_vendor = pager_duty.get('/vendors', {'query': 'sysdig', 'limit': 1,
+                                                'offset': 0, 'total': 'false'})['vendors'][0]
+
+    #
     # Get integration details
     #
     for service in services:
@@ -98,74 +115,133 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     #
     # Find integrations with Sysdig
     #
-
-    # Build map of notification channel -> integration key
-
-    def get_integration_map(acc, channel):
-        acc[channel['options']['serviceKey']] = channel
-        return acc
-
-    integration_keys = reduce(get_integration_map, pagerduty_channels, {})
-
+    service_integration_keys = {}
     for service in services:
-        service['sysdig_integrations'] = filter(
-            lambda integration: integration['integration_key'] in integration_keys, service['integrations'])
+        service['sysdig_integrations'] = [integration for integration in service['integrations']
+                                          if integration['vendor']['id'] == sysdig_vendor['id']]
+
+        for integration in service['sysdig_integrations']:
+            service_integration_keys[integration['integration_key']] = {
+                'service': service,
+                'integration': integration
+            }
 
     #
     # Get actions
     #
     actions = []
+
     if unlink:
-        # delete all notification channels
-        for channel in pagerduty_channels:
+        #
+        # delete all PagerDuty notification channels in Sysdig
+        #
+        for channel in pager_duty_channels:
             actions.append({
                 'info': 'Sysdig: Delete channel "{}" ({})'.format(channel['name'], channel['id']),
                 'fn': actions_factory.delete_notification_channel(channel)
             })
 
-        # delete integration with Sysdig, and services left with no integrations
+        #
+        # delete integration with Sysdig
+        #
         for service in services:
             if service['sysdig_integrations']:
                 if len(service['sysdig_integrations']) == len(service['integrations']):
+                    #
+                    # service connected to Sysdig only: delete service
+                    #
                     actions.append({
                         'info': 'PagerDuty: Delete service "{}" ({})'.format(service['name'], service['id']),
                         'fn': actions_factory.delete_service(service['id'])
                     })
                 else:
+                    #
+                    # service with some integrations with Sysdig: delete individual integrations
+                    #
                     for integration in service['sysdig_integrations']:
                         actions.append({
                             'info': 'PagerDuty: Delete integration "{}" ({}) in service "{}" ({})'.format(integration['name'], integration['id'], service['name'], service['id']),
                             'fn': actions_factory.delete_integration(service['id'], integration['id'])
                         })
-            elif service['name'] == '{} (Sysdig)'.format(escalation_policies_map[service['escalation_policy']['id']]['name']):
-                # delete service that this script (very likely) created in the past (based on the name)
-                actions.append({
-                    'info': 'PagerDuty: Delete service "{}" ({})'.format(service['name'], service['id']),
-                    'fn': actions_factory.delete_service(service['id'])
-                })
 
     if link:
-        # create services
+        #
+        # delete all PagerDuty notification channels in Sysdig that do NOT have an integration in PagerDuty
+        #
+        for channel in pager_duty_channels:
+            if not channel['options']['serviceKey'] in service_integration_keys:
+                actions.append({
+                    'info': 'Remove notification channel "{}" not connected to any integration'.format(channel['name']),
+                    'fn': actions_factory.delete_notification_channel(channel)
+                })
+
         for policy in escalation_policies:
             service_name = '{} (Sysdig)'.format(policy['name'])
 
-            policy_services = filter(lambda service: service['escalation_policy']['id'] == policy['id'], services)
-            valid_services = filter(lambda service: service['name'] ==
-                                    service_name and service['sysdig_integrations'], policy_services)
+            policy_services = [service for service in services if service['escalation_policy']['id'] == policy['id']]
+            sysdig_services = [service for service in policy_services if service['sysdig_integrations']]
+            disconnected_services = []
+            for service in sysdig_services:
+                for integration in service['integrations']:
+                    if not integration['integration_key'] in integration_keys:
+                        disconnected_services.append({
+                            'service': service,
+                            'integration': integration
+                        })
 
-            if not valid_services:
-                # create service, integration, notification channel
+            if not sysdig_services:
+                #
+                # create service and integration in PagerDuty, and notification channel in Sysdig
+                #
                 actions.append({
                     'info': 'Create service, integration, and notification channel for policy "{}"'.format(policy['name']),
-                    'fn': actions_factory.create_all(policy)
+                    'fn': actions_factory.create_all(policy, sysdig_vendor)
                 })
+            elif disconnected_services:
+                #
+                # create notification channel to disconnected integration
+                #
+                actions.append({
+                    'info': 'Create notification channel for existing service "{}" for policy "{}"'.format(disconnected_services[0]['service']['name'], policy['name']),
+                    'fn': actions_factory.create_notification_channel(policy, disconnected_services[0]['service'], disconnected_services[0]['integration'])
+                })
+            else:
+                for service in sysdig_services:
+                    for integration in service['integrations']:
+                        if integration['integration_key'] in integration_keys:
+                            channel = integration_keys[integration['integration_key']]
+                            if channel['name'] != policy['name']:
+                                #
+                                # rename channel to match new policy name
+                                #
+                                actions.append({
+                                    'info': 'Rename notification channel "{}" to policy name "{}"'.format(channel['name'], policy['name']),
+                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'], service_name)
+                                })
+                            elif channel['options']['serviceName'] != service_name:
+                                #
+                                # rename channel service to service name
+                                #
+                                actions.append({
+                                    'info': 'Rename channel service "{}" to service name "{}"'.format(service['name'], service_name),
+                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'], service_name)
+                                })
+
+                            if len(service['integrations']) == 1 and service['name'] != service_name:
+                                #
+                                # rename service to match new policy name
+                                #
+                                actions.append({
+                                    'info': 'Rename service "{}" to "{}"'.format(service['name'], service_name),
+                                    'fn': actions_factory.rename_service(service, service_name)
+                                })
 
     if actions:
         #
         # Run action, or just print the task in dry mode
         #
         print('')
-        print('Performing the following actions:')
+        print('Action items:')
         for action in actions:
             if dry_run:
                 print('\t* {}'.format(action['info']))
@@ -173,6 +249,10 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
                 print('\t* {}...'.format(action['info']))
                 action['fn']()
                 print('\t  Done!')
+
+        if dry_run:
+            print('\nTo apply changes, execute the same command without "--dry-run" parameter:\npython {}'.format(
+                ' '.join([arg for arg in sys.argv if arg != '--dry-run'])))
 
     else:
         if unlink:
@@ -191,6 +271,9 @@ class PagerDutyAPI():
 
     def post(self, endpoint, data=None):
         return self._base_request('post', endpoint, data=data)
+
+    def put(self, endpoint, data=None):
+        return self._base_request('put', endpoint, data=data)
 
     def delete(self, endpoint, params=None):
         return self._base_request('delete', endpoint, params=params)
@@ -252,7 +335,7 @@ class ActionFactory():
 
         return fn
 
-    def create_all(self, policy):
+    def create_all(self, policy, sysdig_vendor):
         def fn():
             new_service = self._pager_duty.post('/services', {
                 'service': {
@@ -305,8 +388,6 @@ class ActionFactory():
                 }
             })['service']
 
-            sysdig_vendor = self._pager_duty.get('/vendors?query=sysdig&limit=100&offset=0&total=false')['vendors'][0]
-
             new_integration = self._pager_duty.post('/services/{}/integrations'.format(new_service['id']), {
                 'integration': {
                     'type': 'integration_inbound_integration',
@@ -341,21 +422,38 @@ class ActionFactory():
 
         return fn
 
-    def create_notification_channel(self, policy, name, integration):
+    def create_notification_channel(self, policy, service, integration):
         def fn():
             self._sysdig.create_notification_channel({
                 "type": "PAGER_DUTY",
                 "enabled": True,
                 "sendTestNotification": False,
-                "name": name,
+                "name": policy['name'],
                 "options": {
                     "account": self._pager_duty_id,
-                    "serviceKey": integration['intergration_key'],
-                    "serviceName": policy['name'],
+                    "serviceKey": integration['integration_key'],
+                    "serviceName": service['name'],
                     "notifyOnOk": True,
                     "notifyOnResolve": True
                 }
             })
+
+        return fn
+
+    def rename_notification_channel(self, channel, channel_name, service_name):
+        def fn():
+            new_channel = copy.deepcopy(channel)
+            new_channel['name'] = channel_name
+            new_channel['options']['serviceName'] = service_name
+            self._sysdig.update_notification_channel(new_channel)
+
+        return fn
+
+    def rename_service(self, service, service_name):
+        def fn():
+            new_service = copy.deepcopy(service)
+            new_service['name'] = service_name
+            self._pager_duty.put('/services/{}'.format(service['id']), new_service)
 
         return fn
 
