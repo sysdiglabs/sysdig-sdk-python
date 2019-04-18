@@ -118,7 +118,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     service_integration_keys = {}
     for service in services:
         service['sysdig_integrations'] = [integration for integration in service['integrations']
-                                          if integration['vendor']['id'] == sysdig_vendor['id']]
+                                          if 'vendor' in integration and integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id']]
 
         for integration in service['sysdig_integrations']:
             service_integration_keys[integration['integration_key']] = {
@@ -183,7 +183,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
             disconnected_services = []
             for service in sysdig_services:
                 for integration in service['integrations']:
-                    if not integration['integration_key'] in integration_keys:
+                    if 'integration_key' in integration and integration['integration_key'] in integration_keys:
                         disconnected_services.append({
                             'service': service,
                             'integration': integration
@@ -202,13 +202,13 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
                 # create notification channel to disconnected integration
                 #
                 actions.append({
-                    'info': 'Create notification channel for existing service "{}" for policy "{}"'.format(disconnected_services[0]['service']['name'], policy['name']),
+                    'info': 'Restore notification channel for disconnected service "{}" for policy "{}"'.format(disconnected_services[0]['service']['name'], policy['name']),
                     'fn': actions_factory.create_notification_channel(policy, disconnected_services[0]['service'], disconnected_services[0]['integration'])
                 })
             else:
                 for service in sysdig_services:
                     for integration in service['integrations']:
-                        if integration['integration_key'] in integration_keys:
+                        if 'integration_key' in integration and integration['integration_key'] in integration_keys:
                             channel = integration_keys[integration['integration_key']]
                             if channel['name'] != policy['name']:
                                 #
