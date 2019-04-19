@@ -183,7 +183,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
             disconnected_services = []
             for service in sysdig_services:
                 for integration in service['integrations']:
-                    if 'integration_key' in integration and integration['integration_key'] in integration_keys:
+                    if integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id'] and integration['integration_key'] not in integration_keys:
                         disconnected_services.append({
                             'service': service,
                             'integration': integration
@@ -208,7 +208,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
             else:
                 for service in sysdig_services:
                     for integration in service['integrations']:
-                        if 'integration_key' in integration and integration['integration_key'] in integration_keys:
+                        if integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id'] and integration['integration_key'] in integration_keys:
                             channel = integration_keys[integration['integration_key']]
                             if channel['name'] != policy['name']:
                                 #
