@@ -159,10 +159,16 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
                     # service with some integrations with Sysdig: delete individual integrations
                     #
                     for integration in service['sysdig_integrations']:
-                        actions.append({
-                            'info': 'PagerDuty: Delete integration "{}" ({}) in service "{}" ({})'.format(integration['name'], integration['id'], service['name'], service['id']),
-                            'fn': actions_factory.delete_integration(service['id'], integration['id'])
-                        })
+                        actions.append(
+                            {
+                                'info': 'PagerDuty: Delete integration "{}" ({}) in service "{}" ({})'.format(
+                                    integration['name'],
+                                    integration['id'],
+                                    service['name'],
+                                    service['id']),
+                                'fn': actions_factory.delete_integration(
+                                    service['id'],
+                                    integration['id'])})
 
     if link:
         #
@@ -193,18 +199,21 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
                 #
                 # create service and integration in PagerDuty, and notification channel in Sysdig
                 #
-                actions.append({
-                    'info': 'Create service, integration, and notification channel for policy "{}"'.format(policy['name']),
-                    'fn': actions_factory.create_all(policy, sysdig_vendor)
-                })
+                actions.append({'info': 'Create service, integration, and notification channel for policy "{}"'.format(
+                    policy['name']), 'fn': actions_factory.create_all(policy, sysdig_vendor)})
             elif disconnected_services:
                 #
                 # create notification channel to disconnected integration
                 #
-                actions.append({
-                    'info': 'Restore notification channel for disconnected service "{}" for policy "{}"'.format(disconnected_services[0]['service']['name'], policy['name']),
-                    'fn': actions_factory.create_notification_channel(policy, disconnected_services[0]['service'], disconnected_services[0]['integration'])
-                })
+                actions.append(
+                    {
+                        'info': 'Restore notification channel for disconnected service "{}" for policy "{}"'.format(
+                            disconnected_services[0]['service']['name'],
+                            policy['name']),
+                        'fn': actions_factory.create_notification_channel(
+                            policy,
+                            disconnected_services[0]['service'],
+                            disconnected_services[0]['integration'])})
             else:
                 for service in sysdig_services:
                     for integration in service['integrations']:
