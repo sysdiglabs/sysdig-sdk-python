@@ -448,9 +448,15 @@ class SdScanningClient(_SdcCommon):
         **Success Return Value**
             A JSON object containing the policy description.
         '''
-        url = self.url + '/api/scanning/v1/policies/' + policyid
-        if bundleid:
-            url += '?bundleId=' + bundleid
+        ok, policies = self.list_policies(bundleid)
+        if not ok:
+            return [ok, policies]
+
+        for policy in policies:
+            if policy["id"] == policyid:
+                return [True, policy]
+
+        return [False, "Policy not found"]
 
     def update_policy(self, policyid, policy_description):
         '''**Description**
