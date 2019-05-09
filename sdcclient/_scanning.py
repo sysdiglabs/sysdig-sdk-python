@@ -450,13 +450,13 @@ class SdScanningClient(_SdcCommon):
         '''
         ok, policies = self.list_policies(bundleid)
         if not ok:
-            return ok, policies
+            return [ok, policies]
 
         for policy in policies:
             if policy["id"] == policyid:
-                return True, policy
+                return [True, policy]
 
-        return False, "Policy not found"
+        return [False, "Policy not found"]
 
     def update_policy(self, policyid, policy_description):
         '''**Description**
