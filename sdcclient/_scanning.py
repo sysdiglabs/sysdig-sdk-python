@@ -163,6 +163,58 @@ class SdScanningClient(_SdcCommon):
         '''
         return self._query_image(image, query_group='vuln', query_type=vuln_type, vendor_only=vendor_only)
 
+    def query_images_by_vulnerability(self, vulnerability_id, namespace=None, package=None, severity=None, vendor_only=True):
+        '''**Description**
+            Search system for images with the given vulnerability ID present
+
+        **Arguments**
+            - vulnerability_id: Search for images vulnerable to this vulnerability ID (e.g. CVE-1999-0001)
+            - namespace: Filter results to images with vulnerable packages in the given namespace (e.g. debian:9)
+            - package: Filter results to images with the given vulnerable package name (e.g. sed)
+            - severity: Filter results to images with the given vulnerability severity (e.g. Medium)
+            - vendor_only: Only show images with vulnerabilities explicitly deemed applicable by upstream OS vendor, if present
+
+        **Success Return Value**
+            A JSON object representing the images.
+        '''
+        url = "{base_url}/api/scanning/v1/anchore/query/images/by_vulnerability?vulnerability_id={vulnerability_id}{namespace}{package}{severity}&vendor_only={vendor_only}".format(
+            base_url=self.url,
+            vulnerability_id=vulnerability_id,
+            namespace="&namespace={}".format(namespace) if namespace else "",
+            package="&affected_package={}".format(package) if package else "",
+            severity="&severity={}".format(severity) if severity else "",
+            vendor_only=vendor_only)
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def query_images_by_package(self, name, version=None, package_type=None):
+        '''**Description**
+            Search system for images with the given package installed
+
+        **Arguments**
+            - name: Search for images with this package name (e.g. sed)
+            - version: Filter results to only packages with given version (e.g. 4.4-1)
+            - package-type: Filter results to only packages of given type (e.g. dpkg)
+
+        **Success Return Value**
+            A JSON object representing the images.
+        '''
+        url = "{base_url}/api/scanning/v1/anchore/query/images/by_package?name={name}{version}{package_type}".format(
+            base_url=self.url,
+            name=name,
+            version="&version={}".format(version) if version else "",
+            package_type="&package_type={}".format(package_type) if package_type else "")
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def _query_image(self, image, query_group="", query_type="", vendor_only=True):
         if not query_group:
             raise Exception("need to specify a query group")
