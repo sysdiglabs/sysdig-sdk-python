@@ -846,6 +846,19 @@ class SdSecureClient(_SdcCommon):
 
         return True, None
 
+    def run_compliance_task(self, id):
+        '''**Description**
+            Run now the compliance task with the given id
+
+        **Arguments**
+            - id: the id of the compliance task to run
+        '''
+        res = requests.post(self.url + '/api/complianceTasks/run', data=json.dumps({'items': [id]}), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def list_compliance_results(self, limit=50, direction=None, cursor=None, filter=""):
         '''**Description**
             Get the list of all compliance tasks runs.
