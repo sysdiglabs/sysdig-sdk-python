@@ -98,6 +98,7 @@ new_dashboard = res['dashboard']
 #
 # Update Dashboard with previous data.
 #
+dashboard['name'] = new_dashboard['name'] # dashboards belonging to the same user cannot have the same name
 ok, res = sdclient.update_dashboard(dashboard, new_dashboard['id'])
 new_dashboard = res['dashboard']
 
