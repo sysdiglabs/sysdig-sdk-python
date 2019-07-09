@@ -88,3 +88,20 @@ ok, res = sdclient.delete_dashboard(dashboard)
 if not ok:
     print(res)
     sys.exit(1)
+
+#
+# Create Dashboard.
+#
+ok, res = sdclient.create_dashboard("Sample dashboard - " + uuid.uuid4().hex)
+new_dashboard = res['dashboard']
+
+#
+# Update Dashboard with previous data.
+#
+ok, res = sdclient.update_dashboard(dashboard, new_dashboard['id'])
+new_dashboard = res['dashboard']
+
+#
+# Delete Dashboard.
+#
+ok, res = sdclient.delete_dashboard(new_dashboard)

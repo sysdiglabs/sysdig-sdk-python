@@ -335,7 +335,7 @@ class SdMonitorClient(_SdcCommon):
                 return [False, "Invalid dashboard format. ID must be present as paramter or in data set."]
             dashboard_id = dashboard['id'] if isinstance(dashboard_data['id'], type(str)) else str(dashboard_data['id'])
         elif not isinstance(dashboard_id, type(str)):
-            dashboard_id = str(dashbord_id)
+            dashboard_id = str(dashboard_id)
 
         dashboard_data_clone = copy.deepcopy(dashboard_data)
         if 'id' in dashboard_data_clone:
@@ -343,7 +343,7 @@ class SdMonitorClient(_SdcCommon):
         if 'version' in dashboard_data_clone:
             del dashboard_data_clone['version']
 
-        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + dashboard_id, headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
+        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + dashboard_id, headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data_clone}))
         return self._request_result(res)
 
     def find_dashboard_by(self, name=None):
