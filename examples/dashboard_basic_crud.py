@@ -55,13 +55,55 @@ dashboard = res['dashboard']
 #
 # Update Dashboard.
 #
-dashboard['scopeExpressionList'] = [{
-  "displayName": None,
-  "isVariable": False,
-  "operand": "host.hostName",
-  "operator": "equals",
-  "value": ["my-host"],
-  "variable": False
+dashboard['widgets'] = [{
+    "compareToConfig": None,
+    "customDisplayOptions": {
+        "histogram": {
+            "numberOfBuckets": 10,
+        },
+        "unit": "%",
+        "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+        },
+        "xAxis": {
+            "from": 0,
+            "to": None
+        },
+        "yAxisLeftDomain": {
+            "from": 0,
+            "to": None
+        },
+        "yAxisRightDomain": {
+            "from": 0,
+            "to": None
+        },
+        "yAxisScale": "linear"
+    },
+    "gridConfiguration": {
+        "col": 1,
+        "row": 1,
+        "size_x": 6,
+        "size_y": 4
+    },
+    "metrics": [
+        {
+            "id": "timestamp",
+            "propertyName": "k0"
+        },
+        {
+            "groupAggregation": "avg",
+            "id": "cpu.used.percent",
+            "metricFormattingDecimals": None,
+            "metricFormattingUnit": None,
+            "propertyName": "v0",
+            "timeAggregation": "avg"
+        }
+    ],
+    "name": "My Panel",
+    "overrideScope": False,
+    "scope": None,
+    "showAs": "timeSeries"
 }]
 ok, res = sdclient.update_dashboard(dashboard)
 # NOTE: ID is optional if present in data set. Line below would also work as expected.
