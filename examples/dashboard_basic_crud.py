@@ -55,7 +55,14 @@ dashboard = res['dashboard']
 #
 # Update Dashboard.
 #
-dashboard['name'] = "MODIFIED - " + dashboard['name']
+dashboard['scopeExpressionList'] = [{
+  "displayName": None,
+  "isVariable": False,
+  "operand": "host.hostName",
+  "operator": "equals",
+  "value": ["my-host"],
+  "variable": False
+}]
 ok, res = sdclient.update_dashboard(dashboard)
 # NOTE: ID is optional if present in data set. Line below would also work as expected.
 #       This can be leveraged to copy one dashboard to another.
