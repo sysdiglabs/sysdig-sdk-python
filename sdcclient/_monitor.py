@@ -334,6 +334,8 @@ class SdMonitorClient(_SdcCommon):
             if 'id' not in dashboard_data:
                 return [False, "Invalid dashboard format. ID must be present as paramter or in data set."]
             dashboard_id = dashboard['id'] if isinstance(dashboard_data['id'], type(str)) else str(dashboard_data['id'])
+        elif not isinstance(dashboard_id, type(str))
+            dashboard_id = str(dashbord_id)
 
         dashboard_data_clone = copy.deepcopy(dashboard_data)
         if 'id' in dashboard_data_clone:
