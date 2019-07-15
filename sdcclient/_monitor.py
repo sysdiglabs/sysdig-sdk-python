@@ -316,13 +316,12 @@ class SdMonitorClient(_SdcCommon):
         **Example**
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
-        id_str = dashboard_id if isinstance(dashboard_id, type(str)) else str(dashboard_id)
-        res = requests.get(self.url + self._dashboards_api_endpoint + "/" + id_str, headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def update_dashboard(self, dashboard_data, dashboard_id=None):
+    def update_dashboard(self, dashboard_data):
         '''**Description**
-            Updates dashboard with provided in data. Dashboard ID is extracted from data if ID is not explicitly provided
+            Updates dashboard with provided in data. Please note that the dictionary will require a valid ID and version field to work as expected.
 
         **Success Return Value**
             A dictionary containing the updated dashboard data.
@@ -330,20 +329,7 @@ class SdMonitorClient(_SdcCommon):
         **Example**
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
-        if not dashboard_id:
-            if 'id' not in dashboard_data:
-                return [False, "Invalid dashboard format. ID must be present as paramter or in data set."]
-            dashboard_id = dashboard['id'] if isinstance(dashboard_data['id'], type(str)) else str(dashboard_data['id'])
-        elif not isinstance(dashboard_id, type(str)):
-            dashboard_id = str(dashboard_id)
-
-        dashboard_data_clone = copy.deepcopy(dashboard_data)
-        if 'id' in dashboard_data_clone:
-            del dashboard_data_clone['id']
-        if 'version' in dashboard_data_clone:
-            del dashboard_data_clone['version']
-
-        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + dashboard_id, headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data_clone}))
+        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_data['id']), headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
         return self._request_result(res)
 
     def find_dashboard_by(self, name=None):

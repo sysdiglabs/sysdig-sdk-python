@@ -55,60 +55,8 @@ dashboard = res['dashboard']
 #
 # Update Dashboard.
 #
-dashboard['widgets'] = [{
-    "compareToConfig": None,
-    "customDisplayOptions": {
-        "histogram": {
-            "numberOfBuckets": 10,
-        },
-        "unit": "%",
-        "valueLimit": {
-            "count": 10,
-            "direction": "desc"
-        },
-        "xAxis": {
-            "from": 0,
-            "to": None
-        },
-        "yAxisLeftDomain": {
-            "from": 0,
-            "to": None
-        },
-        "yAxisRightDomain": {
-            "from": 0,
-            "to": None
-        },
-        "yAxisScale": "linear"
-    },
-    "gridConfiguration": {
-        "col": 1,
-        "row": 1,
-        "size_x": 6,
-        "size_y": 4
-    },
-    "metrics": [
-        {
-            "id": "timestamp",
-            "propertyName": "k0"
-        },
-        {
-            "groupAggregation": "avg",
-            "id": "cpu.used.percent",
-            "metricFormattingDecimals": None,
-            "metricFormattingUnit": None,
-            "propertyName": "v0",
-            "timeAggregation": "avg"
-        }
-    ],
-    "name": "My Panel",
-    "overrideScope": False,
-    "scope": None,
-    "showAs": "timeSeries"
-}]
+dashboard['name'] = "Let's change the dashboard name. " + uuid.uuid4().hex
 ok, res = sdclient.update_dashboard(dashboard)
-# NOTE: ID is optional if present in data set. Line below would also work as expected.
-#       This can be leveraged to copy one dashboard to another.
-# ok, res = sdclient.update_dashboard(dashboard, dashboard['id'])
 
 #
 # Check for successful update
@@ -135,16 +83,41 @@ if not ok:
 # Create Dashboard.
 #
 ok, res = sdclient.create_dashboard("Sample dashboard - " + uuid.uuid4().hex)
+
+#
+# Check for successful update
+#
+if not ok:
+    print(res)
+    sys.exit(1)
+
 new_dashboard = res['dashboard']
 
 #
-# Update Dashboard with previous data.
+# Update Dashboard with previous data. It will be easier to copy the necessary fields to old dashboard data than the other way around.
 #
-dashboard['name'] = new_dashboard['name'] # dashboards belonging to the same user cannot have the same name
-ok, res = sdclient.update_dashboard(dashboard, new_dashboard['id'])
+dashboard['id'] = new_dashboard['id']
+dashboard['version'] = new_dashboard['version']
+dashboard['name'] = new_dashboard['name']
+ok, res = sdclient.update_dashboard(dashboard)
+
+#
+# Check for successful update
+#
+if not ok:
+    print(res)
+    sys.exit(1)
+
 new_dashboard = res['dashboard']
 
 #
 # Delete Dashboard.
 #
 ok, res = sdclient.delete_dashboard(new_dashboard)
+
+#
+# Check for successful update
+#
+if not ok:
+    print(res)
+    sys.exit(1)
