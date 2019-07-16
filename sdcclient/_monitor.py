@@ -306,6 +306,32 @@ class SdMonitorClient(_SdcCommon):
         res = requests.get(self.url + self._dashboards_api_endpoint, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
+    def get_dashboard(self, dashboard_id):
+        '''**Description**
+            Return a dashboard with the pased in ID. This includes the dashboards created by the user and the ones shared with them by other users.
+
+        **Success Return Value**
+            A dictionary containing the requested dashboard data.
+
+        **Example**
+            `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
+        '''
+        res = requests.get(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_dashboard(self, dashboard_data):
+        '''**Description**
+            Updates dashboard with provided in data. Please note that the dictionary will require a valid ID and version field to work as expected.
+
+        **Success Return Value**
+            A dictionary containing the updated dashboard data.
+
+        **Example**
+            `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
+        '''
+        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_data['id']), headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
+        return self._request_result(res)
+
     def find_dashboard_by(self, name=None):
         '''**Description**
             Finds dashboards with the specified name. You can then delete the dashboard (with :func:`~SdcClient.delete_dashboard`) or edit panels (with :func:`~SdcClient.add_dashboard_panel` and :func:`~SdcClient.remove_dashboard_panel`)
