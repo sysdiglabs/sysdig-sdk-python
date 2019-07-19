@@ -291,6 +291,38 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def get_pdf_report(self, image, tag=None, date=None):
+        '''**Description**
+            Get a pdf report of one image
+
+        **Arguments**
+            - image: Input image can be in the following formats: registry/repo:tag
+            - tag: Specify which TAG is evaluated for a given image ID or Image Digest
+            - date: date for the report of interest, the format is 'YYYY-MM-DDTHH:MM:SSZ',
+                    if not provided the latest report will be returned
+
+        **Success Return Value**
+            The pdf content
+        '''
+        image_type, _, image_digest = self._discover_inputimage(image)
+        if not image_digest:
+            return [False, "could not get image record from anchore"]
+        if not tag and image_type != 'tag':
+            return [False, "input image name is not a tag"]
+        image_tag = tag if tag else image
+
+        url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}{at}".format(
+            base_url=self.url,
+            image_digest=image_digest,
+            tag=image_tag,
+            at=("&at=%s" % date) if date else "")
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.content]
+
     def add_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2", validate=True):
         '''**Description**
             Add image registry
