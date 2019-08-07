@@ -615,6 +615,20 @@ class SdSecureClient(_SdcCommon):
         res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
+    def list_image_profiles(self):
+        '''**Description**
+            List the current set of image profiles.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing the number and details of each profile.
+
+        '''
+        res = requests.get(self.url + '/api/profiling/v1/secure/profileGroups/0/profiles', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
     def get_policy_priorities(self):
         '''**Description**
             Get a list of policy ids in the order they will be evaluated.
