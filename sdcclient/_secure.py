@@ -996,7 +996,7 @@ class SdSecureClient(_SdcCommon):
 
     def get_image_profile(self, profileId):
         '''**Description**
-            Find the iamge profile with a (partial) profile ID <profileId> and return its json description.
+            Find the image profile with a (partial) profile ID <profileId> and return its json description.
 
         **Arguments**
             - name: the name of the image profile to fetch
@@ -1040,8 +1040,20 @@ class SdSecureClient(_SdcCommon):
 
 
     def __get_mathced_profileIDs(self, requested_profile, profile_list):
+        '''
+        **Description**
+            Helper function for  retrieving the list of matching profile
+        
+            **Arguments**
+            - the requested profile Id (string)
+            - List of dictionary, where each discionary conatins the profile information 
+    
+        **Success Return Value**
+            List of dictionary, where each dicionary represents a profile with the ID prefix substring
+            matching the requested one
+        '''
 
-        matchedIDs = []
+        matched_profiles = []
 
         request_len = len(requested_profile)
         for profile in profile_list:
@@ -1050,7 +1062,7 @@ class SdSecureClient(_SdcCommon):
             str_len_match = min(len(profile), request_len)
 
             if profile['profileId'][0:str_len_match] == requested_profile[0:str_len_match]:
-                matchedIDs.append(profile)
+                matched_profiles.append(profile)
 
-        return matchedIDs
+        return matched_profiles
 
