@@ -615,20 +615,6 @@ class SdSecureClient(_SdcCommon):
         res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def list_image_profiles(self):
-        '''**Description**
-            List the current set of image profiles.
-
-        **Arguments**
-            - None
-
-        **Success Return Value**
-            A JSON object containing the number and details of each profile.
-
-        '''
-        res = requests.get(self.url + '/api/profiling/v1/secure/profileGroups/0/profiles', headers=self.hdrs, verify=self.ssl_verify)
-        return self._request_result(res)
-
     def get_policy_priorities(self):
         '''**Description**
             Get a list of policy ids in the order they will be evaluated.
@@ -988,3 +974,83 @@ class SdSecureClient(_SdcCommon):
             metrics="&metrics=" + json.dumps(metrics) if metrics else "")
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
+
+    def list_image_profiles(self):
+        '''**Description**
+            List the current set of image profiles.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing the number and details of each profile.
+
+        '''
+        url = "{url}/api/profiling/v1/secure/profileGroups/0/profiles".format(
+            url = self.url
+        )
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+
+    def get_image_profile(self, profileId):
+        '''**Description**
+            Find the iamge profile with a (partial) profile ID <profileId> and return its json description.
+
+        **Arguments**
+            - name: the name of the image profile to fetch
+
+        **Success Return Value**
+            A JSON object containing the description of the image profile. If there is no image profile with
+            the given name, returns False. Moreover, it could happen that more than one profile IDs have a collision.
+            It is due to the fact that even a partial profile ID can be passed and interpreted; in this case a set of
+            collision profiles is returned, and the full complete ID string is printed. In this case, it is returned
+            false.
+
+        '''
+
+        # RETRIEVE ALL THE IMAGE PROFILES
+        ok, image_profiles = self.list_image_profiles()
+
+        if not ok:
+            return [False, self.lasterr]
+
+        
+        matched_profiles = self.__get_mathced_profileIDs(profileId, image_profiles['profiles'])
+        
+        # Profile ID not found
+        if len(matched_profiles) == 0:
+            return [False, "No profile with ID {}".format(profileId)]
+        
+        # Principal workflow. Profile ID found
+        elif len(matched_profiles) == 1:
+            # Matched id. Return information
+            url = "{url}/api/profiling/v1/secure/profiles/{profileId}".format(
+                url = self.url,
+                profileId = matched_profiles[0]['profileId']
+            )
+            
+            res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+            return self._request_result(res)
+
+        # Collision detected. The full profile IDs are returned
+        elif len(matched_profiles) >= 2:
+            return [False, matched_profiles]
+
+
+    def __get_mathced_profileIDs(self, requested_profile, profile_list):
+
+        matchedIDs = []
+
+        request_len = len(requested_profile)
+        for profile in profile_list:
+
+            # get the length of the substring to match    
+            str_len_match = min(len(profile), request_len)
+
+            if profile['profileId'][0:str_len_match] == requested_profile[0:str_len_match]:
+                matchedIDs.append(profile)
+
+        return matchedIDs
+
