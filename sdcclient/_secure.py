@@ -1017,7 +1017,7 @@ class SdSecureClient(_SdcCommon):
             return [False, self.lasterr]
 
         
-        matched_profiles = self.__get_mathced_profileIDs(profileId, image_profiles['profiles'])
+        matched_profiles = self.__get_matched_profileIDs(profileId, image_profiles['profiles'])
         
         # Profile ID not found
         if len(matched_profiles) == 0:
@@ -1039,7 +1039,7 @@ class SdSecureClient(_SdcCommon):
             return [False, matched_profiles]
 
 
-    def __get_mathced_profileIDs(self, requested_profile, profile_list):
+    def __get_matched_profileIDs(self, requested_profile, profile_list):
         '''
         **Description**
             Helper function for  retrieving the list of matching profile
