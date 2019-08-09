@@ -983,7 +983,7 @@ class SdSecureClient(_SdcCommon):
             - None
 
         **Success Return Value**
-            A JSON object containing the number and details of each profile.
+            A JSON object containing the details of each profile.
 
         '''
         url = "{url}/api/profiling/v1/secure/profileGroups/0/profiles".format(
@@ -1004,8 +1004,8 @@ class SdSecureClient(_SdcCommon):
         **Success Return Value**
             A JSON object containing the description of the image profile. If there is no image profile with
             the given name, returns False. Moreover, it could happen that more than one profile IDs have a collision.
-            It is due to the fact that even a partial profile ID can be passed and interpreted; in this case a set of
-            collision profiles is returned, and the full complete ID string is printed. In this case, it is returned
+            It is due to the fact that a partial profile ID can be passed and interpreted; in this case a set of
+            collision profiles is returned, and the full complete ID string is printed. In this case, it returns
             false.
 
         '''
