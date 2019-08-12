@@ -1059,10 +1059,10 @@ class SdSecureClient(_SdcCommon):
         
         **Arguments**
             - the requested profile Id (string)
-            - List of dictionary, where each discionary conatins the profile information 
+            - List of dictionary, where each dictionary contains the profile information
     
         **Success Return Value**
-            List of dictionary, where each dicionary represents a profile with the ID prefix substring
+            List of dictionary, where each dictionary represents a profile with the ID prefix substring
             matching the requested one
         
         **Content structure of the profile_list parameter**
