@@ -1017,6 +1017,19 @@ class SdSecureClient(_SdcCommon):
             return [False, self.lasterr]
 
         
+        '''
+        The content of the json stored in the image_profiles dictionary:
+
+        {
+            "offset": 0,
+            "limit": 99,
+            "canLoadMore": false,
+            "profiles": [
+            ...
+            ]
+        }
+        '''
+        
         matched_profiles = self.__get_matched_profileIDs(profileId, image_profiles['profiles'])
         
         # Profile ID not found
@@ -1044,13 +1057,86 @@ class SdSecureClient(_SdcCommon):
         **Description**
             Helper function for  retrieving the list of matching profile
         
-            **Arguments**
+        **Arguments**
             - the requested profile Id (string)
             - List of dictionary, where each discionary conatins the profile information 
     
         **Success Return Value**
             List of dictionary, where each dicionary represents a profile with the ID prefix substring
             matching the requested one
+        
+        **Content structure of the profile_list parameter**
+        This array of profiles contains all the relevant information. For the purposes of this function, only
+        the profileId field is relevant.
+        
+        [
+            {
+            "profileGroupId": 0,
+            "profileId": "00000000000000000000000000000000000000000000",
+            "profileVersion": 0,
+            "profileName": "AAA/BBB:XYZ@0000000000000000000000",
+            "imageId": "00000000000000000000000000000000000000000000",
+            "imageName": "AAA/BBB:XYZ",
+            "processesProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "process",
+                                    "ruleName": "process - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "PROCESS",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "fileSystemProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "filesystem",
+                                    "ruleName": "filesystem - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "FILESYSTEM",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "syscallProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "syscalls",
+                                    "ruleName": "syscalls - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "SYSCALL",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "networkProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "network",
+                                    "ruleName": "network - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "NETWORK",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "containerImagesProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "container image",
+                                    "ruleName": "container image - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "CONTAINER",
+                                    "score": 0
+                                    }
+                                ],
+                                "score": 0
+            },
+            "status": "STATUS_VALUE",
+            "score": 000
+            },
+            ...
+        ]
         '''
 
         matched_profiles = []
