@@ -69,14 +69,14 @@ with open(alerts_dump_file, 'r') as f:
                     print('Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a['name'] + '" does not exist.\n  Restoring without this ID.')
                     a['notificationChannelIds'].remove(channel_id)
 
-        # JSON Alerts from the list_alerts.py example are in epoch time, but ones
-        # downloaded using the "Export JSON" button of the web interface are ISO
-        # timestamps in string form. If we see these fields as strings, assume
-        # they came from the web UI and convert them to epoch.
+        # The Create/Update APIs will validate but actually ignore these fields;
+        # to avoid problems, don't submit in the API request
         for timefield in ['createdOn', 'modifiedOn']:
-            if isinstance(a.get(timefield), str):
-                a[timefield] = calendar.timegm(datetime.datetime.strptime(a[timefield], '%Y-%m-%dT%H:%M:%S.%fZ').timetuple())
+            del a[timefield]
 
+        # NOTE: when exporting alerts that contain deprecated metrics you will
+        # need to remove them from the source json
+        # (see https://sysdigdocs.atlassian.net/wiki/spaces/Monitor/pages/205684810/Metrics#Metrics-HeuristicandDeprecatedMetrics)
         if a['name'] in existing_alerts:
             a['id'] = existing_alerts[a['name']]['id']
             a['version'] = existing_alerts[a['name']]['version']
