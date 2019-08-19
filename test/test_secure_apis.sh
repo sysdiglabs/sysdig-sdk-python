@@ -112,25 +112,6 @@ if [[ $OUT = *"\"name\": \"Another Copy Of Write below binary dir\""* ]]; then
     exit 1
 fi
 
-WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
-
-# Get the list of policy ids only, reverse the list, and set the order
-OUT=`$SCRIPTDIR/../examples/list_policies.py -o $PYTHON_SDC_TEST_API_TOKEN | jq reverse | $SCRIPTDIR/../examples/set_policy_order.py $PYTHON_SDC_TEST_API_TOKEN`
-
-if [ $? != 0 ]; then
-    echo "Could not set policy order?"
-    exit 1
-fi
-
-NEW_WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
-
-if [[ $NEW_WRITE_BELOW_BINARY_POS -lt $WRITE_BELOW_BINARY_POS ]]; then
-    echo "After reordering policies, Write Below Binary Dir policy did not move to the end?"
-    exit 1
-fi
-
-echo $OUT
-
 # Trigger some events
 FOUND=0
 
