@@ -3,6 +3,7 @@ import hashlib
 import json
 import re
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 import time
 
 try:
@@ -49,23 +50,6 @@ class SdScanningClient(_SdcCommon):
             force="&force=true" if force else "")
 
         res = requests.post(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
-
-    def import_image(self, image_data):
-        '''**Description**
-            Import an image from the scanner export
-
-        **Arguments**
-            - image_data: A JSON with the image information.
-
-        **Success Return Value**
-            A JSON object representing the image that was imported.
-        '''
-        url = self.url + "/api/scanning/v1/anchore/imageimport"
-        res = requests.post(url, data=json.dumps(image_data), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -322,6 +306,49 @@ class SdScanningClient(_SdcCommon):
             return [False, self.lasterr]
 
         return [True, res.content]
+
+    def import_image(self, infile):
+        '''**Description**
+            Import an image archive
+
+        **Arguments**
+           - infile: An image archive file
+
+        **Success Return Value**
+            A JSON object representing the image that was imported.
+        '''
+        try:
+            m = MultipartEncoder(
+                fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
+            )
+            url = self.url+"/api/scanning/v1/import/images"
+
+            headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
+            res = requests.post(url, data=m, headers=headers)
+            if not self._checkResponse(res):
+                return [False, self.lasterr]
+
+            return [True, res.json()]
+
+        except Exception as err:
+            print(err)
+
+    def get_anchore_users_account(self):
+        '''**Description**
+            Get the anchore user account.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing user account information.
+        '''
+        url = self.url + "/api/scanning/v1/anchore/account"
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
 
     def add_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2", validate=True):
         '''**Description**
