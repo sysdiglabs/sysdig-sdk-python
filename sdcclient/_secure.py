@@ -11,8 +11,8 @@ from sdcclient._common import _SdcCommon
 
 class SdSecureClient(_SdcCommon):
 
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True):
-        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify)
+    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, ic_resource=None):
+        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify, ic_resource)
 
         self.customer_id = None
         self.product = "SDS"

@@ -2,6 +2,7 @@ import os
 import json
 import requests
 
+from sdcclient._ibmcloud import SdIbmCloud
 
 class _SdcCommon(object):
     '''Interact with the Sysdig Monitor/Secure API.
@@ -10,21 +11,34 @@ class _SdcCommon(object):
         - **token**: A Sysdig Monitor/Secure API token from the *Sysdig Cloud API* section of the Settings page for `monitor <https://app.sysdigcloud.com/#/settings/user>`_ or .`secure <https://secure.sysdig.com/#/settings/user>`_.
         - **sdc_url**: URL for contacting the Sysdig API server. Set this in `On-Premises installs <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
         - **ssl_verify**: Whether to verify certificate. Set to False if using a self-signed certificate in an `On-Premises install <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
+        - **ic_resource**: The name of the IBM Cloud service instance
 
     **Returns**
         An object for further interactions with the Sysdig Monitor/Secure API. See methods below.
     '''
     lasterr = None
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, ic_resource=None):
         self.token = os.environ.get("SDC_TOKEN", token)
-        self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
         self.url = os.environ.get("SDC_URL", sdc_url)
+        self.hdrs = self.__get_headers(ic_resource)
         self.ssl_verify = os.environ.get("SDC_SSL_VERIFY", None)
         if self.ssl_verify == None:
             self.ssl_verify = ssl_verify
         else:
             self.ssl_verify = self.ssl_verify.lower() == 'true'
+
+    def __get_headers(self, ic_resource):
+        headers = {'Content-Type': 'application/json'}
+        if ic_resource:
+            sdIbmCloud = SdIbmCloud(self.token, self.url, ic_resource)
+            auth_token = sdIbmCloud.get_iam_token()
+            guid = sdIbmCloud.get_get_guid(auth_token)
+            headers['Authorization'] = 'Bearer ' + auth_token
+            headers['IBMInstanceID'] = guid
+        else:
+            headers['Authorization'] = 'Bearer ' + self.token
+        return headers
 
     def _checkResponse(self, res):
         if res.status_code >= 300:
