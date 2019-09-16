@@ -13,8 +13,8 @@ except NameError:
 
 class SdMonitorClient(_SdcCommon):
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, sd_ibm_cloud=None):
-        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, sd_ibm_cloud)
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
+        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDC"
         self._dashboards_api_version = 'v2'
         self._dashboards_api_endpoint = '/api/{}/dashboards'.format(self._dashboards_api_version)

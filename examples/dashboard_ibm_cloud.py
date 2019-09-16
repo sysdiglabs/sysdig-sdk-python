@@ -6,7 +6,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdIbmCloud, SdMonitorClient
+from sdcclient import IbmAuthHelper, SdMonitorClient
 
 # Parse arguments.
 def usage():
@@ -19,15 +19,15 @@ def usage():
 if len(sys.argv) != 4:
     usage()
 
-INGEST_URL = sys.argv[1]
+URL = sys.argv[1]
 APIKEY = sys.argv[2]
 GUID = sys.argv[3]
 DASHBOARD_NAME = 'IBM Cloud IAM with Python Client Example'
 PANEL_NAME = 'CPU Over Time'
 
 # Instantiate the client with an IBM Cloud auth object
-sd_ibm_cloud = SdIbmCloud(APIKEY, GUID)
-sdclient = SdMonitorClient(sdc_url=INGEST_URL, sd_ibm_cloud=sd_ibm_cloud)
+ibm_headers = IbmAuthHelper.get_headers(URL, APIKEY, GUID)
+sdclient = SdMonitorClient(sdc_url=URL, custom_headers=ibm_headers)
 
 # Create an empty dashboard
 ok, res = sdclient.create_dashboard(DASHBOARD_NAME)
