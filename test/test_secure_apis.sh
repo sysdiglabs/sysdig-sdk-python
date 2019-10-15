@@ -131,3 +131,103 @@ if [[ $FOUND == 0 ]]; then
    echo "Did not find any policy events after 10 attempts..."
    exit 1
 fi
+
+
+#
+# Test it again with policy API V1
+#
+
+# Delete all policies and then get them. There should be none.
+$SCRIPTDIR/../examples/delete_all_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN
+OUT=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"policies\": []"* ]]; then
+    echo "Unexpected output after deleting all policies V1"
+    exit 1
+fi
+
+# Create the default set of policies and then get them. There should
+# be 1, corresponding to the system falco rule.
+$SCRIPTDIR/../examples/create_default_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN
+OUT=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Write below binary dir\""* ]]; then
+    echo "Unexpected output after creating default policies V1"
+    exit 1
+fi
+
+# Get that policy, change the name, and create a new duplicate policy.
+OUT=`$SCRIPTDIR/../examples/get_policy_v1.py $PYTHON_SDC_TEST_API_TOKEN "Write below binary dir"`
+MY_POLICY=$OUT
+if [[ $OUT != *"\"name\": \"Write below binary dir\""* ]]; then
+    echo "Could not fetch policy V1 with name \"Write below binary dir\""
+    exit 1
+fi
+
+NEW_POLICY=`echo $MY_POLICY | sed -e "s/Write below binary dir/Copy Of Write below binary dir/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
+OUT=`echo $NEW_POLICY | $SCRIPTDIR/../examples/add_policy_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Copy Of Write below binary dir\""* ]]; then
+    echo "Could not create new policy V1"
+    exit 1
+fi
+
+# Change the description of the new policy and update it.
+MODIFIED_POLICY=`echo $MY_POLICY | sed -e "s/an attempt to write to any file below a set of binary directories/My New Description/g"`
+OUT=`echo $MODIFIED_POLICY | $SCRIPTDIR/../examples/update_policy_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"description\": \"My New Description\""* ]]; then
+    echo "Could not update policy V1 \"Copy Of Write below binary dir\""
+    exit 1
+fi
+
+# Delete the new policy.
+OUT=`$SCRIPTDIR/../examples/delete_policy_v1.py --name "Copy Of Write below binary dir" $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Copy Of Write below binary dir\""* ]]; then
+    echo "Could not delete policy V1 \"Copy Of Write below binary dir\""
+    exit 1
+fi
+
+OUT=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT = *"\"name\": \"Copy Of Write below binary dir\""* ]]; then
+    echo "After deleting policy V1 Copy Of Write below binary dir, policy was still present?"
+    exit 1
+fi
+
+# Make a copy again, but this time delete by id
+NEW_POLICY=`echo $MY_POLICY | sed -e "s/Write below binary dir/Another Copy Of Write below binary dir/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
+OUT=`echo $NEW_POLICY | $SCRIPTDIR/../examples/add_policy_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Another Copy Of Write below binary dir\""* ]]; then
+    echo "Could not create new policy V1"
+    exit 1
+fi
+
+ID=`echo $OUT | grep -E -o '"id": [^,]+,' | awk '{print $2}' | awk -F, '{print $1}'`
+
+OUT=`$SCRIPTDIR/../examples/delete_policy_v1.py --id $ID $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT != *"\"name\": \"Another Copy Of Write below binary dir\""* ]]; then
+    echo "Could not delete policy V1 \"Copy Of Write below binary dir\""
+    exit 1
+fi
+
+OUT=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+if [[ $OUT = *"\"name\": \"Another Copy Of Write below binary dir\""* ]]; then
+    echo "After deleting policy V1 Another Copy Of Write below binary dir, policy was still present?"
+    exit 1
+fi
+
+
+WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
+
+# Get the list of policy ids only, reverse the list, and set the order
+OUT=`$SCRIPTDIR/../examples/list_policies_v1.py -o $PYTHON_SDC_TEST_API_TOKEN | jq reverse | $SCRIPTDIR/../examples/set_policy_order_v1.py $PYTHON_SDC_TEST_API_TOKEN`
+
+if [ $? != 0 ]; then
+	    echo "Could not set policy order?"
+	        exit 1
+fi
+
+NEW_WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
+
+if [[ $NEW_WRITE_BELOW_BINARY_POS -lt $WRITE_BELOW_BINARY_POS ]]; then
+	    echo "After reordering policies, Write Below Binary Dir policy did not move to the end?"
+	        exit 1
+fi
+
+echo $OUT

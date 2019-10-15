@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 #
-# Delete all secure policies.
+# Add a new policy
 #
 
 import os
 import sys
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdSecureClient
+from sdcclient import SdSecureClientV1
 
 
 def usage():
     print('usage: %s <sysdig-token>' % sys.argv[0])
+    print('Reads policy json from standard input')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
@@ -24,24 +25,20 @@ if len(sys.argv) != 2:
 
 sdc_token = sys.argv[1]
 
+policy_json = sys.stdin.read()
+
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
 
-# Get a list of policyIds
-ok, res = sdclient.list_policies()
-policies = []
+ok, res = sdclient.add_policy(policy_json)
 
-if not ok:
+#
+# Return the result
+#
+if ok:
+    print(json.dumps(res, indent=2))
+else:
     print(res)
     sys.exit(1)
-else:
-    policies = res
-
-for policy in policies:
-    print("deleting policy: " + str(policy['id']))
-    ok, res = sdclient.delete_policy_id(policy['id'])
-    if not ok:
-        print(res)
-        sys.exit(1)

@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 #
-# Delete all secure policies.
+# Create the default set of policies given the falco rules file.
+# Existing policies with the same name are unchanged. New policies
+# as needed will be added. Returns JSON representing the new
+# policies created.
 #
 
 import os
 import sys
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdSecureClient
+from sdcclient import SdSecureClientV1
 
 
 def usage():
@@ -27,21 +30,15 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
 
-# Get a list of policyIds
-ok, res = sdclient.list_policies()
-policies = []
+ok, res = sdclient.create_default_policies()
 
-if not ok:
+#
+# Return the result
+#
+if ok:
+    print(json.dumps(res, indent=2))
+else:
     print(res)
     sys.exit(1)
-else:
-    policies = res
-
-for policy in policies:
-    print("deleting policy: " + str(policy['id']))
-    ok, res = sdclient.delete_policy_id(policy['id'])
-    if not ok:
-        print(res)
-        sys.exit(1)
