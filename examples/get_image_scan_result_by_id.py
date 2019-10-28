@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Get a specific policy
+# Get an image scan result given image id
 #
 
 import os
