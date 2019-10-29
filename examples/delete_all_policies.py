@@ -37,7 +37,7 @@ if not ok:
     print(res)
     sys.exit(1)
 else:
-    policies = res['policies']
+    policies = res
 
 for policy in policies:
     print("deleting policy: " + str(policy['id']))

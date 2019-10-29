@@ -7,7 +7,7 @@ import os
 import sys
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdSecureClient
+from sdcclient import SdSecureClientV1
 
 
 def usage():
@@ -35,7 +35,7 @@ except Exception as e:
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
 
 #
 # The argument to /api/policies/priorities is the list of ids wrapped
