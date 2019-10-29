@@ -10,21 +10,31 @@ class _SdcCommon(object):
         - **token**: A Sysdig Monitor/Secure API token from the *Sysdig Cloud API* section of the Settings page for `monitor <https://app.sysdigcloud.com/#/settings/user>`_ or .`secure <https://secure.sysdig.com/#/settings/user>`_.
         - **sdc_url**: URL for contacting the Sysdig API server. Set this in `On-Premises installs <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
         - **ssl_verify**: Whether to verify certificate. Set to False if using a self-signed certificate in an `On-Premises install <https://support.sysdigcloud.com/hc/en-us/articles/206519903-On-Premises-Installation-Guide>`__.
+        - **custom_headers**: [dict] Pass in custom headers. Useful for authentication and will override the default headers.
 
     **Returns**
         An object for further interactions with the Sysdig Monitor/Secure API. See methods below.
     '''
     lasterr = None
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
         self.token = os.environ.get("SDC_TOKEN", token)
-        self.hdrs = {'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
+        self.hdrs = self.__get_headers(custom_headers)
         self.url = os.environ.get("SDC_URL", sdc_url)
         self.ssl_verify = os.environ.get("SDC_SSL_VERIFY", None)
         if self.ssl_verify == None:
             self.ssl_verify = ssl_verify
         else:
             self.ssl_verify = self.ssl_verify.lower() == 'true'
+
+    def __get_headers(self, custom_headers):
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + self.token
+        }
+        if custom_headers:
+            headers.update(custom_headers)
+        return headers
 
     def _checkResponse(self, res):
         if res.status_code >= 300:
