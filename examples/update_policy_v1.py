@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 #
-# Add a new policy
+# Update a specific policy
 #
 
 import os
 import sys
 import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdSecureClient
+from sdcclient import SdSecureClientV1
 
 
 def usage():
     print('usage: %s <sysdig-token>' % sys.argv[0])
-    print('Reads policy json from standard input')
+    print('Reads json representing updated policy from standard input')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
@@ -24,15 +24,14 @@ if len(sys.argv) != 2:
     usage()
 
 sdc_token = sys.argv[1]
-
 policy_json = sys.stdin.read()
 
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
 
-ok, res = sdclient.add_policy_json(policy_json)
+ok, res = sdclient.update_policy(policy_json)
 
 #
 # Return the result
@@ -42,3 +41,5 @@ if ok:
 else:
     print(res)
     sys.exit(1)
+
+
