@@ -355,13 +355,16 @@ class SdScanningClient(_SdcCommon):
             Get the anchore image scan result for an image id.
 
         **Arguments**
-            - image_id : Docker image id of the image whose scan result is to be fetched
-            - full_tag_name : The complete tag name of the image for e.g. docker.io/alpine:3.10
+            - image_id: Docker image id of the image whose scan result is to be fetched
+            - full_tag_name: The complete tag name of the image for e.g. docker.io/alpine:3.10
 
         **Success Return Value**
             A JSON object containing pass/fail status of image scan policy.
         '''
-        url = self.url + "/api/scanning/v1/anchore/images/by_id/" + str(image_id) + "/check?tag=" + str(full_tag_name) + "&detail=false"
+        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail=false".format(
+                base_url=self.url,
+                image_id=image_id,
+                full_tag_name=full_tag_name)
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
