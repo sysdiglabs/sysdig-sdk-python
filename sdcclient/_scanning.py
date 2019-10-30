@@ -488,6 +488,81 @@ class SdScanningClient(_SdcCommon):
     def _registry_string_is_valid(self, registry):
         return re.match(".*\\/.*", registry)
 
+    def add_repo(self, repo, autosubscribe=True, lookuptag=None):
+        '''**Description**
+            Add a repository
+
+        **Arguments**
+            - repo: Input repository can be in the following formats: registry/repo
+            - autosubscribe: If unset, instruct the engine to disable subscriptions for any discovered tags.
+            - lookuptag: Specify a tag to use for repo tag scan if 'latest' tag does not exist in the repo.
+
+        **Success Return Value**
+            A JSON object representing the repo.
+        '''
+        url = "{base_url}/api/scanning/v1/anchore/repositories?repository={repo}&autosubscribe={autosubscribe}{lookuptag}".format(
+            base_url=self.url,
+            repo=repo,
+            autosubscribe=autosubscribe,
+            lookuptag="&lookuptag={}".format(lookuptag) if lookuptag else "")
+
+        res = requests.post(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def watch_repo(self, repo):
+        '''**Description**
+            Instruct engine to start automatically watching the repo for image updates
+
+        **Arguments**
+            - repo: Input repository can be in the following formats: registry/repo
+        '''
+        return self.activate_subscription('repo_update', repo)
+
+    def unwatch_repo(self, repo):
+        '''**Description**
+            Instruct engine to stop automatically watching the repo for image updates
+
+        **Arguments**
+            - repo: Input repository can be in the following formats: registry/repo
+        '''
+        return self.deactivate_subscription('repo_update', repo)
+
+    def delete_repo(self, repo):
+        '''**Description**
+            Delete a repository from the watch list (does not delete already analyzed images)
+
+        **Arguments**
+            - repo: Input repository can be in the following formats: registry/repo
+        '''
+        return self.delete_subscription('repo_update', repo)
+
+    def list_repos(self):
+        '''**Description**
+            List added repositories
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object representing the list of repositories.
+        '''
+        return self.get_subscriptions("repo_update")
+
+    def get_repo(self, repo):
+        '''**Description**
+            Get a repository
+
+        **Arguments**
+            - repo: Input repository can be in the following formats: registry/repo
+
+        **Success Return Value**
+            A JSON object representing the registry.
+        '''
+        return self.get_subscriptions("repo_update", repo)
+
     def add_policy(self, name, rules, comment="", bundleid=None):
         '''**Description**
             Create a new policy
@@ -713,6 +788,31 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.text]
 
+    def get_subscriptions(self, subscription_type=None, subscription_key=None):
+        '''**Description**
+            Get the list of subscriptions
+
+        **Arguments**
+            - subscription_type: Type of subscription. Valid options:
+                - 'tag_update': Receive notification when new image is pushed
+                - 'policy_eval': Receive notification when image policy status changes
+                - 'vuln_update': Receive notification when vulnerabilities are added, removed or modified
+                - 'repo_update': Receive notification when a repo is updated
+            - subscription_key: Fully qualified name of tag to subscribe to. Eg. docker.io/library/alpine:latest
+        '''
+        url = self.url + "/api/scanning/v1/anchore/subscriptions/"
+        if subscription_key or subscription_type:
+            url += "?"
+            if subscription_key:
+                url += "subscription_key={}&".format(subscription_key)
+            if subscription_type:
+                url += "subscription_type={}".format(subscription_type)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def activate_subscription(self, subscription_type, subscription_key):
         '''**Description**
             Activate a subscription
@@ -722,6 +822,7 @@ class SdScanningClient(_SdcCommon):
                 - 'tag_update': Receive notification when new image is pushed
                 - 'policy_eval': Receive notification when image policy status changes
                 - 'vuln_update': Receive notification when vulnerabilities are added, removed or modified
+                - 'repo_update': Receive notification when a repo is updated
             - subscription_key: Fully qualified name of tag to subscribe to. Eg. docker.io/library/alpine:latest
         '''
         return self._update_subscription(subscription_type, subscription_key, True)
@@ -735,21 +836,59 @@ class SdScanningClient(_SdcCommon):
                 - 'tag_update': Receive notification when new image is pushed
                 - 'policy_eval': Receive notification when image policy status changes
                 - 'vuln_update': Receive notification when vulnerabilities are added, removed or modified
+                - 'repo_update': Receive notification when a repo is updated
             - subscription_key: Fully qualified name of tag to subscribe to. Eg. docker.io/library/alpine:latest
         '''
         return self._update_subscription(subscription_type, subscription_key, False)
 
-    def _update_subscription(self, subscription_type, subscription_key, activate):
-        hashstr = '+'.join([self.token, subscription_key, subscription_type]).encode('utf-8')
-        subscription_id = hashlib.md5(hashstr).hexdigest()
-        url = self.url + "/api/scanning/v1/anchore/subscriptions/" + subscription_id
-        payload = {'active': activate, 'subscription_key': subscription_key, 'subscription_type': subscription_type}
+    def delete_subscription(self, subscription_type, subscription_key):
+        '''**Description**
+            Delete a subscription
 
+        **Arguments**
+            - subscription_type: Type of subscription. Valid options:
+                - 'tag_update': Receive notification when new image is pushed
+                - 'policy_eval': Receive notification when image policy status changes
+                - 'vuln_update': Receive notification when vulnerabilities are added, removed or modified
+                - 'repo_update': Receive notification when a repo is updated
+            - subscription_key: Fully qualified name of tag to subscribe to. Eg. docker.io/library/alpine:latest
+        '''
+        try:
+            url = self._subscription_url(subscription_type, subscription_key)
+        except Exception as err:
+            return [False, err]
+
+        res = requests.delete(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def _update_subscription(self, subscription_type, subscription_key, activate):
+        try:
+            url = self._subscription_url(subscription_type, subscription_key)
+        except Exception as err:
+            return [False, err]
+
+        payload = {'active': activate, 'subscription_key': subscription_key, 'subscription_type': subscription_type}
         res = requests.put(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
+
+    def _subscription_url(self, subscription_type, subscription_key):
+        ok, res = self.get_subscriptions(subscription_type, subscription_key)
+        if not ok:
+            raise Exception(res)
+
+        if len(res) != 1:
+            raise Exception("Subscription {} doesn't exist".format(subscription_key))
+        id = res[0].get("subscription_id", None)
+        if not id:
+            raise Exception("Subscription malformed")
+
+        return self.url + "/api/scanning/v1/anchore/subscriptions/" + id
 
     def list_subscription(self):
         '''**Description**
@@ -761,12 +900,7 @@ class SdScanningClient(_SdcCommon):
         **Success Return Value**
             A JSON object representing the list of subscriptions.
         '''
-        url = self.url + "/api/scanning/v1/anchore/subscriptions"
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
+        return self.get_subscriptions()
 
     def list_runtime(self, scope="", skip_policy_evaluation=True, start_time=None, end_time=None):
         '''**Description**
