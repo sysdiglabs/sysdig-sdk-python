@@ -29,7 +29,7 @@ image_id_sha = sys.argv[2]
 #
 sdclient = SdScanningClient(sdc_token, 'https://secure.sysdig.com')
 
-ok, res = sdclient.get_image_present_in_list(image_id_sha)
+ok, res = sdclient.get_image_info_by_id(image_id_sha)
 
 #
 # Return the result

@@ -371,7 +371,7 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
-    def get_image_present_in_list(self, image_id_sha):
+    def get_image_info_by_id(self, image_id_sha):
         '''**Description**
             Get the anchore image info for an image id sha.
 
