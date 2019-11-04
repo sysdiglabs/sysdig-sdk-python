@@ -324,7 +324,7 @@ class SdScanningClient(_SdcCommon):
             url = self.url+"/api/scanning/v1/import/images"
 
             headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
-            res = requests.post(url, data=m, headers=headers)
+            res = requests.post(url, data=m, headers=headers, verify=self.ssl_verify)
             if not self._checkResponse(res):
                 return [False, self.lasterr]
 
