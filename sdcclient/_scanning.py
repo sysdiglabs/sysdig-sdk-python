@@ -321,7 +321,7 @@ class SdScanningClient(_SdcCommon):
             m = MultipartEncoder(
                 fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
             )
-            url = self.url+"/api/scanning/v1/import/images"
+            url = self.url+"/api/scanning/v1/anchore/import/images"
 
             headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
             res = requests.post(url, data=m, headers=headers)
