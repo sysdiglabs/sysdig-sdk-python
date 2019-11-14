@@ -49,7 +49,7 @@ fi
 # be 1, corresponding to the system falco rule.
 $SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
 OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
-if [[ $OUT != *"\"name\": \"Write below binary dir\""* ]]; then
+if [[ $OUT != *"\"Write below binary dir\""* ]]; then
     echo "Unexpected output after creating default policies"
     exit 1
 fi
