@@ -321,7 +321,7 @@ class SdScanningClient(_SdcCommon):
             m = MultipartEncoder(
                 fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
             )
-            url = self.url+"/api/scanning/v1/import/images"
+            url = self.url + "/api/scanning/v1/anchore/import/images"
 
             headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
             res = requests.post(url, data=m, headers=headers, verify=self.ssl_verify)
@@ -344,6 +344,46 @@ class SdScanningClient(_SdcCommon):
             A JSON object containing user account information.
         '''
         url = self.url + "/api/scanning/v1/anchore/account"
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def get_image_scan_result_by_id(self, image_id, full_tag_name):
+        '''**Description**
+            Get the anchore image scan result for an image id.
+
+        **Arguments**
+            - image_id: Docker image id of the image whose scan result is to be fetched.
+            - full_tag_name: The complete tag name of the image for e.g. docker.io/alpine:3.10.
+
+        **Success Return Value**
+            A JSON object containing pass/fail status of image scan policy.
+        '''
+        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail=false".format(
+                base_url=self.url,
+                image_id=image_id,
+                full_tag_name=full_tag_name)
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def get_image_info_by_id(self, image_id_sha):
+        '''**Description**
+            Get the anchore image info for an image id sha.
+
+        **Arguments**
+            - image_id: Image id sha of the image.
+
+        **Success Return Value**
+            A JSON object containing metadata about the image.
+        '''
+        url = "{base_url}/api/scanning/v1/anchore/images/{image_id_sha}".format(
+            base_url=self.url,
+            image_id_sha=image_id_sha)
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
