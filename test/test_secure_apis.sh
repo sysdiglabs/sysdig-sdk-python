@@ -45,7 +45,7 @@ if [[ $OUT != *"\"policies\": []"* ]]; then
     exit 1
 fi
 
-# Create the default set of policies and then get them. There should
+# Create the default set of policies and then fetch them. There should
 # be 1, corresponding to the system falco rule.
 $SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
 OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
