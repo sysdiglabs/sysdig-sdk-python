@@ -37,15 +37,15 @@ $SCRIPTDIR/../examples/set_secure_user_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN
 $SCRIPTDIR/../examples/get_secure_user_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN > /tmp/falco_rules.yaml
 diff /tmp/falco_rules.yaml /tmp/test_apis_user_rules.yaml
 
-# Delete all policies and then get them. There should be none.
-$SCRIPTDIR/../examples/delete_all_policies.py $PYTHON_SDC_TEST_API_TOKEN
-OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
-if [[ $OUT != *"[]"* ]]; then
-    echo "Unexpected output after deleting all policies"
-    exit 1
-fi
-
 # Temporarily disabled while the Secure API is being reviewed
+# # Delete all policies and then get them. There should be none.
+# $SCRIPTDIR/../examples/delete_all_policies.py $PYTHON_SDC_TEST_API_TOKEN
+# OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+# if [[ $OUT != *"[]"* ]]; then
+#     echo "Unexpected output after deleting all policies"
+#     exit 1
+# fi
+
 # # Create the default set of policies and then fetch them. There should
 # # be 1, corresponding to the system falco rule.
 # $SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
