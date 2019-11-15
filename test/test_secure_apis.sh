@@ -45,14 +45,15 @@ if [[ $OUT != *"[]"* ]]; then
     exit 1
 fi
 
-# Create the default set of policies and then fetch them. There should
-# be 1, corresponding to the system falco rule.
-$SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
-OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
-if [[ $OUT != *"\"Write below binary dir\""* ]]; then
-    echo "Unexpected output after creating default policies"
-    exit 1
-fi
+# Temporarily disabled while the Secure API is being reviewed
+# # Create the default set of policies and then fetch them. There should
+# # be 1, corresponding to the system falco rule.
+# $SCRIPTDIR/../examples/create_default_policies.py $PYTHON_SDC_TEST_API_TOKEN
+# OUT=`$SCRIPTDIR/../examples/list_policies.py $PYTHON_SDC_TEST_API_TOKEN`
+# if [[ $OUT != *"\"Write below binary dir\""* ]]; then
+#     echo "Unexpected output after creating default policies"
+#     exit 1
+# fi
 
 # Get that policy, change the name, and create a new duplicate policy.
 OUT=`$SCRIPTDIR/../examples/get_policy.py $PYTHON_SDC_TEST_API_TOKEN "Write below binary dir"`
