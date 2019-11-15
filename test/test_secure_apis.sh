@@ -63,9 +63,9 @@ if [[ $OUT != *"\"Write below binary dir\""* ]]; then
     exit 1
 fi
 
-NEW_POLICY=`echo $MY_POLICY | sed -e "s/Write below binary dir/Copy Of Write below binary dir/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
+NEW_POLICY=`echo $MY_POLICY | sed -e "s/Write below binary dir/Write below etc/g" | sed -e 's/"id": [0-9]*,//' | sed -e 's/"version": [0-9]*/"version": null/'`
 OUT=`echo $NEW_POLICY | $SCRIPTDIR/../examples/add_policy.py $PYTHON_SDC_TEST_API_TOKEN`
-if [[ $OUT != *"\"Copy Of Write below binary dir\""* ]]; then
+if [[ $OUT != *"\"Write below etc\""* ]]; then
     echo "Could not create new policy"
     exit 1
 fi
