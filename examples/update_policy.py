@@ -31,7 +31,7 @@ policy_json = sys.stdin.read()
 #
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
-ok, res = sdclient.update_policy(policy_json)
+ok, res = sdclient.update_policy_json(policy_json)
 
 #
 # Return the result

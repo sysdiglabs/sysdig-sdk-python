@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 #
-# Add a new policy
+# Get a specific anchore user account
 #
 
 import os
 import sys
-import json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdSecureClient
+from sdcclient import SdScanningClient
 
 
 def usage():
     print('usage: %s <sysdig-token>' % sys.argv[0])
-    print('Reads policy json from standard input')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
@@ -25,20 +23,18 @@ if len(sys.argv) != 2:
 
 sdc_token = sys.argv[1]
 
-policy_json = sys.stdin.read()
-
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdScanningClient(sdc_token, 'https://secure.sysdig.com')
 
-ok, res = sdclient.add_policy_json(policy_json)
+ok, res = sdclient.get_anchore_users_account()
 
 #
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print("Anchore User Info %s" % res)
 else:
     print(res)
     sys.exit(1)

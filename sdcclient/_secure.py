@@ -11,11 +11,22 @@ from sdcclient._common import _SdcCommon
 
 class SdSecureClient(_SdcCommon):
 
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True):
-        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify)
+    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
+        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
 
         self.customer_id = None
         self.product = "SDS"
+        self._policy_v2 = None
+
+    @property
+    def policy_v2(self):
+        '''**Description**
+            True if policy V2 API is available
+        '''
+        if self._policy_v2 is None:
+            res = requests.get(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
+            self._policy_v2 = res.status_code != 404
+        return self._policy_v2
 
     def _get_falco_rules(self, kind):
         res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs, verify=self.ssl_verify)
@@ -309,7 +320,7 @@ class SdSecureClient(_SdcCommon):
 
         try:
             tags.remove("default_policies.yaml")
-        except ValueError as e:
+        except ValueError:
             # Do nothing, it wasn't in the list of files
             pass
 
@@ -327,7 +338,7 @@ class SdSecureClient(_SdcCommon):
             try:
                 with open(defpath, "r") as infile:
                     defjson = yaml.safe_load(infile)
-            except Exception as e:
+            except Exception as exc:
                 return [False, "Could not load default_policies.yaml: " + exc]
 
         ret = {"tag": os.path.basename(tpath), "files": [], "defaultPolicies": defjson}
@@ -516,15 +527,15 @@ class SdSecureClient(_SdcCommon):
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
         from_ts = to_ts - (int(duration_sec) * 1000 * 1000)
 
-        ctx = {"id": id,
-               "to": to_ts,
-               "from": from_ts,
-               "offset": 0,
-               "limit": 1000,
-               "sampling": sampling,
-               "aggregations": aggregations,
-               "scopeFilter": scope_filter,
-               "eventFilter": event_filter}
+        options = {"id": id,
+                   "to": to_ts,
+                   "from": from_ts,
+                   "offset": 0,
+                   "limit": 1000,
+                   "sampling": sampling,
+                   "aggregations": aggregations,
+                   "scopeFilter": scope_filter,
+                   "eventFilter": event_filter}
         ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
@@ -560,10 +571,10 @@ class SdSecureClient(_SdcCommon):
 
     def create_default_policies(self):
         '''**Description**
-            Create a set of default policies using the current system falco rules file as a reference. For every falco rule in the system
-            falco rules file, one policy will be created. The policy will take the name and description from the name and description of
-            the corresponding falco rule. If a policy already exists with the same name, no policy is added or modified. Existing
-            policies will be unchanged.
+            Create new policies based on the currently available set of rules. For now, this only covers Falco rules, but we might extend
+            the endpoint later. The backend should use the defaultPolicies property of a previously provided FalcoRulesFiles model as
+            guidance on the set of policies to create. The backend should only create new policies (not delete or modify), and should only
+            create new policies if there is not an existing policy with the same name.
 
         **Arguments**
             - None
@@ -575,7 +586,7 @@ class SdSecureClient(_SdcCommon):
             `examples/create_default_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_default_policies.py>`_
 
         '''
-        res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_all_policies(self):
@@ -592,11 +603,16 @@ class SdSecureClient(_SdcCommon):
             `examples/delete_all_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_all_policies.py>`_
 
         '''
-        res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
+        ok, res = self.list_policies()
+        if not ok:
+            return False, res
 
-        return [True, "Policies Deleted"]
+        for policy in res:
+            ok, res = self.delete_policy_id(policy["id"])
+            if not ok:
+                return False, res
+
+        return True, "Policies Deleted"
 
     def list_policies(self):
         '''**Description**
@@ -612,48 +628,7 @@ class SdSecureClient(_SdcCommon):
             `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
 
         '''
-        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
-        return self._request_result(res)
-
-    def get_policy_priorities(self):
-        '''**Description**
-            Get a list of policy ids in the order they will be evaluated.
-
-        **Arguments**
-            - None
-
-        **Success Return Value**
-            A JSON object representing the list of policy ids.
-
-        **Example**
-            `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
-
-        '''
-
-        res = requests.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
-        return self._request_result(res)
-
-    def set_policy_priorities(self, priorities_json):
-        '''**Description**
-            Change the policy evaluation order
-
-        **Arguments**
-            - priorities_json: a description of the new policy order.
-
-        **Success Return Value**
-            A JSON object representing the updated list of policy ids.
-
-        **Example**
-            `examples/set_policy_order.py <https://github.com/draios/python-sdc-client/blob/master/examples/set_policy_order.py>`_
-
-        '''
-
-        try:
-            json.loads(priorities_json)
-        except Exception as e:
-            return [False, "priorities json is not valid json: {}".format(str(e))]
-
-        res = requests.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
+        res = requests.get(self.url + '/api/v2/policies', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_policy(self, name):
@@ -671,11 +646,10 @@ class SdSecureClient(_SdcCommon):
             `examples/get_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_policy.py>`_
 
         '''
-        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        policies = res.json()["policies"]
+        ok, res = self.list_policies()
+        if not ok:
+            return [False, res]
+        policies = res
 
         # Find the policy with the given name and return it.
         for policy in policies:
@@ -684,7 +658,51 @@ class SdSecureClient(_SdcCommon):
 
         return [False, "No policy with name {}".format(name)]
 
-    def add_policy(self, policy_json):
+    def get_policy_id(self, id):
+        '''**Description**
+            Find the policy with id <id> and return its json description.
+
+        **Arguments**
+            - id: the id of the policy to fetch
+
+        **Success Return Value**
+            A JSON object containing the description of the policy. If there is no policy with
+            the given name, returns False.
+        '''
+        res = requests.get(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def add_policy(self, name, description, rule_names=[], actions=[], scope=None, severity=0, enabled=True, notification_channels=[]):
+        '''**Description**
+            Add a new policy.
+
+        **Arguments**
+            - name: A short name for the policy
+            - description: Description of policy
+            - rule_names: Array of rule names. (They must be names instead of ids, as the rules list view is by name, to account for multiple rules having the same name).
+            - actions: It can be a stop, pause and/or capture action
+            - scope: Where the policy is being applied- Container, Host etc.. (example: "container.image.repository = sysdig/agent")
+            - enabled: True if the policy should be considered
+            - severity: How severe is this policy when violated. Range from 0 to 7 included.
+            - notification_channels: ids of the notification channels to subscribe to the policy
+
+        **Success Return Value**
+            The string "OK"
+        '''
+        policy = {
+            "name": name,
+            "description": description,
+            "ruleNames": rule_names,
+            "actions": actions,
+            "scope": scope,
+            "severity": severity,
+            "enabled": enabled,
+            "notificationChannelIds": notification_channels
+        }
+        res = requests.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy), verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def add_policy_json(self, policy_json):
         '''**Description**
             Add a new policy using the provided json.
 
@@ -704,11 +722,54 @@ class SdSecureClient(_SdcCommon):
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
-        body = {"policy": policy_obj}
-        res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy_obj), verify=self.ssl_verify)
         return self._request_result(res)
 
-    def update_policy(self, policy_json):
+    def update_policy(self, id, name=None, description=None, rule_names=None, actions=None, scope=None,
+                      severity=None, enabled=None, notification_channels=None):
+        '''**Description**
+            Update policy with the provided values.
+
+        **Arguments**
+            - id: the id of the policy to update
+            - name: A short name for the policy
+            - description: Description of policy
+            - rule_names: Array of rule names. (They must be names instead of ids, as the rules list view is by name, to account for multiple rules having the same name).
+            - actions: It can be a stop, pause and/or capture action
+            - scope: Where the policy is being applied- Container, Host etc.. (example: "container.image.repository = sysdig/agent")
+            - enabled: True if the policy should be considered
+            - severity: How severe is this policy when violated. Range from 0 to 7 included.
+            - notification_channels: ids of the notification channels to subscribe to the policy
+
+        **Success Return Value**
+            The string "OK"
+        '''
+        ok, res = self.get_policy_id(id)
+        if not ok:
+            return [False, res]
+        policy = res
+
+        if name is not None:
+            policy["name"] = name
+        if description is not None:
+            policy["description"] = description
+        if rule_names is not None:
+            policy["ruleNames"] = rule_names
+        if actions is not None:
+            policy["actions"] = actions
+        if scope is not None:
+            policy["scope"] = scope
+        if severity is not None:
+            policy["severity"] = severity
+        if enabled is not None:
+            policy["enabled"] = enabled
+        if notification_channels is not None:
+            policy["notificationChannelIds"] = notification_channels
+
+        res = requests.put(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, data=json.dumps(policy), verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_policy_json(self, policy_json):
         '''**Description**
             Update an existing policy using the provided json. The 'id' field from the policy is
             used to determine which policy to update.
@@ -723,7 +784,6 @@ class SdSecureClient(_SdcCommon):
             `examples/update_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/update_policy.py>`_
 
         '''
-
         try:
             policy_obj = json.loads(policy_json)
         except Exception as e:
@@ -732,9 +792,7 @@ class SdSecureClient(_SdcCommon):
         if "id" not in policy_obj:
             return [False, "Policy Json does not have an 'id' field"]
 
-        body = {"policy": policy_obj}
-
-        res = requests.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/v2/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(policy_obj), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_policy_name(self, name):
@@ -751,12 +809,12 @@ class SdSecureClient(_SdcCommon):
             `examples/delete_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_policy.py>`_
 
         '''
-        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
+        ok, res = self.list_policies()
+        if not ok:
+            return [False, res]
 
         # Find the policy with the given name and delete it
-        for policy in res.json()["policies"]:
+        for policy in res:
             if policy["name"] == name:
                 return self.delete_policy_id(policy["id"])
 
@@ -776,7 +834,305 @@ class SdSecureClient(_SdcCommon):
             `examples/delete_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_policy.py>`_
 
         '''
-        res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.delete(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def list_rules(self):
+        '''**Description**
+            Returns the list of rules in the system. These are grouped by name
+            and do not necessarily represent individual rule objects, as multiple
+            rules can have the same name.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object representing the list of rules.
+        '''
+        res = requests.get(self.url + '/api/secure/rules/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_rules_group(self, name):
+        '''**Description**
+            Retrieve a group of all rules having the given name. This is used to
+            show how a base rule is modified by later rules that override/append
+            to the rule.
+
+        **Arguments**
+            - name: the name of the rule group
+
+        **Success Return Value**
+            A JSON object representing the list of rules.
+        '''
+        res = requests.get(self.url + '/api/secure/rules/groups?name={}'.format(name), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_rule_id(self, id):
+        '''**Description**
+            Retrieve info about a single rule
+
+        **Arguments**
+            - id: the id of the rule
+
+        **Success Return Value**
+            A JSON object representing the rule.
+        '''
+        res = requests.get(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def add_rule(self, name, details={}, description="", tags=[]):
+        '''**Description**
+            Create a new rule
+
+        **Arguments**
+            - name: A name for this object. Should exactly be the value of the "rule" property of the yaml object.
+            - details: The rule description as a python dictionary.
+            - description: A description of this rule. No newlines/formatting.
+            - tags: The set of tags.
+
+        **Success Return Value**
+            A JSON object representing the rule.
+        '''
+        rule = {
+            "name": name,
+            "description": description,
+            "details": details,
+            "tags": tags
+        }
+        res = requests.post(self.url + '/api/secure/rules', data=json.dumps(rule), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_rule(self, id, details={}, description="", tags=[]):
+        '''**Description**
+            Update info associated with a rule
+
+        **Arguments**
+            - id: The rule id
+            - details: The rule description as a python dictionary.
+            - description: A description of this rule. No newlines/formatting.
+            - tags: The set of tags.
+
+        **Success Return Value**
+            A JSON object representing the rule.
+        '''
+        ok, res = self.get_rule_id(id)
+        if not ok:
+            return [False, res]
+        rule = res
+
+        if details:
+            rule['details'] = details
+        if description:
+            rule['description'] = description
+        if tags:
+            rule['tags'] = tags
+        res = requests.put(self.url + '/api/secure/rules/{}'.format(id), data=json.dumps(rule), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def delete_rule(self, id):
+        '''**Description**
+            Delete the rule with given id.
+
+        **Arguments**
+            - id: The rule id
+
+        **Success Return Value**
+            A JSON object representing the rule.
+        '''
+        res = requests.delete(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def list_falco_macros(self):
+        '''**Description**
+            Returns the list of macros in the system. These are grouped by name
+            and do not necessarily represent individual macro objects, as multiple
+            macros can have the same name.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object representing the list of falco macros.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/macros/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_falco_macros_group(self, name):
+        '''**Description**
+            Retrieve a group of all falco groups having the given name. This is used
+            to show how a base macro is modified by later macrosthat override/append
+            to the macro.
+
+        **Arguments**
+            - name: the name of the falco macros group
+
+        **Success Return Value**
+            A JSON object representing the list of falco macros.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/macros/groups?name={}'.format(name), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_falco_macro_id(self, id):
+        '''**Description**
+            Retrieve info about a single falco macro
+
+        **Arguments**
+            - id: the id of the falco macro
+
+        **Success Return Value**
+            A JSON object representing the falco macro.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def add_falco_macro(self, name, condition):
+        '''**Description**
+            Create a new macro
+
+        **Arguments**
+            - name: A name for this object. Should exactly be the value of the "macro" property of the yaml object.
+            - condition: the full condition text exactly as represented in the yaml file.
+
+        **Success Return Value**
+            A JSON object representing the falco macro.
+        '''
+        macro = {
+            "name": name,
+            "condition": {
+                "components": [],
+                "condition": condition
+            }
+        }
+        res = requests.post(self.url + '/api/secure/falco/macros', data=json.dumps(macro), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_falco_macro(self, id, condition):
+        '''**Description**
+            Update info associated with a macro
+
+        **Arguments**
+            - id: The rule id
+            - condition: the full condition text exactly as represented in the yaml file.
+
+        **Success Return Value**
+            A JSON object representing the macro.
+        '''
+        ok, res = self.get_falco_macro_id(id)
+        if not ok:
+            return [False, res]
+        macro = res
+        macro['condition']['condition'] = condition
+
+        res = requests.put(self.url + '/api/secure/falco/macros/{}'.format(id), data=json.dumps(macro), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def delete_falco_macro(self, id):
+        '''**Description**
+            Delete the macro with given id.
+
+        **Arguments**
+            - id: The macro id
+
+        **Success Return Value**
+            A JSON object representing the macro.
+        '''
+        res = requests.delete(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def list_falco_lists(self):
+        '''**Description**
+            Returns the list of falco lists in the system. These are grouped by
+            name and do not necessarily represent individual falco list objects,
+            as multiple falco lists can have the same name.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object representing the list of falco lists.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/lists/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_falco_lists_group(self, name):
+        '''**Description**
+            Retrieve a group of all falco lists having the given name. This is used
+            to show how a base list is modified by later lists that override/append
+            to the list.
+
+        **Arguments**
+            - name: the name of the falco lists group
+
+        **Success Return Value**
+            A JSON object representing the list of falco lists.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/lists/groups?name={}'.format(name), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_falco_list_id(self, id):
+        '''**Description**
+            Retrieve info about a single falco list
+
+        **Arguments**
+            - id: the id of the falco list
+
+        **Success Return Value**
+            A JSON object representing the falco list.
+        '''
+        res = requests.get(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def add_falco_list(self, name, items):
+        '''**Description**
+            Create a new list
+
+        **Arguments**
+            - name: A name for this object. Should exactly be the value of the "list" property of the yaml object.
+            - items: the array of items as represented in the yaml List.
+
+        **Success Return Value**
+            A JSON object representing the falco list.
+        '''
+        flist = {
+            "name": name,
+            "items": {
+                "items": items
+            }
+        }
+        res = requests.post(self.url + '/api/secure/falco/lists', data=json.dumps(flist), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def update_falco_list(self, id, items):
+        '''**Description**
+            Update info associated with a list
+
+        **Arguments**
+            - id: The rule id
+            - items: the array of items as represented in the yaml List.
+
+        **Success Return Value**
+            A JSON object representing the list.
+        '''
+        ok, res = self.get_falco_list_id(id)
+        if not ok:
+            return [False, res]
+        flist = res
+        flist['items']['items'] = items
+
+        res = requests.put(self.url + '/api/secure/falco/lists/{}'.format(id), data=json.dumps(flist), headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def delete_falco_list(self, id):
+        '''**Description**
+            Delete the list with given id.
+
+        **Arguments**
+            - id: The list id
+
+        **Success Return Value**
+            A JSON object representing the list.
+        '''
+        res = requests.delete(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def add_compliance_task(self, name, module_name='docker-bench-security', schedule='06:00:00Z/PT12H', scope=None, enabled=True):
@@ -974,3 +1330,181 @@ class SdSecureClient(_SdcCommon):
             metrics="&metrics=" + json.dumps(metrics) if metrics else "")
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
+
+    def list_image_profiles(self):
+        '''**Description**
+            List the current set of image profiles.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing the details of each profile.
+
+        '''
+        url = "{url}/api/profiling/v1/secure/profileGroups/0/profiles".format(
+            url = self.url
+        )
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+
+    def get_image_profile(self, profileId):
+        '''**Description**
+            Find the image profile with a (partial) profile ID <profileId> and return its json description.
+
+        **Arguments**
+            - name: the name of the image profile to fetch
+
+        **Success Return Value**
+            A JSON object containing the description of the image profile. If there is no image profile with
+            the given name, returns False. Moreover, it could happen that more than one profile IDs have a collision.
+            It is due to the fact that a partial profile ID can be passed and interpreted; in this case a set of
+            collision profiles is returned, and the full complete ID string is printed. In this case, it returns
+            false.
+
+        '''
+
+        # RETRIEVE ALL THE IMAGE PROFILES
+        ok, image_profiles = self.list_image_profiles()
+
+        if not ok:
+            return [False, self.lasterr]
+
+        
+        '''
+        The content of the json stored in the image_profiles dictionary:
+
+        {
+            "offset": 0,
+            "limit": 99,
+            "canLoadMore": false,
+            "profiles": [
+            ...
+            ]
+        }
+        '''
+        
+        matched_profiles = self.__get_matched_profileIDs(profileId, image_profiles['profiles'])
+        
+        # Profile ID not found
+        if len(matched_profiles) == 0:
+            return [False, "No profile with ID {}".format(profileId)]
+        
+        # Principal workflow. Profile ID found
+        elif len(matched_profiles) == 1:
+            # Matched id. Return information
+            url = "{url}/api/profiling/v1/secure/profiles/{profileId}".format(
+                url = self.url,
+                profileId = matched_profiles[0]['profileId']
+            )
+            
+            res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+            return self._request_result(res)
+
+        # Collision detected. The full profile IDs are returned
+        elif len(matched_profiles) >= 2:
+            return [False, matched_profiles]
+
+
+    def __get_matched_profileIDs(self, requested_profile, profile_list):
+        '''
+        **Description**
+            Helper function for  retrieving the list of matching profile
+        
+        **Arguments**
+            - the requested profile Id (string)
+            - List of dictionary, where each dictionary contains the profile information
+    
+        **Success Return Value**
+            List of dictionary, where each dictionary represents a profile with the ID prefix substring
+            matching the requested one
+        
+        **Content structure of the profile_list parameter**
+        This array of profiles contains all the relevant information. For the purposes of this function, only
+        the profileId field is relevant.
+        
+        [
+            {
+            "profileGroupId": 0,
+            "profileId": "00000000000000000000000000000000000000000000",
+            "profileVersion": 0,
+            "profileName": "AAA/BBB:XYZ@0000000000000000000000",
+            "imageId": "00000000000000000000000000000000000000000000",
+            "imageName": "AAA/BBB:XYZ",
+            "processesProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "process",
+                                    "ruleName": "process - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "PROCESS",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "fileSystemProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "filesystem",
+                                    "ruleName": "filesystem - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "FILESYSTEM",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "syscallProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "syscalls",
+                                    "ruleName": "syscalls - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "SYSCALL",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "networkProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "network",
+                                    "ruleName": "network - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "NETWORK",
+                                    "score": 000
+                                    }
+                                ],
+                                "score": 000
+            },
+            "containerImagesProposal": {
+                "subcategories": [
+                                    {
+                                    "name": "container image",
+                                    "ruleName": "container image - 00000000000000000000000000000000000000000000",
+                                    "ruleType": "CONTAINER",
+                                    "score": 0
+                                    }
+                                ],
+                                "score": 0
+            },
+            "status": "STATUS_VALUE",
+            "score": 000
+            },
+            ...
+        ]
+        '''
+
+        matched_profiles = []
+
+        request_len = len(requested_profile)
+        for profile in profile_list:
+
+            # get the length of the substring to match    
+            str_len_match = min(len(profile), request_len)
+
+            if profile['profileId'][0:str_len_match] == requested_profile[0:str_len_match]:
+                matched_profiles.append(profile)
+
+        return matched_profiles
+

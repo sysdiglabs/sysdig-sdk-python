@@ -5,7 +5,7 @@ python:
 - '2.7'
 install:
   - sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
-  - pip install pyyaml requests
+  - pip install pyyaml requests requests_toolbelt
 script:
 - bash test/start_agent.sh
 - bash test/test_monitor_apis.sh
