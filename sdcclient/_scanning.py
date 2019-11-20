@@ -371,25 +371,6 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
-    def get_image_info_by_id(self, image_id_sha):
-        '''**Description**
-            Get the anchore image info for an image id sha.
-
-        **Arguments**
-            - image_id: Image id sha of the image.
-
-        **Success Return Value**
-            A JSON object containing metadata about the image.
-        '''
-        url = "{base_url}/api/scanning/v1/anchore/images/{image_id_sha}".format(
-            base_url=self.url,
-            image_id_sha=image_id_sha)
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
-            return [False, self.lasterr]
-
-        return [True, res.json()]
-
     def add_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2", validate=True):
         '''**Description**
             Add image registry
