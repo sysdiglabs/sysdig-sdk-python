@@ -307,28 +307,33 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.content]
 
-    def import_image(self, infile):
+    def import_image(self, infile, sync=False):
         '''**Description**
             Import an image archive
 
         **Arguments**
            - infile: An image archive file
+           - sync: Whether the import should be synchronous or asynchronous
 
         **Success Return Value**
-            A JSON object representing the image that was imported.
+            If synchronous, A JSON object representing the image that was imported.
+
         '''
         try:
             m = MultipartEncoder(
                 fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
             )
-            url = self.url + "/api/scanning/v1/anchore/import/images"
+            if sync:
+                url = self.url + "/api/scanning/v1/anchore/import/images"
+            else:
+                url = self.url + "/api/scanning/v1/import/images"
 
             headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
             res = requests.post(url, data=m, headers=headers, verify=self.ssl_verify)
             if not self._checkResponse(res):
                 return [False, self.lasterr]
 
-            return [True, res.json()]
+            return [True, res.json() if sync else res.content]
 
         except Exception as err:
             print(err)
