@@ -307,7 +307,7 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.content]
 
-    def import_image(self, infile, sync=True):
+    def import_image(self, infile, sync=False):
         '''**Description**
             Import an image archive
 
