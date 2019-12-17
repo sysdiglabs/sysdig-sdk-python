@@ -1342,7 +1342,7 @@ class SdSecureClient(_SdcCommon):
             A JSON object containing the details of each profile.
 
         '''
-        url = "{url}/api/profiling/v1/secure/profileGroups/0/profiles".format(
+        url = "{url}/api/v1/profiling/profileGroups/0/profiles".format(
             url = self.url
         )
 
@@ -1395,7 +1395,7 @@ class SdSecureClient(_SdcCommon):
         # Principal workflow. Profile ID found
         elif len(matched_profiles) == 1:
             # Matched id. Return information
-            url = "{url}/api/profiling/v1/secure/profiles/{profileId}".format(
+            url = "{url}/api/v1/profiling/profiles/{profileId}".format(
                 url = self.url,
                 profileId = matched_profiles[0]['profileId']
             )
