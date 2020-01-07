@@ -609,13 +609,16 @@ class SdMonitorClient(_SdcCommon):
             }
 
         # set dashboard scope to the specific parameter
-        scopeExpression = self.convert_scope_string_to_expression(scope)
-        if scopeExpression[0] == False:
-            return scopeExpression
-        if scopeExpression[1]:
-            template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
+        if isinstance(scope, list):
+            template['scopeExpressionList'] = scope
         else:
-            template['scopeExpressionList'] = None
+            scopeExpression = self.convert_scope_string_to_expression(scope)
+            if scopeExpression[0] == False:
+                return scopeExpression
+            if scopeExpression[1]:
+                template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
+            else:
+                template['scopeExpressionList'] = None
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
         if 'widgets' in template and template['widgets'] is not None:
