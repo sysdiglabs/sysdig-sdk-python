@@ -307,6 +307,28 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.content]
 
+    def get_latest_pdf_report_by_digest(self, image_digest, full_tag=None):
+        '''**Description**
+            Get the latest pdf report of one image digest
+
+        **Arguments**
+            - image_digest: Input image digest should be in the following formats: sha256:134dhgfd65765
+            - tag: Specify which FULLTAG is evaluated for a given Image Digest: docker.io/alpine:latest
+
+        **Success Return Value**
+            The pdf content
+        '''
+        url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}".format(
+            base_url=self.url,
+            image_digest=image_digest,
+            tag=full_tag)
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.content]
+
     def import_image(self, infile, sync=False):
         '''**Description**
             Import an image archive
