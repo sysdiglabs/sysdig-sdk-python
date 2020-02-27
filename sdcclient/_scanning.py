@@ -377,21 +377,23 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
-    def get_image_scan_result_by_id(self, image_id, full_tag_name):
+    def get_image_scan_result_by_id(self, image_id, full_tag_name, detail):
         '''**Description**
             Get the anchore image scan result for an image id.
 
         **Arguments**
             - image_id: Docker image id of the image whose scan result is to be fetched.
             - full_tag_name: The complete tag name of the image for e.g. docker.io/alpine:3.10.
+            - detail: Boolean to indicate whether full scan result API is needed.
 
         **Success Return Value**
             A JSON object containing pass/fail status of image scan policy.
         '''
-        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail=false".format(
+        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail={detail}".format(
                 base_url=self.url,
                 image_id=image_id,
-                full_tag_name=full_tag_name)
+                full_tag_name=full_tag_name,
+                detail=detail)
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
