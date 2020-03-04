@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Get an image scan result given image id
+# Get a specific policy
 #
 
 import os
@@ -10,10 +10,9 @@ from sdcclient import SdScanningClient
 
 
 def usage():
-    print('usage: %s <sysdig-token> <image_id> <full_tag_name> <detail>' % sys.argv[0])
+    print('usage: %s <sysdig-token> <image> <output_pdf>' % sys.argv[0])
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
-
 
 #
 # Parse arguments
@@ -22,22 +21,24 @@ if len(sys.argv) != 5:
     usage()
 
 sdc_token = sys.argv[1]
-image_id = sys.argv[2]
-full_tag_name = sys.argv[3]
-detail = sys.argv[4]
+image_digest = sys.argv[2]
+full_tag = sys.argv[3]
+pdf_path = sys.argv[4]
 
 #
 # Instantiate the SDC client
 #
 sdclient = SdScanningClient(sdc_token, 'https://secure.sysdig.com')
 
-ok, res = sdclient.get_image_scan_result_by_id(image_id, full_tag_name, detail)
+ok, res = sdclient.get_latest_pdf_report_by_digest(image_digest, full_tag)
 
 #
 # Return the result
 #
 if ok:
-    print("Image Scan Result %s" % res)
+    with open(pdf_path, 'wb') as f:
+        f.write(res)
+    print("PDF %s saved" % pdf_path)
 else:
     print(res)
     sys.exit(1)
