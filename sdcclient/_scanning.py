@@ -307,6 +307,28 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.content]
 
+    def get_latest_pdf_report_by_digest(self, image_digest, full_tag=None):
+        '''**Description**
+            Get the latest pdf report of one image digest
+
+        **Arguments**
+            - image_digest: Input image digest should be in the following formats: sha256:134dhgfd65765
+            - tag: Specify which FULLTAG is evaluated for a given Image Digest: docker.io/alpine:latest
+
+        **Success Return Value**
+            The pdf content
+        '''
+        url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}".format(
+            base_url=self.url,
+            image_digest=image_digest,
+            tag=full_tag)
+
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.content]
+
     def import_image(self, infile, sync=False):
         '''**Description**
             Import an image archive
@@ -355,21 +377,23 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
-    def get_image_scan_result_by_id(self, image_id, full_tag_name):
+    def get_image_scan_result_by_id(self, image_id, full_tag_name, detail):
         '''**Description**
             Get the anchore image scan result for an image id.
 
         **Arguments**
             - image_id: Docker image id of the image whose scan result is to be fetched.
             - full_tag_name: The complete tag name of the image for e.g. docker.io/alpine:3.10.
+            - detail: Boolean to indicate whether full scan result API is needed.
 
         **Success Return Value**
             A JSON object containing pass/fail status of image scan policy.
         '''
-        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail=false".format(
+        url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail={detail}".format(
                 base_url=self.url,
                 image_id=image_id,
-                full_tag_name=full_tag_name)
+                full_tag_name=full_tag_name,
+                detail=detail)
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]

@@ -115,25 +115,24 @@ if [[ $OUT = *"\"Another Copy Of Write below binary dir\""* ]]; then
 fi
 
 # Trigger some events
-# should be able to uncomment after SSPROD-2580 is addressed
-#FOUND=0
+FOUND=0
 
-#for i in $(seq 10); do
-#    sudo cat /etc/shadow
-#    sleep 10
+for i in $(seq 10); do
+    sudo cat /etc/shadow
+    sleep 10
 
-#    EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
+    EVTS=`$SCRIPTDIR/../examples/get_secure_policy_events.py $PYTHON_SDC_TEST_API_TOKEN 60`
 
-#    if [[ "$EVTS" != "" ]]; then
-#       FOUND=1
-#       break;
-#    fi
-#done
+    if [[ "$EVTS" != "" ]]; then
+       FOUND=1
+       break;
+    fi
+done
 
-#if [[ $FOUND == 0 ]]; then
-#   echo "Did not find any policy events after 10 attempts..."
-#   exit 1
-#fi
+if [[ $FOUND == 0 ]]; then
+   echo "Did not find any policy events after 10 attempts..."
+   exit 1
+fi
 
 
 #
