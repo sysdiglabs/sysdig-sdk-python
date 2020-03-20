@@ -985,7 +985,7 @@ class SdSecureClient(_SdcCommon):
         res = requests.get(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def add_falco_macro(self, name, condition):
+    def add_falco_macro(self, name, condition, append=False):
         '''**Description**
             Create a new macro
 
@@ -1001,7 +1001,8 @@ class SdSecureClient(_SdcCommon):
             "condition": {
                 "components": [],
                 "condition": condition
-            }
+            },
+            "append": append
         }
         res = requests.post(self.url + '/api/secure/falco/macros', data=json.dumps(macro), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
@@ -1082,7 +1083,7 @@ class SdSecureClient(_SdcCommon):
         res = requests.get(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def add_falco_list(self, name, items):
+    def add_falco_list(self, name, items, append=False):
         '''**Description**
             Create a new list
 
@@ -1097,7 +1098,8 @@ class SdSecureClient(_SdcCommon):
             "name": name,
             "items": {
                 "items": items
-            }
+            },
+            "append": append
         }
         res = requests.post(self.url + '/api/secure/falco/lists', data=json.dumps(flist), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
