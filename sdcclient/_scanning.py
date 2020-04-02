@@ -329,7 +329,7 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.content]
 
-    def import_image(self, infile, sync=False):
+    def import_image(self, infile, image_id, digest_id, image_name, sync=False):
         '''**Description**
             Import an image archive
 
@@ -350,7 +350,8 @@ class SdScanningClient(_SdcCommon):
             else:
                 url = self.url + "/api/scanning/v1/import/images"
 
-            headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type}
+            headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type,
+                       'imageId': image_id, 'digestId': digest_id, 'imageName': image_name}
             res = requests.post(url, data=m, headers=headers, verify=self.ssl_verify)
             if not self._checkResponse(res):
                 return [False, self.lasterr]
