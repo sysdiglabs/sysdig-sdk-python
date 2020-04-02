@@ -370,7 +370,7 @@ class SdScanningClient(_SdcCommon):
         **Success Return Value**
             A JSON object containing user account information.
         '''
-        url = self.url + "/api/scanning/v1/anchore/account"
+        url = self.url + "/api/scanning/v1/account"
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
