@@ -586,10 +586,6 @@ class SdMonitorClient(_SdcCommon):
             return [False, 'Not found']
 
     def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False):
-        if scope is not None:
-            if isinstance(scope, basestring) == False:
-                return [False, 'Invalid scope format: Expected a string']
-
         #
         # Clean up the dashboard we retireved so it's ready to be pushed
         #
@@ -608,14 +604,18 @@ class SdMonitorClient(_SdcCommon):
                 'filterNotificationsUserInputFilter': ''
             }
 
-        # set dashboard scope to the specific parameter
-        scopeExpression = self.convert_scope_string_to_expression(scope)
-        if scopeExpression[0] == False:
-            return scopeExpression
-        if scopeExpression[1]:
-            template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
-        else:
-            template['scopeExpressionList'] = None
+        if scope is not None:
+            if isinstance(scope, basestring) == False:
+                return [False, 'Invalid scope format: Expected a string']
+            
+            # set dashboard scope to the specific parameter
+            scopeExpression = self.convert_scope_string_to_expression(scope)
+            if scopeExpression[0] == False:
+                return scopeExpression
+            if scopeExpression[1]:
+                template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
+            else:
+                template['scopeExpressionList'] = None
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
         if 'widgets' in template and template['widgets'] is not None:
