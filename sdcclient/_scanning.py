@@ -103,6 +103,23 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def list_whitelisted_cves(self):
+        '''**Description**
+            List the whitelisted global CVEs.
+
+        **Arguments**
+            - None
+
+        **Success Return Value**
+            A JSON object containing all the whitelisted CVEs.
+        '''
+        url = self.url + "/api/scanning/v1/whitelists/global?bundle=default"
+        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def query_image_content(self, image, content_type=""):
         '''**Description**
             Find the image with the tag <image> and return its content.
