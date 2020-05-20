@@ -11,8 +11,9 @@ from sdcclient import SdcClient
 
 def print_events(data):
     for event in data['events']:
-        event['sev'] = event['severity'] if event.get('severity') else 'not set'
-        print('time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s' % event)
+        event['sev'] = event.get('severity', 'not set')
+        event['description'] = event.get('description', 'not set')
+        print('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s' % event)
 
 
 #
@@ -42,9 +43,9 @@ else:
     sys.exit(1)
 
 #
-# Get the events that match a period in time
+# Get the events before other event
 #
-ok, res = sdclient.get_events(from_ts=1460365211, to_ts=1460465211)
+ok, res = sdclient.get_events(pivot=res['events'][-1]["id"])
 
 if ok:
     print_events(res)
@@ -53,9 +54,9 @@ else:
     sys.exit(1)
 
 #
-# Get the events that match a name
+# Get the events that match a category
 #
-ok, res = sdclient.get_events(name='test event')
+ok, res = sdclient.get_events(category=["kubernetes"])
 
 if ok:
     print_events(res)
@@ -64,9 +65,20 @@ else:
     sys.exit(1)
 
 #
-# Get the events that match a tag/value pair
+# Get the events that match a status
 #
-ok, res = sdclient.get_events(tags="tag1 = 'value1'")
+ok, res = sdclient.get_events(status=['triggered', 'unacknowledged'])
+
+if ok:
+    print_events(res)
+else:
+    print(res)
+    sys.exit(1)
+
+#
+# Get the last event only
+#
+ok, res = sdclient.get_events(limit=1)
 
 if ok:
     print_events(res)
