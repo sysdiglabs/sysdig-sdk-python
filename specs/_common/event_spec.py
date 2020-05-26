@@ -70,3 +70,18 @@ with description("Events") as self:
 
             expect(ok).to(be_false)
             expect(res).to(equal("Invalid direction 'incorrect_direction', must be either 'before' or 'after'"))
+
+        with it("is able to retrieve events by name"):
+            ok, res = self.client.get_events(name="Container")
+
+            expect(ok).to(be_true)
+            expect(res).to(have_key("events"))
+            expect(res["events"]).to(contain(have_key("name")))
+            expect(res["events"][0]["name"]).to(contain("Container"))
+
+        with it("retrieves an empty list when the name provided is not found"):
+            ok, res = self.client.get_events(name="RandomUnexistingEvent")
+
+            expect(ok).to(be_true)
+            expect(res).to(have_key("events"))
+            expect(res["events"]).to(be_empty)

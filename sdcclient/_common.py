@@ -392,11 +392,12 @@ class _SdcCommon(object):
                             verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_events(self, category=None, direction='before', status=None, limit=100, pivot=None):
+    def get_events(self, name=None, category=None, direction='before', status=None, limit=100, pivot=None):
         '''**Description**
             Returns the list of Sysdig Monitor events.
 
         **Arguments**
+            - **name**: filter events by name. Default: None.
             - **category**: filter events by category. Default: ['alert', 'custom', 'docker', 'containerd', 'kubernetes'].
             - **direction**: orders the list of events. Valid values: "before", "after". Default: "before".
             - **status**: status of the event as list. Default: ['triggered', 'resolved', 'acknowledged', 'unacknowledged']
@@ -416,7 +417,7 @@ class _SdcCommon(object):
 
         for c in category:
             if c not in valid_categories:
-                return (False, "Invalid category '{}'".format(c))
+                return False, "Invalid category '{}'".format(c)
 
         valid_status = ["triggered", "resolved", "acknowledged", "unacknowledged"]
         if status is None:
@@ -424,10 +425,10 @@ class _SdcCommon(object):
 
         for s in status:
             if s not in valid_status:
-                return (False, "Invalid status '{}'".format(s))
+                return False, "Invalid status '{}'".format(s)
 
         if direction not in ["before", "after"]:
-            return (False, "Invalid direction '{}', must be either 'before' or 'after'".format(direction))
+            return False, "Invalid direction '{}', must be either 'before' or 'after'".format(direction)
 
         options = {
             'alertStatus': status,
@@ -438,6 +439,7 @@ class _SdcCommon(object):
             'include_total': 'true',
             'limit': str(limit),
             'pivot': pivot,
+            'filter': name,
         }
         params = {k: v for k, v in options.items() if v is not None}
         res = requests.get(self.url + '/api/v2/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
