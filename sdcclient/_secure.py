@@ -719,6 +719,8 @@ class SdSecureClient(_SdcCommon):
 
         try:
             policy_obj = json.loads(policy_json)
+            if "origin" in policy_obj:
+                del policy_obj["origin"]
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
@@ -786,6 +788,8 @@ class SdSecureClient(_SdcCommon):
         '''
         try:
             policy_obj = json.loads(policy_json)
+            if "origin" in policy_obj:
+                del policy_obj["origin"]
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
