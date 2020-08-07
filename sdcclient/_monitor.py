@@ -613,7 +613,7 @@ class SdMonitorClient(_SdcCommon):
         if scopeExpression[0] == False:
             return scopeExpression
         if scopeExpression[1]:
-            template['scopeExpressionList'] = map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1])
+            template['scopeExpressionList'] = list(map(lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '', 'variable': False}, scopeExpression[1]))
         else:
             template['scopeExpressionList'] = None
 
