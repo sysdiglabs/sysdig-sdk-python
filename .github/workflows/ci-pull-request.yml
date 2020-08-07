@@ -6,7 +6,7 @@ on:
     - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
       env:
         PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
       run: |
-        apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
+        sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
         ./test/start_agent.sh
 
     - name: Travis Test - Monitor APIs
