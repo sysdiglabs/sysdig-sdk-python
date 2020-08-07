@@ -44,6 +44,9 @@ jobs:
         sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
         ./test/start_agent.sh
 
+    - name: Travis Test - Install dependencies
+      run: pip install .
+
     - name: Travis Test - Monitor APIs
       env:
         PYTHON_SDC_TEST_MONITOR_API_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
