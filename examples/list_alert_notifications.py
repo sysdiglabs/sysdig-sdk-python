@@ -17,6 +17,7 @@ def print_notifications(notifications):
             for value in entity['metricValues']:
                 values.append(str(value['value']))
         notification.update({'values': ','.join(values)})
+        notification["filter"] = notification.get("filter", "")
         print("#%(id)s, State: %(state)s, Severity: %(severity)s, Scope: %(filter)s, Condition: %(condition)s, Value: %(values)s, Resolved: %(resolved)s" %
               notification)
 
