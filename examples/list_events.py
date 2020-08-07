@@ -45,7 +45,10 @@ else:
 #
 # Get the events before other event
 #
-ok, res = sdclient.get_events(pivot=res['events'][-1]["id"])
+if len(res['events']) > 0:
+    ok, res = sdclient.get_events(pivot=res['events'][-1]["id"])
+else:
+    ok, res = True, {"events": []}
 
 if ok:
     print_events(res)
