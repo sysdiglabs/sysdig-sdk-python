@@ -15,7 +15,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -40,7 +40,7 @@ if ok:
     else:
         print("Current contents of config file:")
         print("--------------------------------")
-        print(res["files"][0]["content"])
+        print((res["files"][0]["content"]))
         print("--------------------------------")
 else:
     print(res)

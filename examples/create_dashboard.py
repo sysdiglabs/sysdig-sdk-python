@@ -17,7 +17,7 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0]))
     print('-d|--dashboard: Set name of dashboard to create')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)

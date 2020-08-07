@@ -17,7 +17,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print('usage: %s <sysdig-token> <agent-yaml-config-file>' % sys.argv[0])
+    print(('usage: %s <sysdig-token> <agent-yaml-config-file>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 

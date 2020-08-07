@@ -18,7 +18,7 @@ from sdcclient import SdcClient
 #
 def evaluate(scope, expected):
     parsed_scope = SdcClient.convert_scope_string_to_expression(scope)
-    print '{} is valid: {}'.format(scope, parsed_scope[0] == True)
+    print('{} is valid: {}'.format(scope, parsed_scope[0] == True))
 
     if parsed_scope[0] != expected:
         print('Unexpected parsing result!')

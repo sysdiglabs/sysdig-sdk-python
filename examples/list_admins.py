@@ -16,7 +16,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     print('For this script to work, the user for the token must have Admin rights')
     sys.exit(1)

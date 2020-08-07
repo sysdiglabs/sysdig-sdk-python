@@ -11,7 +11,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s <secure-endpoint> <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <secure-endpoint> <sysdig-token>' % sys.argv[0]))
     sys.exit(1)
 
 
@@ -44,4 +44,4 @@ if not ok:
 res = res['profiles']
 
 for profile in res:
-    print("ID: {}, Name: {}".format(profile["profileId"], profile["imageName"]))
+    print(("ID: {}, Name: {}".format(profile["profileId"], profile["imageName"])))

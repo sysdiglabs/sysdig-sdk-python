@@ -12,7 +12,7 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 

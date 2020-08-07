@@ -17,7 +17,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-a|--alert <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-a|--alert <name>] <sysdig-token>' % sys.argv[0]))
     print('-a|--alert: Set name of alert to create')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
@@ -53,7 +53,7 @@ notify_channels = [{'type': 'SLACK', 'channel': '#python-sdc-test-alert'},
 
 ok, res = sdclient.get_notification_ids(notify_channels)
 if not ok:
-    print("Could not get IDs and hence not creating the alert: " + res)
+    print(("Could not get IDs and hence not creating the alert: " + res))
     sys.exit(-1)
 
 notification_channel_ids = res

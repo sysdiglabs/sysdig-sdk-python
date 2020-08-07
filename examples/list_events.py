@@ -13,14 +13,14 @@ def print_events(data):
     for event in data['events']:
         event['sev'] = event.get('severity', 'not set')
         event['description'] = event.get('description', 'not set')
-        print('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s' % event)
+        print(('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s' % event))
 
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 

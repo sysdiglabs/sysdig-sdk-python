@@ -12,7 +12,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s [-i|--id <id>] [-n|--name <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-i|--id <id>] [-n|--name <name>] <sysdig-token>' % sys.argv[0]))
     print('-i|--id: the id of the policy to delete')
     print('-n|--name: the name of the policy to delete')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
@@ -57,7 +57,7 @@ else:
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

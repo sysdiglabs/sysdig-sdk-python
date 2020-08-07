@@ -20,7 +20,7 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-s|--save <path>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-s|--save <path>] <sysdig-token>' % sys.argv[0]))
     print('-s|--save: save the retrieved files to a set of files below <path> using save_default_rules_files().')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
@@ -62,7 +62,7 @@ if ok:
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(res)
     else:
-        print("Saving falco rules files below {}...".format(save_dir))
+        print(("Saving falco rules files below {}...".format(save_dir)))
         ok, sres = sdclient.save_default_falco_rules_files(res, save_dir)
         if not ok:
             print(sres)

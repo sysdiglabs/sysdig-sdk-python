@@ -13,7 +13,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -46,6 +46,6 @@ else:
     print(res)
     sys.exit(1)
 
-print('User Email: ' + uinfo['user']['username'])
-print('Current Agents: %d' % nagents)
-print('Max Agents: %s' % uinfo['user']['customerSettings']['plan']['maxAgents'])
+print(('User Email: ' + uinfo['user']['username']))
+print(('Current Agents: %d' % nagents))
+print(('Max Agents: %s' % uinfo['user']['customerSettings']['plan']['maxAgents']))

@@ -22,7 +22,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0])
+    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0]))
     print('-s|--summarize: group policy events by sanitized output and print by frequency')
     print('-l|--limit: with -s, only print the first <limit> outputs')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
@@ -97,7 +97,7 @@ while True:
     ok, res = sdclient.get_more_policy_events(res['ctx'])
 
 if summarize:
-    sorted = sorted(all_outputs.items(), key=operator.itemgetter(1), reverse=True)
+    sorted = sorted(list(all_outputs.items()), key=operator.itemgetter(1), reverse=True)
     count = 0
     for val in sorted:
         count += 1

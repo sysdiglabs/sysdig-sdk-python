@@ -11,7 +11,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('Reads json representing updated policy from standard input')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
@@ -37,7 +37,7 @@ ok, res = sdclient.update_policy_json(policy_json)
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

@@ -18,7 +18,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print('usage: %s <sysdig-token> <hostname>' % sys.argv[0])
+    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -73,6 +73,6 @@ ok, res = sdclient.get_data(metrics=metrics,               # List of metrics to 
 #
 # Show the result!
 #
-print(json.dumps(res, sort_keys=True, indent=4))
+print((json.dumps(res, sort_keys=True, indent=4)))
 if not ok:
     sys.exit(1)

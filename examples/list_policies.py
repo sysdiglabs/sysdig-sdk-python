@@ -12,7 +12,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
@@ -40,7 +40,7 @@ if not ok:
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

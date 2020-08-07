@@ -15,9 +15,9 @@ from sdcclient import SdMonitorClientV1
 # Parse arguments
 #
 if len(sys.argv) != 5:
-    print(
+    print((
         'usage: %s <sysdig-v1-url> <sysdig-v1-token> <sysdig-v2-url> <sysdig-v2-token>'
-        % sys.argv[0])
+        % sys.argv[0]))
     print(
         'You can find your token at https://app.sysdigcloud.com/#/settings/user'
     )
@@ -45,23 +45,23 @@ if not ok:
 
 for dashboard in res['dashboards']:
     file_name = '{}.json'.format(dashboard['id'])
-    print('Saving v1 dashboard {} to file {}...'.format(
-        dashboard['name'], file_name))
+    print(('Saving v1 dashboard {} to file {}...'.format(
+        dashboard['name'], file_name)))
     sdclient_v1.save_dashboard_to_file(dashboard, file_name)
 
     print('Importing dashboard to v2...')
     ok, res = sdclient_v2.create_dashboard_from_file(
-        u'import of {}'.format(dashboard['name']),
+        'import of {}'.format(dashboard['name']),
         file_name,
         None,
         shared=dashboard['isShared'],
         public=dashboard['isPublic'])
 
     if ok:
-        print('Dashboard {} imported!'.format(dashboard['name']))
+        print(('Dashboard {} imported!'.format(dashboard['name'])))
         sdclient_v2.delete_dashboard(res['dashboard'])
     else:
-        print('Dashboard {} import failed:'.format(dashboard['name']))
+        print(('Dashboard {} import failed:'.format(dashboard['name'])))
         print(res)
 
     print('\n')

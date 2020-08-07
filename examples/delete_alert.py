@@ -14,7 +14,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-a|--alert <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-a|--alert <name>] <sysdig-token>' % sys.argv[0]))
     print('-a|--alert: Set name of alert to delete')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)

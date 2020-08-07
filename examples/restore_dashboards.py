@@ -14,7 +14,7 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print('usage: %s <sysdig-token> <file-name>' % sys.argv[0])
+    print(('usage: %s <sysdig-token> <file-name>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -33,7 +33,7 @@ for info in zipf.infolist():
     try:
         j = json.loads(data)
     except ValueError:
-        print('Invalid JSON file found in ZIP file ' + info.filename + ': skipping')
+        print(('Invalid JSON file found in ZIP file ' + info.filename + ': skipping'))
         continue
 
     #
@@ -44,6 +44,6 @@ for info in zipf.infolist():
 
     ok, res = sdclient.create_dashboard_with_configuration(j)
     if ok:
-        print('Restored Dashboard named: ' + j['name'])
+        print(('Restored Dashboard named: ' + j['name']))
     else:
-        print("Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res))
+        print(("Dashboard creation failed for dashboard name %s with error %s" % (j['name'], res)))

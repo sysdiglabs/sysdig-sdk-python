@@ -12,7 +12,7 @@ from sdcclient import SdSecureClientV1
 
 
 def usage():
-    print('usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0]))
     print('-o|--order-only: Only display the list of policy ids in evaluation order. Suitable for use by set_policy_order.py')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
@@ -60,7 +60,7 @@ if not order_only:
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

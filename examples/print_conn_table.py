@@ -13,7 +13,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) not in [2, 3]:
-    print('usage: %s <sysdig-token> <hostname>' % sys.argv[0])
+    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -107,8 +107,8 @@ cur = 0
 
 row_format = "{:20.20}\t{:20.20}\t{:20.20}\t{:20.20}\t{:10}\t{:10}\t{:10}\t{:10}\t{:10}\t{:10}\t{:10}"
 
-print(row_format.format("Source", "Source Process", "Destination", "Destination Process", "Count",
-                        "Bytes In", "Bytes Out", "Bytes", "Req In", "Req Out", "Req"))
+print((row_format.format("Source", "Source Process", "Destination", "Destination Process", "Count",
+                        "Bytes In", "Bytes Out", "Bytes", "Req In", "Req Out", "Req")))
 
 while cur < fetch_limit:
     paging = {'from': cur, 'to': cur + page_size}
@@ -130,4 +130,4 @@ while cur < fetch_limit:
 
     cur += len(data)
     for line in data:
-        print(row_format.format(*line['d']))
+        print((row_format.format(*line['d'])))

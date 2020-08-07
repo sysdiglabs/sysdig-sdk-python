@@ -13,7 +13,7 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -33,8 +33,8 @@ if not ok:
     print(res)
     sys.exit(1)
 
-if len(res[u'dashboards']) > 0:
-    sdclient.save_dashboard_to_file(res[u'dashboards'][0], 'dashboard.json')
+if len(res['dashboards']) > 0:
+    sdclient.save_dashboard_to_file(res['dashboards'][0], 'dashboard.json')
 else:
     print('the user has no dashboards. Exiting.')
     sys.exit(0)

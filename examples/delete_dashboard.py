@@ -14,7 +14,7 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-p|--pattern <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-p|--pattern <name>] <sysdig-token>' % sys.argv[0]))
     print('-p|--pattern: Delete all dashboards containing the provided pattern')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
@@ -53,7 +53,7 @@ if not ok:
 #
 for dashboard in res['dashboards']:
     if pattern in dashboard['name']:
-        print("Deleting " + dashboard['name'])
+        print(("Deleting " + dashboard['name']))
         ok, res = sdclient.delete_dashboard(dashboard)
         if not ok:
             print(res)

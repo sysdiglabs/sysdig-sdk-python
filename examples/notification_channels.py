@@ -14,7 +14,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-c|--channel <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-c|--channel <name>] <sysdig-token>' % sys.argv[0]))
     print('-c|--channel: Set name of channel to create')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)

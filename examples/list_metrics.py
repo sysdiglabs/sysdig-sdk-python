@@ -12,7 +12,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -35,5 +35,5 @@ if not ok:
     print(res)
     sys.exit(1)
 
-for metric_id, metric in res.iteritems():
-    print("Metric name: " + metric_id + ", type: " + metric['type'])
+for metric_id, metric in res.items():
+    print(("Metric name: " + metric_id + ", type: " + metric['type']))

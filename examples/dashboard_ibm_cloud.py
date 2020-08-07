@@ -10,7 +10,7 @@ from sdcclient import IbmAuthHelper, SdMonitorClient
 
 # Parse arguments.
 def usage():
-    print('usage: %s <endpoint-url> <apikey> <instance-guid>' % sys.argv[0])
+    print(('usage: %s <endpoint-url> <apikey> <instance-guid>' % sys.argv[0]))
     print('endpoint-url: The endpoint URL that should point to IBM Cloud')
     print('apikey: IBM Cloud IAM apikey that will be used to retrieve an access token')
     print('instance-guid: GUID of an IBM Cloud Monitoring with Sysdig instance')
@@ -35,7 +35,7 @@ ok, res = sdclient.create_dashboard(DASHBOARD_NAME)
 # Check the result
 dashboard_configuration = None
 if ok:
-    print('Dashboard %d created successfully' % res['dashboard']['id'])
+    print(('Dashboard %d created successfully' % res['dashboard']['id']))
     dashboard_configuration = res['dashboard']
 else:
     print(res)
