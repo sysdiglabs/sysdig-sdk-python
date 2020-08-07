@@ -27,7 +27,7 @@ sdc_token = sys.argv[1]
 with open(sys.argv[2]) as cfile:
     yaml_conf = cfile.read()
     # Verify that the content is valid yaml
-    parsed_yaml_conf = yaml.load(yaml_conf)
+    parsed_yaml_conf = yaml.safe_load(yaml_conf)
 
 sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 

@@ -75,7 +75,7 @@ else:
     with open(cpath, 'r') as content_file:
         content = content_file.read()
         required_engine_version = 0
-        cyaml = yaml.load(content)
+        cyaml = yaml.safe_load(content)
         for obj in cyaml:
             if "required_engine_version" in obj:
                 try:
