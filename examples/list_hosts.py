@@ -13,9 +13,8 @@
 #
 import getopt
 import json
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -67,7 +66,7 @@ ok, res = sdclient.get_data(
     -duration,  # start time: either a unix timestamp, or a difference from "now"
     0,  # end time: either a unix timestamp, or a difference from "now" (0 means you need "last X seconds")
     duration,  # sampling time, ie. data granularity;
-               # if equal to the time window span then the result will contain a single sample
+    # if equal to the time window span then the result will contain a single sample
     paging={
         "from": 0,
         "to": count - 1

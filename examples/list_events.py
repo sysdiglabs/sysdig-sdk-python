@@ -3,9 +3,8 @@
 # Get user events from Sysdig Cloud
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -13,7 +12,8 @@ def print_events(data):
     for event in data['events']:
         event['sev'] = event.get('severity', 'not set')
         event['description'] = event.get('description', 'not set')
-        print(('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s' % event))
+        print(('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s'
+               % event))
 
 
 #

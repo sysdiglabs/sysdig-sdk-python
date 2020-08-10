@@ -3,11 +3,10 @@
 # Post a user event to Sysdig Cloud
 #
 
-import os
-import sys
-import json
 import argparse
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import json
+import sys
+
 from sdcclient import SdcClient
 
 #
@@ -18,8 +17,11 @@ from sdcclient import SdcClient
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--description')
 parser.add_argument('-s', '--severity', help='syslog style from 0 (high) to 7 (low)')
-parser.add_argument('-c', '--scope', help='metadata, in Sysdig Cloud format, of nodes to associate with the event, eg: \'host.hostName = "ip-10-1-1-1" and container.name = "foo"\'')
-parser.add_argument('-t', '--tags', help='dictionary of arbitrary key-value pairs, eg: \'{"app":"my_app", "file":"text.py"}\'')
+parser.add_argument('-c', '--scope',
+                    help='metadata, in Sysdig Cloud format, of nodes to associate with the event, '
+                         'eg: \'host.hostName = "ip-10-1-1-1" and container.name = "foo"\'')
+parser.add_argument('-t', '--tags',
+                    help='dictionary of arbitrary key-value pairs, eg: \'{"app":"my_app", "file":"text.py"}\'')
 parser.add_argument('sysdig_token', help='You can find your token at https://app.sysdigcloud.com/#/settings/user')
 parser.add_argument('name')
 args = parser.parse_args()

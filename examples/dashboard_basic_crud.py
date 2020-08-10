@@ -2,11 +2,10 @@
 #
 # Simple example of dashboard creation, retrieval, updating, and deletion.
 #
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-from sdcclient import SdMonitorClient
 import uuid
+
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments

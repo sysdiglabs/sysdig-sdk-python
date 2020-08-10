@@ -3,17 +3,17 @@
 # List the current set of secure policies.
 #
 
-import os
-import sys
-import json
 import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import json
+import sys
+
 from sdcclient import SdSecureClientV1
 
 
 def usage():
     print(('usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0]))
-    print('-o|--order-only: Only display the list of policy ids in evaluation order. Suitable for use by set_policy_order.py')
+    print('-o|--order-only: Only display the list of policy ids in evaluation order. '
+          'Suitable for use by set_policy_order.py')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 

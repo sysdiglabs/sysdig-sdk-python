@@ -6,10 +6,9 @@
 #
 
 import getopt
-import os
-import sys
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdcClient
 
 
@@ -59,7 +58,7 @@ for alert in res['alerts']:
         update_txt = ' (changed by update_alert)'
         if alert['description'][-len(update_txt):] != update_txt:
             alert['description'] = alert['description'] + update_txt
-        alert['timespan'] = alert['timespan'] * 2   # Note: Expressed in seconds * 1000000
+        alert['timespan'] = alert['timespan'] * 2  # Note: Expressed in seconds * 1000000
         ok, res_update = sdclient.update_alert(alert)
 
         if not ok:

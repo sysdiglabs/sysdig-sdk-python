@@ -12,11 +12,8 @@
 # of the Secure Operations team as well.
 #
 
-import os
 import sys
-import json
-import logging
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #

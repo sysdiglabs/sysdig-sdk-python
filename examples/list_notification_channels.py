@@ -3,10 +3,9 @@
 # Post a user event to Sysdig Cloud
 #
 
-import os
-import sys
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdcClient
 
 #

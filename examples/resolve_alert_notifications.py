@@ -3,10 +3,9 @@
 # Resolve alert notifications from Sysdig Cloud
 #
 
-import os
 import sys
 import time
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #

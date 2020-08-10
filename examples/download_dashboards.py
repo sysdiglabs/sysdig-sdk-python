@@ -6,8 +6,7 @@
 import os
 import sys
 import zipfile
-import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdMonitorClient
 
 
@@ -19,9 +18,9 @@ def zipdir(path, ziph):
 
 
 def cleanup_dir(path):
-    if os.path.exists(path) == False:
+    if not os.path.exists(path):
         return
-    if os.path.isdir(path) == False:
+    if not os.path.isdir(path):
         print('Provided path is not a directory')
         sys.exit(-1)
 
@@ -66,14 +65,12 @@ if not ok:
     print(res)
     sys.exit(1)
 
-
 # Clean up any state in the tmp directory
 cleanup_dir(sysdig_dashboard_dir)
 
 # Creating sysdig dashboard directory to store dashboards
 if not os.path.exists(sysdig_dashboard_dir):
     os.makedirs(sysdig_dashboard_dir)
-
 
 for db in res['dashboards']:
     sdclient.save_dashboard_to_file(db, os.path.join(sysdig_dashboard_dir, str(db['id'])))

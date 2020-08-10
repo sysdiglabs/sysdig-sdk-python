@@ -6,9 +6,8 @@
 # the set_agents_config script.
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
@@ -35,7 +34,7 @@ ok, res = sdclient.get_agents_config()
 # Return the result
 #
 if ok:
-    if not("files" in res) or len(res["files"]) == 0:
+    if not ("files" in res) or len(res["files"]) == 0:
         print("No current auto configuration")
     else:
         print("Current contents of config file:")

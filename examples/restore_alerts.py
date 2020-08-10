@@ -3,12 +3,9 @@
 # Restore Alerts of the format in a JSON dumpfile from the list_alerts.py example.
 #
 
-import os
-import sys
 import json
-import datetime
-import calendar
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdcClient
 
 #
@@ -66,7 +63,8 @@ with open(alerts_dump_file, 'r') as f:
         if 'notificationChannelIds' in a:
             for channel_id in a['notificationChannelIds']:
                 if channel_id not in existing_notification_channel_ids:
-                    print(('Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a['name'] + '" does not exist.\n  Restoring without this ID.'))
+                    print(('Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a[
+                        'name'] + '" does not exist.\n  Restoring without this ID.'))
                     a['notificationChannelIds'].remove(channel_id)
 
         # The Create/Update APIs will validate but actually ignore these fields;
@@ -98,4 +96,4 @@ with open(alerts_dump_file, 'r') as f:
             sys.exit(1)
 
 print(('All Alerts in ' + alerts_dump_file + ' restored successfully ('
-      + str(created_count) + ' created, ' + str(updated_count) + ' updated)'))
+       + str(created_count) + ' created, ' + str(updated_count) + ' updated)'))

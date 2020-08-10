@@ -8,13 +8,12 @@
 # a given file that are compatible with different agent versions.
 #
 
+import getopt
 import os
 import sys
-import pprint
-import getopt
-import shutil
+
 import yaml
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdSecureClient
 
 
@@ -81,7 +80,8 @@ else:
                 try:
                     required_engine_version = int(obj["required_engine_version"])
                 except ValueError:
-                    print(("Required engine version \"{}\" in content {} must be a number".format(obj["required_engine_version"], cpath)))
+                    print(("Required engine version \"{}\" in content {} must be a number".format(
+                        obj["required_engine_version"], cpath)))
                     sys.exit(1)
         files_obj = {
             "tag": tag,

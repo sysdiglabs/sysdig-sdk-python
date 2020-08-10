@@ -3,9 +3,8 @@
 # Print the list of sysdig captures.
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
@@ -39,4 +38,4 @@ else:
 
 for capture in captures:
     print(("Folder %s, Name %s, Host: %s, Size: %d, Status: %s" %
-          (capture['folder'], capture['name'], capture['agent']['hostName'], capture['size'], capture['status'])))
+           (capture['folder'], capture['name'], capture['agent']['hostName'], capture['size'], capture['status'])))

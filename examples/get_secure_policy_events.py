@@ -11,18 +11,18 @@
 # Progress information is written to standard error.
 #
 
-import os
-import sys
+import getopt
 import json
 import operator
 import re
-import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdSecureClient
 
 
 def usage():
-    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0]))
+    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' %
+           sys.argv[0]))
     print('-s|--summarize: group policy events by sanitized output and print by frequency')
     print('-l|--limit: with -s, only print the first <limit> outputs')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')

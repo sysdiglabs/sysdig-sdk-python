@@ -7,9 +7,8 @@
 # the last 10 minutes, with 1 minute data granularity
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
@@ -93,7 +92,9 @@ if ok:
     #
     # Print table headers
     #
-    dataToPrint = ' '.join([str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[:(colLen - 3)].ljust(colLen - 3) + '...' for x in metrics])
+    dataToPrint = ' '.join([str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[
+                                                                                          :(colLen - 3)].ljust(
+        colLen - 3) + '...' for x in metrics])
     print(('%s %s' % ('timestamp'.ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint))
     print('')
 
@@ -104,7 +105,9 @@ if ok:
         timestamp = d['t'] if sampling > 0 else start
         values = d['d']
 
-        dataToPrint = ' '.join([str(x).ljust(colLen) if len(str(x)) < colLen else str(x)[:(colLen - 3)].ljust(colLen - 3) + '...' for x in values])
+        dataToPrint = ' '.join(
+            [str(x).ljust(colLen) if len(str(x)) < colLen else str(x)[:(colLen - 3)].ljust(colLen - 3) + '...' for x in
+             values])
 
         print(('%s %s' % (('<t: %d>' % (timestamp)).ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint))
 
