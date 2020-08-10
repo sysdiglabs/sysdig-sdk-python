@@ -82,12 +82,12 @@ while True:
         print(res)
         sys.exit(1)
 
-    if len(res['data']['policyEvents']) == 0:
+    if len(res['data']) == 0:
         break
 
     sys.stderr.write("offset={}\n".format(res['ctx']['offset']))
 
-    for event in res['data']['policyEvents']:
+    for event in res['data']:
         if summarize:
             sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
             all_outputs[sanitize_output] = all_outputs.get(sanitize_output, 0) + 1
