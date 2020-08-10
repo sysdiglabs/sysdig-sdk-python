@@ -1025,6 +1025,59 @@ class _SdcCommon(object):
         else:
             return [True, None]
 
+    def list_access_keys(self):
+        '''
+        **Description**
+            List all the access keys enabled and disabled for this instance of Sysdig Monitor/Secure
+
+        **Reslut**
+            A list of access keys objects
+
+        **Example**
+            `examples/list_access_keys.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_access_keys.py>`_
+        '''
+        res = requests.get(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def create_access_key(self):
+        '''
+        **Description**
+            Create a new access key for Sysdig Monitor/Secure
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def disable_access_key(self, access_key):
+        '''
+        **Description**
+            Disable an existing access key
+
+        **Arguments**
+            - **access_key**: the access key to be disabled
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/disable/", headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def enable_access_key(self, access_key):
+        '''
+        **Description**
+            Enable an existing access key
+
+        **Arguments**
+            - **access_key**: the access key to be enabled
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/enable/", headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
     def get_agents_config(self):
         res = requests.get(self.url + '/api/agents/config', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
