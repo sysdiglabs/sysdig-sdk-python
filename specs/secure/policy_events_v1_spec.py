@@ -2,7 +2,7 @@ import datetime
 import os
 
 from expects import be_within, have_len, expect, contain, have_key, be_empty, have_keys
-from mamba import before, context, description, it
+from mamba import before, context, description, it, _context
 
 from sdcclient.secure import PolicyEventsClientV1
 from specs import be_successful_api_call
