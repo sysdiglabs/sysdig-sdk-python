@@ -85,8 +85,6 @@ while True:
     if len(res['data']) == 0:
         break
 
-    sys.stderr.write("offset={}\n".format(res['ctx']['offset']))
-
     for event in res['data']:
         if summarize:
             sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
