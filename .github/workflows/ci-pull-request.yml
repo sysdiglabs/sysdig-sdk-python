@@ -61,11 +61,11 @@ jobs:
       run: ./test/stop_agent.sh
       if: steps.start_agent.outcome == 'success'
 
-     - name: Test in staging
-       env:
-         SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
-         SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
-         SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
-         SDC_SECURE_URL: "https://secure-staging.sysdig.com"
-       run: |
-         pipenv run mamba -f documentation
+    - name: Test in staging
+      env:
+        SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
+        SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+        SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
+        SDC_SECURE_URL: "https://secure-staging.sysdig.com"
+      run: |
+        pipenv run mamba -f documentation
