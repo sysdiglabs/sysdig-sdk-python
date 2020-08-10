@@ -20,7 +20,7 @@ class _SdcCommon(object):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = self.__get_headers(custom_headers)
-        self.url = os.environ.get("SDC_URL", sdc_url)
+        self.url = os.environ.get("SDC_URL", sdc_url).rstrip('/')
         self.ssl_verify = os.environ.get("SDC_SSL_VERIFY", None)
         if self.ssl_verify == None:
             self.ssl_verify = ssl_verify
