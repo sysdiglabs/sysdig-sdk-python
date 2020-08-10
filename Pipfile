@@ -9,6 +9,7 @@ doublex = "*"
 doublex-expects = "*"
 expects = "*"
 sdcclient = {editable = true,path = "."}
+flake8 = "*"
 
 [packages]
 requests = "*"
