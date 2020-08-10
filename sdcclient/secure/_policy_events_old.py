@@ -17,7 +17,7 @@ class PolicyEventsClientOld(_SdcCommon):
 
     def _get_policy_events_int(self, ctx):
         warn("The PolicyEventsClientOld class is deprecated in favour of PolicyEventsClientV1; use it only if you have "
-             "an old on-premises installation", DeprecationWarning, 2)
+             "an old on-premises installation", DeprecationWarning, 3)
         policy_events_url = self.url + '/api/policyEvents{id}?from={frm:d}&to={to:d}&offset={offset}&limit={limit}{sampling}{aggregations}{scope}{filter}'.format(
             id="/%s" % ctx["id"] if "id" in ctx else "",
             frm=int(ctx['from']),
