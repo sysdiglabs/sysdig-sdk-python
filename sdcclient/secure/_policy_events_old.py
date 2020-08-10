@@ -1,5 +1,6 @@
 import datetime
 import json
+from warnings import warn
 
 import requests
 
@@ -15,6 +16,8 @@ class PolicyEventsClientOld(_SdcCommon):
         self._policy_v2 = None
 
     def _get_policy_events_int(self, ctx):
+        warn("The PolicyEventsClientOld class is deprecated in favour of PolicyEventsClientV1; use it only if you have "
+             "an old on-premises installation", DeprecationWarning, 2)
         policy_events_url = self.url + '/api/policyEvents{id}?from={frm:d}&to={to:d}&offset={offset}&limit={limit}{sampling}{aggregations}{scope}{filter}'.format(
             id="/%s" % ctx["id"] if "id" in ctx else "",
             frm=int(ctx['from']),
@@ -91,7 +94,6 @@ class PolicyEventsClientOld(_SdcCommon):
 
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
-
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
@@ -131,8 +133,8 @@ class PolicyEventsClientOld(_SdcCommon):
 
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
-
         '''
+
         options = {"id": id,
                    "from": int(from_sec) * 1000000,
                    "to": int(to_sec) * 1000000,
@@ -167,7 +169,6 @@ class PolicyEventsClientOld(_SdcCommon):
 
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
-
         '''
         epoch = datetime.datetime.utcfromtimestamp(0)
         to_ts = (datetime.datetime.utcnow() - epoch).total_seconds() * 1000 * 1000
