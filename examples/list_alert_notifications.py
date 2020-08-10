@@ -3,10 +3,9 @@
 # Get alert notifications from Sysdig Cloud
 #
 
-import os
 import sys
 import time
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -17,7 +16,9 @@ def print_notifications(notifications):
             for value in entity['metricValues']:
                 values.append(str(value['value']))
         notification.update({'values': ','.join(values)})
-        print("#%(id)s, State: %(state)s, Severity: %(severity)s, Scope: %(filter)s, Condition: %(condition)s, Value: %(values)s, Resolved: %(resolved)s" %
+        notification["filter"] = notification.get("filter", "")
+        print("#%(id)s, State: %(state)s, Severity: %(severity)s, Scope: %(filter)s, Condition: %(condition)s, "
+              "Value: %(values)s, Resolved: %(resolved)s" %
               notification)
 
 
@@ -25,7 +26,7 @@ def print_notifications(notifications):
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 

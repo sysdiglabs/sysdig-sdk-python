@@ -8,13 +8,12 @@
 # a given file that are compatible with different agent versions.
 #
 
+import getopt
 import os
 import sys
-import pprint
-import getopt
-import shutil
+
 import yaml
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdSecureClient
 
 
@@ -22,7 +21,7 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>' % sys.argv[0]))
     print('-l|--load: load the files to set from a set of files below <path> using load_default_rules_files().')
     print('-t|--tag: Set a tag for the set of files')
     print('-c|--content: the (single) file to set')
@@ -64,7 +63,7 @@ sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
 
 files_obj = {}
 if load_dir != "":
-    print("Loading falco rules files from {}...".format(load_dir))
+    print(("Loading falco rules files from {}...".format(load_dir)))
     ok, res = sdclient.load_default_falco_rules_files(load_dir)
     if ok:
         files_obj = res
@@ -75,13 +74,14 @@ else:
     with open(cpath, 'r') as content_file:
         content = content_file.read()
         required_engine_version = 0
-        cyaml = yaml.load(content)
+        cyaml = yaml.safe_load(content)
         for obj in cyaml:
             if "required_engine_version" in obj:
                 try:
                     required_engine_version = int(obj["required_engine_version"])
                 except ValueError:
-                    print("Required engine version \"{}\" in content {} must be a number".format(obj["required_engine_version"], cpath))
+                    print(("Required engine version \"{}\" in content {} must be a number".format(
+                        obj["required_engine_version"], cpath)))
                     sys.exit(1)
         files_obj = {
             "tag": tag,

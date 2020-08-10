@@ -3,16 +3,15 @@
 # Delete a policy, by either id or name.
 #
 
-import os
-import sys
-import json
 import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import json
+import sys
+
 from sdcclient import SdSecureClientV1
 
 
 def usage():
-    print('usage: %s [-i|--id <id>] [-n|--name <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-i|--id <id>] [-n|--name <name>] <sysdig-token>' % sys.argv[0]))
     print('-i|--id: the id of the policy to delete')
     print('-n|--name: the name of the policy to delete')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
@@ -57,7 +56,7 @@ else:
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

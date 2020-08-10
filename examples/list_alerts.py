@@ -4,10 +4,9 @@
 # Optionally dump the full Alerts list as a JSON object to a target file.
 #
 
-import os
-import sys
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdcClient
 
 #
@@ -15,7 +14,7 @@ from sdcclient import SdcClient
 #
 json_dumpfilename = None
 if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print('usage: %s <sysdig-token> [json-dumpfile]' % sys.argv[0])
+    print(('usage: %s <sysdig-token> [json-dumpfile]' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 elif len(sys.argv) == 3:
@@ -41,7 +40,7 @@ if not ok:
     sys.exit(1)
 
 for alert in res['alerts']:
-    print('enabled: %s, name: %s' % (str(alert['enabled']), alert['name']))
+    print(('enabled: %s, name: %s' % (str(alert['enabled']), alert['name'])))
 
 if json_dumpfilename:
     with open(json_dumpfilename, "w") as f:

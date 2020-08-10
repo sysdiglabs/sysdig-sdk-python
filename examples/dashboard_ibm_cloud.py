@@ -3,18 +3,19 @@
 # This example uses IBM Cloud IAM authentication and makes a few calls to the
 # Dashboard API as validation. Creates, edits and then deletes a dashboard.
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import IbmAuthHelper, SdMonitorClient
+
 
 # Parse arguments.
 def usage():
-    print('usage: %s <endpoint-url> <apikey> <instance-guid>' % sys.argv[0])
+    print(('usage: %s <endpoint-url> <apikey> <instance-guid>' % sys.argv[0]))
     print('endpoint-url: The endpoint URL that should point to IBM Cloud')
     print('apikey: IBM Cloud IAM apikey that will be used to retrieve an access token')
     print('instance-guid: GUID of an IBM Cloud Monitoring with Sysdig instance')
     sys.exit(1)
+
 
 if len(sys.argv) != 4:
     usage()
@@ -35,7 +36,7 @@ ok, res = sdclient.create_dashboard(DASHBOARD_NAME)
 # Check the result
 dashboard_configuration = None
 if ok:
-    print('Dashboard %d created successfully' % res['dashboard']['id'])
+    print(('Dashboard %d created successfully' % res['dashboard']['id']))
     dashboard_configuration = res['dashboard']
 else:
     print(res)

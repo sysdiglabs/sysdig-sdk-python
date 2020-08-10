@@ -12,18 +12,15 @@
 # of the Secure Operations team as well.
 #
 
-import os
 import sys
-import json
-import logging
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -47,14 +44,14 @@ sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
 ok, res = sdclient.list_memberships(SECURE_TEAM_NAME)
 
 if not ok:
-    print('Unable to get memberships for ' + SECURE_TEAM_NAME + ' team: ', res)
+    print(('Unable to get memberships for ' + SECURE_TEAM_NAME + ' team: ', res))
     sys.exit(1)
 memberships = res
 
 ok, res = sdclient.get_users()
 
 if not ok:
-    print('Unable to get users: ', res)
+    print(('Unable to get users: ', res))
     sys.exit(1)
 all_users = res
 
@@ -64,16 +61,16 @@ all_users = res
 #
 for user in all_users:
     if user['username'] in memberships:
-        print('Will preserve existing membership for: ' + user['username'])
+        print(('Will preserve existing membership for: ' + user['username']))
     else:
-        print('Will add new member: ' + user['username'])
+        print(('Will add new member: ' + user['username']))
         memberships[user['username']] = SECURE_TEAM_ROLE
 
 ok, res = sdclient.save_memberships(SECURE_TEAM_NAME, memberships=memberships)
 if not ok:
-    print('Could not edit team:', res, '. Exiting.')
+    print(('Could not edit team:', res, '. Exiting.'))
     sys.exit(1)
 else:
-    print('Finished syncing memberships of "' + SECURE_TEAM_NAME + '" team')
+    print(('Finished syncing memberships of "' + SECURE_TEAM_NAME + '" team'))
 
 sys.exit(0)

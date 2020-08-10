@@ -58,3 +58,9 @@ target/
 
 # virtualenv
 venv/
+
+# Direnv
+.envrc
+
+# IntelliJ projects
+.idea/

@@ -10,19 +10,22 @@
 #
 # Progress information is written to standard error.
 #
+# ===========================================================================================
+# UNSUPPORTED: This script is unsupported as it is only an example from an old API version.
+# ===========================================================================================
 
-import getopt
+import os
+import sys
 import json
 import operator
 import re
-import sys
-
-from sdcclient import SdSecureClient
+import getopt
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+from sdcclient.secure import PolicyEventsClientOld
 
 
 def usage():
-    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' %
-           sys.argv[0]))
+    print('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0])
     print('-s|--summarize: group policy events by sanitized output and print by frequency')
     print('-l|--limit: with -s, only print the first <limit> outputs')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
@@ -64,7 +67,7 @@ else:
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = PolicyEventsClientOld(sdc_token, 'https://secure.sysdig.com')
 
 if duration is not None:
     ok, res = sdclient.get_policy_events_duration(duration)
@@ -82,10 +85,12 @@ while True:
         print(res)
         sys.exit(1)
 
-    if not res["ctx"]["cursor"] or len(res['data']) == 0:
+    if len(res['data']['policyEvents']) == 0:
         break
 
-    for event in res['data']:
+    sys.stderr.write("offset={}\n".format(res['ctx']['offset']))
+
+    for event in res['data']['policyEvents']:
         if summarize:
             sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
             all_outputs[sanitize_output] = all_outputs.get(sanitize_output, 0) + 1
@@ -95,7 +100,7 @@ while True:
     ok, res = sdclient.get_more_policy_events(res['ctx'])
 
 if summarize:
-    sorted = sorted(list(all_outputs.items()), key=operator.itemgetter(1), reverse=True)
+    sorted = sorted(all_outputs.items(), key=operator.itemgetter(1), reverse=True)
     count = 0
     for val in sorted:
         count += 1
