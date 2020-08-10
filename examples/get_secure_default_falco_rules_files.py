@@ -8,11 +8,10 @@
 # a given file that are compatible with different agent versions.
 #
 
-import os
-import sys
-import pprint
 import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import pprint
+import sys
+
 from sdcclient import SdSecureClient
 
 

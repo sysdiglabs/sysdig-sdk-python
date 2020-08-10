@@ -7,10 +7,10 @@
 # edit it and then push it back with this script.
 #
 
-import os
 import sys
+
 import yaml
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #

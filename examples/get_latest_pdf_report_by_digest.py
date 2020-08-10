@@ -3,9 +3,8 @@
 # Get a specific policy
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdScanningClient
 
 
@@ -13,6 +12,7 @@ def usage():
     print(('usage: %s <sysdig-token> <image> <output_pdf>' % sys.argv[0]))
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
+
 
 #
 # Parse arguments

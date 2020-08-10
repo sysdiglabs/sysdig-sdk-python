@@ -3,10 +3,8 @@
 # Save the first user dashboard to file and then use create_dashboard_from_file()
 # to apply the stored dasboard again with a different filter.
 #
-import os
 import sys
-import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdMonitorClient
 
 #

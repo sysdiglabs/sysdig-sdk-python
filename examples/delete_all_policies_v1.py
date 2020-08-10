@@ -3,10 +3,8 @@
 # Delete all secure policies.
 #
 
-import os
 import sys
-import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdSecureClientV1
 
 

@@ -3,9 +3,8 @@
 # This example shows the different aspects of user/team management.
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
@@ -76,7 +75,6 @@ try:
     # to configure Teams for this test to pass, we'll treat both types of
     # error as a genuine fail of the test.
     #
-
 
     print('Creating test teams...')
 
@@ -167,7 +165,8 @@ try:
     # Add new or update existing memberships
     ok, res = sdclient.save_memberships(teamA, {userA: 'ROLE_TEAM_READ', userB: 'ROLE_TEAM_EDIT'})
     if not ok:
-        print(('-- Unable to modify membership for ', userA, ' and to add ', userB, ' to ', teamA, ' due to: ', res, '. Exiting.'))
+        print(('-- Unable to modify membership for ', userA, ' and to add ', userB, ' to ', teamA, ' due to: ', res,
+               '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamA)
@@ -178,7 +177,8 @@ try:
         print(('-- Users ', userA, ', ', userB, ' and ', admin, ' should be part of team ', teamA, '!', 'Exiting.'))
         sys.exit(1)
     elif res[userA] != 'ROLE_TEAM_READ' or res[userB] != 'ROLE_TEAM_EDIT':
-        print(('-- Users ', userA, ' and ', userB, ' should have appropriate roles assigned for team ', teamA, '!', 'Exiting.'))
+        print(('-- Users ', userA, ' and ', userB, ' should have appropriate roles assigned for team ', teamA, '!',
+               'Exiting.'))
         sys.exit(1)
 
     # Remove team memberships
@@ -237,7 +237,6 @@ finally:
     except Exception as exception:
         print(('-- Team \'', teamB, '\' deletion failed: ', exception))
 
-
     print('-- Deleting test users.')
 
     try:
@@ -260,7 +259,6 @@ finally:
             print(('-- User \'', userB, '\' deletion failed: ', res))
     except Exception as exception:
         print(('-- User \'', userB, '\' deletion failed: ', exception))
-
 
 print('All done successfully!!!')
 

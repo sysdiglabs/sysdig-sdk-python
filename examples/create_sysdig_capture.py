@@ -3,10 +3,9 @@
 # Creates a sysdig capture, waits for termination and prints the download URL.
 #
 
-import os
 import sys
 import time
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #

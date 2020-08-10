@@ -6,9 +6,8 @@
 #
 
 import getopt
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -53,10 +52,7 @@ for alert in res['alerts']:
         alert_found = True
         print(("Updating \'" + alert['name'] + "\'. Enabled status before change:"))
         print((alert['enabled']))
-        if alert['enabled'] == True:
-            alert['enabled'] = False
-        else:
-            alert['enabled'] = True
+        alert['enabled'] = not alert['enabled']
         ok, res_update = sdclient.update_alert(alert)
 
         if not ok:
