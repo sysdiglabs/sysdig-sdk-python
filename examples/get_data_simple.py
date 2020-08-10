@@ -7,16 +7,15 @@
 # the last 10 minutes, with 1 minute data granularity
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -87,14 +86,16 @@ if ok:
     end = res['end']
     data = res['data']
 
-    print('Data for %s from %d to %d' % (filter if filter else 'everything', start, end))
+    print(('Data for %s from %d to %d' % (filter if filter else 'everything', start, end)))
     print('')
 
     #
     # Print table headers
     #
-    dataToPrint = ' '.join([str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[:(colLen - 3)].ljust(colLen - 3) + '...' for x in metrics])
-    print('%s %s' % ('timestamp'.ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint)
+    dataToPrint = ' '.join([str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[
+                                                                                          :(colLen - 3)].ljust(
+        colLen - 3) + '...' for x in metrics])
+    print(('%s %s' % ('timestamp'.ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint))
     print('')
 
     #
@@ -104,9 +105,11 @@ if ok:
         timestamp = d['t'] if sampling > 0 else start
         values = d['d']
 
-        dataToPrint = ' '.join([str(x).ljust(colLen) if len(str(x)) < colLen else str(x)[:(colLen - 3)].ljust(colLen - 3) + '...' for x in values])
+        dataToPrint = ' '.join(
+            [str(x).ljust(colLen) if len(str(x)) < colLen else str(x)[:(colLen - 3)].ljust(colLen - 3) + '...' for x in
+             values])
 
-        print('%s %s' % (('<t: %d>' % (timestamp)).ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint)
+        print(('%s %s' % (('<t: %d>' % (timestamp)).ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint))
 
 else:
     print(res)

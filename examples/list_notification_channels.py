@@ -3,17 +3,16 @@
 # Post a user event to Sysdig Cloud
 #
 
-import os
-import sys
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -33,7 +32,7 @@ ok, res = sdclient.list_notification_channels()
 # Return the result
 #
 if ok:
-    print(json.dumps(res['notificationChannels'], indent=4))
+    print((json.dumps(res['notificationChannels'], indent=4)))
 else:
     print(res)
     sys.exit(1)

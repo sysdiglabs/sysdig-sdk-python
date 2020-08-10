@@ -3,15 +3,14 @@
 # Change the evaluation order of policies to match the provided json.
 #
 
-import os
-import sys
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdSecureClientV1
 
 
 def usage():
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('Reads json representing new policy evaluation order from standard input')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
@@ -29,7 +28,7 @@ priorities_json = sys.stdin.read()
 try:
     priorities_obj = json.loads(priorities_json)
 except Exception as e:
-    print("priorities json is not valid json: {}".format(str(e)))
+    print(("priorities json is not valid json: {}".format(str(e))))
     sys.exit(1)
 
 #
@@ -58,7 +57,7 @@ ok, res = sdclient.set_policy_priorities(json.dumps(obj))
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

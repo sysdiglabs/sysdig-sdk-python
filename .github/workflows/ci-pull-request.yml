@@ -1,0 +1,71 @@
+name: CI - Pull Request
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install pipenv
+      run: python -m pip install pipenv
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache
+        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pipenv-
+
+    - name: Get dependencies
+      run: pipenv install -d
+
+    - name: Lint
+      continue-on-error: true
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        pipenv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        pipenv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Travis Test - Start agent
+      id: start_agent
+      env:
+        PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
+      run: |
+        sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
+        ./test/start_agent.sh
+
+    - name: Travis Test - Install dependencies
+      run: pip install .
+
+    - name: Travis Test - Monitor APIs
+      env:
+        PYTHON_SDC_TEST_MONITOR_API_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
+      run: ./test/test_monitor_apis.sh
+
+    - name: Travis Test - Secure APIs
+      env:
+        PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+      run: ./test/test_secure_apis.sh
+
+    - name: Travis Test - Stop agent
+      run: ./test/stop_agent.sh
+      if: steps.start_agent.outcome == 'success'
+
+    - name: Test in staging
+      env:
+        SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
+        SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+        SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
+        SDC_SECURE_URL: "https://secure-staging.sysdig.com"
+      run: |
+        pipenv run mamba -f documentation
