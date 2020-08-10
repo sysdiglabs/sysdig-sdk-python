@@ -82,7 +82,7 @@ while True:
         print(res)
         sys.exit(1)
 
-    if len(res['data']) == 0:
+    if not res["ctx"]["cursor"] or len(res['data']) == 0:
         break
 
     for event in res['data']:

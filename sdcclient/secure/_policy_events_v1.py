@@ -28,7 +28,7 @@ class PolicyEventsClientV1(_SdcCommon):
 
         ctx = {
             "limit": limit,
-            "cursor": res.json()["page"].get("prev", "")
+            "cursor": res.json()["page"].get("prev", None)
         }
 
         return [True, {"ctx": ctx, "data": res.json()["data"]}]
