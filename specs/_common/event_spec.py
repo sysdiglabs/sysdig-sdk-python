@@ -1,13 +1,16 @@
 import os
 
-from expects import *
-from mamba import *
+from expects import equal, expect, contain, have_key, be_empty, be_true, be_false, be_above_or_equal, \
+    have_keys
+from expects.matchers import _Or
+from mamba import before, context, description, it
 
 from sdcclient import SdcClient
 
 with description("Events") as self:
     with before.each:
         self.client = SdcClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
             token=os.getenv("SDC_MONITOR_TOKEN"),
         )
 
@@ -34,7 +37,7 @@ with description("Events") as self:
 
                 expect(ok).to(be_true)
                 expect(res).to(have_keys('events', 'total', 'matched'))
-                expect(len(res['events'])).to_not(equal(0))
+                expect(res["total"]).to(be_above_or_equal(0))
 
         with it("fails to retrieve the events with an incorrect category"):
             ok, res = self.client.get_events(category=['incorrect_category'])
@@ -76,8 +79,7 @@ with description("Events") as self:
 
             expect(ok).to(be_true)
             expect(res).to(have_key("events"))
-            expect(res["events"]).to(contain(have_key("name")))
-            expect(res["events"][0]["name"]).to(contain("Container"))
+            expect(res["events"]).to(_Or(contain(have_key("name", contain("Container"))), be_empty))
 
         with it("retrieves an empty list when the name provided is not found"):
             ok, res = self.client.get_events(name="RandomUnexistingEvent")
