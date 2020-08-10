@@ -3,16 +3,15 @@
 # Post a user event to Sysdig Cloud
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print('usage: %s <sysdig-token> email' % sys.argv[0])
+    print(('usage: %s <sysdig-token> email' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 

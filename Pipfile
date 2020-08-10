@@ -8,7 +8,9 @@ mamba = "*"
 doublex = "*"
 doublex-expects = "*"
 expects = "*"
-sdcclient = {editable = true,path = "."}
+flake8 = "*"
+pipenv-setup = "*"
+sdcclient = {editable = true, path = "."}
 
 [packages]
 requests = "*"

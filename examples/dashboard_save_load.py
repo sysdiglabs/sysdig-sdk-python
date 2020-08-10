@@ -3,17 +3,15 @@
 # Save the first user dashboard to file and then use create_dashboard_from_file()
 # to apply the stored dasboard again with a different filter.
 #
-import os
 import sys
-import json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -33,8 +31,8 @@ if not ok:
     print(res)
     sys.exit(1)
 
-if len(res[u'dashboards']) > 0:
-    sdclient.save_dashboard_to_file(res[u'dashboards'][0], 'dashboard.json')
+if len(res['dashboards']) > 0:
+    sdclient.save_dashboard_to_file(res['dashboards'][0], 'dashboard.json')
 else:
     print('the user has no dashboards. Exiting.')
     sys.exit(0)

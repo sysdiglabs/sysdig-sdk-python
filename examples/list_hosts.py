@@ -13,9 +13,8 @@
 #
 import getopt
 import json
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -23,7 +22,7 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-j|--json] [-d|--duration <secs>] [-c|--count <number>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-j|--json] [-d|--duration <secs>] [-c|--count <number>] <sysdig-token>' % sys.argv[0]))
     print('-d|--duration: List hosts seen in the last <secs> seconds (default: 3600, ie. last hour)')
     print('-c|--count: Number of hosts to print (default: 100)')
     print('-j|--json: Print output as json')
@@ -67,7 +66,7 @@ ok, res = sdclient.get_data(
     -duration,  # start time: either a unix timestamp, or a difference from "now"
     0,  # end time: either a unix timestamp, or a difference from "now" (0 means you need "last X seconds")
     duration,  # sampling time, ie. data granularity;
-               # if equal to the time window span then the result will contain a single sample
+    # if equal to the time window span then the result will contain a single sample
     paging={
         "from": 0,
         "to": count - 1
@@ -80,7 +79,7 @@ if not ok:
 
 # data fetched successfully
 if print_json:
-    print(json.dumps(res))
+    print((json.dumps(res)))
 else:
     data = res['data']
     output = []
@@ -91,4 +90,4 @@ else:
         count = metrics[1]
         output.append('%s\t%d' % (hostName, count))
 
-    print '\n'.join(output)
+    print('\n'.join(output))
