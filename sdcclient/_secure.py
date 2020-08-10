@@ -1,9 +1,9 @@
-import datetime
 import json
-import requests
+import os
 import shutil
 import time
-import os
+
+import requests
 import yaml
 
 from sdcclient._common import _SdcCommon
