@@ -51,7 +51,6 @@ with description("Events") as self:
 
                 expect(ok).to(be_true)
                 expect(res).to(have_keys('events', 'total', 'matched'))
-                expect(len(res['events'])).to_not(equal(0))
 
         with it("fails to retrieve the events with an incorrect status"):
             ok, res = self.client.get_events(status=['incorrect_status'])
