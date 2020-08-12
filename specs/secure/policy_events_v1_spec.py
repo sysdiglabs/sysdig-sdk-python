@@ -65,3 +65,16 @@ with description("Policy Events v1") as self:
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res["data"]).to(have_len(qty_before - 1))
+
+    with context("when the parameters are wrong"):
+        with it("returns an error retrieving events"):
+            wrong_duration = -1
+            ok, res = self.client.get_policy_events_duration(wrong_duration)
+            expect((ok, res)).to_not(be_successful_api_call)
+
+        with it("returns an error with an incorrect context"):
+            wrong_context = {
+                "limit": -1,
+            }
+            call = self.client.get_more_policy_events(wrong_context)
+            expect(call).to_not(be_successful_api_call)
