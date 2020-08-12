@@ -72,6 +72,13 @@ with description("Policies v2") as self:
 
         expect((ok, res)).to(be_successful_api_call)
 
+    with it("is able to delete all policies"):
+        _, policies = self.client.list_policies()
+
+        for policy in policies:
+            ok, res = self.client.delete_policy_id(policy['id'])
+            expect((ok, res)).to(be_successful_api_call)
+
     with it("is able to create the default policies"):
         ok, res = self.client.create_default_policies()
         expect((ok, res)).to(be_successful_api_call)
