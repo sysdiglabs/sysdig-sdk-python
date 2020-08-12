@@ -33,7 +33,6 @@ with description("Policy Events v1") as self:
             expect(res["data"]).to(
                 contain(have_keys("id", "timestamp", "customerId", "source", "name", "description", "cursor")))
 
-
         with it("returns the list of all events from the last 7 days that match a filter"):
             day_in_seconds = 7 * 24 * 60 * 60
 
@@ -51,7 +50,6 @@ with description("Policy Events v1") as self:
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
             expect(res["data"]).to(be_empty)
-
 
     with _context("and from the first event we retrieve the rest of events"):
         # Deactivated tests. There seems to be a bug in the API -- need confirmation
