@@ -11,6 +11,7 @@ expects = "*"
 flake8 = "*"
 pipenv-setup = "*"
 sdcclient = {editable = true, path = "."}
+coverage = "*"
 
 [packages]
 requests = "*"
