@@ -51,7 +51,7 @@ with description("Captures v1") as self:
         capture = [capture for capture in res["dumps"] if capture["name"] == f"{self.capture_name}.scap"][0]
 
         status = "undefined"
-        for _ in range(60):
+        for _ in range(300):
             ok, res = self.client.poll_sysdig_capture(capture)
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_key("dump", have_key("status")))
