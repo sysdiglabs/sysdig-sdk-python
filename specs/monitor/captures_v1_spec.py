@@ -57,7 +57,7 @@ with description("Captures v1") as self:
             expect(res).to(have_key("dump", have_key("status")))
 
             status = res["dump"]["status"]
-            if status in ("done", "uploaded", "error", "uploadingError"):
+            if status in ["done", "uploaded", "error", "uploadingError"]:
                 break
 
             time.sleep(1)
