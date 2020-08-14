@@ -57,10 +57,6 @@ jobs:
         PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
       run: ./test/test_secure_apis.sh
 
-    - name: Travis Test - Stop agent
-      run: ./test/stop_agent.sh
-      if: steps.start_agent.outcome == 'success'
-
     - name: Test in staging
       env:
         SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
@@ -69,3 +65,7 @@ jobs:
         SDC_SECURE_URL: "https://secure-staging.sysdig.com"
       run: |
         pipenv run mamba -f documentation
+
+    - name: Travis Test - Stop agent
+      run: ./test/stop_agent.sh
+      if: steps.start_agent.outcome == 'success'
