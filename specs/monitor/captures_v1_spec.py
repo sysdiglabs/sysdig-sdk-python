@@ -22,7 +22,7 @@ with description("Captures v1") as self:
     with before.all:
         self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                       token=os.getenv("SDC_MONITOR_TOKEN"))
-        self.capture_name = f"apicapture-{randomword(10)}"
+        self.capture_name = f"apicapture-sdk-{randomword(10)}"
         self.hostname = socket.gethostname()
 
     with it("is able to create a capture"):
