@@ -28,12 +28,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pipenv-
 
-    - uses: actions/cache@v2
-      name: Cache Docker images
-      with:
-        path: /var/lib/docker
-        key: ${{ runner.os }}-docker
-
     - name: Get dependencies
       run: pipenv install -d
 
