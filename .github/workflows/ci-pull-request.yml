@@ -54,11 +54,6 @@ jobs:
     - name: Travis Test - Install dependencies
       run: pip install .
 
-    - name: Travis Test - Monitor APIs
-      env:
-        PYTHON_SDC_TEST_MONITOR_API_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
-      run: ./test/test_monitor_apis.sh
-
     - name: Travis Test - Secure APIs
       env:
         PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
