@@ -77,6 +77,12 @@ with description("Policies v1") as self:
         call = self.clientV1.add_policy(policy_json())
         expect(call).to(be_successful_api_call)
 
+    with it("is able to get a policy"):
+        ok, res = self.clientV1.list_policies()
+        name = res['policies'][0]['name']
+        call = self.clientV1.get_policy(name)
+        expect(call).to(be_successful_api_call)
+
 
     with it("is able to delete all policies"):
         ok, res = self.clientV1.list_policies()
