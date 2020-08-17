@@ -6,3 +6,4 @@ from sdcclient._secure_v1 import SdSecureClientV1
 from sdcclient._scanning import SdScanningClient
 from sdcclient.ibm_auth_helper import IbmAuthHelper
 import sdcclient.secure
+import sdcclient.monitor

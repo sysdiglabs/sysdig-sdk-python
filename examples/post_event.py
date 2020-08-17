@@ -7,7 +7,7 @@ import argparse
 import json
 import sys
 
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
@@ -33,7 +33,7 @@ if args.tags:
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(args.sysdig_token)
+sdclient = SdMonitorClient(args.sysdig_token)
 
 #
 # Post the event using post_event(self, name, description=None, severity=None, event_filter=None, tags=None)
