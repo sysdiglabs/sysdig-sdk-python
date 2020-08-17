@@ -1,8 +1,7 @@
 import os
 import time
 
-from expects import expect, have_key, contain, have_keys, be_empty, equal
-from expects.matchers import _Or
+from expects import expect, have_key, contain, have_keys, be_empty, equal, be_false
 from expects.matchers.built_in import have_len
 from mamba import it, before, description
 
@@ -32,10 +31,52 @@ with description("Events v2") as self:
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_key("events", contain(have_keys(name=self.event_name))))
 
+    with it("fails to retrieve the events with an incorrect category"):
+        ok, res = self.client.get_events(category=['incorrect_category'])
+
+        expect(ok).to(be_false)
+        expect(res).to(equal("Invalid category 'incorrect_category'"))
+
     with it("is able to retrieve events that match a status"):
         ok, res = self.client.get_events(status=['triggered'])
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_key("events", contain(have_keys(name=self.event_name))))
+
+    with it("fails to retrieve the events with an incorrect status"):
+        ok, res = self.client.get_events(status=['incorrect_status'])
+
+        expect(ok).to(be_false)
+        expect(res).to(equal("Invalid status 'incorrect_status'"))
+
+    with it("retrieves the events correctly specifying direction 'before'"):
+        ok, res = self.client.get_events(direction="before")
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys('events', 'total', 'matched'))
+
+    with it("retrieves the events correctly specifying direction 'after'"):
+        ok, res = self.client.get_events(direction="after")
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys('events', 'total', 'matched'))
+
+    with it("fails to retrieve the events with an incorrect direction"):
+        ok, res = self.client.get_events(direction="incorrect_direction")
+
+        expect(ok).to(be_false)
+        expect(res).to(equal("Invalid direction 'incorrect_direction', must be either 'before' or 'after'"))
+
+    with it("is able to retrieve events by name"):
+        ok, res = self.client.get_events(name=self.event_name)
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_key("events", contain(have_key("name", equal(self.event_name)))))
+
+    with it("retrieves an empty list when the name provided is not found"):
+        ok, res = self.client.get_events(name="RandomUnexistingEvent")
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_key("events", be_empty))
 
     with it("is able to retrieve the last event only"):
         ok, res = self.client.get_events(limit=1)
