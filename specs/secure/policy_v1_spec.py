@@ -64,13 +64,18 @@ with description("Policies v1") as self:
                 ok, res = self.clientV1.delete_policy_id(policy["id"])
                 expect((ok, res)).to(be_successful_api_call)
 
-
     with it("is able to list all existing policies"):
         ok, res = self.clientV1.list_policies()
         expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to list all policies priorities"):
         ok, res = self.clientV1.get_policy_priorities()
+        expect((ok, res)).to(be_successful_api_call)
+
+    with it("is able to change the evaluation order of policies"):
+        ok, res = self.clientV1.get_policy_priorities()
+        random.shuffle(res['priorities']['policyIds'])
+        ok, res = self.clientV1.set_policy_priorities(json.dumps(res))
         expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to add a policy from JSON"):
