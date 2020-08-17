@@ -52,7 +52,7 @@ with description("Agent") as self:
                                 token=os.getenv("SDC_MONITOR_TOKEN"))
 
     with after.all:
-        time.sleep(120)  # Wait until the changes are propagated
+        time.sleep(180)  # Wait until the changes are propagated
 
     with it("is able to retrieve the agent configuration"):
         ok, res = self.client.get_agents_config()
