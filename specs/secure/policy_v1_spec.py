@@ -106,8 +106,11 @@ with description("Policies v1") as self:
         ok, res = self.clientV1.list_policies()
         ok, res = self.clientV1.delete_policy_id(res['policies'][0]['id'])
         expect((ok, res)).to(be_successful_api_call)
+
+    with it("is able to delete a single policy by name"):
         ok, res = self.clientV1.list_policies()
-        expect((ok, res)).to(be_successful_api_call)  
+        ok, res = self.clientV1.delete_policy_name(res['policies'][1]['name'])
+        expect((ok, res)).to(be_successful_api_call)        
 
     with it("is able to delete all policies at once"):
         ok, res = self.clientV1.delete_all_policies()
