@@ -51,9 +51,6 @@ with description("Agent") as self:
         self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                 token=os.getenv("SDC_MONITOR_TOKEN"))
 
-    with after.all:
-        time.sleep(180)  # Wait until the changes are propagated
-
     with it("is able to retrieve the agent configuration"):
         ok, res = self.client.get_agents_config()
 
