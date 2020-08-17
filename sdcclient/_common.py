@@ -989,7 +989,7 @@ class _SdcCommon(object):
 
     def clear_agents_config(self):
         data = {'files': []}
-        self.set_agents_config(data)
+        return self.set_agents_config(data)
 
     def get_user_api_token(self, username, teamname):
         res = self.get_team(teamname)
