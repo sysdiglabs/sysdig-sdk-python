@@ -5,8 +5,6 @@ from expects import expect
 from mamba import before, description, after, it
 
 from sdcclient import SdSecureClientV1
-
-
 from specs import be_successful_api_call
 
 _POLICY_NAME = "Test - Launch Suspicious Network Tool on Host"
@@ -52,14 +50,12 @@ def policy_json():
 }
 """ % (_POLICY_NAME, _POLICY_DESCRIPTION, json.dumps(_POLICY_ACTIONS), _POLICY_RULES_REGEX)
 
-
 with description("Policies v1") as self:
     with before.all:
         self.clientV1 = SdSecureClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                      token=os.getenv("SDC_SECURE_TOKEN"))
     with after.each:
         self.cleanup_policies()
-
 
     def cleanup_policies(self):
         _, res = self.clientV1.list_policies()
@@ -73,6 +69,9 @@ with description("Policies v1") as self:
         ok, res = self.clientV1.list_policies()
         expect((ok, res)).to(be_successful_api_call)
 
+    with it("is able to list all policies priorities"):
+        ok, res = self.clientV1.get_policy_priorities()
+        expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to add a policy from JSON"):
         call = self.clientV1.add_policy(policy_json())
