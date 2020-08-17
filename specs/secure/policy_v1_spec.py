@@ -102,7 +102,10 @@ with description("Policies v1") as self:
         call = self.clientV1.update_policy(json.dumps(policy_json))
         expect(call).to(be_successful_api_call)
 
-    with it("is able to delete all policies"):
+    with it("is able to delete a single policy by id"):
+        ok, res = self.clientV1.list_policies()
+        ok, res = self.clientV1.delete_policy_id(res['policies'][0]['id'])
+        expect((ok, res)).to(be_successful_api_call)
         ok, res = self.clientV1.list_policies()
         expect((ok, res)).to(be_successful_api_call)  
 
