@@ -1,9 +1,10 @@
 import os
+import time
 
 from expects import expect, have_key, have_keys
 from expects.matchers import _Or
 from expects.matchers.built_in import be_empty, contain, be_above_or_equal
-from mamba import before, it
+from mamba import before, it, description, after
 
 from sdcclient import SdcClient
 from specs import be_successful_api_call
@@ -49,6 +50,9 @@ with description("Agent") as self:
     with before.all:
         self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                 token=os.getenv("SDC_MONITOR_TOKEN"))
+
+    with after.all:
+        time.sleep(120)  # Wait until the changes are propagated
 
     with it("is able to retrieve the agent configuration"):
         ok, res = self.client.get_agents_config()
