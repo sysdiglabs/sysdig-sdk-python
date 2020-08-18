@@ -3,16 +3,14 @@
 # List the current set of secure policies.
 #
 
-import os
-import sys
 import json
-import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
     sys.exit(1)
 
@@ -40,7 +38,7 @@ if not ok:
 # Return the result
 #
 if ok:
-    print(json.dumps(res, indent=2))
+    print((json.dumps(res, indent=2)))
 else:
     print(res)
     sys.exit(1)

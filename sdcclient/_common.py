@@ -20,7 +20,7 @@ class _SdcCommon(object):
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = self.__get_headers(custom_headers)
-        self.url = os.environ.get("SDC_URL", sdc_url)
+        self.url = os.environ.get("SDC_URL", sdc_url).rstrip('/')
         self.ssl_verify = os.environ.get("SDC_SSL_VERIFY", None)
         if self.ssl_verify == None:
             self.ssl_verify = ssl_verify
@@ -225,7 +225,8 @@ class _SdcCommon(object):
             }
         }
 
-        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_notification_channel(self, channel):
@@ -253,14 +254,16 @@ class _SdcCommon(object):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
 
-        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
+                           data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_notification_channel(self, channel):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
 
-        res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
+                              verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
         return True, None
@@ -385,18 +388,21 @@ class _SdcCommon(object):
         edata = {
             'event': {k: v for k, v in options.items() if v is not None}
         }
-        res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_events(self, name=None, from_ts=None, to_ts=None, tags=None):
+    def get_events(self, name=None, category=None, direction='before', status=None, limit=100, pivot=None):
         '''**Description**
             Returns the list of Sysdig Monitor events.
 
         **Arguments**
-            - **name**: filter events by name.
-            - **from_ts**: filter events by start time. Timestamp format is in UTC (seconds).
-            - **to_ts**: filter events by end time. Timestamp format is in UTC (seconds).
-            - **tags**: filter events by tags. Can be, for example ``tag1 = 'value1'``.
+            - **name**: filter events by name. Default: None.
+            - **category**: filter events by category. Default: ['alert', 'custom', 'docker', 'containerd', 'kubernetes'].
+            - **direction**: orders the list of events. Valid values: "before", "after". Default: "before".
+            - **status**: status of the event as list. Default: ['triggered', 'resolved', 'acknowledged', 'unacknowledged']
+            - **limit**: max number of events to retrieve. Default: 100.
+            - **pivot**: event id to use as pivot. Default: None.
 
         **Success Return Value**
             A dictionary containing the list of events.
@@ -404,14 +410,39 @@ class _SdcCommon(object):
         **Example**
             `examples/list_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_events.py>`_
         '''
+        valid_categories = ['alert', 'custom', 'docker', 'containerd', 'kubernetes']
+
+        if category is None:
+            category = valid_categories
+
+        for c in category:
+            if c not in valid_categories:
+                return False, "Invalid category '{}'".format(c)
+
+        valid_status = ["triggered", "resolved", "acknowledged", "unacknowledged"]
+        if status is None:
+            status = valid_status
+
+        for s in status:
+            if s not in valid_status:
+                return False, "Invalid status '{}'".format(s)
+
+        if direction not in ["before", "after"]:
+            return False, "Invalid direction '{}', must be either 'before' or 'after'".format(direction)
+
         options = {
-            'name': name,
-            'from': from_ts,
-            'to': to_ts,
-            'tags': tags
+            'alertStatus': status,
+            'category': ','.join(category),
+            'dir': direction,
+            'feed': 'true',
+            'include_pivot': 'true',
+            'include_total': 'true',
+            'limit': str(limit),
+            'pivot': pivot,
+            'filter': name,
         }
         params = {k: v for k, v in options.items() if v is not None}
-        res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
+        res = requests.get(self.url + '/api/v2/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_event(self, event):
@@ -480,7 +511,8 @@ class _SdcCommon(object):
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
 
-        res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
@@ -501,8 +533,8 @@ class _SdcCommon(object):
         url = '{url}/api/sysdig?source={source}{frm}{to}{scopeFilter}'.format(
             url=self.url,
             source=self.product,
-            frm="&from=%d" % (from_sec * 10**6) if from_sec else "",
-            to="&to=%d" % (to_sec * 10**6) if to_sec else "",
+            frm="&from=%d" % (from_sec * 10 ** 6) if from_sec else "",
+            to="&to=%d" % (to_sec * 10 ** 6) if to_sec else "",
             scopeFilter="&scopeFilter=%s" % scope_filter if scope_filter else "")
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
@@ -624,7 +656,8 @@ class _SdcCommon(object):
                    'systemRole': system_role}
         user_json = {k: v for k, v in options.items() if v is not None}
 
-        res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_user(self, user_email):
@@ -689,7 +722,8 @@ class _SdcCommon(object):
         else:
             reqbody['lastName'] = lastName
 
-        res = requests.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody),
+                           verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, 'Successfully edited user']
@@ -810,7 +844,8 @@ class _SdcCommon(object):
         if filter != '':
             reqbody['filter'] = filter
 
-        res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
+        res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
@@ -881,7 +916,8 @@ class _SdcCommon(object):
         elif 'filter' in list(t.keys()):
             reqbody['filter'] = t['filter']
 
-        res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody),
+                           verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_team(self, name):
@@ -989,6 +1025,59 @@ class _SdcCommon(object):
         else:
             return [True, None]
 
+    def list_access_keys(self):
+        '''
+        **Description**
+            List all the access keys enabled and disabled for this instance of Sysdig Monitor/Secure
+
+        **Reslut**
+            A list of access keys objects
+
+        **Example**
+            `examples/list_access_keys.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_access_keys.py>`_
+        '''
+        res = requests.get(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def create_access_key(self):
+        '''
+        **Description**
+            Create a new access key for Sysdig Monitor/Secure
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def disable_access_key(self, access_key):
+        '''
+        **Description**
+            Disable an existing access key
+
+        **Arguments**
+            - **access_key**: the access key to be disabled
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/disable/", headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def enable_access_key(self, access_key):
+        '''
+        **Description**
+            Enable an existing access key
+
+        **Arguments**
+            - **access_key**: the access key to be enabled
+
+        **Reslut**
+            The access keys object
+        '''
+        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/enable/", headers=self.hdrs, verify=self.ssl_verify)
+        return self._request_result(res)
+
     def get_agents_config(self):
         res = requests.get(self.url + '/api/agents/config', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -997,7 +1086,8 @@ class _SdcCommon(object):
         return [True, data]
 
     def set_agents_config(self, config):
-        res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config), verify=self.ssl_verify)
+        res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config),
+                           verify=self.ssl_verify)
         return self._request_result(res)
 
     def clear_agents_config(self):
@@ -1011,7 +1101,8 @@ class _SdcCommon(object):
 
         t = res[1]
 
-        res = requests.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = requests.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs,
+                           verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()

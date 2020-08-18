@@ -4,16 +4,15 @@
 # by providing a few clarifying examples
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print('usage: %s <sysdig-token>' % sys.argv[0])
+    print(('usage: %s <sysdig-token>' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -39,8 +38,8 @@ cpu_metric = [
 req = [{"id": "host.hostName"}]
 req.extend(cpu_metric)
 ok, res = sdclient.get_data(req,  # metrics list
-                            -600,    # start_ts = 600 seconds ago
-                            0)       # end_ts = now
+                            -600,  # start_ts = 600 seconds ago
+                            0)  # end_ts = now
 
 if ok:
     data = res
@@ -57,9 +56,9 @@ print(data)
 #
 req = [{"id": "container.name"}]
 req.extend(cpu_metric)
-ok, res = sdclient.get_data(req,   # metrics list
+ok, res = sdclient.get_data(req,  # metrics list
                             -600,  # start_ts = 600 seconds ago
-                            0)     # end_ts = now
+                            0)  # end_ts = now
 
 if ok:
     data = res
@@ -74,9 +73,9 @@ print(data)
 # Third example: CPU average across all hosts
 # datasource_type is set to host since no grouping keys or filters are specified (default would be host anyway)
 #
-ok, res = sdclient.get_data(cpu_metric,              # metrics list
-                            -600,                    # start_ts = 600 seconds ago
-                            0,                       # end_ts = now
+ok, res = sdclient.get_data(cpu_metric,  # metrics list
+                            -600,  # start_ts = 600 seconds ago
+                            0,  # end_ts = now
                             datasource_type='host')  # ask data from hosts
 
 if ok:
@@ -92,9 +91,9 @@ print(data)
 # Third example: CPU average across all containers
 # datasource_type is set to container since no grouping keys or filters are specified (ovverrides the host default)
 #
-ok, res = sdclient.get_data(cpu_metric,                   # metrics list
-                            -600,                         # start_ts = 600 seconds ago
-                            0,                            # end_ts = now
+ok, res = sdclient.get_data(cpu_metric,  # metrics list
+                            -600,  # start_ts = 600 seconds ago
+                            0,  # end_ts = now
                             datasource_type='container')  # ask data from containers
 
 if ok:

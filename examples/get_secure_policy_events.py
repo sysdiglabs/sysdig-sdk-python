@@ -11,18 +11,18 @@
 # Progress information is written to standard error.
 #
 
-import os
-import sys
+import getopt
 import json
 import operator
 import re
-import getopt
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+import sys
+
 from sdcclient import SdSecureClient
 
 
 def usage():
-    print('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' % sys.argv[0])
+    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' %
+           sys.argv[0]))
     print('-s|--summarize: group policy events by sanitized output and print by frequency')
     print('-l|--limit: with -s, only print the first <limit> outputs')
     print('You can find your token at https://secure.sysdig.com/#/settings/user')
@@ -82,12 +82,10 @@ while True:
         print(res)
         sys.exit(1)
 
-    if len(res['data']['policyEvents']) == 0:
+    if not res["ctx"]["cursor"] or len(res['data']) == 0:
         break
 
-    sys.stderr.write("offset={}\n".format(res['ctx']['offset']))
-
-    for event in res['data']['policyEvents']:
+    for event in res['data']:
         if summarize:
             sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
             all_outputs[sanitize_output] = all_outputs.get(sanitize_output, 0) + 1
@@ -97,7 +95,7 @@ while True:
     ok, res = sdclient.get_more_policy_events(res['ctx'])
 
 if summarize:
-    sorted = sorted(all_outputs.items(), key=operator.itemgetter(1), reverse=True)
+    sorted = sorted(list(all_outputs.items()), key=operator.itemgetter(1), reverse=True)
     count = 0
     for val in sorted:
         count += 1

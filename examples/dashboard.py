@@ -5,9 +5,8 @@
 #
 
 import getopt
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdMonitorClient
 
 
@@ -15,7 +14,7 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 def usage():
-    print('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0])
+    print(('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0]))
     print('-d|--dashboard: Set name of dashboard to create')
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
@@ -41,7 +40,6 @@ sdc_token = args[0]
 #
 sdclient = SdMonitorClient(sdc_token)
 
-
 #
 # Create an empty dashboard
 #
@@ -50,12 +48,11 @@ ok, res = sdclient.create_dashboard(dashboard_name)
 
 # Check the result
 if ok:
-    print('Dashboard %d created successfully' % res['dashboard']['id'])
+    print(('Dashboard %d created successfully' % res['dashboard']['id']))
     dashboard_configuration = res['dashboard']
 else:
     print(res)
     sys.exit(1)
-
 
 #
 # Find a dashboard by name
@@ -69,7 +66,6 @@ if ok and len(res) > 0:
 else:
     print(res)
     sys.exit(1)
-
 
 #
 # Add a time series
@@ -91,7 +87,6 @@ else:
     print(res)
     sys.exit(1)
 
-
 #
 # Add a top bar chart
 #
@@ -104,7 +99,8 @@ metrics = [
 sort_direction = 'desc'
 limit = 10
 layout = {'col': 1, 'row': 7, 'size_x': 12, 'size_y': 6}
-ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics, sort_direction=sort_direction, limit=limit, layout=layout)
+ok, res = sdclient.add_dashboard_panel(dashboard_configuration, panel_name, panel_type, metrics,
+                                       sort_direction=sort_direction, limit=limit, layout=layout)
 
 # Check the result
 if ok:
@@ -113,7 +109,6 @@ if ok:
 else:
     print(res)
     sys.exit(1)
-
 
 #
 # Add a number panel
@@ -134,7 +129,6 @@ else:
     print(res)
     sys.exit(1)
 
-
 #
 # Remove a panel
 #
@@ -147,7 +141,6 @@ if ok:
 else:
     print(res)
     sys.exit(1)
-
 
 #
 # Delete the dashboard

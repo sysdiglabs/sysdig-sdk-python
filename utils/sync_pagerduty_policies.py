@@ -7,6 +7,7 @@ import copy
 import json
 import os
 import sys
+from functools import reduce
 
 import requests
 

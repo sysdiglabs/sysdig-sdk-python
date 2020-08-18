@@ -3,10 +3,8 @@
 # This example shows some examples of scope you can use for dashboards.
 #
 
-import getopt
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 
@@ -18,7 +16,7 @@ from sdcclient import SdcClient
 #
 def evaluate(scope, expected):
     parsed_scope = SdcClient.convert_scope_string_to_expression(scope)
-    print '{} is valid: {}'.format(scope, parsed_scope[0] == True)
+    print('{} is valid: {}'.format(scope, parsed_scope[0] is True))
 
     if parsed_scope[0] != expected:
         print('Unexpected parsing result!')
@@ -53,17 +51,17 @@ evaluate('', True)
 evaluate(None, True)
 
 # invalid scopes will cause errors
-evaluate('proc.name == "cassandra"', False) # invalid operator
+evaluate('proc.name == "cassandra"', False)  # invalid operator
 
 # currently, one space is required around operands and operators -- improvements will come soon
 evaluate('proc.name="cassandra"', False)
 
 #
-# The current grammer is unable to validate all errors -- in these cases, the API will fail!
+# The current grammar is unable to validate all errors -- in these cases, the API will fail!
 # Improvements will come soon!
 #
 # Here some errors that will not be detected by the Python library, but the API will
 #
-evaluate('proc.name = "cassandra" or proc.name = "mysql"', True) # not AND'd expressions are supported
-evaluate('proc.name in ("cassandra\', \'mysql")', True) # mismatching quotes
-evaluate('proc.name in ("cassandra", "mysql"', True) # missing parenthesis
+evaluate('proc.name = "cassandra" or proc.name = "mysql"', True)  # not AND'd expressions are supported
+evaluate('proc.name in ("cassandra\', \'mysql")', True)  # mismatching quotes
+evaluate('proc.name in ("cassandra", "mysql"', True)  # missing parenthesis

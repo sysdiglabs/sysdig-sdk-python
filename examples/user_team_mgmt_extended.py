@@ -3,16 +3,15 @@
 # This example shows the different aspects of user/team management.
 #
 
-import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
+
 from sdcclient import SdcClient
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 4:
-    print('usage: %s <sysdig-token> team-prefix user-name' % sys.argv[0])
+    print(('usage: %s <sysdig-token> team-prefix user-name' % sys.argv[0]))
     print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
@@ -47,24 +46,24 @@ print('Creating test users...')
 try:
     ok, res = sdclient.create_user_invite(admin, first_name='TestUser', last_name='Admin', system_role='ROLE_CUSTOMER')
     if not ok:
-        print('-- User creation failed:', res, '. Exiting.')
+        print(('-- User creation failed:', res, '. Exiting.'))
         sys.exit(1)
     else:
-        print('-- User \'', admin, '\' created successfully.')
+        print(('-- User \'', admin, '\' created successfully.'))
 
     ok, res = sdclient.create_user_invite(userA, first_name='TestUser', last_name='Alpha')
     if not ok:
-        print('-- User creation failed:', res, '. Exiting.')
+        print(('-- User creation failed:', res, '. Exiting.'))
         sys.exit(1)
     else:
-        print('-- User \'', userA, '\' created successfully.')
+        print(('-- User \'', userA, '\' created successfully.'))
 
     ok, res = sdclient.create_user_invite(userB, first_name='TestUser', last_name='Beta')
     if not ok:
-        print('-- User creation failed:', res, '. Exiting.')
+        print(('-- User creation failed:', res, '. Exiting.'))
         sys.exit(1)
     else:
-        print('-- User \'', userB, '\' created successfully.')
+        print(('-- User \'', userB, '\' created successfully.'))
 
     #
     # Create test teams
@@ -77,22 +76,21 @@ try:
     # error as a genuine fail of the test.
     #
 
-
     print('Creating test teams...')
 
     ok, res = sdclient.create_team(teamA)
     if not ok:
-        print('-- Team creation failed:', res, '. Exiting.')
+        print(('-- Team creation failed:', res, '. Exiting.'))
         sys.exit(1)
     else:
-        print('-- Team \'', teamA, '\' created successfully.')
+        print(('-- Team \'', teamA, '\' created successfully.'))
 
     ok, res = sdclient.create_team(teamB)
     if not ok:
-        print('-- Team creation failed:', res, '. Exiting.')
+        print(('-- Team creation failed:', res, '. Exiting.'))
         sys.exit(1)
     else:
-        print('-- Team \'', teamB, '\' created successfully.')
+        print(('-- Team \'', teamB, '\' created successfully.'))
 
     #
     # Membership manipulation
@@ -104,24 +102,24 @@ try:
 
     ok, res = sdclient.list_memberships(teamA)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif admin not in res.keys():
-        print('-- Admin should  be part of all teams!', 'Exiting.')
+    elif admin not in list(res.keys()):
+        print(('-- Admin should  be part of all teams!', 'Exiting.'))
         sys.exit(1)
-    elif userA in res.keys() or userB in res.keys():
-        print('-- Users ', userA, ' and ', userB, ' should not be part of team ', teamA, '!', 'Exiting.')
+    elif userA in list(res.keys()) or userB in list(res.keys()):
+        print(('-- Users ', userA, ' and ', userB, ' should not be part of team ', teamA, '!', 'Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamB)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif admin not in res.keys():
-        print('-- Admin should  be part of all teams!', 'Exiting.')
+    elif admin not in list(res.keys()):
+        print(('-- Admin should  be part of all teams!', 'Exiting.'))
         sys.exit(1)
-    elif userA in res.keys() or userB in res.keys():
-        print('-- Users ', userA, ' and ', userB, ' should not be part of team ', teamB, '!', 'Exiting.')
+    elif userA in list(res.keys()) or userB in list(res.keys()):
+        print(('-- Users ', userA, ' and ', userB, ' should not be part of team ', teamB, '!', 'Exiting.'))
         sys.exit(1)
 
     #
@@ -134,30 +132,30 @@ try:
 
     ok, res = sdclient.save_memberships(teamA, {userA: 'ROLE_TEAM_EDIT'})
     if not ok:
-        print('-- Unable to add ', userA, ' to ', teamA, ' due to: ', res, '. Exiting.')
+        print(('-- Unable to add ', userA, ' to ', teamA, ' due to: ', res, '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamA)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif userA not in res.keys() or admin not in res.keys():
-        print('-- Users ', userA, ' and ', admin, ' should be part of team ', teamA, '!', 'Exiting.')
+    elif userA not in list(res.keys()) or admin not in list(res.keys()):
+        print(('-- Users ', userA, ' and ', admin, ' should be part of team ', teamA, '!', 'Exiting.'))
         sys.exit(1)
 
     # Manipulate with teamB
 
     ok, res = sdclient.save_memberships(teamB, {userA: 'ROLE_TEAM_MANAGER', userB: 'ROLE_TEAM_READ'})
     if not ok:
-        print('-- Unable to add ', userA, ' and ', userB, ' to ', teamB, ' due to: ', res, '. Exiting.')
+        print(('-- Unable to add ', userA, ' and ', userB, ' to ', teamB, ' due to: ', res, '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamB)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif userA not in res.keys() or userB not in res.keys() or admin not in res.keys():
-        print('-- Users ', userA, ', ', userB, ' and ', admin, ' should be part of team ', teamB, '!', 'Exiting.')
+    elif userA not in list(res.keys()) or userB not in list(res.keys()) or admin not in list(res.keys()):
+        print(('-- Users ', userA, ', ', userB, ' and ', admin, ' should be part of team ', teamB, '!', 'Exiting.'))
         sys.exit(1)
 
     # Update team memberships
@@ -167,18 +165,20 @@ try:
     # Add new or update existing memberships
     ok, res = sdclient.save_memberships(teamA, {userA: 'ROLE_TEAM_READ', userB: 'ROLE_TEAM_EDIT'})
     if not ok:
-        print('-- Unable to modify membership for ', userA, ' and to add ', userB, ' to ', teamA, ' due to: ', res, '. Exiting.')
+        print(('-- Unable to modify membership for ', userA, ' and to add ', userB, ' to ', teamA, ' due to: ', res,
+               '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamA)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif userA not in res.keys() or userB not in res.keys() or admin not in res.keys():
-        print('-- Users ', userA, ', ', userB, ' and ', admin, ' should be part of team ', teamA, '!', 'Exiting.')
+    elif userA not in list(res.keys()) or userB not in list(res.keys()) or admin not in list(res.keys()):
+        print(('-- Users ', userA, ', ', userB, ' and ', admin, ' should be part of team ', teamA, '!', 'Exiting.'))
         sys.exit(1)
     elif res[userA] != 'ROLE_TEAM_READ' or res[userB] != 'ROLE_TEAM_EDIT':
-        print('-- Users ', userA, ' and ', userB, ' should have appropriate roles assigned for team ', teamA, '!', 'Exiting.')
+        print(('-- Users ', userA, ' and ', userB, ' should have appropriate roles assigned for team ', teamA, '!',
+               'Exiting.'))
         sys.exit(1)
 
     # Remove team memberships
@@ -187,32 +187,32 @@ try:
 
     ok, res = sdclient.remove_memberships(teamA, [userB])
     if not ok:
-        print('-- Unable to remove membership for ', userB, ' from team', teamA, ' due to: ', res, '. Exiting.')
+        print(('-- Unable to remove membership for ', userB, ' from team', teamA, ' due to: ', res, '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamA)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif userB in res.keys():
-        print('-- User ', userB, ' should not be part of team ', teamA, '!', 'Exiting.')
+    elif userB in list(res.keys()):
+        print(('-- User ', userB, ' should not be part of team ', teamA, '!', 'Exiting.'))
         sys.exit(1)
 
     # Admin user cannot be removed from any team
     ok, res = sdclient.remove_memberships(teamB, [admin, userA])
     if not ok:
-        print('-- Unable to remove membership for ', userB, ' from team', teamA, ' due to: ', res, '. Exiting.')
+        print(('-- Unable to remove membership for ', userB, ' from team', teamA, ' due to: ', res, '. Exiting.'))
         sys.exit(1)
 
     ok, res = sdclient.list_memberships(teamB)
     if not ok:
-        print('-- Unable to fetch team memberships:', res, '. Exiting.')
+        print(('-- Unable to fetch team memberships:', res, '. Exiting.'))
         sys.exit(1)
-    elif userA in res.keys():
-        print('-- User ', userA, ' should not be part of team ', teamB, '!', 'Exiting.')
+    elif userA in list(res.keys()):
+        print(('-- User ', userA, ' should not be part of team ', teamB, '!', 'Exiting.'))
         sys.exit(1)
-    elif admin not in res.keys():
-        print('-- User ', admin, ' should be always part of all teams!', 'Exiting.')
+    elif admin not in list(res.keys()):
+        print(('-- User ', admin, ' should be always part of all teams!', 'Exiting.'))
         sys.exit(1)
 
 finally:
@@ -226,41 +226,39 @@ finally:
     try:
         ok, res = sdclient.delete_team(teamA)
         if not ok:
-            print ('-- Team \'', teamA, '\' deletion failed: ', res)
+            print(('-- Team \'', teamA, '\' deletion failed: ', res))
     except Exception as exception:
-        print ('-- Team \'', teamA, '\' deletion failed: ', exception)
+        print(('-- Team \'', teamA, '\' deletion failed: ', exception))
 
     try:
         ok, res = sdclient.delete_team(teamB)
         if not ok:
-            print('-- Team \'', teamB, '\' deletion failed: ', res)
+            print(('-- Team \'', teamB, '\' deletion failed: ', res))
     except Exception as exception:
-        print('-- Team \'', teamB, '\' deletion failed: ', exception)
-
+        print(('-- Team \'', teamB, '\' deletion failed: ', exception))
 
     print('-- Deleting test users.')
 
     try:
         ok, res = sdclient.delete_user(admin)
         if not ok:
-            print('-- User \'', admin, '\' deletion failed: ', res)
+            print(('-- User \'', admin, '\' deletion failed: ', res))
     except Exception as exception:
-        print('-- User \'', admin, '\' deletion failed: ', exception)
+        print(('-- User \'', admin, '\' deletion failed: ', exception))
 
     try:
         ok, res = sdclient.delete_user(userA)
         if not ok:
-            print('-- User \'', userA, '\' deletion failed: ', res)
+            print(('-- User \'', userA, '\' deletion failed: ', res))
     except Exception as exception:
-        print('-- User \'', userA, '\' deletion failed: ', exception)
+        print(('-- User \'', userA, '\' deletion failed: ', exception))
 
     try:
         ok, res = sdclient.delete_user(userB)
         if not ok:
-            print('-- User \'', userB, '\' deletion failed: ', res)
+            print(('-- User \'', userB, '\' deletion failed: ', res))
     except Exception as exception:
-        print('-- User \'', userB, '\' deletion failed: ', exception)
-
+        print(('-- User \'', userB, '\' deletion failed: ', exception))
 
 print('All done successfully!!!')
 
