@@ -361,7 +361,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
                     with open(cpath, 'r') as content_file:
                         try:
                             required_engine_version = int(os.path.basename(vpath))
-                            if vpath < 0:
+                            if int(os.path.basename(vpath)) < 0:
                                 return [False, "Variant directory {} must be a positive number".format(vpath)]
                             fobj["variants"].append({
                                 "requiredEngineVersion": required_engine_version,
