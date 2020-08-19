@@ -6,12 +6,14 @@
 import getopt
 import sys
 
-from sdcclient import SdcClient
-
+from sdcclient import SdcClient, SdMonitorClient
 
 #
 # Parse arguments
 #
+from sdcclient.monitor import EventsClientV2
+
+
 def usage():
     print(('usage: %s [-e|--event <name>] <sysdig-token>' % sys.argv[0]))
     print('-e|--event: Name of event to delete')
@@ -37,7 +39,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Get the events that match a name

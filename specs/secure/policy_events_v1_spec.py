@@ -33,7 +33,6 @@ with description("Policy Events v1") as self:
             expect(res["data"]).to(
                 contain(have_keys("id", "timestamp", "customerId", "source", "name", "description", "cursor")))
 
-
         with it("returns the list of all events from the last 7 days that match a filter"):
             day_in_seconds = 7 * 24 * 60 * 60
 
@@ -52,7 +51,6 @@ with description("Policy Events v1") as self:
             expect(res).to(have_keys("ctx", "data"))
             expect(res["data"]).to(be_empty)
 
-
     with _context("and from the first event we retrieve the rest of events"):
         # Deactivated tests. There seems to be a bug in the API -- need confirmation
         with it("returns the list of all events except the first"):
@@ -65,3 +63,16 @@ with description("Policy Events v1") as self:
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res["data"]).to(have_len(qty_before - 1))
+
+    with context("when the parameters are wrong"):
+        with it("returns an error retrieving events"):
+            wrong_duration = -1
+            ok, res = self.client.get_policy_events_duration(wrong_duration)
+            expect((ok, res)).to_not(be_successful_api_call)
+
+        with it("returns an error with an incorrect context"):
+            wrong_context = {
+                "limit": -1,
+            }
+            call = self.client.get_more_policy_events(wrong_context)
+            expect(call).to_not(be_successful_api_call)
