@@ -4,6 +4,7 @@ import requests
 import re
 
 from sdcclient._common import _SdcCommon
+from sdcclient.monitor import EventsClientV2
 
 try:
     basestring
@@ -11,7 +12,7 @@ except NameError:
     basestring = str
 
 
-class SdMonitorClient(_SdcCommon):
+class SdMonitorClient(EventsClientV2, _SdcCommon):
 
     def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)

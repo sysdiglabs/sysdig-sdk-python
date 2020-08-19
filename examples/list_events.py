@@ -5,7 +5,7 @@
 
 import sys
 
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 
 def print_events(data):
@@ -29,7 +29,7 @@ sdc_token = sys.argv[1]
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Get the entire list of events

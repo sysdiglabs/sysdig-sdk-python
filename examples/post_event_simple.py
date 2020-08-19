@@ -5,7 +5,7 @@
 
 import sys
 
-from sdcclient import SdcClient
+from sdcclient import SdMonitorClient
 
 #
 # Parse arguments
@@ -29,7 +29,7 @@ if len(sys.argv) < 4:
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token)
+sdclient = SdMonitorClient(sdc_token)
 
 #
 # Post the event
