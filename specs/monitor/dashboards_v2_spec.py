@@ -14,7 +14,7 @@ _DASHBOARD_NAME = "test_dashboard_ci"
 with description("Dashboards v2") as self:
     with before.all:
         self.client = DashboardsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                      token=os.getenv("SDC_MONITOR_TOKEN"))
+                                         token=os.getenv("SDC_MONITOR_TOKEN"))
 
     with before.each:
         self.cleanup_test_dashboards()
