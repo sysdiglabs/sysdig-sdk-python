@@ -3,18 +3,18 @@ import os
 import tempfile
 
 from expects import expect, have_key, have_keys, contain, equal, start_with
-from expects.matchers.built_in import be_false, be_empty
+from expects.matchers.built_in import be_false, have_len, be_empty
 from mamba import before, it, context, after, description
 
-from sdcclient.monitor import DashboardsClientV2
+from sdcclient import SdMonitorClient
 from specs import be_successful_api_call
 
 _DASHBOARD_NAME = "test_dashboard_ci"
 
-with description("Dashboards v2") as self:
+with description("Dashboards v3") as self:
     with before.all:
-        self.client = DashboardsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                         token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
+                                      token=os.getenv("SDC_MONITOR_TOKEN"))
 
     with before.each:
         self.cleanup_test_dashboards()
@@ -50,7 +50,7 @@ with description("Dashboards v2") as self:
         self.create_test_dashboard()
         with tempfile.NamedTemporaryFile(mode="w+") as f:
             # Write the info to the temp file
-            json.dump({"dashboard": self.test_dashboard, "version": "v2"}, f)
+            json.dump({"dashboard": self.test_dashboard, "version": "v3"}, f)
             f.flush()
             f.seek(0)
 
@@ -59,10 +59,11 @@ with description("Dashboards v2") as self:
             expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to create a dashboard from a view"):
-        _, res_view_list = self.client.get_views_list()
+        ok, res_view_list = self.client.get_views_list()
+        expect((ok, res_view_list)).to(be_successful_api_call)
 
         call = self.client.create_dashboard_from_view(newdashname=f"{_DASHBOARD_NAME}_2",
-                                                      viewname=res_view_list["defaultDashboards"][0]["name"],
+                                                      viewname=res_view_list["dashboardTemplates"][0]["name"],
                                                       filter=None)
         expect(call).to(be_successful_api_call)
 
@@ -111,7 +112,7 @@ with description("Dashboards v2") as self:
                 f.seek(0)
 
                 data = json.load(f)
-                expect(data).to(have_keys(version=equal("v2"), dashboard=equal(self.test_dashboard)))
+                expect(data).to(have_keys(version=equal("v3"), dashboard=equal(self.test_dashboard)))
 
         with it("is able to create a dashboard from template"):
             call = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
@@ -119,13 +120,33 @@ with description("Dashboards v2") as self:
                                                               scope='agent.id = "foo"')
             expect(call).to(be_successful_api_call)
 
+        with it("is able to make it public"):
+            modified_dashboard = self.test_dashboard
+            modified_dashboard["public"] = True
+
+            ok, res = self.client.update_dashboard(modified_dashboard)
+
+            expect((ok, res)).to(be_successful_api_call)
+            expect(res["dashboard"]).to(have_key("public", True))
+
+        with it("is able to favorite it and unfavorite it"):
+            ok, res = self.client.favorite_dashboard(self.test_dashboard["id"], True)
+
+            expect((ok, res)).to(be_successful_api_call)
+            expect(res["dashboard"]).to(have_key("favorite", True))
+
+            ok, res = self.client.favorite_dashboard(self.test_dashboard["id"], False)
+
+            expect((ok, res)).to(be_successful_api_call)
+            expect(res["dashboard"]).to(have_key("favorite", False))
+
         with context("when it's created with an incorrect scope"):
             with it("fails if the scope is not a string"):
                 ok, res = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
                                                                      template=self.test_dashboard,
                                                                      scope={})
                 expect(ok).to(be_false)
-                expect(res).to(equal("Invalid scope format: Expected a string"))
+                expect(res).to(equal("Invalid scope format: Expected a list, a string or None"))
 
             with it("fails if the scope has incorrect format"):
                 ok, res = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
@@ -165,3 +186,79 @@ with description("Dashboards v2") as self:
             expect(res).to(contain(
                 have_key("dashboard", have_keys(id=self.test_dashboard["id"], name=self.test_dashboard["name"])))
             )
+
+        with context("when we are sharing a dashboard with all teams"):
+            with it("shares it with view only permissions"):
+                ok, res = self.client.share_dashboard_with_all_teams(self.test_dashboard, "r")
+
+                expect((ok, res)).to(be_successful_api_call)
+                expect(res["dashboard"]).to(have_key("shared", True))
+                expect(res["dashboard"]).to(have_key("sharingSettings"))
+                expect(res["dashboard"]["sharingSettings"]).to(have_len(1))
+                expect(res["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_READ"))
+
+            with it("shares it with read write permissions"):
+                ok, res = self.client.share_dashboard_with_all_teams(self.test_dashboard, "w")
+
+                expect((ok, res)).to(be_successful_api_call)
+                expect(res["dashboard"]).to(have_key("shared", True))
+                expect(res["dashboard"]).to(have_key("sharingSettings"))
+                expect(res["dashboard"]["sharingSettings"]).to(have_len(1))
+                expect(res["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_EDIT"))
+
+        with context("when there is a shared dashboard"):
+            with it("unshares it"):
+                _, dboard = self.client.share_dashboard_with_all_teams(self.test_dashboard, "w")
+
+                ok, res = self.client.unshare_dashboard(dboard["dashboard"])
+
+                expect((ok, res)).to(be_successful_api_call)
+                expect(res["dashboard"]).to(have_key("shared", False))
+                expect(res["dashboard"]).to(have_key("sharingSettings"))
+                expect(res["dashboard"]["sharingSettings"]).to(be_empty)
+
+        with context("when we are sharing a dashboard with a particular team"):
+            with before.all:
+                self.new_team_name = "NewMonitorTeam-sdc-cli"
+                _, self.team = self.client.create_team(self.new_team_name)
+
+            with after.all:
+                self.client.delete_team(self.new_team_name)
+
+            with it("shares it with view only permissions"):
+                _, team = self.client.get_team("Monitor Operations")
+
+                ok, res = self.client.share_dashboard_with_team(self.test_dashboard, team["id"], "r")
+
+                expect((ok, res)).to(be_successful_api_call)
+                expect(res["dashboard"]).to(have_key("shared", True))
+                expect(res["dashboard"]).to(have_key("sharingSettings"))
+                expect(res["dashboard"]["sharingSettings"]).to(have_len(1))
+                expect(res["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_READ"))
+
+            with it("shares it with read write permissions"):
+                _, team = self.client.get_team("Monitor Operations")
+
+                ok, res = self.client.share_dashboard_with_team(self.test_dashboard, team["id"], "w")
+
+                expect((ok, res)).to(be_successful_api_call)
+                expect(res["dashboard"]).to(have_key("shared", True))
+                expect(res["dashboard"]).to(have_key("sharingSettings"))
+                expect(res["dashboard"]["sharingSettings"]).to(have_len(1))
+                expect(res["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_EDIT"))
+
+            with it("shares it with two teams, one of those with write access"):
+                _, team = self.client.get_team("Monitor Operations")
+
+                ok_team, res_team = self.client.share_dashboard_with_team(self.test_dashboard, team["id"], "r")
+                ok_team2, res_team2 = self.client.share_dashboard_with_team(res_team["dashboard"],
+                                                                            self.team["team"]["id"], "w")
+
+                expect((ok_team, res_team)).to(be_successful_api_call)
+                expect((ok_team2, res_team2)).to(be_successful_api_call)
+
+                expect(res_team2["dashboard"]).to(have_key("shared", True))
+                expect(res_team2["dashboard"]).to(have_key("sharingSettings"))
+                expect(res_team2["dashboard"]["sharingSettings"]).to(have_len(2))
+                expect(res_team2["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_READ"))
+                expect(res_team2["dashboard"]["sharingSettings"][1]["role"]).to(equal("ROLE_RESOURCE_EDIT"))
