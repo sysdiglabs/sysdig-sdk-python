@@ -30,11 +30,10 @@ setup(
         "pyyaml==5.3.1",
         "requests==2.24.0",
         "requests-toolbelt==0.9.1",
+        "tatsu==5.5.0",
         "urllib3==1.25.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
     ],
-    extras_require={
-        "dev": []
-    },
+    extras_require={"dev": []},
     project_urls={
         "Bug Reports": "https://github.com/sysdiglabs/sysdig-sdk-python/issues",
         "Source": "https://github.com/sysdiglabs/sysdig-sdk-python/",
