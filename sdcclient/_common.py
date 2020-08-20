@@ -26,7 +26,8 @@ class _SdcCommon(object):
         if self.ssl_verify == None:
             self.ssl_verify = ssl_verify
         else:
-            self.ssl_verify = self.ssl_verify.lower() == 'true'
+            if self.ssl_verify.lower() in ['true', 'false']:
+                self.ssl_verify = self.ssl_verify.lower() == 'true'
 
     def __get_headers(self, custom_headers):
         headers = {
