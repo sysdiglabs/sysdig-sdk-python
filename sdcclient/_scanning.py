@@ -1040,3 +1040,23 @@ class SdScanningClient(_SdcCommon):
                     break
 
         return ret_type, input_string, urldigest
+
+    def get_vulnerability_details(self, id):
+        if id is None:
+            return [False, "No vulnerability ID provided"]
+
+        url = self.url + f"/api/scanning/v1/anchore/query/vulnerabilities"
+
+        params = {
+            "id": id,
+        }
+
+        res = requests.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        json_res = res.json()
+        if "vulnerabilities" not in json_res or not json_res["vulnerabilities"]:
+            return [False, f"Vulnerability {id} was not found"]
+
+        return [True, json_res["vulnerabilities"][0]]
