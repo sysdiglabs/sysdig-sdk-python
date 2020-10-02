@@ -1,10 +1,10 @@
 import base64
-import hashlib
 import json
 import re
+import time
+
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-import time
 
 try:
     from urllib.parse import quote_plus, unquote_plus
@@ -164,7 +164,8 @@ class SdScanningClient(_SdcCommon):
         '''
         return self._query_image(image, query_group='vuln', query_type=vuln_type, vendor_only=vendor_only)
 
-    def query_images_by_vulnerability(self, vulnerability_id, namespace=None, package=None, severity=None, vendor_only=True):
+    def query_images_by_vulnerability(self, vulnerability_id, namespace=None, package=None, severity=None,
+                                      vendor_only=True):
         '''**Description**
             Search system for images with the given vulnerability ID present
 
@@ -408,17 +409,18 @@ class SdScanningClient(_SdcCommon):
             A JSON object containing pass/fail status of image scan policy.
         '''
         url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail={detail}".format(
-                base_url=self.url,
-                image_id=image_id,
-                full_tag_name=full_tag_name,
-                detail=detail)
+            base_url=self.url,
+            image_id=image_id,
+            full_tag_name=full_tag_name,
+            detail=detail)
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
-    def add_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2", validate=True):
+    def add_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2",
+                     validate=True):
         '''**Description**
             Add image registry
 
@@ -437,7 +439,8 @@ class SdScanningClient(_SdcCommon):
         if registry_type and registry_type not in registry_types:
             return [False, "input registry type not supported (supported registry_types: " + str(registry_types)]
         if self._registry_string_is_valid(registry):
-            return [False, "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
+            return [False,
+                    "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
 
         if not registry_type:
             registry_type = self._get_registry_type(registry)
@@ -458,7 +461,8 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
-    def update_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2", validate=True):
+    def update_registry(self, registry, registry_user, registry_pass, insecure=False, registry_type="docker_v2",
+                        validate=True):
         '''**Description**
             Update an existing image registry.
 
@@ -474,7 +478,8 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the registry.
         '''
         if self._registry_string_is_valid(registry):
-            return [False, "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
+            return [False,
+                    "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
 
         payload = {
             'registry': registry,
@@ -502,7 +507,8 @@ class SdScanningClient(_SdcCommon):
         '''
         # do some input string checking
         if re.match(".*\\/.*", registry):
-            return [False, "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
+            return [False,
+                    "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
 
         url = self.url + "/api/scanning/v1/anchore/registries/" + registry
         res = requests.delete(url, headers=self.hdrs, verify=self.ssl_verify)
@@ -539,7 +545,8 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the registry.
         '''
         if self._registry_string_is_valid(registry):
-            return [False, "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
+            return [False,
+                    "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
 
         url = self.url + "/api/scanning/v1/anchore/registries/" + registry
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
@@ -1060,3 +1067,116 @@ class SdScanningClient(_SdcCommon):
             return [False, f"Vulnerability {id} was not found"]
 
         return [True, json_res["vulnerabilities"][0]]
+
+    def add_vulnerability_exception_bundle(self, name, comment=""):
+        if not name:
+            return [False, "A name is required for the exception bundle"]
+
+        url = self.url + f"/api/scanning/v1/vulnexceptions"
+        params = {
+            "version": "1_0",
+            "name": name,
+            "comment": comment,
+        }
+
+        data = json.dumps(params)
+        res = requests.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def delete_vulnerability_exception_bundle(self, id):
+
+        url = self.url + f"/api/scanning/v1/vulnexceptions/{id}"
+
+        res = requests.delete(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, None]
+
+    def list_vulnerability_exception_bundles(self):
+        url = self.url + f"/api/scanning/v1/vulnexceptions"
+
+        params = {
+            "bundleId": "default",
+        }
+
+        res = requests.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def get_vulnerability_exception_bundle(self, bundle):
+        url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}"
+
+        params = {
+            "bundleId": "default",
+        }
+
+        res = requests.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        res_json = res.json()
+        for item in res_json["items"]:
+            item["trigger_id"] = str(item["trigger_id"]).rstrip("+*")
+        return [True, res_json]
+
+    def add_vulnerability_exception(self, bundle, cve, note=None, expiration_date=None):
+        url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities"
+
+        params = {
+            "gate": "vulnerabilities",
+            "is_busy": False,
+            "trigger_id": f"{cve}+*",
+            "expiration_date": int(expiration_date) if expiration_date else None,
+            "notes": note,
+        }
+
+        data = json.dumps(params)
+        res = requests.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        res_json = res.json()
+        res_json["trigger_id"] = str(res_json["trigger_id"]).rstrip("+*")
+        return [True, res_json]
+
+    def delete_vulnerability_exception(self, bundle, id):
+        url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities/{id}"
+
+        params = {
+            "bundleId": "default",
+        }
+
+        res = requests.delete(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, None]
+
+    def update_vulnerability_exception(self, bundle, id, cve, enabled, note, expiration_date):
+        url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities/{id}"
+
+        data = {
+            "id": id,
+            "gate": "vulnerabilities",
+            "trigger_id": f"{cve}+*",
+            "enabled": enabled,
+            "notes": note,
+            "expiration_date": int(expiration_date) if expiration_date else None,
+        }
+        params = {
+            "bundleId": "default",
+        }
+
+        res = requests.put(url, data=json.dumps(data), params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        res_json = res.json()
+        res_json["trigger_id"] = str(res_json["trigger_id"]).rstrip("+*")
+        return [True, res_json]
