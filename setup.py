@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sdcclient",
-    version="0.12.0",
+    version="0.13.0",
     description="Python client for Sysdig Cloud",
     url="http://github.com/sysdiglabs/sysdig-sdk-python",
     author="Sysdig Inc.",
