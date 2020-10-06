@@ -21,6 +21,7 @@ if [[ "$OUT" != "Access is denied: Not enough privileges to complete the action"
 fi
 set -e
 
+
 # Get the system falco rules file. Don't validate it, just verify that it can be fetched.
 $SCRIPTDIR/../examples/get_secure_system_falco_rules.py $PYTHON_SDC_TEST_API_TOKEN | tee /tmp/falco_rules.yaml
 
@@ -222,14 +223,14 @@ OUT=`$SCRIPTDIR/../examples/list_policies_v1.py -o $PYTHON_SDC_TEST_API_TOKEN | 
 
 if [ $? != 0 ]; then
 	    echo "Could not set policy order?"
-	        exit 1
+		exit 1
 fi
 
 NEW_WRITE_BELOW_BINARY_POS=`$SCRIPTDIR/../examples/list_policies_v1.py $PYTHON_SDC_TEST_API_TOKEN | grep -b "\"name\": \"Write below binary dir" | awk -F: '{print $1}'`
 
 if [[ $NEW_WRITE_BELOW_BINARY_POS -lt $WRITE_BELOW_BINARY_POS ]]; then
 	    echo "After reordering policies, Write Below Binary Dir policy did not move to the end?"
-	        exit 1
+		exit 1
 fi
 
 echo $OUT
