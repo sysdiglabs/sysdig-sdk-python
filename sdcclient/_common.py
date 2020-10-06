@@ -191,10 +191,10 @@ class _SdcCommon(object):
                             found = True
                             ids.append(ch['id'])
                     elif c['type'] == 'SLACK':
-                        opt = ch['options']
-                        if 'channel' in opt and opt['channel'] == c['channel']:
-                            found = True
-                            ids.append(ch['id'])
+                        if 'name' in c:
+                            if c['name'] == ch.get('name'):
+                                found = True
+                                ids.append(ch['id'])
                     elif c['type'] == 'OPSGENIE':
                         if 'name' in c:
                             if c['name'] == ch.get('name'):
