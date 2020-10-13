@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sdcclient",
-    version="0.13.0",
+    version="0.13.1",
     description="Python client for Sysdig Cloud",
     url="http://github.com/sysdiglabs/sysdig-sdk-python",
     author="Sysdig Inc.",
@@ -23,15 +23,15 @@ setup(
     ),
     python_requires=">=3.8, <4",
     install_requires=[
-        "certifi==2020.6.20",
-        "chardet==3.0.4",
-        "idna==2.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-        "pyaml==20.4.0",
-        "pyyaml==5.3.1",
-        "requests==2.24.0",
-        "requests-toolbelt==0.9.1",
-        "tatsu==5.5.0",
-        "urllib3==1.25.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
+        "certifi>=2020.6.20",
+        "chardet>=3.0.4",
+        "idna>=2.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+        "pyaml>=20.4.0",
+        "pyyaml>=5.3.1",
+        "requests>=2.23.0",
+        "requests-toolbelt>=0.9.1",
+        "tatsu>=5.5.0",
+        "urllib3>=1.25.8",
     ],
     extras_require={"dev": []},
     project_urls={

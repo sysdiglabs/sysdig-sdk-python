@@ -14,10 +14,11 @@ sdcclient = {editable = true, path = "."}
 coverage = "*"
 
 [packages]
-requests = "*"
+requests = ">=2.23.0"
 pyaml = "*"
 requests-toolbelt = "*"
 tatsu = "*"
+urllib3 = ">=1.25.8"
 
 [requires]
 python_version = "3.8"
