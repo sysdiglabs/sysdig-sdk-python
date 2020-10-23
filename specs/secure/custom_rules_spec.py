@@ -6,7 +6,7 @@ from mamba import before, context, description, it
 from sdcclient import SdSecureClient
 from specs import be_successful_api_call
 
-with description("Custom Rules") as self:
+with description("Custom Rules", "integration") as self:
     with before.each:
         self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                      token=os.getenv("SDC_SECURE_TOKEN"))

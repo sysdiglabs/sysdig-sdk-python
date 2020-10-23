@@ -51,7 +51,7 @@ def policy_json():
 }
 """ % (_POLICY_NAME, _POLICY_DESCRIPTION, json.dumps(_POLICY_ACTIONS), _POLICY_RULES_REGEX)
 
-with description("Policies v1") as self:
+with description("Policies v1", "integration") as self:
     with before.all:
         self.clientV1 = SdSecureClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                      token=os.getenv("SDC_SECURE_TOKEN"))
@@ -110,7 +110,7 @@ with description("Policies v1") as self:
     with it("is able to delete a single policy by name"):
         ok, res = self.clientV1.list_policies()
         ok, res = self.clientV1.delete_policy_name(res['policies'][1]['name'])
-        expect((ok, res)).to(be_successful_api_call)        
+        expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to delete all policies at once"):
         ok, res = self.clientV1.delete_all_policies()
