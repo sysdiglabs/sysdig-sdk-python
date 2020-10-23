@@ -18,7 +18,7 @@ def randomword(length):
     return ''.join(random.choice(letters) for _ in range(length))
 
 
-with description("Captures v1") as self:
+with description("Captures v1", "integration-agent") as self:
     with before.all:
         self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                       token=os.getenv("SDC_MONITOR_TOKEN"))

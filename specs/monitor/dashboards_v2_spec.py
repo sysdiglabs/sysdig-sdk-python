@@ -11,7 +11,7 @@ from specs import be_successful_api_call
 
 _DASHBOARD_NAME = "test_dashboard_ci"
 
-with description("Dashboards v2") as self:
+with description("Dashboards v2", "integration") as self:
     with before.all:
         self.client = DashboardsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                          token=os.getenv("SDC_MONITOR_TOKEN"))
