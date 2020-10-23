@@ -40,7 +40,7 @@ def policy_json():
 """ % (_POLICY_NAME, _POLICY_DESCRIPTION, json.dumps(_POLICY_RULES), json.dumps(_POLICY_ACTIONS))
 
 
-with description("Policies v2") as self:
+with description("Policies v2", "integration") as self:
     with before.all:
         self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                      token=os.getenv("SDC_SECURE_TOKEN"))

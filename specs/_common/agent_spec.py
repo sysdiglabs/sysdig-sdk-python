@@ -46,7 +46,7 @@ def _agent_configuration():
     }
 
 
-with description("Agent") as self:
+with description("Agent", "integration-agent") as self:
     with before.all:
         self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                 token=os.getenv("SDC_MONITOR_TOKEN"))

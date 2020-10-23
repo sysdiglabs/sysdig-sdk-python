@@ -8,7 +8,7 @@ from mamba import it, before, description
 from sdcclient.monitor import EventsClientV2
 from specs import be_successful_api_call
 
-with description("Events v2") as self:
+with description("Events v2", "integration") as self:
     with before.all:
         self.client = EventsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                      token=os.getenv("SDC_MONITOR_TOKEN"))

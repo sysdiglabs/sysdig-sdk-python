@@ -56,4 +56,4 @@ jobs:
         SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
         SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
         SDC_SECURE_URL: "https://secure-staging.sysdig.com"
-      run: poetry run mamba -f documentation
+      run: poetry run mamba -f documentation -t integration
