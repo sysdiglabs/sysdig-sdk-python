@@ -7,7 +7,7 @@ from mamba import before, context, description, it, _context
 from sdcclient.secure import PolicyEventsClientV1
 from specs import be_successful_api_call
 
-with description("Policy Events v1") as self:
+with description("Policy Events v1", "integration") as self:
     with before.each:
         self.client = PolicyEventsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                            token=os.getenv("SDC_SECURE_TOKEN"))

@@ -10,7 +10,7 @@ from specs import be_successful_api_call
 _ALERT_NAME = "Test - Alert"
 _ALERT_DESCRIPTION = "This alert was automatically created using the Sysdig SDK Python"
 
-with description("Alerts v1") as self:
+with description("Alerts v1", "integration") as self:
     with before.all:
         self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                       token=os.getenv("SDC_MONITOR_TOKEN"))
