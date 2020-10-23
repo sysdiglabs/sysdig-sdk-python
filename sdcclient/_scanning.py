@@ -2,6 +2,7 @@ import base64
 import json
 import re
 import time
+from warnings import warn
 
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -112,7 +113,14 @@ class SdScanningClient(_SdcCommon):
 
         **Success Return Value**
             A JSON object containing all the whitelisted CVEs.
+
+        **Deprecated**
+            This method has been deprecated since the API has changed. Use the
+            list_vulnerability_exception_bundles and get_vulnerability_exception_bundle methods.
         '''
+        warn("list_whitelisted_cves has been deprecated and doesn't work properly, please use the "
+             "list_vulnerability_exception_bundles and get_vulnerability_exception_bundle methods",
+             DeprecationWarning, 3)
         url = self.url + "/api/scanning/v1/whitelists/global?bundle=default"
         res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
