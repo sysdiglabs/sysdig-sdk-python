@@ -47,7 +47,7 @@ class DashboardsClientV3(_SdcCommon):
                            verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_dashboards(self):
+    def get_dashboards(self, light=True):
         '''**Description**
             Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
 
@@ -57,7 +57,11 @@ class DashboardsClientV3(_SdcCommon):
         **Example**
             `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
         '''
-        res = requests.get(self.url + self._dashboards_api_endpoint, params={"light": "true"}, headers=self.hdrs,
+        params = {
+            "light": light
+        }
+        res = requests.get(self.url + self._dashboards_api_endpoint, params=params,
+                           headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -280,7 +284,6 @@ class DashboardsClientV3(_SdcCommon):
             if not ok:
                 return ok, converted_scope
             template['scopeExpressionList'] = converted_scope
-
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
         if 'widgets' in template and template['widgets'] is not None:
