@@ -1,15 +1,14 @@
-name: CI - Pull Request
+name: CI - Master - Scheduled
 
 on:
-  pull_request:
-    branches:
-    - master
+  schedule:
+    - cron: "0 1 * * *" # 1 AM everyday https://crontab.guru/#0_1_*_*_*
 
 jobs:
-  test:
+  scheduled-test:
     strategy:
       max-parallel: 1
-      fail-fast: true
+      fail-fast: false
       matrix:
         python_version:
           # https://python-release-cycle.glitch.me/
@@ -49,6 +48,23 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    - name: Travis Test - Start agent
+      id: start_agent
+      env:
+        PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
+      run: |
+        sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
+        ./test/start_agent.sh
+
+    - name: Travis Test - Install dependencies
+      run: |
+        poetry build
+        python -m pip install $(find dist -iname "*.whl" | head -1)
+
+    - name: Travis Test - Secure APIs
+      env:
+        PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+      run: ./test/test_secure_apis.sh
 
     - name: Test in staging
       env:
@@ -57,3 +73,7 @@ jobs:
         SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
         SDC_SECURE_URL: "https://secure-staging.sysdig.com"
       run: poetry run mamba -f documentation
+
+    - name: Travis Test - Stop agent
+      run: ./test/stop_agent.sh
+      if: steps.start_agent.outcome == 'success'
