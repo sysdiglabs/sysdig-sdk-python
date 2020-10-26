@@ -32,7 +32,7 @@ def convert_scope_string_to_expression(scope = None):
             |  'in'
             ;
 
-        operand = /[\w\.]+/ ;
+        operand = /[[a-zA-Z0-9_-]\.]+/ ;
 
         multiple_value 
             = 
@@ -81,7 +81,7 @@ def convert_scope_string_to_expression(scope = None):
                 "starts with": "startsWith",
             }
 
-            if isinstance(value, tuple):
+            if isinstance(value, tuple) or isinstance(value, list):
                 value = flatten(value)
                 if len(value) > 1:
                     value = list(value[1:-1])  # Remove '[' and ']'

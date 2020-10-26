@@ -2,8 +2,7 @@ import json
 import os
 import tempfile
 
-from expects import expect, have_key, have_keys, contain, equal, start_with
-from expects.matchers.built_in import be_false, have_len, be_empty
+from expects import expect, have_key, have_keys, contain, equal, start_with, be_false, have_len, be_empty, not_
 from mamba import before, it, context, after, description
 
 from sdcclient import SdMonitorClient
@@ -11,7 +10,7 @@ from specs import be_successful_api_call
 
 _DASHBOARD_NAME = "test_dashboard_ci"
 
-with description("Dashboards v3") as self:
+with description("Dashboards v3", "integration") as self:
     with before.all:
         self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                       token=os.getenv("SDC_MONITOR_TOKEN"))
@@ -75,6 +74,14 @@ with description("Dashboards v3") as self:
             ok, res = self.client.get_dashboards()
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_key("dashboards", contain(have_keys("name", "id"))))
+
+        with it("is able to list all the dashboards with the full information"):
+            ok, res = self.client.get_dashboards(light=False)
+            expect((ok, res)).to(be_successful_api_call)
+            expect(res).to(have_key("dashboards", contain(have_keys("name", "id",
+                                                                    panels=not_(be_empty),
+                                                                    layout=not_(be_empty),
+                                                                    permissions=not_(be_empty)))))
 
         with it("is able to retrieve the test dashboard by its id"):
             ok, res = self.client.get_dashboard(dashboard_id=self.test_dashboard["id"])
