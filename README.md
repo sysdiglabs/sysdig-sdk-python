@@ -1,28 +1,25 @@
 Sysdig Monitor/Secure Python client library
 ===
 
-[![Build Status](https://travis-ci.org/draios/python-sdc-client.png?branch=master)](https://travis-ci.org/draios/python-sdc-client)
+![CI - Master - Scheduled](https://github.com/sysdiglabs/sysdig-sdk-python/workflows/CI%20-%20Master%20-%20Scheduled/badge.svg)
 [![Current version on PyPI](http://img.shields.io/pypi/v/sdcclient.svg)](https://pypi.python.org/pypi/sdcclient)
 
 A Python client API for Sysdig Monitor/Sysdig Secure.
 
-This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs, which are documented [here](http://support.sysdigcloud.com/hc/en-us/articles/205233166-The-Sysdig-Cloud-API-Specification). It exposes most of the sysdig REST API functionality as an easy to use and easy to install Python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
+This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs. It exposes most of the sysdig REST API functionality as an easy to use and easy to install Python interface. The repository includes a rich set of examples (in the [examples](examples/) subdir) that quickly address several use cases.
 
 Installation
 ------------
-#### Automatic w/ PyPI ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
+#### Automatic with PyPI
     pip install sdcclient
 
-#### Manual
-    git clone https://github.com/draios/python-sdc-client.git
+#### Manual (development only)
+
+This method requires [Poetry](https://python-poetry.org/) installed
+
+    git clone https://github.com/sysdiglabs/sysdig-sdk-python.git
     cd python-sdc-client
-    python setup.py install
-
-#### One-step cmdline to create virtualenv, install client, and gain access to sample programs
-
-```
-$ virtualenv python-sdc-env && source python-sdc-env/bin/activate && pip install sdcclient && git clone https://github.com/draios/python-sdc-client && python python-sdc-client/examples/set_secure_system_falco_rules.py --help
-```
+    poetry install
 
 Quick start
 -----------
@@ -61,7 +58,9 @@ For an example on how to parse this output, take a look at a simple example like
 
 Function List & Documentation
 -----------------------------
-For the list of available functions in the current `master` branch of this repo and corresponding docs, refer to the [Python Script Library documentation page](http://python-sdc-client.readthedocs.io/en/latest/). Equivalent docs for the functions in the most recent "stable" release (which is what you'd get via `pip` install, and corresponds to the most recent [release](https://github.com/draios/python-sdc-client/releases)) are located [here](http://python-sdc-client.readthedocs.io/en/stable/).
+**Work in progress**
+
+Fully documented methods is in our roadmap and will be available soon.
 
 On-Premises Installs
 --------------------
