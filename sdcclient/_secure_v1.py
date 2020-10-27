@@ -1,5 +1,4 @@
 import json
-import requests
 
 from sdcclient._secure import SdSecureClient
 
@@ -22,7 +21,7 @@ class SdSecureClientV1(SdSecureClient):
         **Success Return Value**
             JSON containing details on any new policies that were added.
         '''
-        res = requests.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/policies/createDefault', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_all_policies(self):
@@ -35,7 +34,7 @@ class SdSecureClientV1(SdSecureClient):
         **Success Return Value**
             The string "Policies Deleted"
         '''
-        res = requests.post(self.url + '/api/policies/deleteAll', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/policies/deleteAll', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -51,7 +50,7 @@ class SdSecureClientV1(SdSecureClient):
         **Success Return Value**
             A JSON object containing the number and details of each policy.
         '''
-        res = requests.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/policies', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_policy_priorities(self):
@@ -65,7 +64,7 @@ class SdSecureClientV1(SdSecureClient):
             A JSON object representing the list of policy ids.
         '''
 
-        res = requests.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/policies/priorities', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def set_policy_priorities(self, priorities_json):
@@ -84,7 +83,7 @@ class SdSecureClientV1(SdSecureClient):
         except Exception as e:
             return [False, "priorities json is not valid json: {}".format(str(e))]
 
-        res = requests.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/policies/priorities', headers=self.hdrs, data=priorities_json, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_policy(self, name):
@@ -122,7 +121,7 @@ class SdSecureClientV1(SdSecureClient):
             A JSON object containing the description of the policy. If there is no policy with
             the given name, returns False.
         '''
-        res = requests.get(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def add_policy(self, policy_json):
@@ -141,7 +140,7 @@ class SdSecureClientV1(SdSecureClient):
             return [False, "policy json is not valid json: {}".format(str(e))]
 
         body = {"policy": policy_obj}
-        res = requests.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/policies', headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
         return self._request_result(res)
 
     def update_policy(self, policy_json):
@@ -166,7 +165,7 @@ class SdSecureClientV1(SdSecureClient):
 
         body = {"policy": policy_obj}
 
-        res = requests.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/policies/{}'.format(policy_obj["id"]), headers=self.hdrs, data=json.dumps(body), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_policy_name(self, name):
@@ -200,5 +199,5 @@ class SdSecureClientV1(SdSecureClient):
         **Success Return Value**
             The JSON object representing the now-deleted policy.
         '''
-        res = requests.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)

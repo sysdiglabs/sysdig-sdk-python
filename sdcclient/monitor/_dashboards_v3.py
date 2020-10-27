@@ -1,8 +1,6 @@
 import copy
 import json
 
-import requests
-
 from sdcclient._common import _SdcCommon
 from sdcclient.monitor.dashboard_converters import convert_dashboard_between_versions, \
     convert_scope_string_to_expression
@@ -20,7 +18,7 @@ class DashboardsClientV3(_SdcCommon):
         self._default_dashboards_api_endpoint = '/api/{}/dashboards/templates'.format(self._dashboards_api_version)
 
     def get_views_list(self):
-        res = requests.get(self.url + self._default_dashboards_api_endpoint, headers=self.hdrs,
+        res = self.http.get(self.url + self._default_dashboards_api_endpoint, headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -43,7 +41,7 @@ class DashboardsClientV3(_SdcCommon):
         if not id:
             return [False, 'view ' + name + ' not found']
 
-        res = requests.get(self.url + self._default_dashboards_api_endpoint + '/' + id, headers=self.hdrs,
+        res = self.http.get(self.url + self._default_dashboards_api_endpoint + '/' + id, headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -60,7 +58,7 @@ class DashboardsClientV3(_SdcCommon):
         params = {
             "light": light
         }
-        res = requests.get(self.url + self._dashboards_api_endpoint, params=params,
+        res = self.http.get(self.url + self._dashboards_api_endpoint, params=params,
                            headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
@@ -75,7 +73,7 @@ class DashboardsClientV3(_SdcCommon):
         **Example**
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
-        res = requests.put(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_data['id']),
+        res = self.http.put(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_data['id']),
                            headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
         return self._request_result(res)
 
@@ -113,7 +111,7 @@ class DashboardsClientV3(_SdcCommon):
         if 'version' in configuration_clone:
             del configuration_clone['version']
 
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
                             data=json.dumps({'dashboard': configuration_clone}),
                             verify=self.ssl_verify)
         return self._request_result(res)
@@ -146,7 +144,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
                             data=json.dumps({'dashboard': dashboard_configuration}),
                             verify=self.ssl_verify)
         return self._request_result(res)
@@ -306,7 +304,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
                             data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
 
         return self._request_result(res)
@@ -378,7 +376,7 @@ class DashboardsClientV3(_SdcCommon):
         **Example**
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
-        res = requests.get(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), headers=self.hdrs,
+        res = self.http.get(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -402,7 +400,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Get the list of dashboards from the server
         #
-        dashboard = requests.get(self.url + self._dashboards_api_endpoint, params={"light": "true"}, headers=self.hdrs,
+        dashboard = self.http.get(self.url + self._dashboards_api_endpoint, params={"light": "true"}, headers=self.hdrs,
                                  verify=self.ssl_verify)
         if not self._checkResponse(dashboard):
             return [False, self.lasterr]
@@ -433,7 +431,7 @@ class DashboardsClientV3(_SdcCommon):
 
     def favorite_dashboard(self, dashboard_id, favorite):
         data = {"dashboard": {"favorite": favorite}}
-        res = requests.patch(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), json=data,
+        res = self.http.patch(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), json=data,
                              headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -549,7 +547,7 @@ class DashboardsClientV3(_SdcCommon):
         if 'id' not in dashboard:
             return [False, "Invalid dashboard format"]
 
-        res = requests.delete(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
+        res = self.http.delete(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]

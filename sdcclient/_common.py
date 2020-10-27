@@ -2,6 +2,29 @@ import json
 import os
 
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+
+class SysdigHTTPAdapter(HTTPAdapter):
+    def __init__(self, *args, **kwargs):
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[403, 404, 429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS", "PUSH", "PUT"],
+            backoff_factor=0.5
+        )
+        kwargs["max_retries"] = retry_strategy
+
+        self.ssl_verify = kwargs.get("ssl_verify", True)
+        del kwargs["ssl_verify"]
+
+        super().__init__(*args, **kwargs)
+
+    def send(self, request, **kwargs):
+        kwargs["verify"] = kwargs.get("verify", self.ssl_verify)
+
+        return super().send(request, **kwargs)
 
 
 class _SdcCommon(object):
@@ -28,6 +51,11 @@ class _SdcCommon(object):
         else:
             if self.ssl_verify.lower() in ['true', 'false']:
                 self.ssl_verify = self.ssl_verify.lower() == 'true'
+
+        adapter = SysdigHTTPAdapter(ssl_verify=self.ssl_verify)
+        self.http = requests.Session()
+        self.http.mount("https://", adapter)
+        self.http.mount("http://", adapter)
 
     def __get_headers(self, custom_headers):
         headers = {
@@ -79,7 +107,7 @@ class _SdcCommon(object):
         **Example**
             `examples/print_user_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_user_info.py>`_
         '''
-        res = requests.get(self.url + '/api/user/me', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/user/me', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_user_token(self):
@@ -89,7 +117,7 @@ class _SdcCommon(object):
         **Success Return Value**
             A string containing the user token.
         '''
-        res = requests.get(self.url + '/api/token', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/token', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         tkinfo = res.json()
@@ -103,7 +131,7 @@ class _SdcCommon(object):
         **Success Return Value**
             A list of the agents with all their attributes.
         '''
-        res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/agents/connected', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
@@ -116,7 +144,7 @@ class _SdcCommon(object):
         **Success Return Value**
             An integer number.
         '''
-        res = requests.get(self.url + '/api/agents/connected', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/agents/connected', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
@@ -132,7 +160,7 @@ class _SdcCommon(object):
         **Success Return Value**
             A JSON representation of all the notification channels
         '''
-        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_notification_ids(self, channels=None):
@@ -150,7 +178,7 @@ class _SdcCommon(object):
             - `examples/restore_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/restore_alerts.py>`_
         '''
 
-        res = requests.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/notificationChannels', headers=self.hdrs, verify=self.ssl_verify)
 
         if not self._checkResponse(res):
             return False, self.lasterr
@@ -227,7 +255,7 @@ class _SdcCommon(object):
             }
         }
 
-        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
+        res = self.http.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -240,13 +268,13 @@ class _SdcCommon(object):
             'notificationChannel': channel
         }
 
-        res = requests.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
+        res = self.http.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_notification_channel(self, id):
 
-        res = requests.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
 
@@ -256,7 +284,7 @@ class _SdcCommon(object):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
 
-        res = requests.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
                            data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -264,7 +292,7 @@ class _SdcCommon(object):
         if 'id' not in channel:
             return [False, "Invalid channel format"]
 
-        res = requests.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
+        res = self.http.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
@@ -280,7 +308,7 @@ class _SdcCommon(object):
         **Example**
             `examples/print_data_retention_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_data_retention_info.py>`_
         '''
-        res = requests.get(self.url + '/api/history/timelines/', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/history/timelines/', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_topology_map(self, grouping_hierarchy, time_window_s, sampling_time_s):
@@ -358,7 +386,7 @@ class _SdcCommon(object):
         #
         # Fire the request
         #
-        res = requests.post(self.url + '/api/data?format=map', headers=self.hdrs,
+        res = self.http.post(self.url + '/api/data?format=map', headers=self.hdrs,
                             data=json.dumps(req_json), verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -407,7 +435,7 @@ class _SdcCommon(object):
         if sampling_s != 0:
             reqbody['sampling'] = sampling_s
 
-        res = requests.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody),
+        res = self.http.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -432,7 +460,7 @@ class _SdcCommon(object):
             frm="&from=%d" % (from_sec * 10 ** 6) if from_sec else "",
             to="&to=%d" % (to_sec * 10 ** 6) if to_sec else "",
             scopeFilter="&scopeFilter=%s" % scope_filter if scope_filter else "")
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def poll_sysdig_capture(self, capture):
@@ -453,7 +481,7 @@ class _SdcCommon(object):
 
         url = '{url}/api/sysdig/{id}?source={source}'.format(
             url=self.url, id=capture['id'], source=self.product)
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter='', folder='/'):
@@ -497,7 +525,7 @@ class _SdcCommon(object):
             'source': self.product
         }
 
-        res = requests.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/sysdig', headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
         return self._request_result(res)
 
     def download_sysdig_capture(self, capture_id):
@@ -512,7 +540,7 @@ class _SdcCommon(object):
         '''
         url = '{url}/api/sysdig/{id}/download?_product={product}'.format(
             url=self.url, id=capture_id, product=self.product)
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
 
@@ -537,7 +565,7 @@ class _SdcCommon(object):
 
         '''
         # Look up the list of users to see if this exists, do not create if one exists
-        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
@@ -552,7 +580,7 @@ class _SdcCommon(object):
                    'systemRole': system_role}
         user_json = {k: v for k, v in options.items() if v is not None}
 
-        res = requests.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json),
+        res = self.http.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -570,13 +598,13 @@ class _SdcCommon(object):
         if res[0] == False:
             return res
         userid = res[1][0]
-        res = requests.delete(self.url + '/api/users/' + str(userid), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/users/' + str(userid), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
 
     def get_user(self, user_email):
-        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         for u in res.json()['users']:
@@ -591,7 +619,7 @@ class _SdcCommon(object):
         **Success Return Value**
             A list user objects
         '''
-        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()['users']]
@@ -618,7 +646,7 @@ class _SdcCommon(object):
         else:
             reqbody['lastName'] = lastName
 
-        res = requests.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody),
+        res = self.http.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody),
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -634,7 +662,7 @@ class _SdcCommon(object):
         **Success Return Value**
             The teams that match the filter.
         '''
-        res = requests.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         ret = [t for t in res.json()['teams'] if team_filter in t['name']]
@@ -662,21 +690,21 @@ class _SdcCommon(object):
         return [False, 'Could not find team']
 
     def get_team_ids(self, teams):
-        res = requests.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         u = [x for x in res.json()['teams'] if x['name'] in teams]
         return [True, [x['id'] for x in u]]
 
     def _get_user_id_dict(self, users):
-        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         u = [x for x in res.json()['users'] if x['username'] in users]
         return [True, dict((user['username'], user['id']) for user in u)]
 
     def _get_id_user_dict(self, user_ids):
-        res = requests.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/users', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         u = [x for x in res.json()['users'] if x['id'] in user_ids]
@@ -740,7 +768,7 @@ class _SdcCommon(object):
         if filter != '':
             reqbody['filter'] = filter
 
-        res = requests.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody),
+        res = self.http.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -812,7 +840,7 @@ class _SdcCommon(object):
         elif 'filter' in list(t.keys()):
             reqbody['filter'] = t['filter']
 
-        res = requests.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody),
+        res = self.http.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -831,7 +859,7 @@ class _SdcCommon(object):
             return res
 
         t = res[1]
-        res = requests.delete(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
@@ -932,7 +960,7 @@ class _SdcCommon(object):
         **Example**
             `examples/list_access_keys.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_access_keys.py>`_
         '''
-        res = requests.get(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_access_key(self):
@@ -943,7 +971,7 @@ class _SdcCommon(object):
         **Reslut**
             The access keys object
         '''
-        res = requests.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def disable_access_key(self, access_key):
@@ -957,7 +985,7 @@ class _SdcCommon(object):
         **Reslut**
             The access keys object
         '''
-        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/disable/", headers=self.hdrs,
+        res = self.http.post(self.url + '/api/customer/accessKeys/' + access_key + "/disable/", headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -972,19 +1000,19 @@ class _SdcCommon(object):
         **Reslut**
             The access keys object
         '''
-        res = requests.post(self.url + '/api/customer/accessKeys/' + access_key + "/enable/", headers=self.hdrs,
+        res = self.http.post(self.url + '/api/customer/accessKeys/' + access_key + "/enable/", headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_agents_config(self):
-        res = requests.get(self.url + '/api/agents/config', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/agents/config', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data]
 
     def set_agents_config(self, config):
-        res = requests.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config),
+        res = self.http.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -999,7 +1027,7 @@ class _SdcCommon(object):
 
         t = res[1]
 
-        res = requests.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
