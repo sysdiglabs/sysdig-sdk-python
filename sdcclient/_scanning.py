@@ -1187,3 +1187,42 @@ class SdScanningClient(_SdcCommon):
         res_json = res.json()
         res_json["trigger_id"] = str(res_json["trigger_id"]).rstrip("+*")
         return [True, res_json]
+
+    def download_cve_report_csv(self, vuln_type="os", scope_type="static"):
+        """
+        Downloads a CVE report in CSV format
+
+        Args:
+            vuln_type (str): Vulnerability type, can be either "os" or "non-os".
+            scope_type (str): Scope type. Can be either "static" or "runtime".
+
+        Returns:
+            A tuple of (bool, str).
+            The first parameter, if true, means that the result is correct, while
+            if false, means that there's been an error. The second parameter
+            will hold the response of the API call.
+        """
+        url = f"{self.url}/api/scanning/v1/reports/csv"
+
+        params = {
+            "queryType": "vuln",
+            "scopeType": scope_type,
+            "staticScope":
+                {
+                    "registry": "",
+                    "repository": "",
+                    "tag": ""
+                },
+            "runtimeScope": {},
+            "imageQueryFilter": {
+                "vType": vuln_type
+            },
+            "offset": 0,
+            "limit": 100000
+        }
+
+        res = self.http.post(url, data=json.dumps(params), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.content.decode("utf-8")]
