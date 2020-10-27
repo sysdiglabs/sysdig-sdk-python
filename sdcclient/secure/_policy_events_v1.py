@@ -1,7 +1,5 @@
 import datetime
 
-import requests
-
 from sdcclient._common import _SdcCommon
 
 
@@ -22,7 +20,7 @@ class PolicyEventsClientV1(_SdcCommon):
             filter=f'&filter={ctx["filter"]}' if "filter" in ctx else "",
             cursor=f'&cursor={ctx["cursor"]}' if "cursor" in ctx else "")
 
-        res = requests.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
