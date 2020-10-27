@@ -3,7 +3,6 @@ import os
 import shutil
 import time
 
-import requests
 import yaml
 
 from sdcclient._common import _SdcCommon
@@ -24,12 +23,12 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             True if policy V2 API is available
         '''
         if self._policy_v2 is None:
-            res = requests.get(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
+            res = self.http.get(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
             self._policy_v2 = res.status_code != 404
         return self._policy_v2
 
     def _get_falco_rules(self, kind):
-        res = requests.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -69,7 +68,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         return res if not ok else [True, res["customFalcoRulesFiles"]["files"][0]["variants"][0]["content"]]
 
     def _get_user_falco_rules(self):
-        res = requests.get(self.url + '/api/settings/falco/customRulesFiles', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/settings/falco/customRulesFiles', headers=self.hdrs, verify=self.ssl_verify)
 
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -84,7 +83,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
 
         payload[1]["{}RulesFile".format(kind)]["content"] = rules_content  # pylint: disable=unsubscriptable-object
 
-        res = requests.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/settings/falco/{}RulesFile'.format(kind), headers=self.hdrs,
                            data=json.dumps(payload[1]), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -127,7 +126,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
 
         res["customFalcoRulesFiles"]["files"][0]["variants"][0]["content"] = rules_content
 
-        res = requests.put(self.url + '/api/settings/falco/customRulesFiles', headers=self.hdrs,
+        res = self.http.put(self.url + '/api/settings/falco/customRulesFiles', headers=self.hdrs,
                            data=json.dumps(res), verify=self.ssl_verify)
 
         if not self._checkResponse(res):
@@ -139,7 +138,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
     # Only one kind for now called "default", but might add a "custom" kind later.
     def _get_falco_rules_files(self, kind):
 
-        res = requests.get(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -302,7 +301,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         if "defaultPolicies" in rules_files:
             obj["defaultPolicies"] = rules_files["defaultPolicies"]
 
-        res = requests.put(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers=self.hdrs,
                            data=json.dumps(payload[1]), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -416,7 +415,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             `examples/create_default_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/create_default_policies.py>`_
 
         '''
-        res = requests.post(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_all_policies(self):
@@ -458,7 +457,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             `examples/list_policies.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_policies.py>`_
 
         '''
-        res = requests.get(self.url + '/api/v2/policies', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/v2/policies', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_policy(self, name):
@@ -499,7 +498,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             A JSON object containing the description of the policy. If there is no policy with
             the given name, returns False.
         '''
-        res = requests.get(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def add_policy(self, name, description, rule_names=[], actions=[], scope=None, severity=0, enabled=True,
@@ -530,7 +529,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             "enabled": enabled,
             "notificationChannelIds": notification_channels
         }
-        res = requests.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy),
+        res = self.http.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -556,7 +555,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
-        res = requests.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy_obj),
+        res = self.http.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy_obj),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -601,7 +600,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         if notification_channels is not None:
             policy["notificationChannelIds"] = notification_channels
 
-        res = requests.put(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, data=json.dumps(policy),
+        res = self.http.put(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, data=json.dumps(policy),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -630,7 +629,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         if "id" not in policy_obj:
             return [False, "Policy Json does not have an 'id' field"]
 
-        res = requests.put(self.url + '/api/v2/policies/{}'.format(policy_obj["id"]), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/v2/policies/{}'.format(policy_obj["id"]), headers=self.hdrs,
                            data=json.dumps(policy_obj), verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -673,7 +672,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             `examples/delete_policy.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_policy.py>`_
 
         '''
-        res = requests.delete(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def list_rules(self):
@@ -688,7 +687,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of rules.
         '''
-        res = requests.get(self.url + '/api/secure/rules/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/secure/rules/summaries', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_rules_group(self, name):
@@ -703,7 +702,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of rules.
         '''
-        res = requests.get(self.url + '/api/secure/rules/groups?name={}'.format(name), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/secure/rules/groups?name={}'.format(name), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -717,7 +716,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the rule.
         '''
-        res = requests.get(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def add_rule(self, name, details={}, description="", tags=[]):
@@ -739,7 +738,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             "details": details,
             "tags": tags
         }
-        res = requests.post(self.url + '/api/secure/rules', data=json.dumps(rule), headers=self.hdrs,
+        res = self.http.post(self.url + '/api/secure/rules', data=json.dumps(rule), headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -767,7 +766,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             rule['description'] = description
         if tags:
             rule['tags'] = tags
-        res = requests.put(self.url + '/api/secure/rules/{}'.format(id), data=json.dumps(rule), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/secure/rules/{}'.format(id), data=json.dumps(rule), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -781,7 +780,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the rule.
         '''
-        res = requests.delete(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def list_falco_macros(self):
@@ -796,7 +795,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of falco macros.
         '''
-        res = requests.get(self.url + '/api/secure/falco/macros/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/secure/falco/macros/summaries', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_falco_macros_group(self, name):
@@ -811,7 +810,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of falco macros.
         '''
-        res = requests.get(self.url + '/api/secure/falco/macros/groups?name={}'.format(name), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/secure/falco/macros/groups?name={}'.format(name), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -825,7 +824,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the falco macro.
         '''
-        res = requests.get(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -848,7 +847,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             },
             "append": append
         }
-        res = requests.post(self.url + '/api/secure/falco/macros', data=json.dumps(macro), headers=self.hdrs,
+        res = self.http.post(self.url + '/api/secure/falco/macros', data=json.dumps(macro), headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -869,7 +868,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         macro = res
         macro['condition']['condition'] = condition
 
-        res = requests.put(self.url + '/api/secure/falco/macros/{}'.format(id), data=json.dumps(macro),
+        res = self.http.put(self.url + '/api/secure/falco/macros/{}'.format(id), data=json.dumps(macro),
                            headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -883,7 +882,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the macro.
         '''
-        res = requests.delete(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
+        res = self.http.delete(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
                               verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -899,7 +898,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of falco lists.
         '''
-        res = requests.get(self.url + '/api/secure/falco/lists/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/secure/falco/lists/summaries', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_falco_lists_group(self, name):
@@ -914,7 +913,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list of falco lists.
         '''
-        res = requests.get(self.url + '/api/secure/falco/lists/groups?name={}'.format(name), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/secure/falco/lists/groups?name={}'.format(name), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -928,7 +927,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the falco list.
         '''
-        res = requests.get(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -950,7 +949,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             },
             "append": append
         }
-        res = requests.post(self.url + '/api/secure/falco/lists', data=json.dumps(flist), headers=self.hdrs,
+        res = self.http.post(self.url + '/api/secure/falco/lists', data=json.dumps(flist), headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -971,7 +970,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         flist = res
         flist['items']['items'] = items
 
-        res = requests.put(self.url + '/api/secure/falco/lists/{}'.format(id), data=json.dumps(flist),
+        res = self.http.put(self.url + '/api/secure/falco/lists/{}'.format(id), data=json.dumps(flist),
                            headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -985,7 +984,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON object representing the list.
         '''
-        res = requests.delete(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
+        res = self.http.delete(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
                               verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -1012,7 +1011,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             "scope": scope,
             "schedule": schedule
         }
-        res = requests.post(self.url + '/api/complianceTasks', data=json.dumps(task), headers=self.hdrs,
+        res = self.http.post(self.url + '/api/complianceTasks', data=json.dumps(task), headers=self.hdrs,
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -1026,7 +1025,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON list with the representation of each compliance task.
         '''
-        res = requests.get(self.url + '/api/complianceTasks', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/complianceTasks', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_compliance_task(self, id):
@@ -1039,7 +1038,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON representation of the compliance task.
         '''
-        res = requests.get(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def update_compliance_task(self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None):
@@ -1070,7 +1069,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             'enabled': enabled
         }
         task.update({k: v for k, v in options.items() if v is not None})
-        res = requests.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs,
+        res = self.http.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs,
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -1081,7 +1080,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Arguments**
             - id: the id of the compliance task to delete
         '''
-        res = requests.delete(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs,
+        res = self.http.delete(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs,
                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
@@ -1107,7 +1106,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             direction="&direction=%s" % direction if direction else "",
             cursor="=%d" % cursor if cursor is not None else "",
             filter=filter)
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_compliance_results(self, id):
@@ -1120,7 +1119,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A JSON representation of the compliance task run result.
         '''
-        res = requests.get(self.url + '/api/complianceResults/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/complianceResults/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_compliance_results_csv(self, id):
@@ -1133,7 +1132,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
         **Success Return Value**
             A CSV representation of the compliance task run result.
         '''
-        res = requests.get(self.url + '/api/complianceResults/{}/csv'.format(id), headers=self.hdrs,
+        res = self.http.get(self.url + '/api/complianceResults/{}/csv'.format(id), headers=self.hdrs,
                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
@@ -1170,7 +1169,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             scope="&scopeFilter=" + scope_filter if scope_filter else "",
             commandFilter="&commandFilter=" + command_filter if command_filter else "",
             metrics="&metrics=" + json.dumps(metrics) if metrics else "")
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_command_audit(self, id, metrics=[]):
@@ -1188,7 +1187,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             id=id,
             to=int(time.time() * 10 ** 6),
             metrics="&metrics=" + json.dumps(metrics) if metrics else "")
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def list_image_profiles(self):
@@ -1206,7 +1205,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             url=self.url
         )
 
-        res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_image_profile(self, profileId):
@@ -1258,7 +1257,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
                 profileId=matched_profiles[0]['profileId']
             )
 
-            res = requests.get(url, headers=self.hdrs, verify=self.ssl_verify)
+            res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
             return self._request_result(res)
 
         # Collision detected. The full profile IDs are returned

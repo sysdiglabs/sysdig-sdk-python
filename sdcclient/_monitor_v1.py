@@ -1,7 +1,5 @@
-import json
 import copy
-import requests
-import re
+import json
 
 from sdcclient._monitor import SdMonitorClient
 
@@ -75,7 +73,7 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_dashboard(self, name):
@@ -101,7 +99,7 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Create the new dashboard
         #
-        res = requests.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -242,7 +240,7 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Update dashboard
         #
-        res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+        res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                            verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -283,7 +281,7 @@ class SdMonitorClientV1(SdMonitorClient):
             #
             # Update dashboard
             #
-            res = requests.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
                                verify=self.ssl_verify)
             return self._request_result(res)
         else:
