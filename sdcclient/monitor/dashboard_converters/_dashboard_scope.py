@@ -47,9 +47,9 @@ def convert_scope_string_to_expression(scope = None):
             ;
 
         word = 
-            | /[\w\.]+/ 
-            | '"' /[\w\.]+/ '"'
-            | "'" /[\w\.]+/ "'"
+            | /[a-zA-Z0-9-_\-\.]+/ 
+            | '"' /[a-zA-Z0-9-_\-\.]+/ '"'
+            | "'" /[a-zA-Z0-9-_\-\.]+/ "'"
             ;
     """
 
