@@ -32,7 +32,7 @@ def convert_scope_string_to_expression(scope = None):
             |  'in'
             ;
 
-        operand = /[[a-zA-Z0-9_-]\.]+/ ;
+        operand = /[\w\.]+/ ;
 
         multiple_value 
             = 
@@ -47,9 +47,9 @@ def convert_scope_string_to_expression(scope = None):
             ;
 
         word = 
-            | /[\w\.]+/ 
-            | '"' /[\w\.]+/ '"'
-            | "'" /[\w\.]+/ "'"
+            | /[a-zA-z0-9-_\.]+/ 
+            | '"' /[a-zA-z0-9-_\.]+/ '"'
+            | "'" /[a-zA-z0-9-_\.]+/ "'"
             ;
     """
 
