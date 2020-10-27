@@ -37,6 +37,17 @@ with description("Dashboard Scopes"):
             "value": ["foo"]
         }]]))
 
+    with it('parses correctly: cluster.id-number = "foo"'):
+        param = 'cluster.id-number = "foo"'
+        res = convert_scope_string_to_expression(param)
+        expect(res).to(equal([True, [{
+            "displayName": "",
+            "isVariable": False,
+            "operand": "cluster.id-number",
+            "operator": "equals",
+            "value": ["foo"]
+        }]]))
+
     with it("parses correctly: agent.id = 'foo'"):
         param = "agent.id = 'foo'"
         res = convert_scope_string_to_expression(param)
