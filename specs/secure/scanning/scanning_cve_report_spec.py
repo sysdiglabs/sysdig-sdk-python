@@ -10,7 +10,7 @@ with description("CVE Reports", "integration") as self:
     with before.all:
         self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                        token=os.getenv("SDC_SECURE_TOKEN"))
-    with fcontext("when the CSV of static can be downloaded"):
+    with context("when the CSV of static can be downloaded"):
         with it("is able to download it for OS vulnerabilities"):
             ok, csv = self.client.download_cve_report_csv(vuln_type="os", scope_type="static")
 
