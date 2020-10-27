@@ -1,7 +1,5 @@
 import json
 
-import requests
-
 from sdcclient._common import _SdcCommon
 
 
@@ -35,7 +33,7 @@ class EventsClientV1(_SdcCommon):
             "last": last_s,
         }
         params = {k: v for k, v in options.items() if v is not None}
-        res = requests.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
         return self._request_result(res)
 
     def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
@@ -66,7 +64,7 @@ class EventsClientV1(_SdcCommon):
         edata = {
             'event': {k: v for k, v in options.items() if v is not None}
         }
-        res = requests.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata),
+        res = self.http.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata),
                             verify=self.ssl_verify)
         return self._request_result(res)
 
@@ -86,7 +84,7 @@ class EventsClientV1(_SdcCommon):
         if 'id' not in event:
             return [False, "Invalid event format"]
 
-        res = requests.delete(self.url + '/api/events/' + str(event['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/events/' + str(event['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]

@@ -2,8 +2,6 @@ import datetime
 import json
 from warnings import warn
 
-import requests
-
 from sdcclient._common import _SdcCommon
 
 
@@ -29,7 +27,7 @@ class PolicyEventsClientOld(_SdcCommon):
             scope='&scopeFilter=%s' % ctx['scopeFilter'] if "scopeFilter" in ctx else "",
             filter='&eventFilter=%s' % ctx['eventFilter'] if "eventFilter" in ctx else "")
 
-        res = requests.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 

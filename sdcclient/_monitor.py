@@ -1,8 +1,6 @@
 import json
 import re
 
-import requests
-
 from sdcclient._common import _SdcCommon
 from sdcclient.monitor import EventsClientV2, DashboardsClientV3
 
@@ -24,7 +22,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         **Example**
             `examples/list_alerts.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_alerts.py>`_
         '''
-        res = requests.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_notifications(self, from_ts, to_ts, state=None, resolved=None):
@@ -57,7 +55,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         if resolved is not None:
             params['resolved'] = resolved
 
-        res = requests.get(self.url + '/api/notifications', headers=self.hdrs, params=params, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/notifications', headers=self.hdrs, params=params, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
@@ -82,7 +80,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         notification['resolved'] = resolved
         data = {'notification': notification}
 
-        res = requests.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_alert(self, name=None, description=None, severity=None, for_atleast_s=None, condition=None,
@@ -121,7 +119,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         #
         # Get the list of alerts from the server
         #
-        res = requests.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         res.json()
@@ -167,7 +165,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         #
         # Create the new alert
         #
-        res = requests.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json), verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json), verify=self.ssl_verify)
         return self._request_result(res)
 
     def update_alert(self, alert):
@@ -186,7 +184,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         if 'id' not in alert:
             return [False, "Invalid alert format"]
 
-        res = requests.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({"alert": alert}), verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({"alert": alert}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_alert(self, alert):
@@ -205,7 +203,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         if 'id' not in alert:
             return [False, 'Invalid alert format']
 
-        res = requests.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -221,7 +219,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         **Example**
             `examples/print_explore_grouping.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_explore_grouping.py>`_
         '''
-        res = requests.get(self.url + '/api/groupConfigurations', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/groupConfigurations', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -259,7 +257,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         for item in new_hierarchy:
             body['groups'][0]['groupBy'].append({'metric': item})
 
-        res = requests.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
+        res = self.http.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
                            data=json.dumps(body), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -277,7 +275,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         **Example**
             `examples/list_metrics.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_metrics.py>`_
         '''
-        res = requests.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     @staticmethod
