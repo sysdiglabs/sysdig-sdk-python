@@ -65,7 +65,7 @@ class SdSecureClient(PolicyEventsClientV1, PolicyEventsClientOld, _SdcCommon):
             `examples/get_secure_user_falco_rules.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_user_falco_rules.py>`_
         '''
         ok, res = self._get_user_falco_rules()
-        return res if not ok else [True, res["customFalcoRulesFiles"]["files"][0]["variants"][0]["content"]]
+        return [False, res] if not ok else [True, res["customFalcoRulesFiles"]["files"][0]["variants"][0]["content"]]
 
     def _get_user_falco_rules(self):
         res = self.http.get(self.url + '/api/settings/falco/customRulesFiles', headers=self.hdrs, verify=self.ssl_verify)

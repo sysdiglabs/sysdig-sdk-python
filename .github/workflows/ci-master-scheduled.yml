@@ -3,6 +3,7 @@ name: CI - Master - Scheduled
 on:
   schedule:
     - cron: "0 1 * * *" # 1 AM everyday https://crontab.guru/#0_1_*_*_*
+  workflow_dispatch:
 
 jobs:
   scheduled-test:
@@ -18,62 +19,62 @@ jobs:
           - "3.9"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python_version }}
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
 
-    - name: Install Poetry
-      run: python -m pip install poetry poetry-dynamic-versioning
+      - name: Install Poetry
+        run: python -m pip install poetry poetry-dynamic-versioning
 
-    - uses: actions/cache@v2
-      name: Cache Poetry dependencies
-      with:
-        path: |
-          ~/.cache
-          ~/.local/share/virtualenvs/
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-poetry-
+      - uses: actions/cache@v2
+        name: Cache Poetry dependencies
+        with:
+          path: |
+            ~/.cache
+            ~/.local/share/virtualenvs/
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-    - name: Get dependencies
-      run: poetry install
+      - name: Get dependencies
+        run: poetry install
 
-    - name: Lint
-      continue-on-error: true
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint
+        continue-on-error: true
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: Travis Test - Start agent
-      id: start_agent
-      env:
-        PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
-      run: |
-        sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
-        ./test/start_agent.sh
+      - name: Travis Test - Start agent
+        id: start_agent
+        env:
+          PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
+        run: |
+          sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
+          ./test/start_agent.sh
 
-    - name: Travis Test - Install dependencies
-      run: |
-        poetry build
-        python -m pip install $(find dist -iname "*.whl" | head -1)
+      - name: Travis Test - Install dependencies
+        run: |
+          poetry build
+          python -m pip install $(find dist -iname "*.whl" | head -1)
 
-    - name: Travis Test - Secure APIs
-      env:
-        PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
-      run: ./test/test_secure_apis.sh
+      - name: Travis Test - Secure APIs
+        env:
+          PYTHON_SDC_TEST_API_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+        run: ./test/test_secure_apis.sh
 
-    - name: Test in staging
-      env:
-        SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
-        SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
-        SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
-        SDC_SECURE_URL: "https://secure-staging.sysdig.com"
-      run: poetry run mamba -f documentation
+      - name: Test in staging
+        env:
+          SDC_MONITOR_TOKEN: ${{ secrets.STAGING_MONITOR_API_TOKEN }}
+          SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
+          SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
+          SDC_SECURE_URL: "https://secure-staging.sysdig.com"
+        run: poetry run mamba -f documentation
 
-    - name: Travis Test - Stop agent
-      run: ./test/stop_agent.sh
-      if: steps.start_agent.outcome == 'success'
+      - name: Travis Test - Stop agent
+        run: ./test/stop_agent.sh
+        if: steps.start_agent.outcome == 'success'
