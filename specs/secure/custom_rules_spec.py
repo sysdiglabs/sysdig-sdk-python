@@ -18,6 +18,17 @@ with description("Custom Rules", "integration") as self:
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(start_with("####################\n# Your custom rules!\n####################\n"))
 
+        with context("when the credentials are not valid"):
+            with it("can't be retrieved"):
+                self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+                                             token="foo-bar")
+
+                ok, res = self.client.get_user_falco_rules()
+
+                expect((ok, res)).to_not(be_successful_api_call)
+                expect(res).to(equal("Bad credentials"))
+
+
     with it("can push custom rules"):
         _, previous_rules = self.client.get_user_falco_rules()
         empty_rules = self.empty_falco_rules()
