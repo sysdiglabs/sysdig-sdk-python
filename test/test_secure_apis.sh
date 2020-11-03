@@ -14,11 +14,6 @@ if [[ $? != 1 ]]; then
    echo "set_secure_system_falco_rules.py succeeded when it should have failed"
    exit 1
 fi
-
-if [[ "$OUT" != "Access is denied: Not enough privileges to complete the action" ]]; then
-    echo "Unexpected output from set_secure_system_falco_rules.py: $OUT"
-    exit 1
-fi
 set -e
 
 # Get the system falco rules file. Don't validate it, just verify that it can be fetched.
