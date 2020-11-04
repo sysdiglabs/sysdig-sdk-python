@@ -1,4 +1,7 @@
-class IbmAuthHelper():
+import requests
+
+
+class IbmAuthHelper:
     '''Authenticate with IBM Cloud IAM.
 
     **Arguments**
@@ -14,8 +17,8 @@ class IbmAuthHelper():
     def get_headers(url, apikey, guid):
         iam_token = IbmAuthHelper.__get_iam_token(url, apikey)
         return {
-          'Authorization': 'Bearer ' + iam_token,
-          'IBMInstanceID': guid
+            'Authorization': 'Bearer ' + iam_token,
+            'IBMInstanceID': guid
         }
 
     @staticmethod
@@ -32,7 +35,7 @@ class IbmAuthHelper():
     @staticmethod
     def __get_iam_token(url, apikey):
         env_url = IbmAuthHelper.__get_iam_endpoint(url)
-        response = self.http.post(
+        response = requests.post(
             'https://' + env_url + '/identity/token',
             data={
                 'grant_type': 'urn:ibm:params:oauth:grant-type:apikey',
