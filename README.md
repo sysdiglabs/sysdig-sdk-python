@@ -3,6 +3,9 @@ Sysdig Monitor/Secure Python client library
 
 ![CI - Master - Scheduled](https://github.com/sysdiglabs/sysdig-sdk-python/workflows/CI%20-%20Master%20-%20Scheduled/badge.svg)
 [![Current version on PyPI](http://img.shields.io/pypi/v/sdcclient.svg)](https://pypi.python.org/pypi/sdcclient)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sdcclient)
+![PyPI - License](https://img.shields.io/pypi/l/sdcclient)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/sdcclient)
 
 A Python client API for Sysdig Monitor/Sysdig Secure.
 
