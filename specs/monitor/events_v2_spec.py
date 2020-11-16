@@ -1,9 +1,9 @@
 import os
 import time
+from datetime import datetime, timedelta
 
-from expects import expect, have_key, contain, have_keys, be_empty, equal, be_false
-from expects.matchers.built_in import have_len
-from mamba import it, before, description
+from expects import expect, have_key, contain, have_keys, be_empty, equal, be_false, be_above_or_equal, have_len
+from mamba import it, before, context, description
 
 from sdcclient.monitor import EventsClientV2
 from specs import be_successful_api_call
@@ -82,6 +82,35 @@ with description("Events v2", "integration") as self:
         ok, res = self.client.get_events(limit=1)
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_key("events", have_len(1)))
+
+    with it("is able to retrieve the events from the last day"):
+        to_s = datetime.now()
+        from_s = to_s - timedelta(weeks=2)
+        ok, res = self.client.get_events(from_s=from_s, to_s=to_s)
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_key("events", have_len(be_above_or_equal(1))))
+
+    with context("but the from and to parameters are incorrectly specified"):
+        with it("returns an error if any of the parameters is specified but not the other"):
+            t = datetime.now() - timedelta(weeks=2)
+            ok1, res1 = self.client.get_events(from_s=t)
+            ok2, res2 = self.client.get_events(to_s=t)
+
+            expect((ok1, res1)).not_to(be_successful_api_call)
+            expect((ok2, res2)).not_to(be_successful_api_call)
+            expect(res1).to(equal("only one of 'from_s' or 'to_s' has been specified, "
+                                  "both are required when filtering by time"))
+            expect(res2).to(equal("only one of 'from_s' or 'to_s' has been specified, "
+                                  "both are required when filtering by time"))
+
+        with it("returns an error if they are specified in the wrong order"):
+            to_s = datetime.now()
+            from_s = to_s - timedelta(weeks=2)
+            ok, res = self.client.get_events(from_s=to_s, to_s=from_s)
+
+            expect((ok, res)).not_to(be_successful_api_call)
+            expect(res).to(equal("'from_s' must be lower than 'to_s'"))
 
     with it("is able to remove the event from the feed"):
         time.sleep(3)  # Wait for the event to appear in the feed
