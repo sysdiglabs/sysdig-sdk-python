@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from sdcclient._common import _SdcCommon
 
@@ -8,7 +9,8 @@ class EventsClientV2(_SdcCommon):
         super().__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDC"
 
-    def get_events(self, name=None, category=None, direction='before', status=None, limit=100, pivot=None):
+    def get_events(self, name=None, category=None, direction='before', status=None, limit=100, pivot=None, from_s=None,
+                   to_s=None):
         '''**Description**
             Returns the list of Sysdig Monitor events.
 
@@ -19,6 +21,8 @@ class EventsClientV2(_SdcCommon):
             - **status**: status of the event as list. Default: ['triggered', 'resolved', 'acknowledged', 'unacknowledged']
             - **limit**: max number of events to retrieve. Default: 100.
             - **pivot**: event id to use as pivot. Default: None.
+            - **from_s**: the unix timestamp in milliseconds or datetime object for the beginning of the events. Default: None.
+            - **to_s**: the unix timestamp in milliseconds or datetime object for the end of the events. Default: None.
 
         **Success Return Value**
             A dictionary containing the list of events.
@@ -46,6 +50,18 @@ class EventsClientV2(_SdcCommon):
         if direction not in ["before", "after"]:
             return False, "Invalid direction '{}', must be either 'before' or 'after'".format(direction)
 
+        if from_s is not None and isinstance(from_s, datetime):
+            from_s = int(from_s.timestamp() * 1000)
+        if to_s is not None and isinstance(to_s, datetime):
+            to_s = int(to_s.timestamp() * 1000)
+
+        if to_s is None and from_s is not None or from_s is None and to_s is not None:
+            return False, "only one of 'from_s' or 'to_s' has been specified, both are required when filtering by time"
+
+        if to_s is not None and from_s is not None:
+            if int(to_s) < int(from_s):
+                return False, "'from_s' must be lower than 'to_s'"
+
         options = {
             'alertStatus': status,
             'category': ','.join(category),
@@ -56,6 +72,8 @@ class EventsClientV2(_SdcCommon):
             'limit': str(limit),
             'pivot': pivot,
             'filter': name,
+            'from': from_s,
+            'to': to_s,
         }
         params = {k: v for k, v in options.items() if v is not None}
         res = self.http.get(self.url + '/api/v2/events/', headers=self.hdrs, params=params, verify=self.ssl_verify)
@@ -78,7 +96,7 @@ class EventsClientV2(_SdcCommon):
             return [False, "Invalid event format"]
 
         res = self.http.delete(self.url + '/api/v2/events/' + str(event['id']), headers=self.hdrs,
-                              verify=self.ssl_verify)
+                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
@@ -112,5 +130,5 @@ class EventsClientV2(_SdcCommon):
             'event': {k: v for k, v in options.items() if v is not None}
         }
         res = self.http.post(self.url + '/api/v2/events/', headers=self.hdrs, data=json.dumps(edata),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
