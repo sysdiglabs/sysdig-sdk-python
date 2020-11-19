@@ -6,9 +6,7 @@ from sdcclient._common import _SdcCommon
 class PolicyEventsClientV1(_SdcCommon):
     def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
         super(PolicyEventsClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
-
         self.product = "SDS"
-        self._policy_v2 = None
 
     def _get_policy_events_int(self, ctx):
         limit = ctx.get("limit", 50)
