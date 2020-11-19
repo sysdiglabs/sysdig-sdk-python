@@ -20,9 +20,10 @@ class SdMonitorClientV1(SdMonitorClient):
         self._dashboards_api_endpoint = '/ui/dashboards'
         self._default_dashboards_api_endpoint = '/api/defaultDashboards'
 
-    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False, annotations={}):
+    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False,
+                                       annotations={}):
         if scope is not None:
-            if isinstance(scope, basestring) == False:
+            if not isinstance(scope, basestring):
                 return [False, 'Invalid scope format: Expected a string']
 
         #
@@ -37,11 +38,13 @@ class SdMonitorClientV1(SdMonitorClient):
         template['publicToken'] = None
 
         # set dashboard scope to the specific parameter
-        scopeExpression = self.convert_scope_string_to_expression(scope)
-        if scopeExpression[0] == False:
-            return scopeExpression
+        ok, scope_expression = self.convert_scope_string_to_expression(scope)
+        if not ok:
+            return ok, scope_expression
         template['filterExpression'] = scope
-        template['scopeExpressionList'] = map(lambda ex: {'operand':ex['operand'], 'operator':ex['operator'],'value':ex['value'],'displayName':'', 'isVariable':False}, scopeExpression[1])
+        template['scopeExpressionList'] = map(
+            lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '',
+                        'isVariable': False}, scope_expression)
 
         if 'widgets' in template and template['widgets'] is not None:
             # Default dashboards (aka Explore views) specify panels with the property `widgets`,
@@ -55,7 +58,7 @@ class SdMonitorClientV1(SdMonitorClient):
                 if 'overrideFilter' not in chart:
                     chart['overrideFilter'] = False
 
-                if chart['overrideFilter'] == False:
+                if not chart['overrideFilter']:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
 
@@ -73,7 +76,8 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Create the new dashboard
         #
-        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
+                             data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_dashboard(self, name):
@@ -99,11 +103,13 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Create the new dashboard
         #
-        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
-                            verify=self.ssl_verify)
+        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
+                             data=json.dumps({'dashboard': dashboard_configuration}),
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
-    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None, layout=None):
+    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None,
+                            layout=None):
         """**Description**
             Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
 
@@ -176,7 +182,8 @@ class SdMonitorClientV1(SdMonitorClient):
 
         panel_configuration['scope'] = scope
         # if chart scope is equal to dashboard scope, set it as non override
-        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or ('scope' not in dashboard and scope != None)
+        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or \
+                                                ('scope' not in dashboard and scope is not None)
 
         #
         # Configure panel type
@@ -185,7 +192,7 @@ class SdMonitorClientV1(SdMonitorClient):
             panel_configuration['showAs'] = 'timeSeries'
             panel_configuration['showAsType'] = 'line'
 
-            if limit != None:
+            if limit is not None:
                 panel_configuration['paging'] = {
                     'from': 0,
                     'to': limit - 1
@@ -223,7 +230,7 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Configure layout
         #
-        if layout != None:
+        if layout is not None:
             panel_configuration['gridConfiguration'] = layout
 
         #
@@ -240,8 +247,9 @@ class SdMonitorClientV1(SdMonitorClient):
         #
         # Update dashboard
         #
-        res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
-                           verify=self.ssl_verify)
+        res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
+                            data=json.dumps({'dashboard': dashboard_configuration}),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def remove_dashboard_panel(self, dashboard, panel_name):
@@ -281,8 +289,9 @@ class SdMonitorClientV1(SdMonitorClient):
             #
             # Update dashboard
             #
-            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
-                               verify=self.ssl_verify)
+            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']),
+                                headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
+                                verify=self.ssl_verify)
             return self._request_result(res)
         else:
             return [False, 'Not found']

@@ -18,8 +18,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
 
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ------------------------------------------------
 
@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.linkcode' ]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.linkcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -76,7 +76,6 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -95,12 +94,10 @@ html_theme = 'classic'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'python-sdc-clientdoc'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -130,7 +127,6 @@ latex_documents = [
      u'Sysdig Inc.', 'manual'),
 ]
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
@@ -139,7 +135,6 @@ man_pages = [
     (master_doc, 'python-sdc-client', u'python-sdc-client Documentation',
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -159,13 +154,12 @@ def linkcode_resolve(domain, info):
         for part in info['fullname'].split('.'):
             obj = getattr(obj, part)
         import inspect
-        fn = inspect.getsourcefile(obj)
         source, lineno = inspect.findsource(obj)
         return lineno + 1
 
     if domain != 'py' or not info['module']:
         return None
-    #tag = 'master' if 'dev' in release else ('v' + release)
+    # tag = 'master' if 'dev' in release else ('v' + release)
     url = "https://github.com/draios/python-sdc-client/blob/master/sdcclient/_client.py"
     try:
         return url + '#L%d' % find_line()

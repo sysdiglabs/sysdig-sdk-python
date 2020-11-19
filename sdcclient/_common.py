@@ -46,7 +46,7 @@ class _SdcCommon(object):
         self.hdrs = self.__get_headers(custom_headers)
         self.url = os.environ.get("SDC_URL", sdc_url).rstrip('/')
         self.ssl_verify = os.environ.get("SDC_SSL_VERIFY", None)
-        if self.ssl_verify == None:
+        if self.ssl_verify is None:
             self.ssl_verify = ssl_verify
         else:
             if self.ssl_verify.lower() in ['true', 'false']:
@@ -256,7 +256,7 @@ class _SdcCommon(object):
         }
 
         res = self.http.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_notification_channel(self, channel):
@@ -269,12 +269,13 @@ class _SdcCommon(object):
         }
 
         res = self.http.post(self.url + '/api/notificationChannels', headers=self.hdrs, data=json.dumps(channel_json),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_notification_channel(self, id):
 
-        res = self.http.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/notificationChannels/' + str(id), headers=self.hdrs,
+                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
 
@@ -285,7 +286,7 @@ class _SdcCommon(object):
             return [False, "Invalid channel format"]
 
         res = self.http.put(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
-                           data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
+                            data=json.dumps({"notificationChannel": channel}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_notification_channel(self, channel):
@@ -293,7 +294,7 @@ class _SdcCommon(object):
             return [False, "Invalid channel format"]
 
         res = self.http.delete(self.url + '/api/notificationChannels/' + str(channel['id']), headers=self.hdrs,
-                              verify=self.ssl_verify)
+                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return False, self.lasterr
         return True, None
@@ -387,7 +388,7 @@ class _SdcCommon(object):
         # Fire the request
         #
         res = self.http.post(self.url + '/api/data?format=map', headers=self.hdrs,
-                            data=json.dumps(req_json), verify=self.ssl_verify)
+                             data=json.dumps(req_json), verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_data(self, metrics, start_ts, end_ts=0, sampling_s=0,
@@ -436,7 +437,7 @@ class _SdcCommon(object):
             reqbody['sampling'] = sampling_s
 
         res = self.http.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
@@ -581,7 +582,7 @@ class _SdcCommon(object):
         user_json = {k: v for k, v in options.items() if v is not None}
 
         res = self.http.post(self.url + '/api/users', headers=self.hdrs, data=json.dumps(user_json),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_user(self, user_email):
@@ -594,10 +595,10 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
         '''
-        res = self.get_user_ids([user_email])
-        if res[0] == False:
-            return res
-        userid = res[1][0]
+        ok, res = self.get_user_ids([user_email])
+        if not ok:
+            return ok, res
+        userid = res[0]
         res = self.http.delete(self.url + '/api/users/' + str(userid), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -625,10 +626,10 @@ class _SdcCommon(object):
         return [True, res.json()['users']]
 
     def edit_user(self, user_email, firstName=None, lastName=None, systemRole=None):
-        res = self.get_user(user_email)
-        if res[0] == False:
-            return res
-        user = res[1]
+        ok, user = self.get_user(user_email)
+        if not ok:
+            return ok, user
+
         reqbody = {
             'systemRole': systemRole if systemRole else user['systemRole'],
             'username': user_email,
@@ -636,18 +637,18 @@ class _SdcCommon(object):
             'version': user['version']
         }
 
-        if firstName == None:
+        if firstName is None:
             reqbody['firstName'] = user['firstName'] if 'firstName' in list(user.keys()) else ''
         else:
             reqbody['firstName'] = firstName
 
-        if lastName == None:
+        if lastName is None:
             reqbody['lastName'] = user['lastName'] if 'lastName' in list(user.keys()) else ''
         else:
             reqbody['lastName'] = lastName
 
         res = self.http.put(self.url + '/api/users/' + str(user['id']), headers=self.hdrs, data=json.dumps(reqbody),
-                           verify=self.ssl_verify)
+                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, 'Successfully edited user']
@@ -681,12 +682,12 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
         '''
-        res = self.get_teams(name)
-        if res[0] == False:
-            return res
-        for t in res[1]:
-            if t['name'] == name:
-                return [True, t]
+        ok, res = self.get_teams(name)
+        if not ok:
+            return ok, res
+        for team in res:
+            if team['name'] == name:
+                return [True, team]
         return [False, 'Could not find team']
 
     def get_team_ids(self, teams):
@@ -711,11 +712,11 @@ class _SdcCommon(object):
         return [True, dict((user['id'], user['username']) for user in u)]
 
     def get_user_ids(self, users):
-        res = self._get_user_id_dict(users)
-        if res[0] == False:
-            return res
+        ok, res = self._get_user_id_dict(users)
+        if not ok:
+            return ok, res
         else:
-            return [True, list(res[1].values())]
+            return [True, list(res.values())]
 
     def create_team(self, name, memberships=None, filter='', description='', show='host', theme='#7BB0B2',
                     perm_capture=False, perm_custom_events=False, perm_aws_data=False):
@@ -751,16 +752,16 @@ class _SdcCommon(object):
         }
 
         # Map user-names to IDs
-        if memberships != None and len(memberships) != 0:
-            res = self._get_user_id_dict(list(memberships.keys()))
-            if res[0] == False:
+        if memberships:
+            ok, res = self._get_user_id_dict(list(memberships.keys()))
+            if not ok:
                 return [False, 'Could not fetch IDs for user names']
             reqbody['userRoles'] = [
                 {
                     'userId': user_id,
                     'role': memberships[user_name]
                 }
-                for (user_name, user_id) in res[1].items()
+                for (user_name, user_id) in res.items()
             ]
         else:
             reqbody['users'] = []
@@ -769,7 +770,7 @@ class _SdcCommon(object):
             reqbody['filter'] = filter
 
         res = self.http.post(self.url + '/api/teams', headers=self.hdrs, data=json.dumps(reqbody),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
@@ -795,53 +796,52 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
         '''
-        res = self.get_team(name)
-        if res[0] == False:
-            return res
+        ok, team = self.get_team(name)
+        if not ok:
+            return ok, team
 
-        t = res[1]
         reqbody = {
             'name': name,
-            'theme': theme if theme else t['theme'],
-            'show': show if show else t['show'],
-            'canUseSysdigCapture': perm_capture if perm_capture else t['canUseSysdigCapture'],
-            'canUseCustomEvents': perm_custom_events if perm_custom_events else t['canUseCustomEvents'],
-            'canUseAwsMetrics': perm_aws_data if perm_aws_data else t['canUseAwsMetrics'],
-            'id': t['id'],
-            'version': t['version']
+            'theme': theme if theme else team['theme'],
+            'show': show if show else team['show'],
+            'canUseSysdigCapture': perm_capture if perm_capture else team['canUseSysdigCapture'],
+            'canUseCustomEvents': perm_custom_events if perm_custom_events else team['canUseCustomEvents'],
+            'canUseAwsMetrics': perm_aws_data if perm_aws_data else team['canUseAwsMetrics'],
+            'id': team['id'],
+            'version': team['version']
         }
 
         # Handling team description
         if description is not None:
             reqbody['description'] = description
-        elif 'description' in list(t.keys()):
-            reqbody['description'] = t['description']
+        elif 'description' in list(team.keys()):
+            reqbody['description'] = team['description']
 
         # Handling for users to map (user-name, team-role) pairs to memberships
-        if memberships != None:
-            res = self._get_user_id_dict(list(memberships.keys()))
-            if res[0] == False:
+        if memberships is not None:
+            ok, res = self._get_user_id_dict(list(memberships.keys()))
+            if not res:
                 return [False, 'Could not convert user names to IDs']
             reqbody['userRoles'] = [
                 {
                     'userId': user_id,
                     'role': memberships[user_name]
                 }
-                for (user_name, user_id) in res[1].items()
+                for (user_name, user_id) in res.items()
             ]
-        elif 'userRoles' in list(t.keys()):
-            reqbody['userRoles'] = t['userRoles']
+        elif 'userRoles' in list(team.keys()):
+            reqbody['userRoles'] = team['userRoles']
         else:
             reqbody['userRoles'] = []
 
         # Special handling for filters since we don't support blank filters
-        if filter != None:
+        if filter is not None:
             reqbody['filter'] = filter
-        elif 'filter' in list(t.keys()):
-            reqbody['filter'] = t['filter']
+        elif 'filter' in list(team.keys()):
+            reqbody['filter'] = team['filter']
 
-        res = self.http.put(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, data=json.dumps(reqbody),
-                           verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/teams/' + str(team['id']), headers=self.hdrs, data=json.dumps(reqbody),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_team(self, name):
@@ -854,12 +854,11 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
         '''
-        res = self.get_team(name)
-        if res[0] == False:
-            return res
+        ok, team = self.get_team(name)
+        if not ok:
+            return ok, team
 
-        t = res[1]
-        res = self.http.delete(self.url + '/api/teams/' + str(t['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(self.url + '/api/teams/' + str(team['id']), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, None]
@@ -878,20 +877,18 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt_extended.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt_extended.py>`_
         '''
-        res = self.get_team(team)
-        if res[0] == False:
-            return res
+        ok, res = self.get_team(team)
+        if not ok:
+            return ok, res
 
-        raw_memberships = res[1]['userRoles']
+        raw_memberships = res['userRoles']
         user_ids = [m['userId'] for m in raw_memberships]
 
-        res = self._get_id_user_dict(user_ids)
-        if res[0] == False:
+        ok, res = self._get_id_user_dict(user_ids)
+        if not ok:
             return [False, 'Could not fetch IDs for user names']
         else:
-            id_user_dict = res[1]
-
-        return [True, dict([(id_user_dict[m['userId']], m['role']) for m in raw_memberships])]
+            return [True, dict([(res[m['userId']], m['role']) for m in raw_memberships])]
 
     def save_memberships(self, team, memberships):
         '''
@@ -986,7 +983,7 @@ class _SdcCommon(object):
             The access keys object
         '''
         res = self.http.post(self.url + '/api/customer/accessKeys/' + access_key + "/disable/", headers=self.hdrs,
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def enable_access_key(self, access_key):
@@ -1001,7 +998,7 @@ class _SdcCommon(object):
             The access keys object
         '''
         res = self.http.post(self.url + '/api/customer/accessKeys/' + access_key + "/enable/", headers=self.hdrs,
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_agents_config(self):
@@ -1013,7 +1010,7 @@ class _SdcCommon(object):
 
     def set_agents_config(self, config):
         res = self.http.put(self.url + '/api/agents/config', headers=self.hdrs, data=json.dumps(config),
-                           verify=self.ssl_verify)
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def clear_agents_config(self):
@@ -1021,14 +1018,12 @@ class _SdcCommon(object):
         return self.set_agents_config(data)
 
     def get_user_api_token(self, username, teamname):
-        res = self.get_team(teamname)
-        if res[0] == False:
-            return res
+        ok, team = self.get_team(teamname)
+        if not ok:
+            return ok, team
 
-        t = res[1]
-
-        res = self.http.get(self.url + '/api/token/%s/%d' % (username, t['id']), headers=self.hdrs,
-                           verify=self.ssl_verify)
+        res = self.http.get(self.url + '/api/token/%s/%d' % (username, team['id']), headers=self.hdrs,
+                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         data = res.json()

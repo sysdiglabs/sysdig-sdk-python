@@ -1,7 +1,7 @@
 import os
 
-from expects import *
-from mamba import *
+from expects import expect, start_with
+from mamba import before, context, description, it
 
 from sdcclient import SdScanningClient
 from specs import be_successful_api_call

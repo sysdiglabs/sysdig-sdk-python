@@ -1,5 +1,5 @@
-from expects import *
-from mamba import *
+from expects import equal, expect, be_false, start_with
+from mamba import description, it
 
 from sdcclient.monitor.dashboard_converters import convert_scope_string_to_expression
 

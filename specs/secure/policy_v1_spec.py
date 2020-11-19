@@ -27,34 +27,37 @@ _POLICY_ACTIONS = [
         "isLimitedToContainer": True
     }
 ]
+
+
 def policy_json():
-    return """\
-{
-  "name": "%s",
-  "description": "%s", 
-  "notificationChannelIds": [], 
-  "severity": 0, 
-  "hostScope": true, 
-  "enabled": true, 
-  "actions": %s, 
-  "falcoConfiguration": {
-    "fields": [], 
-    "ruleNameRegEx": "%s", 
+    return f"""\
+{{
+  "name": "{_POLICY_NAME}",
+  "description": "{_POLICY_DESCRIPTION}",
+  "notificationChannelIds": [],
+  "severity": 0,
+  "hostScope": true,
+  "enabled": true,
+  "actions": {json.dumps(_POLICY_ACTIONS)},
+  "falcoConfiguration": {{
+    "fields": [],
+    "ruleNameRegEx": "{_POLICY_RULES_REGEX}",
     "onDefault": "DEFAULT_MATCH_EFFECT_NEXT"
-  }, 
-  "policyEventsCount": 0,  
-  "isManual": true, 
-  "isBuiltin": true, 
-  "containerScope": true, 
-  "modifiedOn": 1597646118000, 
+  }},
+  "policyEventsCount": 0,
+  "isManual": true,
+  "isBuiltin": true,
+  "containerScope": true,
+  "modifiedOn": 1597646118000,
   "createdOn": 1597646118000
-}
-""" % (_POLICY_NAME, _POLICY_DESCRIPTION, json.dumps(_POLICY_ACTIONS), _POLICY_RULES_REGEX)
+}}
+"""
+
 
 with description("Policies v1", "integration") as self:
     with before.all:
         self.clientV1 = SdSecureClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                     token=os.getenv("SDC_SECURE_TOKEN"))
+                                         token=os.getenv("SDC_SECURE_TOKEN"))
     with after.each:
         self.cleanup_policies()
 

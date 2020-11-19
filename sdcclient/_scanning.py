@@ -1059,7 +1059,7 @@ class SdScanningClient(_SdcCommon):
         if id is None:
             return [False, "No vulnerability ID provided"]
 
-        url = self.url + f"/api/scanning/v1/anchore/query/vulnerabilities"
+        url = f"{self.url}/api/scanning/v1/anchore/query/vulnerabilities"
 
         params = {
             "id": id,
@@ -1079,7 +1079,7 @@ class SdScanningClient(_SdcCommon):
         if not name:
             return [False, "A name is required for the exception bundle"]
 
-        url = self.url + f"/api/scanning/v1/vulnexceptions"
+        url = f"{self.url}/api/scanning/v1/vulnexceptions"
         params = {
             "version": "1_0",
             "name": name,
@@ -1104,7 +1104,7 @@ class SdScanningClient(_SdcCommon):
         return [True, None]
 
     def list_vulnerability_exception_bundles(self):
-        url = self.url + f"/api/scanning/v1/vulnexceptions"
+        url = f"{self.url}/api/scanning/v1/vulnexceptions"
 
         params = {
             "bundleId": "default",
@@ -1214,9 +1214,7 @@ class SdScanningClient(_SdcCommon):
                     "tag": ""
                 },
             "runtimeScope": {},
-            "imageQueryFilter": {
-                "vType": vuln_type
-            },
+            "imageQueryFilter": {"vType": vuln_type},
             "offset": 0,
             "limit": 100000
         }
