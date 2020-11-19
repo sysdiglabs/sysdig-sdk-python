@@ -2,8 +2,10 @@ import base64
 import json
 import re
 import time
+from datetime import datetime
 from warnings import warn
 
+from requests.exceptions import RetryError
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 try:
@@ -1224,3 +1226,81 @@ class SdScanningClient(_SdcCommon):
             return [False, self.lasterr]
 
         return [True, res.content.decode("utf-8")]
+
+    def get_image_scanning_results(self, image_name, policy_id=None):
+        '''
+        Args:
+            image_name (str): Image name to retrieve the scanning results from
+            policy_id (str): Policy ID to check against. If not specified, will check against all policies.
+
+        Returns:
+            A tuple of (bool, str).
+            The first parameter, if true, means that the result is correct, while
+            if false, means that there's been an error. The second parameter
+            will hold the response of the API call.
+        '''
+        try:
+            ok, res = self.get_image(image_name)
+            if not ok:
+                return ok, res
+
+            image_digest = res[0]["imageDigest"]
+            image_tag = res[0]["image_detail"][0]["fulltag"]
+        except RetryError:
+            return [False, "could not retrieve image digest for the given image name, "
+                           "ensure that the image has been scanned"]
+
+        url = f"{self.url}/api/scanning/v1/images/{image_digest}/policyEvaluation"
+        params = {
+            "tag": image_tag,
+        }
+
+        res = self.http.get(url, headers=self.hdrs, params=params, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        json_res = res.json()
+
+        result = {
+            "image_digest": json_res["imageDigest"],
+            "image_id": json_res["imageId"],
+            "status": json_res["status"],
+            "image_tag": image_tag,
+            "total_stop": json_res["nStop"],
+            "total_warn": json_res["nWarn"],
+            "last_evaluation": datetime.utcfromtimestamp(json_res["at"]),
+            "policy_id": "*",
+            "policy_name": "All policies",
+            "warn_results": [],
+            "stop_results": []
+        }
+
+        if policy_id:
+            policy_results = [result for result in json_res["results"] if result["policyId"] == policy_id]
+            if policy_results:
+                filtered_result_by_policy_id = policy_results[0]
+                result["total_stop"] = filtered_result_by_policy_id["nStop"]
+                result["total_warn"] = filtered_result_by_policy_id["nWarn"]
+                result["warn_results"] = [rule_result["checkOutput"]
+                                          for gate_result in filtered_result_by_policy_id["gateResults"]
+                                          for rule_result in gate_result["ruleResults"]
+                                          if rule_result["gateAction"] == "warn"]
+                result["stop_results"] = [rule_result["checkOutput"]
+                                          for gate_result in filtered_result_by_policy_id["gateResults"]
+                                          for rule_result in gate_result["ruleResults"]
+                                          if rule_result["gateAction"] == "stop"]
+            else:
+                return [False, "the specified policy ID doesn't exist"]
+        else:
+            result["warn_results"] = [rule_result["checkOutput"]
+                                      for result in json_res["results"]
+                                      for gate_result in result["gateResults"]
+                                      for rule_result in gate_result["ruleResults"]
+                                      if rule_result["gateAction"] == "warn"]
+            result["stop_results"] = [rule_result["checkOutput"]
+                                      for result in json_res["results"]
+                                      for gate_result in result["gateResults"]
+                                      for rule_result in gate_result["ruleResults"]
+                                      if rule_result["gateAction"] == "stop"]
+
+        return [True, result]
