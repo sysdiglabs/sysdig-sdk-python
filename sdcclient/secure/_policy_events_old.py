@@ -8,10 +8,7 @@ from sdcclient._common import _SdcCommon
 class PolicyEventsClientOld(_SdcCommon):
     def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
         super(PolicyEventsClientOld, self).__init__(token, sdc_url, ssl_verify, custom_headers)
-
-        self.customer_id = None
         self.product = "SDS"
-        self._policy_v2 = None
 
     def _get_policy_events_int(self, ctx):
         warn("The PolicyEventsClientOld class is deprecated in favour of PolicyEventsClientV1; use it only if you have "

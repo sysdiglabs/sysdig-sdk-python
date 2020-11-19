@@ -289,7 +289,7 @@ class DashboardsClientV3(_SdcCommon):
                 if 'overrideScope' not in chart:
                     chart['overrideScope'] = False
 
-                if chart['overrideScope'] == False:
+                if not chart['overrideScope']:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
 

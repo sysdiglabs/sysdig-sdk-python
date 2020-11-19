@@ -12,12 +12,8 @@ from sdcclient import SdMonitorClientV1
 # Parse arguments
 #
 if len(sys.argv) != 5:
-    print((
-            'usage: %s <sysdig-v1-url> <sysdig-v1-token> <sysdig-v2-url> <sysdig-v2-token>'
-            % sys.argv[0]))
-    print(
-        'You can find your token at https://app.sysdigcloud.com/#/settings/user'
-    )
+    print(f'usage: {sys.argv[0]} <sysdig-v1-url> <sysdig-v1-token> <sysdig-v2-url> <sysdig-v2-token>')
+    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
     sys.exit(1)
 
 sdc_v1_url = sys.argv[1]

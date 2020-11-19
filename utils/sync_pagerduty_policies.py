@@ -5,28 +5,22 @@
 import argparse
 import copy
 import json
-import os
 import sys
 from functools import reduce
 
 import requests
 
-sys.path.insert(
-    0, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), '..'))
-
 from sdcclient import SdMonitorClient
-
 
 #
 # Parse arguments
 #
-parser = argparse.ArgumentParser(
-    description='Synchronize PagerDuty escalation policies with Sysdig, to make sure each escalation policy has a notification channel enabled in Sysdig')
+parser = argparse.ArgumentParser(description='Synchronize PagerDuty escalation policies with Sysdig, '
+                                             'to make sure each escalation policy has a notification '
+                                             'channel enabled in Sysdig')
 parser.add_argument('sysdig-token', nargs=1, help='Sysdig API token')
-parser.add_argument(
-    'pagerduty-account-id', nargs=1, help='PagerDuty account ID')
-parser.add_argument(
-    'pagerduty-access-key', nargs=1, help='PagerDuty API access key')
+parser.add_argument('pagerduty-account-id', nargs=1, help='PagerDuty account ID')
+parser.add_argument('pagerduty-access-key', nargs=1, help='PagerDuty API access key')
 parser.add_argument(
     '--link',
     action='store_true',
@@ -69,6 +63,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     pager_duty_channels = [channel for channel in res['notificationChannels'] if channel['type'] == 'PAGER_DUTY']
     print('Found {} PagerDuty notification {} configured in Sysdig'.format(
         len(pager_duty_channels), pluralize('channel', len(pager_duty_channels))))
+
     # print(json.dumps(pager_duty_channels, sort_keys=True, indent=4))
 
     # Build map of notification channel -> integration key
@@ -119,7 +114,9 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
     service_integration_keys = {}
     for service in services:
         service['sysdig_integrations'] = [integration for integration in service['integrations']
-                                          if 'vendor' in integration and integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id']]
+                                          if
+                                          'vendor' in integration and integration['vendor'] and integration['vendor'][
+                                              'id'] == sysdig_vendor['id']]
 
         for integration in service['sysdig_integrations']:
             service_integration_keys[integration['integration_key']] = {
@@ -190,7 +187,9 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
             disconnected_services = []
             for service in sysdig_services:
                 for integration in service['integrations']:
-                    if integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id'] and integration['integration_key'] not in integration_keys:
+                    if integration['vendor'] and \
+                            integration['vendor']['id'] == sysdig_vendor['id'] and \
+                            integration['integration_key'] not in integration_keys:
                         disconnected_services.append({
                             'service': service,
                             'integration': integration
@@ -218,23 +217,29 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
             else:
                 for service in sysdig_services:
                     for integration in service['integrations']:
-                        if integration['vendor'] and integration['vendor']['id'] == sysdig_vendor['id'] and integration['integration_key'] in integration_keys:
+                        if integration['vendor'] and \
+                                integration['vendor']['id'] == sysdig_vendor['id'] and \
+                                integration['integration_key'] in integration_keys:
                             channel = integration_keys[integration['integration_key']]
                             if channel['name'] != policy['name']:
                                 #
                                 # rename channel to match new policy name
                                 #
                                 actions.append({
-                                    'info': 'Rename notification channel "{}" to policy name "{}"'.format(channel['name'], policy['name']),
-                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'], service_name)
+                                    'info': 'Rename notification channel "{}" to policy name "{}"'.format(
+                                        channel['name'], policy['name']),
+                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'],
+                                                                                      service_name)
                                 })
                             elif channel['options']['serviceName'] != service_name:
                                 #
                                 # rename channel service to service name
                                 #
                                 actions.append({
-                                    'info': 'Rename channel service "{}" to service name "{}"'.format(service['name'], service_name),
-                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'], service_name)
+                                    'info': 'Rename channel service "{}" to service name "{}"'.format(service['name'],
+                                                                                                      service_name),
+                                    'fn': actions_factory.rename_notification_channel(channel, policy['name'],
+                                                                                      service_name)
                                 })
 
                             if len(service['integrations']) == 1 and service['name'] != service_name:
@@ -480,7 +485,6 @@ def pluralize(term, count, plural=None):
 
 # let's get started!
 print('')
-
 
 run(args['sysdig-token'][0], args['pagerduty-account-id'][0],
     args['pagerduty-access-key'][0], args['link'], args['unlink'], args['dry_run'])

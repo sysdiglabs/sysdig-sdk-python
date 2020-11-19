@@ -6,12 +6,12 @@
 import getopt
 import sys
 
-from sdcclient import SdcClient, SdMonitorClient
+from sdcclient import SdMonitorClient
+
 
 #
 # Parse arguments
 #
-from sdcclient.monitor import EventsClientV2
 
 
 def usage():

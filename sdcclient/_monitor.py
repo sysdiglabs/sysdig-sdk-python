@@ -11,7 +11,6 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDC"
 
-
     def get_alerts(self):
         '''**Description**
             Retrieve the list of alerts configured by the user.
@@ -80,7 +79,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         notification['resolved'] = resolved
         data = {'notification': notification}
 
-        res = self.http.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs, data=json.dumps(data), verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs,
+                            data=json.dumps(data), verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_alert(self, name=None, description=None, severity=None, for_atleast_s=None, condition=None,
@@ -127,7 +127,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
         if alert_obj is None:
             if None in (name, description, severity, for_atleast_s, condition):
-                return [False, 'Must specify a full Alert object or all parameters: name, description, severity, for_atleast_s, condition']
+                return [False,
+                        'Must specify a full Alert object or all parameters: name, description, severity, for_atleast_s, condition']
             else:
                 #
                 # Populate the alert information
@@ -145,14 +146,14 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
                     }
                 }
 
-                if segmentby != None and segmentby != []:
+                if segmentby:
                     alert_json['alert']['segmentBy'] = segmentby
                     alert_json['alert']['segmentCondition'] = {'type': segment_condition}
 
-                if annotations != None and annotations != {}:
+                if annotations:
                     alert_json['alert']['annotations'] = annotations
 
-                if notify != None:
+                if notify is not None:
                     alert_json['alert']['notificationChannelIds'] = notify
         else:
             # The REST API enforces "Alert ID and version must be null", so remove them if present,
@@ -166,7 +167,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         #
         # Create the new alert
         #
-        res = self.http.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json), verify=self.ssl_verify)
+        res = self.http.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json),
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def update_alert(self, alert):
@@ -185,7 +187,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         if 'id' not in alert:
             return [False, "Invalid alert format"]
 
-        res = self.http.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, data=json.dumps({"alert": alert}), verify=self.ssl_verify)
+        res = self.http.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs,
+                            data=json.dumps({"alert": alert}), verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_alert(self, alert):
@@ -259,12 +262,11 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             body['groups'][0]['groupBy'].append({'metric': item})
 
         res = self.http.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
-                           data=json.dumps(body), verify=self.ssl_verify)
+                            data=json.dumps(body), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         else:
             return [True, None]
-
 
     def get_metrics(self):
         '''**Description**
@@ -295,7 +297,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
         expressions = []
         string_expressions = scope.strip(' \t\n\r').split(' and ')
-        expression_re = re.compile('^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?"[^"]+"|\'[^\']+\'|\(.+\)|.+))$')
+        expression_re = re.compile(
+            '^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?"[^"]+"|\'[^\']+\'|(.+)|.+))$')
 
         for string_expression in string_expressions:
             matches = expression_re.match(string_expression)

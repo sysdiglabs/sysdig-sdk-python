@@ -254,6 +254,7 @@ _DASHBOARD_CONVERTERS = {
     }
 }
 
+
 def convert_dashboard_between_versions(dashboard, version_from, version_to):
     '''
     **Description**

@@ -1,7 +1,7 @@
 import tatsu
 
 
-def convert_scope_string_to_expression(scope = None):
+def convert_scope_string_to_expression(scope=None):
     if scope is None or not scope:
         return [True, []]
 
@@ -10,8 +10,8 @@ def convert_scope_string_to_expression(scope = None):
 
         start = expression $ ;
 
-        expression 
-            = 
+        expression
+            =
             |   operand simple_operator word
             |   operand multiple_operator multiple_value
             ;
@@ -34,8 +34,8 @@ def convert_scope_string_to_expression(scope = None):
 
         operand = /[a-zA-Z0-9_\-\.]+/ ;
 
-        multiple_value 
-            = 
+        multiple_value
+            =
             | '[' word_array ']'
             | word
             ;
@@ -46,8 +46,8 @@ def convert_scope_string_to_expression(scope = None):
             | word
             ;
 
-        word = 
-            | /[a-zA-Z0-9-_\-\.]+/ 
+        word =
+            | /[a-zA-Z0-9-_\-\.]+/
             | '"' /[a-zA-Z0-9-_\-\.]+/ '"'
             | "'" /[a-zA-Z0-9-_\-\.]+/ "'"
             ;
