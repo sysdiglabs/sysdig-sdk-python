@@ -92,9 +92,9 @@ if ok:
     #
     # Print table headers
     #
-    dataToPrint = ' '.join([str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[
-                                                                                          :(colLen - 3)].ljust(
-        colLen - 3) + '...' for x in metrics])
+    dataToPrint = ' '.join(
+        [str(x['id']).ljust(colLen) if len(str(x['id'])) < colLen else str(x['id'])[:(colLen - 3)].ljust(
+            colLen - 3) + '...' for x in metrics])
     print(('%s %s' % ('timestamp'.ljust(colLen), dataToPrint) if sampling > 0 else dataToPrint))
     print('')
 

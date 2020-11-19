@@ -87,5 +87,5 @@ with open(alerts_dump_file, 'r') as f:
             print(res)
             sys.exit(1)
 
-print(('All Alerts in ' + alerts_dump_file + ' restored successfully ('
-       + str(created_count) + ' created, ' + str(updated_count) + ' updated)'))
+print(f'All Alerts in {alerts_dump_file} restored successfully '
+      f'({str(created_count)} created, {str(updated_count)} updated)')

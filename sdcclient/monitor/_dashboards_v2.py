@@ -16,7 +16,7 @@ class DashboardsClientV2(_SdcCommon):
 
     def get_views_list(self):
         res = self.http.get(self.url + self._default_dashboards_api_endpoint, headers=self.hdrs,
-                           verify=self.ssl_verify)
+                            verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
@@ -39,7 +39,7 @@ class DashboardsClientV2(_SdcCommon):
             return [False, 'view ' + name + ' not found']
 
         res = self.http.get(self.url + self._default_dashboards_api_endpoint + '/' + id, headers=self.hdrs,
-                           verify=self.ssl_verify)
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_dashboards(self):
@@ -66,7 +66,7 @@ class DashboardsClientV2(_SdcCommon):
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
         res = self.http.put(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_data['id']),
-                           headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
+                            headers=self.hdrs, verify=self.ssl_verify, data=json.dumps({'dashboard': dashboard_data}))
         return self._request_result(res)
 
     def find_dashboard_by(self, name=None):
@@ -104,8 +104,8 @@ class DashboardsClientV2(_SdcCommon):
             del configuration_clone['version']
 
         res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
-                            data=json.dumps({'dashboard': configuration_clone}),
-                            verify=self.ssl_verify)
+                             data=json.dumps({'dashboard': configuration_clone}),
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_dashboard(self, name):
@@ -135,8 +135,8 @@ class DashboardsClientV2(_SdcCommon):
         # Create the new dashboard
         #
         res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
-                            data=json.dumps({'dashboard': dashboard_configuration}),
-                            verify=self.ssl_verify)
+                             data=json.dumps({'dashboard': dashboard_configuration}),
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     # TODO COVER
@@ -214,8 +214,8 @@ class DashboardsClientV2(_SdcCommon):
 
         panel_configuration['scope'] = scope
         # if chart scope is equal to dashboard scope, set it as non override
-        panel_configuration['overrideScope'] = ('scope' in dashboard and dashboard['scope'] != scope) or (
-                'scope' not in dashboard and scope != None)
+        panel_configuration['overrideScope'] = ('scope' in dashboard and dashboard['scope'] != scope) or \
+                                               ('scope' not in dashboard and scope is not None)
 
         if 'custom_display_options' not in panel_configuration:
             panel_configuration['custom_display_options'] = {
@@ -246,7 +246,7 @@ class DashboardsClientV2(_SdcCommon):
         if panel_type == 'timeSeries':
             panel_configuration['showAs'] = 'timeSeries'
 
-            if limit != None:
+            if limit is not None:
                 panel_configuration['custom_display_options']['valueLimit'] = {
                     'count': limit,
                     'direction': 'desc'
@@ -257,7 +257,7 @@ class DashboardsClientV2(_SdcCommon):
         elif panel_type == 'top':
             panel_configuration['showAs'] = 'top'
 
-            if limit != None:
+            if limit is not None:
                 panel_configuration['custom_display_options']['valueLimit'] = {
                     'count': limit,
                     'direction': sort_direction
@@ -266,7 +266,7 @@ class DashboardsClientV2(_SdcCommon):
         #
         # Configure layout
         #
-        if layout != None:
+        if layout is not None:
             panel_configuration['gridConfiguration'] = layout
 
         #
@@ -283,8 +283,8 @@ class DashboardsClientV2(_SdcCommon):
         # Update dashboard
         #
         res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
-                           data=json.dumps({'dashboard': dashboard_configuration}),
-                           verify=self.ssl_verify)
+                            data=json.dumps({'dashboard': dashboard_configuration}),
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     # TODO COVER
@@ -324,9 +324,10 @@ class DashboardsClientV2(_SdcCommon):
             #
             # Update dashboard
             #
-            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
-                               data=json.dumps({'dashboard': dashboard_configuration}),
-                               verify=self.ssl_verify)
+            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']),
+                                headers=self.hdrs,
+                                data=json.dumps({'dashboard': dashboard_configuration}),
+                                verify=self.ssl_verify)
             return self._request_result(res)
         else:
             return [False, 'Not found']
@@ -371,7 +372,7 @@ class DashboardsClientV2(_SdcCommon):
                 if 'overrideScope' not in chart:
                     chart['overrideScope'] = False
 
-                if chart['overrideScope'] == False:
+                if not chart['overrideScope']:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
                     chart['scope'] = scope
 
@@ -387,7 +388,7 @@ class DashboardsClientV2(_SdcCommon):
         # Create the new dashboard
         #
         res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
-                            data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+                             data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
 
         return self._request_result(res)
 
@@ -411,11 +412,11 @@ class DashboardsClientV2(_SdcCommon):
         #
         # Find our template view
         #
-        gvres = self.get_view(viewname)
-        if gvres[0] is False:
-            return gvres
+        ok, gvres = self.get_view(viewname)
+        if not ok:
+            return ok, gvres
 
-        view = gvres[1]['defaultDashboard']
+        view = gvres['defaultDashboard']
 
         view['timeMode'] = {'mode': 1}
         view['time'] = {'last': 2 * 60 * 60 * 1000000, 'sampling': 2 * 60 * 60 * 1000000}
@@ -436,7 +437,7 @@ class DashboardsClientV2(_SdcCommon):
             `examples/dashboard_basic_crud.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_basic_crud.py>`_
         '''
         res = self.http.get(self.url + self._dashboards_api_endpoint + "/" + str(dashboard_id), headers=self.hdrs,
-                           verify=self.ssl_verify)
+                            verify=self.ssl_verify)
         return self._request_result(res)
 
     def create_dashboard_from_dashboard(self, newdashname, templatename, filter, shared=False, public=False):
@@ -580,7 +581,7 @@ class DashboardsClientV2(_SdcCommon):
             return [False, "Invalid dashboard format"]
 
         res = self.http.delete(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
-                              verify=self.ssl_verify)
+                               verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 

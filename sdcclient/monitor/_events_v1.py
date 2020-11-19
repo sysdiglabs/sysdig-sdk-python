@@ -65,7 +65,7 @@ class EventsClientV1(_SdcCommon):
             'event': {k: v for k, v in options.items() if v is not None}
         }
         res = self.http.post(self.url + '/api/events/', headers=self.hdrs, data=json.dumps(edata),
-                            verify=self.ssl_verify)
+                             verify=self.ssl_verify)
         return self._request_result(res)
 
     def delete_event(self, event):

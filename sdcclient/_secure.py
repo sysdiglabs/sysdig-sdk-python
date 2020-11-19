@@ -896,19 +896,19 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         '''
         **Description**
             Helper function for  retrieving the list of matching profile
-        
+
         **Arguments**
             - the requested profile Id (string)
             - List of dictionary, where each dictionary contains the profile information
-    
+
         **Success Return Value**
             List of dictionary, where each dictionary represents a profile with the ID prefix substring
             matching the requested one
-        
+
         **Content structure of the profile_list parameter**
         This array of profiles contains all the relevant information. For the purposes of this function, only
         the profileId field is relevant.
-        
+
         [
             {
             "profileGroupId": 0,
@@ -984,7 +984,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         request_len = len(requested_profile)
         for profile in profile_list:
 
-            # get the length of the substring to match    
+            # get the length of the substring to match
             str_len_match = min(len(profile), request_len)
 
             if profile['profileId'][0:str_len_match] == requested_profile[0:str_len_match]:

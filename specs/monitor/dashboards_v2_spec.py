@@ -3,7 +3,7 @@ import os
 import tempfile
 
 from expects import expect, have_key, have_keys, contain, equal, start_with
-from expects.matchers.built_in import be_false, be_empty
+from expects.matchers.built_in import be_false
 from mamba import before, it, context, after, description
 
 from sdcclient.monitor import DashboardsClientV2
