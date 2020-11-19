@@ -37,7 +37,7 @@ with description("Policy Evaluation", "integration") as self:
                       total_warn=be_above_or_equal(0), total_stop=be_above_or_equal(0),
                       last_evaluation=be_an(datetime),
                       status="pass", image_tag="docker.io/alpine:latest",
-                      policy_id="*", policy_name="All policies",
+                      policy_id="default", policy_name="DefaultPolicy",
                       warn_results=not_(be_empty))
         )
 

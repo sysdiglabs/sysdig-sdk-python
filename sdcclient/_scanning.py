@@ -1279,6 +1279,8 @@ class SdScanningClient(_SdcCommon):
             policy_results = [result for result in json_res["results"] if result["policyId"] == policy_id]
             if policy_results:
                 filtered_result_by_policy_id = policy_results[0]
+                result["policy_id"] = filtered_result_by_policy_id["policyId"]
+                result["policy_name"] = filtered_result_by_policy_id["policyName"]
                 result["total_stop"] = filtered_result_by_policy_id["nStop"]
                 result["total_warn"] = filtered_result_by_policy_id["nWarn"]
                 result["warn_results"] = [rule_result["checkOutput"]
