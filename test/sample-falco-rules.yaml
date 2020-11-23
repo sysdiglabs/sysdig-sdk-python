@@ -1,5 +1,0 @@
-- rule: My Rule
-  desc: My Description
-  condition: evt.type=open and fd.name="/tmp/some-file.txt"
-  output: Impossible file opened
-  priority: DEBUG
