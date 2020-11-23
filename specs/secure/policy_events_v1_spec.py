@@ -13,9 +13,9 @@ with description("Policy Events v1", "integration") as self:
                                            token=os.getenv("SDC_SECURE_TOKEN"))
     with context("when we try to retrieve policy events from the last 7 days"):
         with it("returns the list of all events happened"):
-            day_in_seconds = 7 * 24 * 60 * 60
+            week_in_seconds = 7 * 24 * 60 * 60
 
-            ok, res = self.client.get_policy_events_duration(day_in_seconds)
+            ok, res = self.client.get_policy_events_duration(week_in_seconds)
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
@@ -34,18 +34,18 @@ with description("Policy Events v1", "integration") as self:
                 contain(have_keys("id", "timestamp", "customerId", "source", "name", "description", "cursor")))
 
         with it("returns the list of all events from the last 7 days that match a filter"):
-            day_in_seconds = 7 * 24 * 60 * 60
+            week_in_seconds = 7 * 24 * 60 * 60
 
-            ok, res = self.client.get_policy_events_duration(day_in_seconds, filter='severity in ("4","5")')
+            ok, res = self.client.get_policy_events_duration(week_in_seconds, filter='severity in ("4","5")')
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
             expect(res["data"]).to(contain(have_key("severity", be_within(3, 6))))
 
         with it("returns an empty list if the filter does not match"):
-            day_in_seconds = 7 * 24 * 60 * 60
+            week_in_seconds = 7 * 24 * 60 * 60
 
-            ok, res = self.client.get_policy_events_duration(day_in_seconds, filter='severity in ("-1")')
+            ok, res = self.client.get_policy_events_duration(week_in_seconds, filter='severity in ("-1")')
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
@@ -54,8 +54,8 @@ with description("Policy Events v1", "integration") as self:
     with _context("and from the first event we retrieve the rest of events"):
         # Deactivated tests. There seems to be a bug in the API -- need confirmation
         with it("returns the list of all events except the first"):
-            day_in_seconds = 7 * 24 * 60 * 60
-            _, res = self.client.get_policy_events_duration(day_in_seconds)
+            week_in_seconds = 7 * 24 * 60 * 60
+            _, res = self.client.get_policy_events_duration(week_in_seconds)
             ctx = {"cursor": res["data"][0]["cursor"]}
             qty_before = len(res["data"])
 
@@ -76,3 +76,16 @@ with description("Policy Events v1", "integration") as self:
             }
             call = self.client.get_more_policy_events(wrong_context)
             expect(call).to_not(be_successful_api_call)
+
+    with context("while retrieving a single event"):
+        with it("retrieves the event correctly"):
+            week_in_seconds = 7 * 24 * 60 * 60
+            ok, res = self.client.get_policy_events_duration(week_in_seconds)
+
+            expect((ok, res)).to(be_successful_api_call)
+
+            event_id = res["data"][0]["id"]
+            ok, res = self.client.get_policy_event(event_id)
+
+            expect((ok, res)).to(be_successful_api_call)
+            expect(res).to(have_keys("name", "timestamp", "customerId", "originator", "machineId", id=event_id))

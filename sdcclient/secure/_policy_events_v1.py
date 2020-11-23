@@ -115,3 +115,21 @@ class PolicyEventsClientV1(_SdcCommon):
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
         '''
         return self._get_policy_events_int(ctx)
+
+    def get_policy_event(self, event_id):
+        """
+
+        Args:
+            event_id: The ID of the Runtime Policy event to retrieve more info from.
+
+        Returns:
+            A tuple where the first parameter indicates if the request was successful, and the second parameter
+            holds the info from the policy event or the error.
+        """
+        policy_events_url = f'{self.url}/api/v1/secureEvents/{event_id}'
+
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, res.json()
