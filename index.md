@@ -1,7 +1,6 @@
 ---
-description: Sysdig SDK for Python
+description: A Python client API for Sysdig Monitor/Sysdig Secure.
 ---
-A Python client API for Sysdig Monitor/Sysdig Secure.
 
 This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs. It
 exposes most of the sysdig REST API functionality as an easy to use and easy to
