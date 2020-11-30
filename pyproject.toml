@@ -15,6 +15,8 @@ tatsu = [
     { version = "^4.4.0", python = "<3.8" },
     { version = "^5.5.0", python = "^3.8" }
 ]
+sphinx-material = {version = "^0.0.32", optional = true}
+sphinx = {version = "^3.3.1", optional = true}
 
 [tool.poetry.dev-dependencies]
 mamba = "^0.11.1"
@@ -23,9 +25,9 @@ doublex-expects = "^0.7.1"
 expects = "^0.9.0"
 flake8 = "^3.8.4"
 coverage = "^5.3"
-sphinx = "^3.3.1"
-sphinx-material = "^0.0.32"
 
+[tool.poetry.extras]
+docs = ["sphinx", "sphinx-material"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
