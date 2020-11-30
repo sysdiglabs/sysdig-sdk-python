@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = python-sdc-client
+SPHINXPROJ    = sysdig-sdk-python
 SOURCEDIR     = .
 BUILDDIR      = _build
 
