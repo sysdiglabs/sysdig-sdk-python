@@ -1,9 +1,0 @@
-title: Sysdig Python SDK
-
-remote_theme: sysdiglabs/jekyll-theme-sysdiglabs-docs@main
-
-sass:
-  style: compressed
-
-plugins:
-  - jekyll-remote-theme
