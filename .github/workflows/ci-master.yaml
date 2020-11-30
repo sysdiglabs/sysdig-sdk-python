@@ -32,7 +32,7 @@ jobs:
       run: poetry install
 
     - name: Documentation
-      run: make html
+      run: poetry run make html
       working-directory: ./doc
 
     - name: Deploy to GitHub Pages
