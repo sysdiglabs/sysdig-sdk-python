@@ -5,7 +5,7 @@ This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs.
 It exposes most of the sysdig REST API functionality as an easy to use and easy to
 install Python interface.
 
-Having trouble? We would like to help you!
+Having troubles? We would like to help you!
 
 * Looking for specific information? Try the :ref:`genindex`
 * Check out the `Sysdig Documentation`_.
