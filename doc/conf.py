@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.linkcode']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.linkcode', 'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -45,7 +45,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'python-sdc-client'
+project = u'Sysdig SDK for Python'
 copyright = u'2016, Sysdig Inc.'
 author = u'Sysdig Inc.'
 
@@ -81,13 +81,23 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'classic'
+html_theme = 'sphinx_material'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'nav_title': 'Sysdig SDK for Python',
+    'base_url': 'https://sysdiglabs.github.io/sysdig-sdk-python',
+    'color_primary': 'blue',
+    'color_accent': 'light-blue',
+    'repo_url': 'https://github.com/sysdiglabs/sysdig-sdk-python/',
+    'repo_name': 'Sysdig SDK for Python',
+    'globaltoc_depth': 3,
+    'globaltoc_collapse': False,
+    'globaltoc_includehidden': False,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -159,9 +169,24 @@ def linkcode_resolve(domain, info):
 
     if domain != 'py' or not info['module']:
         return None
+
     # tag = 'master' if 'dev' in release else ('v' + release)
-    url = "https://github.com/draios/python-sdc-client/blob/master/sdcclient/_client.py"
+    url = "https://github.com/sysdiglabs/sysdig-sdk-python/blob/master/sdcclient/_client.py"
     try:
         return url + '#L%d' % find_line()
     except Exception:
         return url
+
+
+# Napoleon settings
+napoleon_google_docstring = True
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
+napoleon_type_aliases = None

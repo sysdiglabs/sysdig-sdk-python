@@ -12,7 +12,7 @@ class SysdigHTTPAdapter(HTTPAdapter):
             total=3,
             status_forcelist=[403, 404, 429, 500, 502, 503, 504],
             method_whitelist=["HEAD", "GET", "OPTIONS", "PUSH", "PUT"],
-            backoff_factor=0.5
+            backoff_factor=2,
         )
         kwargs["max_retries"] = retry_strategy
 
