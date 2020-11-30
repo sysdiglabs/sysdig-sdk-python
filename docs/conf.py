@@ -18,6 +18,7 @@
 #
 import os
 import sys
+from datetime import datetime
 
 sys.path.insert(0, os.path.abspath('..'))
 
@@ -32,7 +33,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.autosectionlabel', 'sphinx.ext.graphviz',
               'sphinx.ext.inheritance_diagram', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary',
-              'sphinx.ext.githubpages', 'sphinx.ext.napoleon']
+              'sphinx.ext.githubpages', 'sphinx.ext.napoleon', 'sphinx_rtd_theme']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -48,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Sysdig SDK for Python'
-copyright = u'2016, Sysdig Inc.'
+copyright = f'2016-{datetime.now().year}, Sysdig Inc.'
 author = u'Sysdig Inc.'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -83,23 +84,13 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_material'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {
-    'nav_title': 'Sysdig SDK for Python',
-    'base_url': 'https://sysdiglabs.github.io/sysdig-sdk-python',
-    'color_primary': 'blue',
-    'color_accent': 'light-blue',
-    'repo_url': 'https://github.com/sysdiglabs/sysdig-sdk-python/',
-    'repo_name': 'Sysdig SDK for Python',
-    'globaltoc_depth': 3,
-    'globaltoc_collapse': False,
-    'globaltoc_includehidden': False,
-}
+html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
