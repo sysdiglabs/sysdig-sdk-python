@@ -6,6 +6,8 @@ This module is a wrapper around the Sysdig Monitor/Sysdig Secure APIs. It
 exposes most of the sysdig REST API functionality as an easy to use and easy to
 install Python interface.
 
+There are more details the [Sysdig SDK Python documentation](https://sysdig-sdk-python.readthedocs.io).
+
 ## Installation
 
 ### Automatic with PyPI
@@ -50,16 +52,6 @@ client = SdMonitorClient(api_token)
 For backwards compatibility purposes, a third class `SdcClient` is exported which is an alias of `SdMonitorClient`.
 
 Once instantiated, all the methods documented below can be called on the object.
-
-### API Usage
-
-Every method in the SdMonitorClient/SdSecureClient classes returns **a list with two entries**. The first one is a boolean value indicating if the call was successful. The second entry depends on the result:
-- If the call was successful, it's a dictionary reflecting the json returned by the underlying REST call
-- If the call failed, it's a string describing the error
-
-For an example on how to parse this output, take a look at a simple example like [get_data_simple.py](examples/get_data_simple.py)
-
-You can read more details in the [Sysdig SDK Python documentation](https://sysdig-sdk-python.readthedocs.io).
 
 ## On-Premises Installs
 
