@@ -1,6 +1,8 @@
 title: Sysdig Python SDK
 
 remote_theme: sysdiglabs/jekyll-theme-sysdiglabs-docs@main
+keep_files:
+  - api
 
 sass:
   style: compressed
