@@ -76,7 +76,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
     def update_notification_resolution(self, notification, resolved) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
         '''
         Updates the resolution status of an alert notification.
-        
+
         Args:
             notification (object): notification object as returned by :func:`~SdcClient.get_notifications`.
             resolved (str): new resolution status. Supported values are ``True`` and ``False``.
