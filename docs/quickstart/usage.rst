@@ -22,8 +22,3 @@ They can be instantiated like this:
 
     # Instantiate the Sysdig Monitor client
     client = SdMonitorClient(api_token)
-
-
-* :ref:`genindex`
-* :ref:`search`
-
