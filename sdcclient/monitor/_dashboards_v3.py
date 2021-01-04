@@ -46,15 +46,29 @@ class DashboardsClientV3(_SdcCommon):
         return self._request_result(res)
 
     def get_dashboards(self, light=True):
-        '''**Description**
-            Return the list of dashboards available under the given user account. This includes the dashboards created by the user and the ones shared with her by other users.
+        """
+        Return the list of dashboards available under the given user account.
+        This includes the dashboards created by the user and the ones shared with her by other users.
+        Since every user has multiple tokens -- one per team they are assigned to -- and dashboards are scoped per
+        team, in order to download all the dashboards from a user account, all the tokens must be specified.
 
-        **Success Return Value**
-            A dictionary containing the list of available sampling intervals.
+        Args:
+            light (bool): If it's true, only a small portion of information will be retrieved, otherwise all
+                          the information from the dashboards will be retrieved.
+                          If the retrieved dashboards are going to be restored in the future, then this
+                          parameter must be false.
 
-        **Example**
-            `examples/list_dashboards.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_dashboards.py>`_
-        '''
+        Returns:
+            The list of the dashboards visible for the given token.
+
+        See Also:
+            :py:meth:`~.DashboardsClientV3.create_dashboard_with_configuration`
+
+        Examples:
+            >>> ok, res = client.get_dashboards(light=False)
+            >>> for dashboard in res["dashboards"]:
+            >>>     print(dashboard["name"])
+        """
         params = {
             "light": "true" if light else "false"
         }
