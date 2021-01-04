@@ -54,6 +54,7 @@ jobs:
         env:
           PYTHON_SDC_TEST_ACCESS_KEY: ${{ secrets.STAGING_AGENT_KEY }}
         run: |
+          sudo apt-get update
           sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
           ./test/start_agent.sh
 
