@@ -12,9 +12,6 @@
 #
 
 import getopt
-import json
-import operator
-import re
 import sys
 
 from sdcclient import SdSecureClient
@@ -73,32 +70,8 @@ else:
 
 all_outputs = dict()
 
-while True:
+if not ok:
+    print(res)
+    sys.exit(1)
 
-    #
-    # Return the result
-    #
-    if not ok:
-        print(res)
-        sys.exit(1)
-
-    if not res["ctx"]["cursor"] or len(res['data']) == 0:
-        break
-
-    for event in res['data']:
-        if summarize:
-            sanitize_output = re.sub(r'\S+\s\(id=\S+\)', '', event['output'])
-            all_outputs[sanitize_output] = all_outputs.get(sanitize_output, 0) + 1
-        else:
-            sys.stdout.write(json.dumps(event) + "\n")
-
-    ok, res = sdclient.get_more_policy_events(res['ctx'])
-
-if summarize:
-    sorted = sorted(list(all_outputs.items()), key=operator.itemgetter(1), reverse=True)
-    count = 0
-    for val in sorted:
-        count += 1
-        sys.stdout.write("{} {}\n".format(val[1], val[0]))
-        if limit != 0 and count > limit:
-            break
+print(res["data"])
