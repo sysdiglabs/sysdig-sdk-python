@@ -56,7 +56,7 @@ sdclient = SdMonitorClient(sdc_token)
 #
 # Fire the request.
 #
-ok, res = sdclient.get_dashboards()
+ok, res = sdclient.get_dashboards(light=False)
 
 #
 # Show the list of dashboards
