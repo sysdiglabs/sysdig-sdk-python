@@ -1,5 +1,4 @@
 import json
-import re
 from typing import Any, Tuple, Union
 
 from sdcclient._common import _SdcCommon

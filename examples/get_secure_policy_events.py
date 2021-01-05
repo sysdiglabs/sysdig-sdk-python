@@ -12,9 +12,6 @@
 #
 
 import getopt
-import json
-import operator
-import re
 import sys
 
 from sdcclient import SdSecureClient
