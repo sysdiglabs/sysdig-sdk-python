@@ -50,7 +50,7 @@ class PolicyEventsClientV1(_SdcCommon):
         '''
         options = {"from": int(from_sec) * 1_000_000_000,
                    "to": int(to_sec) * 1_000_000_000,
-                   "limit": 50,
+                   "limit": 999,
                    "filter": filter}
         ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
