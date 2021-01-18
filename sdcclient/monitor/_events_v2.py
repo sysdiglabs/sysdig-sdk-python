@@ -123,7 +123,7 @@ class EventsClientV2(_SdcCommon):
             'name': name,
             'description': description,
             'severity': severity,
-            'filter': event_filter,
+            'scope': event_filter,
             'tags': tags
         }
         edata = {
