@@ -7,3 +7,6 @@ docker run -d -it --rm --name sysdig-agent --privileged --net host --pid host -e
 
 # make sure the agent starts sending data and the backend makes it available via API
 sleep 60
+
+# Start the falco event generator to generate policy events in Secure
+docker run --rm -d -it falcosecurity/event-generator run syscall
