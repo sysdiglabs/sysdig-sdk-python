@@ -7,6 +7,8 @@ on:
 
 jobs:
   test:
+    needs:
+      - test-release
     strategy:
       max-parallel: 1
       fail-fast: true
