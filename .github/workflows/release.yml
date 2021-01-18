@@ -21,7 +21,7 @@ jobs:
         env:
           VERSION: "0.10.0"
         run: |
-          wget https://github.com/git-chglog/git-chglog/releases/download/v$VERSION/git-chglog_$VERSION_linux_amd64.tar.gz
+          wget https://github.com/git-chglog/git-chglog/releases/download/v${VERSION}/git-chglog_${VERSION}_linux_amd64.tar.gz
           tar xgvf git-chglog_$VERSION_linux_amd64.tar.gz
           mv git-chglog /usr/local/bin/
 
