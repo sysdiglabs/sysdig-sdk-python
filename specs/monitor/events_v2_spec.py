@@ -1,6 +1,7 @@
 import os
 import time
 from datetime import datetime, timedelta
+from time import sleep
 
 from expects import expect, have_key, contain, have_keys, be_empty, equal, be_false, be_above_or_equal, have_len
 from mamba import it, before, context, description
@@ -24,6 +25,7 @@ with description("Events v2", "integration") as self:
                                       description="This event was created in a CI pipeline for the Python SDK library",
                                       event_filter="host.hostName='ci'")
         expect(call).to(be_successful_api_call)
+        sleep(2)  # sleep to guarantee the event is created
 
         ok, res = self.client.get_events()
         expect((ok, res)).to(be_successful_api_call)
