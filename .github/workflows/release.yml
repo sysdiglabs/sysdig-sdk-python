@@ -16,13 +16,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '^1.15'
-
       - name: Setup go-chglog
-        run: go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+        working-directory: /tmp
+        env:
+          VERSION: "0.10.0"
+        run: |
+          wget https://github.com/git-chglog/git-chglog/releases/download/v$VERSION/git-chglog_$VERSION_linux_amd64.tar.gz
+          tar xgvf git-chglog_$VERSION_linux_amd64.tar.gz
+          mv git-chglog /usr/local/bin/
 
       - name: Generate changelog
         run: git-chglog -c .github/git-chglog/config.yml -o RELEASE_CHANGELOG.md $(git describe --tags $(git rev-list --tags --max-count=1))
