@@ -3,7 +3,7 @@ from random import choice
 from string import ascii_letters
 
 from expects import expect, contain
-from mamba import before, description, after, it, fit, context
+from mamba import before, description, after, it, context
 
 from sdcclient import SdcClient
 from specs import be_successful_api_call
