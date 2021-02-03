@@ -547,6 +547,35 @@ class _SdcCommon(object):
 
         return True, res.content
 
+    def create_user(self, user_email, first_name=None, last_name=None, password=None):
+        '''
+        Provisions a new user to use Sysdig without sending an email notification.
+        If password is not set through this request a random one is generated for the user
+        which requires them to reset password on first login.
+
+        Args:
+            user_email (str): Email of the user to provision.
+            first_name (str): First name of the user to provision. Can be null.
+            last_name (str): Last name of the user to provision. Can be null.
+            password (str): Default password for the user to provision. If this is not set, a random one is generated.
+
+        Returns:
+            The provisioned user information.
+
+        '''
+
+        user_info = {
+            "username": user_email,
+            "firstName": first_name,
+            "lastName": last_name,
+            "password": password,
+        }
+        user_info = {k: v for k, v in user_info.items() if v}
+
+        res = self.http.post(self.url + '/api/user/provisioning/', headers=self.hdrs, data=json.dumps(user_info),
+                             verify=self.ssl_verify)
+        return self._request_result(res)
+
     def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         '''**Description**
             Invites a new user to use Sysdig Monitor. This should result in an email notification to the specified address.
