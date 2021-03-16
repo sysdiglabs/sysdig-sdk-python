@@ -547,6 +547,23 @@ class _SdcCommon(object):
 
         return True, res.content
 
+    def delete_sysdig_capture(self, capture_id):
+        """
+        Removes an existing Sysdig Capture from Monitor
+
+        Args:
+            capture_id: ID of the capture to remove
+
+        Returns: A touple of (bool, error) where the first value is false if there's an error and the second value is the error.
+        """
+
+        res = self.http.delete(f'{self.url}/api/sysdig/{capture_id}', headers=self.hdrs, verify=self.ssl_verify)
+
+        if not self._checkResponse(res):
+            return False, self.lasterr
+
+        return True, None
+
     def create_user(self, user_email, first_name=None, last_name=None, password=None):
         '''
         Provisions a new user to use Sysdig without sending an email notification.
