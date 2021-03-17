@@ -224,6 +224,7 @@ class PolicyClientV2(_SdcCommon):
     def update_policy(self, id, name=None, description=None, rule_names=None, actions=None, scope=None,
                       severity=None, enabled=None, notification_channels=None):
         """
+        Update policy with the provided values. Only the defined values will be updated.
 
         Args:
             id(int): The id of the policy to update
