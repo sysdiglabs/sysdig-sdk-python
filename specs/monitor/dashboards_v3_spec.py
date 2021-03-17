@@ -267,5 +267,5 @@ with description("Dashboards v3", "integration") as self:
                 expect(res_team2["dashboard"]).to(have_key("shared", True))
                 expect(res_team2["dashboard"]).to(have_key("sharingSettings"))
                 expect(res_team2["dashboard"]["sharingSettings"]).to(have_len(2))
-                expect(res_team2["dashboard"]["sharingSettings"][0]["role"]).to(equal("ROLE_RESOURCE_READ"))
-                expect(res_team2["dashboard"]["sharingSettings"][1]["role"]).to(equal("ROLE_RESOURCE_EDIT"))
+                expect(res_team2["dashboard"]["sharingSettings"]).to(contain(have_keys(role=equal("ROLE_RESOURCE_READ"))))
+                expect(res_team2["dashboard"]["sharingSettings"]).to(contain(have_keys(role=equal("ROLE_RESOURCE_EDIT"))))
