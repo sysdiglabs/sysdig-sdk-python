@@ -7,7 +7,7 @@ import time
 from expects import expect, have_key, contain
 from expects.matchers import _Or
 from expects.matchers.built_in import have_keys, equal
-from mamba import description, it, before
+from mamba import description, it, before, after
 
 from sdcclient import SdMonitorClient
 from specs import be_successful_api_call
@@ -24,6 +24,14 @@ with description("Captures v1", "integration-agent") as self:
                                       token=os.getenv("SDC_MONITOR_TOKEN"))
         self.capture_name = f"apicapture-sdk-{randomword(10)}"
         self.hostname = socket.gethostname()
+
+    with after.all:
+        ok, res = self.client.get_sysdig_captures()
+        expect((ok, res)).to(be_successful_api_call)
+
+        for capture in res["dumps"]:
+            ok, res = self.client.delete_sysdig_capture(capture["id"])
+            expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to create a capture"):
         ok, res = self.client.create_sysdig_capture(hostname=self.hostname,
