@@ -137,13 +137,20 @@ class SdScanningClient(_SdcCommon):
             - image: Input image can be in the following formats: registry/repo:tag
             - content_type: The content type can be one of the following types:
                 - os: Operating System Packages
+                - files: Files
                 - npm: Node.JS NPM Module
                 - gem: Ruby GEM
-                - files: Files
+                - python: Python modules
+                - java: Java packages
 
         **Success Return Value**
             A JSON object representing the image content.
         '''
+        content_type = content_type.lower()
+        supported_types = ["os", "files", "npm", "gem", "python", "java"]
+        if content_type not in supported_types:
+            return False, f"unsupported type provided: {content_type}, must be one of {supported_types}"
+
         return self._query_image(image, query_group='content', query_type=content_type)
 
     def query_image_metadata(self, image, metadata_type=""):
