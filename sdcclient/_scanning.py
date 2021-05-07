@@ -105,6 +105,19 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def list_image_tags(self):
+        """
+        Lists the current set of image tags in the scanner.
+
+        Returns: A JSON object containing all the image tags.
+        """
+        url = self.url + "/api/scanning/v1/anchore/summaries/imagetags"
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def list_whitelisted_cves(self):
         '''**Description**
             List the whitelisted global CVEs.
