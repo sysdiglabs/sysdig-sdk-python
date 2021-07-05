@@ -22,7 +22,7 @@ class ActivityAuditClientV1(_SdcCommon):
                     data_sources=None):
         """
         List the events in the Activity Audit.
-        
+
         Args:
             from_date (datetime.datetime): the start of the time range from which to get events. The default value is yesterday.
             to_date (datetime.datetime): the end of the time range from which to get events. The default value is now.
