@@ -496,6 +496,8 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         '''**Description**
             List the commands audit.
 
+        **DEPRECATED**: Use sdcclient.secure.ActivityAuditClientV1 instead. This is maintained for old on-prem versions, but will be removed over time.
+
         **Arguments**
             - from_sec: the start of the timerange for which to get commands audit.
             - end_sec: the end of the timerange for which to get commands audit.
@@ -527,6 +529,8 @@ class SdSecureClient(FalcoRulesFilesClientOld,
     def get_command_audit(self, id, metrics=[]):
         '''**Description**
             Get a command audit.
+
+        **DEPRECATED**: Use sdcclient.secure.ActivityAuditClientV1 instead. This is maintained for old on-prem versions, but will be removed over time.
 
         **Arguments**
             - id: the id of the command audit to get.
