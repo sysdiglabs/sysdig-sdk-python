@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from typing import List
+import datetime
 
 from sdcclient._common import _SdcCommon
 
@@ -25,8 +24,8 @@ class ActivityAuditClientV1(_SdcCommon):
         List the events in the Activity Audit.
         
         Args:
-            from_date (datetime): the start of the time range from which to get events. The default value is yesterday.
-            to_date (datetime): the end of the time range from which to get events. The default value is now.
+            from_date (datetime.datetime): the start of the time range from which to get events. The default value is yesterday.
+            to_date (datetime.datetime): the end of the time range from which to get events. The default value is now.
             scope_filter (List): a list of Sysdig Monitor-like filter (e.g `processName in ("ubuntu")`).
             limit (int): max number of events to retrieve. A limit of 0 or negative will retrieve all events.
             data_sources (List): a list of data sources to retrieve events from. None or an empty list retrieves all events.
@@ -34,8 +33,8 @@ class ActivityAuditClientV1(_SdcCommon):
         Examples:
             >>> client = ActivityAuditClientV1(token=SECURE_TOKEN)
             >>>
-            >>> now = datetime.utcnow()
-            >>> three_days_ago = now - timedelta(days=3)
+            >>> now = datetime.datetime.utcnow()
+            >>> three_days_ago = now - datetime.timedelta(days=3)
             >>> max_event_number_retrieved = 50
             >>> data_sources = [ActivityAuditDataSource.CMD, ActivityAuditDataSource.KUBE_EXEC]
             >>>
@@ -50,9 +49,9 @@ class ActivityAuditClientV1(_SdcCommon):
         number_of_events_per_query = 50
 
         if from_date is None:
-            from_date = datetime.utcnow() - timedelta(days=1)
+            from_date = datetime.datetime.utcnow() - datetime.timedelta(days=1)
         if to_date is None:
-            to_date = datetime.utcnow()
+            to_date = datetime.datetime.utcnow()
 
         filters = scope_filter if scope_filter else []
         if data_sources:
