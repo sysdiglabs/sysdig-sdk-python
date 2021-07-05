@@ -48,9 +48,6 @@ with description("Activity Audit v1", "integration") as self:
             ok, res = self.client.list_events(data_sources=[ActivityAuditDataSource.KUBE_EXEC])
             expect((ok, res)).to(be_successful_api_call)
 
-            # FIXME: Dependiendo del entorno, puede que no existan KUBE_EXEC events, así que aqui necesitaría parar
-            # este test ya que la lista devuelta, será vacía
-
             expect(res).to(contain(have_keys(traceable=True)))
 
             traceable_events = [event for event in res if event["traceable"]]
