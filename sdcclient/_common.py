@@ -11,7 +11,7 @@ class SysdigHTTPAdapter(HTTPAdapter):
         retry_strategy = Retry(
             total=3,
             status_forcelist=[403, 404, 429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS", "PUSH", "PUT"],
+            allowed_methods=["HEAD", "GET", "OPTIONS", "PUSH", "PUT"],
             backoff_factor=2,
         )
         kwargs["max_retries"] = retry_strategy
@@ -853,6 +853,8 @@ class _SdcCommon(object):
             'canUseSysdigCapture': perm_capture if perm_capture else team['canUseSysdigCapture'],
             'canUseCustomEvents': perm_custom_events if perm_custom_events else team['canUseCustomEvents'],
             'canUseAwsMetrics': perm_aws_data if perm_aws_data else team['canUseAwsMetrics'],
+            'defaultTeamRole': team['defaultTeamRole'],
+            'entryPoint': team['entryPoint'],
             'id': team['id'],
             'version': team['version']
         }

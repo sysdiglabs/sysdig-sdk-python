@@ -105,6 +105,19 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def list_image_tags(self):
+        """
+        Lists the current set of image tags in the scanner.
+
+        Returns: A JSON object containing all the image tags.
+        """
+        url = self.url + "/api/scanning/v1/anchore/summaries/imagetags"
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def list_whitelisted_cves(self):
         '''**Description**
             List the whitelisted global CVEs.
@@ -137,13 +150,20 @@ class SdScanningClient(_SdcCommon):
             - image: Input image can be in the following formats: registry/repo:tag
             - content_type: The content type can be one of the following types:
                 - os: Operating System Packages
+                - files: Files
                 - npm: Node.JS NPM Module
                 - gem: Ruby GEM
-                - files: Files
+                - python: Python modules
+                - java: Java packages
 
         **Success Return Value**
             A JSON object representing the image content.
         '''
+        content_type = content_type.lower()
+        supported_types = ["os", "files", "npm", "gem", "python", "java"]
+        if content_type not in supported_types:
+            return False, f"unsupported type provided: {content_type}, must be one of {supported_types}"
+
         return self._query_image(image, query_group='content', query_type=content_type)
 
     def query_image_metadata(self, image, metadata_type=""):
