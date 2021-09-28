@@ -17,7 +17,6 @@ from sdcclient._common import _SdcCommon
 
 
 class SdScanningClient(_SdcCommon):
-
     def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
         super(SdScanningClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
@@ -47,9 +46,9 @@ class SdScanningClient(_SdcCommon):
             payload['annotations'] = annotations
 
         url = "{base_url}/api/scanning/v1/anchore/images?autosubscribe={autosubscribe}{force}".format(
-            base_url=self.url,
-            autosubscribe=str(autosubscribe),
-            force="&force=true" if force else "")
+                base_url=self.url,
+                autosubscribe=str(autosubscribe),
+                force="&force=true" if force else "")
 
         res = self.http.post(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -78,8 +77,8 @@ class SdScanningClient(_SdcCommon):
 
         url = self.url + "/api/scanning/v1/anchore/images"
         url += {
-            'imageid': '/by_id/{}'.format(image),
-            'imageDigest': '/{}'.format(image)
+                'imageid':     '/by_id/{}'.format(image),
+                'imageDigest': '/{}'.format(image)
         }.get(itype, '')
 
         res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -209,12 +208,12 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the images.
         '''
         url = "{base_url}/api/scanning/v1/anchore/query/images/by_vulnerability?vulnerability_id={vulnerability_id}{namespace}{package}{severity}&vendor_only={vendor_only}".format(
-            base_url=self.url,
-            vulnerability_id=vulnerability_id,
-            namespace="&namespace={}".format(namespace) if namespace else "",
-            package="&affected_package={}".format(package) if package else "",
-            severity="&severity={}".format(severity) if severity else "",
-            vendor_only=vendor_only)
+                base_url=self.url,
+                vulnerability_id=vulnerability_id,
+                namespace="&namespace={}".format(namespace) if namespace else "",
+                package="&affected_package={}".format(package) if package else "",
+                severity="&severity={}".format(severity) if severity else "",
+                vendor_only=vendor_only)
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -235,10 +234,10 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the images.
         '''
         url = "{base_url}/api/scanning/v1/anchore/query/images/by_package?name={name}{version}{package_type}".format(
-            base_url=self.url,
-            name=name,
-            version="&version={}".format(version) if version else "",
-            package_type="&package_type={}".format(package_type) if package_type else "")
+                base_url=self.url,
+                name=name,
+                version="&version={}".format(version) if version else "",
+                package_type="&package_type={}".format(package_type) if package_type else "")
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -255,11 +254,11 @@ class SdScanningClient(_SdcCommon):
             return [False, "cannot use input image string (no discovered imageDigest)"]
 
         url = "{base_url}/api/scanning/v1/anchore/images/{image_digest}/{query_group}/{query_type}{vendor_only}".format(
-            base_url=self.url,
-            image_digest=image_digest,
-            query_group=query_group,
-            query_type=query_type if query_type else '',
-            vendor_only="?vendor_only={}".format(vendor_only) if query_group == 'vuln' else '')
+                base_url=self.url,
+                image_digest=image_digest,
+                query_group=query_group,
+                query_type=query_type if query_type else '',
+                vendor_only="?vendor_only={}".format(vendor_only) if query_group == 'vuln' else '')
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -309,12 +308,12 @@ class SdScanningClient(_SdcCommon):
 
         url = "{base_url}/api/scanning/v1/anchore/images/{image_digest}/check?history={history}&detail={detail}&tag={tag}{policy_id}"
         url = url.format(
-            base_url=self.url,
-            image_digest=image_digest,
-            history=str(show_history).lower(),
-            detail=str(detail).lower(),
-            tag=thetag,
-            policy_id=("&policyId=%s" % policy) if policy else "")
+                base_url=self.url,
+                image_digest=image_digest,
+                history=str(show_history).lower(),
+                detail=str(detail).lower(),
+                tag=thetag,
+                policy_id=("&policyId=%s" % policy) if policy else "")
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -343,10 +342,10 @@ class SdScanningClient(_SdcCommon):
         image_tag = tag if tag else image
 
         url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}{at}".format(
-            base_url=self.url,
-            image_digest=image_digest,
-            tag=image_tag,
-            at=("&at=%s" % date) if date else "")
+                base_url=self.url,
+                image_digest=image_digest,
+                tag=image_tag,
+                at=("&at=%s" % date) if date else "")
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -366,9 +365,9 @@ class SdScanningClient(_SdcCommon):
             The pdf content
         '''
         url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}".format(
-            base_url=self.url,
-            image_digest=image_digest,
-            tag=full_tag)
+                base_url=self.url,
+                image_digest=image_digest,
+                tag=full_tag)
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -390,7 +389,7 @@ class SdScanningClient(_SdcCommon):
         '''
         try:
             m = MultipartEncoder(
-                fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
+                    fields={'archive_file': (infile, open(infile, 'rb'), 'text/plain')}
             )
             if sync:
                 url = self.url + "/api/scanning/v1/anchore/import/images"
@@ -398,7 +397,7 @@ class SdScanningClient(_SdcCommon):
                 url = self.url + "/api/scanning/v1/import/images"
 
             headers = {'Authorization': 'Bearer ' + self.token, 'Content-Type': m.content_type,
-                       'imageId': image_id, 'digestId': digest_id, 'imageName': image_name}
+                       'imageId':       image_id, 'digestId': digest_id, 'imageName': image_name}
             res = self.http.post(url, data=m, headers=headers, verify=self.ssl_verify)
             if not self._checkResponse(res):
                 return [False, self.lasterr]
@@ -438,10 +437,10 @@ class SdScanningClient(_SdcCommon):
             A JSON object containing pass/fail status of image scan policy.
         '''
         url = "{base_url}/api/scanning/v1/anchore/images/by_id/{image_id}/check?tag={full_tag_name}&detail={detail}".format(
-            base_url=self.url,
-            image_id=image_id,
-            full_tag_name=full_tag_name,
-            detail=detail)
+                base_url=self.url,
+                image_id=image_id,
+                full_tag_name=full_tag_name,
+                detail=detail)
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -475,14 +474,14 @@ class SdScanningClient(_SdcCommon):
             registry_type = self._get_registry_type(registry)
 
         payload = {
-            'registry': registry,
-            'registry_user': registry_user,
-            'registry_pass': registry_pass,
-            'registry_type': registry_type,
-            'registry_verify': not insecure}
+                'registry':        registry,
+                'registry_user':   registry_user,
+                'registry_pass':   registry_pass,
+                'registry_type':   registry_type,
+                'registry_verify': not insecure}
         url = "{base_url}/api/scanning/v1/anchore/registries?validate={validate}".format(
-            base_url=self.url,
-            validate=validate)
+                base_url=self.url,
+                validate=validate)
 
         res = self.http.post(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -511,15 +510,15 @@ class SdScanningClient(_SdcCommon):
                     "input registry name cannot contain '/' characters - valid registry names are of the form <host>:<port> where :<port> is optional"]
 
         payload = {
-            'registry': registry,
-            'registry_user': registry_user,
-            'registry_pass': registry_pass,
-            'registry_type': registry_type,
-            'registry_verify': not insecure}
+                'registry':        registry,
+                'registry_user':   registry_user,
+                'registry_pass':   registry_pass,
+                'registry_type':   registry_type,
+                'registry_verify': not insecure}
         url = "{base_url}/api/scanning/v1/anchore/registries/{registry}?validate={validate}".format(
-            base_url=self.url,
-            registry=registry,
-            validate=validate)
+                base_url=self.url,
+                registry=registry,
+                validate=validate)
 
         res = self.http.put(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -605,10 +604,10 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the repo.
         '''
         url = "{base_url}/api/scanning/v1/anchore/repositories?repository={repo}&autosubscribe={autosubscribe}{lookuptag}".format(
-            base_url=self.url,
-            repo=repo,
-            autosubscribe=autosubscribe,
-            lookuptag="&lookuptag={}".format(lookuptag) if lookuptag else "")
+                base_url=self.url,
+                repo=repo,
+                autosubscribe=autosubscribe,
+                lookuptag="&lookuptag={}".format(lookuptag) if lookuptag else "")
 
         res = self.http.post(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -681,10 +680,10 @@ class SdScanningClient(_SdcCommon):
             A JSON object containing the policy description.
         '''
         policy = {
-            'name': name,
-            'comment': comment,
-            'rules': rules,
-            'version': '1_0'
+                'name':    name,
+                'comment': comment,
+                'rules':   rules,
+                'version': '1_0'
         }
         if bundleid:
             policy['policyBundleId'] = bundleid
@@ -699,8 +698,8 @@ class SdScanningClient(_SdcCommon):
 
     def list_policy_bundles(self, detail=False):
         url = "{base_url}/api/scanning/v1/anchore/policies?detail={detail}".format(
-            base_url=self.url,
-            detail=str(detail))
+                base_url=self.url,
+                detail=str(detail))
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
@@ -785,6 +784,69 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.text]
 
+    class RuntimeAlertTrigger:
+        @staticmethod
+        def unscanned_image(alert):
+            alert["triggers"]["unscanned"] = True
+
+        @staticmethod
+        def scan_result_change_fail(alert):
+            alert["triggers"]["policy_eval"] = True
+            alert["onlyPassFail"] = True
+
+        @staticmethod
+        def scan_result_change_any(alert):
+            alert["triggers"]["policy_eval"] = True
+            alert["onlyPassFail"] = False
+
+        @staticmethod
+        def cve_update(alert):
+            alert["triggers"]["vuln_update"] = True
+
+    def add_runtime_alert(self, name, description="", scope="", triggers=None, notification_channels=None, enabled=True):
+        '''
+        Create a new runtime alert
+
+        Args:
+            name: The name of the alert.
+            description: The descprition of the alert.
+            scope: An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
+            triggers: A list of RuntimeAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
+            notification_channels: A list of notification channel ids.
+            enabled: Whether this alert should actually be applied.
+        Returns:
+            The created alert.
+        '''
+        if not triggers:
+            triggers = [SdScanningClient.RuntimeAlertTrigger.unscanned_image]
+
+        alert = {
+                'name':                   name,
+                'description':            description,
+                'type':                   'runtime',
+                'triggers':               {
+                        "unscanned":       False,
+                        "analysis_update": False,
+                        "vuln_update":     False,
+                        "policy_eval":     False,
+                        "failed":          False
+                },
+                'scope':                  scope,
+                "onlyPassFail":           False,
+                "skipEventSend":          False,
+                'enabled':                enabled,
+                'notificationChannelIds': notification_channels,
+        }
+
+        for trigger in triggers:
+            trigger(alert)
+
+        res = self.http.post(f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     def add_alert(self, name, description=None, scope="", triggers={'failed': True, 'unscanned': True},
                   enabled=False, notification_channels=[]):
         '''**Description**
@@ -802,13 +864,13 @@ class SdScanningClient(_SdcCommon):
             A JSON object containing the alert description.
         '''
         alert = {
-            'name': name,
-            'description': description,
-            'triggers': triggers,
-            'scope': scope,
-            'enabled': enabled,
-            'autoscan': True,
-            'notificationChannelIds': notification_channels,
+                'name':                   name,
+                'description':            description,
+                'triggers':               triggers,
+                'scope':                  scope,
+                'enabled':                enabled,
+                'autoscan':               True,
+                'notificationChannelIds': notification_channels,
         }
 
         url = self.url + '/api/scanning/v1/alerts'
@@ -820,17 +882,17 @@ class SdScanningClient(_SdcCommon):
         return [True, res.json()]
 
     def list_alerts(self, limit=None, cursor=None):
-        '''**Description**
-            List the current set of scanning alerts.
-
-        **Arguments**
-            - limit: Maximum number of alerts in the response.
-            - cursor: An opaque string representing the current position in the list of alerts. It's provided in the 'responseMetadata' of the list_alerts response.
-
-        **Success Return Value**
-            A JSON object containing the list of alerts.
         '''
-        url = self.url + '/api/scanning/v1/alerts'
+        List the current set of scanning alerts.
+        Args:
+            limit(int): Maximum number of alerts in the response.
+            cursor: An opaque string representing the current position in the list of alerts. It's provided in the 'responseMetadata' of the list_alerts response.
+
+        Returns:
+            A JSON containing the list of alerts in the 'alerts' field, and the current cursor position in the 'responseMetadata' field.
+        '''
+
+        url = f"{self.url}/api/scanning/v1/alerts"
         if limit:
             url += '?limit=' + str(limit)
             if cursor:
@@ -1020,8 +1082,8 @@ class SdScanningClient(_SdcCommon):
             A JSON object representing the list of runtime containers.
         '''
         containers = {
-            'scope': scope,
-            'skipPolicyEvaluation': skip_policy_evaluation
+                'scope':                scope,
+                'skipPolicyEvaluation': skip_policy_evaluation
         }
         if start_time or end_time:
             containers['time'] = {}
@@ -1084,7 +1146,7 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/anchore/query/vulnerabilities"
 
         params = {
-            "id": id,
+                "id": id,
         }
 
         res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -1103,9 +1165,9 @@ class SdScanningClient(_SdcCommon):
 
         url = f"{self.url}/api/scanning/v1/vulnexceptions"
         params = {
-            "version": "1_0",
-            "name": name,
-            "comment": comment,
+                "version": "1_0",
+                "name":    name,
+                "comment": comment,
         }
 
         data = json.dumps(params)
@@ -1129,7 +1191,7 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/vulnexceptions"
 
         params = {
-            "bundleId": "default",
+                "bundleId": "default",
         }
 
         res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -1142,7 +1204,7 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}"
 
         params = {
-            "bundleId": "default",
+                "bundleId": "default",
         }
 
         res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -1158,11 +1220,11 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities"
 
         params = {
-            "gate": "vulnerabilities",
-            "is_busy": False,
-            "trigger_id": f"{cve}+*",
-            "expiration_date": int(expiration_date) if expiration_date else None,
-            "notes": note,
+                "gate":            "vulnerabilities",
+                "is_busy":         False,
+                "trigger_id":      f"{cve}+*",
+                "expiration_date": int(expiration_date) if expiration_date else None,
+                "notes":           note,
         }
 
         data = json.dumps(params)
@@ -1178,7 +1240,7 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities/{id}"
 
         params = {
-            "bundleId": "default",
+                "bundleId": "default",
         }
 
         res = self.http.delete(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -1191,15 +1253,15 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities/{id}"
 
         data = {
-            "id": id,
-            "gate": "vulnerabilities",
-            "trigger_id": f"{cve}+*",
-            "enabled": enabled,
-            "notes": note,
-            "expiration_date": int(expiration_date) if expiration_date else None,
+                "id":              id,
+                "gate":            "vulnerabilities",
+                "trigger_id":      f"{cve}+*",
+                "enabled":         enabled,
+                "notes":           note,
+                "expiration_date": int(expiration_date) if expiration_date else None,
         }
         params = {
-            "bundleId": "default",
+                "bundleId": "default",
         }
 
         res = self.http.put(url, data=json.dumps(data), params=params, headers=self.hdrs, verify=self.ssl_verify)
@@ -1227,18 +1289,18 @@ class SdScanningClient(_SdcCommon):
         url = f"{self.url}/api/scanning/v1/reports/csv"
 
         params = {
-            "queryType": "vuln",
-            "scopeType": scope_type,
-            "staticScope":
-                {
-                    "registry": "",
-                    "repository": "",
-                    "tag": ""
-                },
-            "runtimeScope": {},
-            "imageQueryFilter": {"vType": vuln_type},
-            "offset": 0,
-            "limit": 100000
+                "queryType":        "vuln",
+                "scopeType":        scope_type,
+                "staticScope":
+                                    {
+                                            "registry":   "",
+                                            "repository": "",
+                                            "tag":        ""
+                                    },
+                "runtimeScope":     {},
+                "imageQueryFilter": {"vType": vuln_type},
+                "offset":           0,
+                "limit":            100000
         }
 
         res = self.http.post(url, data=json.dumps(params), headers=self.hdrs, verify=self.ssl_verify)
@@ -1272,7 +1334,7 @@ class SdScanningClient(_SdcCommon):
 
         url = f"{self.url}/api/scanning/v1/images/{image_digest}/policyEvaluation"
         params = {
-            "tag": image_tag,
+                "tag": image_tag,
         }
 
         res = self.http.get(url, headers=self.hdrs, params=params, verify=self.ssl_verify)
@@ -1282,17 +1344,17 @@ class SdScanningClient(_SdcCommon):
         json_res = res.json()
 
         result = {
-            "image_digest": json_res["imageDigest"],
-            "image_id": json_res["imageId"],
-            "status": json_res["status"],
-            "image_tag": image_tag,
-            "total_stop": json_res["nStop"],
-            "total_warn": json_res["nWarn"],
-            "last_evaluation": datetime.utcfromtimestamp(json_res["at"]),
-            "policy_id": "*",
-            "policy_name": "All policies",
-            "warn_results": [],
-            "stop_results": []
+                "image_digest":    json_res["imageDigest"],
+                "image_id":        json_res["imageId"],
+                "status":          json_res["status"],
+                "image_tag":       image_tag,
+                "total_stop":      json_res["nStop"],
+                "total_warn":      json_res["nWarn"],
+                "last_evaluation": datetime.utcfromtimestamp(json_res["at"]),
+                "policy_id":       "*",
+                "policy_name":     "All policies",
+                "warn_results":    [],
+                "stop_results":    []
         }
 
         if policy_id:
