@@ -1,7 +1,7 @@
 import os
 
-from expects import *
-from mamba import *
+from expects import be_empty, be_false, be_true, contain, contain_exactly, expect, have_keys
+from mamba import after, before, context, description, it
 
 from sdcclient import SdScanningClient
 from specs import be_successful_api_call
