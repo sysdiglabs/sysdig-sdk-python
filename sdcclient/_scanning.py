@@ -847,6 +847,56 @@ class SdScanningClient(_SdcCommon):
 
         return [True, res.json()]
 
+    def update_runtime_alert(self, id, name=None, description=None, scope=None, triggers=None, notification_channels=None, enabled=None):
+        '''
+        Create a new runtime alert
+
+        Args:
+            id(str): Alert ID.
+            name(str): The name of the alert.
+            description(str): The description of the alert.
+            scope(str): An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
+            triggers(list): A list of RuntimeAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
+            notification_channels(list): A list of notification channel ids.
+            enabled(bool): Whether this alert should actually be applied. Defaults to true.
+        Returns:
+            The updated alert.
+        '''
+        if not triggers:
+            triggers = [SdScanningClient.RuntimeAlertTrigger.unscanned_image]
+
+        ok, alert = self.get_alert(id)
+        if not ok:
+            return False, f"unable to retrieve alert by ID {id}: {alert}"
+
+        if name is not None:
+            alert["name"] = name
+        if description is not None:
+            alert["description"] = description
+        if scope is not None:
+            alert["scope"] = scope
+        if triggers is not None:
+            alert["triggers"] = {
+                    "unscanned":       False,
+                    "analysis_update": False,
+                    "vuln_update":     False,
+                    "policy_eval":     False,
+                    "failed":          False
+            }
+            alert["onlyPassFail"] = False
+            for trigger in triggers:
+                trigger(alert)
+        if notification_channels is not None:
+            alert["notificationChannelIds"] = notification_channels
+        if enabled is not None:
+            alert["enabled"] = enabled
+
+        res = self.http.put(f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
     class RepositoryAlertTrigger:
         @staticmethod
         def new_image_analyzed(alert):

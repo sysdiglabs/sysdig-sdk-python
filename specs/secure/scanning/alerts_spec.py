@@ -189,3 +189,24 @@ with description("Scanning Alerts") as self:
         ok, res = self.client.get_alert(alert_id)
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_keys(name="A name", description="A description", scope="", triggers=have_keys(unscanned=be_true)))
+
+    with it("updates a runtime alert correctly"):
+        ok, res = self.client.add_runtime_alert(
+                name="A name",
+                description="A description",
+                scope="",
+                triggers=[SdScanningClient.RuntimeAlertTrigger.unscanned_image]
+        )
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys(name="A name", description="A description", scope="", triggers=have_keys(unscanned=be_true)))
+
+        alert_id = res["alertId"]
+        ok, res = self.client.update_runtime_alert(
+                id=alert_id,
+                name="An updated name",
+                description="An updated description",
+                scope="agent.id = 'foo'",
+                triggers=[SdScanningClient.RuntimeAlertTrigger.scan_result_change_fail]
+        )
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys(name="An updated name", description="An updated description", scope="agent.id = 'foo'", triggers=have_keys(unscanned=be_false, policy_eval=be_true), onlyPassFail=be_true))
