@@ -1189,12 +1189,11 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         params = {
                 "queryType":        "vuln",
                 "scopeType":        scope_type,
-                "staticScope":
-                                    {
-                                            "registry":   "",
-                                            "repository": "",
-                                            "tag":        ""
-                                    },
+                "staticScope":      {
+                        "registry":   "",
+                        "repository": "",
+                        "tag":        ""
+                },
                 "runtimeScope":     {},
                 "imageQueryFilter": {"vType": vuln_type},
                 "offset":           0,

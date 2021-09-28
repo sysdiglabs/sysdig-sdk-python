@@ -1,6 +1,6 @@
 import sdcclient.monitor as monitor
 import sdcclient.secure as secure
-from sdcclient._monitor import SdMonitorClient, SdcClient
+from sdcclient._monitor import SdcClient, SdMonitorClient
 from sdcclient._monitor_v1 import SdMonitorClientV1
 from sdcclient._scanning import SdScanningClient
 from sdcclient._secure import SdSecureClient
