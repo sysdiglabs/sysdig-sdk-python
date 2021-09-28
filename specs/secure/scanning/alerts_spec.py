@@ -6,7 +6,7 @@ from mamba import *
 from sdcclient import SdScanningClient
 from specs import be_successful_api_call
 
-with fdescription("Scanning Alerts") as self:
+with description("Scanning Alerts") as self:
     with before.all:
         self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                        token=os.getenv("SDC_SECURE_TOKEN"))
