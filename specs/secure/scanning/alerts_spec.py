@@ -6,7 +6,7 @@ from mamba import *
 from sdcclient import SdScanningClient
 from specs import be_successful_api_call
 
-with description("Scanning Alerts") as self:
+with fdescription("Scanning Alerts") as self:
     with before.all:
         self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                        token=os.getenv("SDC_SECURE_TOKEN"))
@@ -210,3 +210,34 @@ with description("Scanning Alerts") as self:
         )
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_keys(name="An updated name", description="An updated description", scope="agent.id = 'foo'", triggers=have_keys(unscanned=be_false, policy_eval=be_true), onlyPassFail=be_true))
+
+    with it("updates a repository alert correctly"):
+        ok, res = self.client.add_repository_alert(
+                name="A name",
+                registry="registry",
+                repository="repository",
+                tag="latest",
+                description="A description",
+                triggers=[SdScanningClient.RepositoryAlertTrigger.new_image_analyzed]
+        )
+
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys(name="A name", description="A description",
+                                 repositories=contain_exactly(have_keys(registry="registry", repository="repository", tag="latest")),
+                                 triggers=have_keys(analysis_update=be_true)))
+
+        alert_id = res["alertId"]
+        ok, res = self.client.update_repository_alert(
+                id=alert_id,
+                name="An updated name",
+                registry="new_registry",
+                repository="new_repository",
+                tag="v1",
+                description="An updated description",
+                triggers=[SdScanningClient.RepositoryAlertTrigger.scan_result_change_fail]
+        )
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys(name="An updated name",
+                                 description="An updated description",
+                                 repositories=contain_exactly(have_keys(registry="new_registry", repository="new_repository", tag="v1")),
+                                 triggers=have_keys(unscanned=be_false, policy_eval=be_true), onlyPassFail=be_true))

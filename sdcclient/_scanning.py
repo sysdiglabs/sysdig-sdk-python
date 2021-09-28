@@ -849,7 +849,7 @@ class SdScanningClient(_SdcCommon):
 
     def update_runtime_alert(self, id, name=None, description=None, scope=None, triggers=None, notification_channels=None, enabled=None):
         '''
-        Create a new runtime alert
+        Updates a runtime alert
 
         Args:
             id(str): Alert ID.
@@ -862,9 +862,6 @@ class SdScanningClient(_SdcCommon):
         Returns:
             The updated alert.
         '''
-        if not triggers:
-            triggers = [SdScanningClient.RuntimeAlertTrigger.unscanned_image]
-
         ok, alert = self.get_alert(id)
         if not ok:
             return False, f"unable to retrieve alert by ID {id}: {alert}"
@@ -918,7 +915,7 @@ class SdScanningClient(_SdcCommon):
 
     def add_repository_alert(self, name, registry, repository, tag, description="", triggers=None, notification_channels=None, enabled=True):
         '''
-        Create a new runtime alert
+        Create a new repository alert
 
         Args:
             name(str): The name of the alert.
@@ -961,6 +958,59 @@ class SdScanningClient(_SdcCommon):
             trigger(alert)
 
         res = self.http.post(f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    def update_repository_alert(self, id, name=None, registry=None, repository=None, tag=None, description=None, triggers=None, notification_channels=None, enabled=None):
+        '''
+        Updates a repository alert
+
+        Args:
+            id(str): Alert ID.
+            name(str): The name of the alert.
+            registry(str): Registry to alert (e.g. docker.io)
+            repository(str): Repository to alert (e.g. sysdig/agent)
+            tag(str): Tag to alert (e.g. latest)
+            description(str): The description of the alert.
+            triggers(list): A list of RepositoryAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
+            notification_channels(list): A list of notification channel ids.
+            enabled(bool): Whether this alert should actually be applied. Defaults to true.
+        Returns:
+            The updated alert.
+        '''
+        ok, alert = self.get_alert(id)
+        if not ok:
+            return False, f"unable to retrieve alert by ID {id}: {alert}"
+
+        if name is not None:
+            alert["name"] = name
+        if description is not None:
+            alert["description"] = description
+        if registry is not None:
+            alert["repositories"][0]["registry"] = registry
+        if repository is not None:
+            alert["repositories"][0]["repository"] = repository
+        if tag is not None:
+            alert["repositories"][0]["tag"] = tag
+        if triggers is not None:
+            alert["triggers"] = {
+                    "unscanned":       False,
+                    "analysis_update": False,
+                    "vuln_update":     False,
+                    "policy_eval":     False,
+                    "failed":          False
+            }
+            alert["onlyPassFail"] = False
+            for trigger in triggers:
+                trigger(alert)
+        if notification_channels is not None:
+            alert["notificationChannelIds"] = notification_channels
+        if enabled is not None:
+            alert["enabled"] = enabled
+
+        res = self.http.put(f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
