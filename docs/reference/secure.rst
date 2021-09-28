@@ -6,3 +6,9 @@ Sysdig Secure
    :members:
    :inherited-members:
    :undoc-members:
+
+.. automodule:: sdcclient
+.. autoclass:: SdScanningClient
+   :members:
+   :inherited-members:
+   :undoc-members:
