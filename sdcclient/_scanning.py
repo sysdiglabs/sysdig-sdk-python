@@ -808,12 +808,12 @@ class SdScanningClient(_SdcCommon):
         Create a new runtime alert
 
         Args:
-            name: The name of the alert.
-            description: The descprition of the alert.
-            scope: An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
-            triggers: A list of RuntimeAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
-            notification_channels: A list of notification channel ids.
-            enabled: Whether this alert should actually be applied.
+            name(str): The name of the alert.
+            description(str): The description of the alert.
+            scope(str): An AND-composed string of predicates that selects the scope in which the alert will be applied. (like: 'host.domain = "example.com" and container.image != "alpine:latest"')
+            triggers(list): A list of RuntimeAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
+            notification_channels(list): A list of notification channel ids.
+            enabled(bool): Whether this alert should actually be applied. Defaults to true.
         Returns:
             The created alert.
         '''
@@ -832,6 +832,75 @@ class SdScanningClient(_SdcCommon):
                         "failed":          False
                 },
                 'scope':                  scope,
+                "onlyPassFail":           False,
+                "skipEventSend":          False,
+                'enabled':                enabled,
+                'notificationChannelIds': notification_channels,
+        }
+
+        for trigger in triggers:
+            trigger(alert)
+
+        res = self.http.post(f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
+
+    class RepositoryAlertTrigger:
+        @staticmethod
+        def new_image_analyzed(alert):
+            alert["triggers"]["analysis_update"] = True
+
+        @staticmethod
+        def scan_result_change_fail(alert):
+            alert["triggers"]["policy_eval"] = True
+            alert["onlyPassFail"] = True
+
+        @staticmethod
+        def scan_result_change_any(alert):
+            alert["triggers"]["policy_eval"] = True
+            alert["onlyPassFail"] = False
+
+        @staticmethod
+        def cve_update(alert):
+            alert["triggers"]["vuln_update"] = True
+
+    def add_repository_alert(self, name, registry, repository, tag, description="", triggers=None, notification_channels=None, enabled=True):
+        '''
+        Create a new runtime alert
+
+        Args:
+            name(str): The name of the alert.
+            registry(str): Registry to alert (e.g. docker.io)
+            repository(str): Repository to alert (e.g. sysdig/agent)
+            tag(str): Tag to alert (e.g. latest)
+            description(str): The description of the alert.
+            triggers(list): A list of RepositoryAlertTrigger indicating which triggers should be enabled. (default: [SdScanningClient.RuntimeAlertTrigger.unscanned_image])
+            notification_channels(list): A list of notification channel ids.
+            enabled(bool): Whether this alert should actually be applied. Defaults to true.
+        Returns:
+            The created alert.
+        '''
+        if not triggers:
+            triggers = [SdScanningClient.RepositoryAlertTrigger.new_image_analyzed]
+
+        alert = {
+                'name':                   name,
+                'description':            description,
+                'type':                   'repository',
+                'triggers':               {
+                        "unscanned":       False,
+                        "analysis_update": False,
+                        "vuln_update":     False,
+                        "policy_eval":     False,
+                        "failed":          False
+                },
+                'repositories':           [{
+                        'registry':   registry,
+                        'repository': repository,
+                        'tag':        tag,
+                }],
                 "onlyPassFail":           False,
                 "skipEventSend":          False,
                 'enabled':                enabled,
