@@ -175,3 +175,17 @@ with description("Scanning Alerts") as self:
         ok, res = self.client.list_alerts()
         expect((ok, res)).to(be_successful_api_call)
         expect(res["alerts"]).to_not(contain(have_keys(id=alert_id)))
+
+    with it("retrieves an alert correctly"):
+        ok, res = self.client.add_runtime_alert(
+                name="A name",
+                description="A description",
+                scope="",
+                triggers=[SdScanningClient.RuntimeAlertTrigger.unscanned_image]
+        )
+        expect((ok, res)).to(be_successful_api_call)
+
+        alert_id = res["alertId"]
+        ok, res = self.client.get_alert(alert_id)
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res).to(have_keys(name="A name", description="A description", scope="", triggers=have_keys(unscanned=be_true)))
