@@ -42,6 +42,23 @@ class ScanningAlertsClientV1(_SdcCommon):
             enabled(bool): Whether this alert should actually be applied. Defaults to true.
         Returns:
             The created alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res = client.add_repository_alert(
+            >>>        name="A name",
+            >>>        registry="docker.io",
+            >>>        repository="sysdig/agent",
+            >>>        tag="latest",
+            >>>        description="A description",
+            >>>        triggers=[ScanningAlertsClientV1.RepositoryAlertTrigger.new_image_analyzed,
+            >>>                  ScanningAlertsClientV1.RepositoryAlertTrigger.scan_result_change_fail,
+            >>>                  ScanningAlertsClientV1.RepositoryAlertTrigger.cve_update]
+            >>>)
+            >>> if not ok:
+            >>>    print(f"error creating alert: {res}")
+            >>> alert_id = res["alertId"]
         '''
         if not triggers:
             triggers = [ScanningAlertsClientV1.RepositoryAlertTrigger.new_image_analyzed]
@@ -79,7 +96,7 @@ class ScanningAlertsClientV1(_SdcCommon):
 
     def update_repository_alert(self, id, name=None, registry=None, repository=None, tag=None, description=None, triggers=None, notification_channels=None, enabled=None):
         '''
-        Updates a repository alert
+        Updates a repository alert. Fields that are not specified, will not be modified.
 
         Args:
             id(str): Alert ID.
@@ -93,6 +110,22 @@ class ScanningAlertsClientV1(_SdcCommon):
             enabled(bool): Whether this alert should actually be applied. Defaults to true.
         Returns:
             The updated alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res = client.update_repository_alert(
+            >>>     id=alert_id,
+            >>>     name="An updated name",
+            >>>     registry="updated_registry",
+            >>>     repository="updated_repository",
+            >>>     tag="v1",
+            >>>     description="An updated description",
+            >>>     triggers=[ScanningAlertsClientV1.RepositoryAlertTrigger.scan_result_change_fail]
+            >>> )
+            >>> if not ok:
+            >>>    print(f"error updating alert: {res}")
+            >>> alert_id = res["alertId"]
         '''
         ok, alert = self.get_alert(id)
         if not ok:
@@ -162,6 +195,21 @@ class ScanningAlertsClientV1(_SdcCommon):
             enabled(bool): Whether this alert should actually be applied. Defaults to true.
         Returns:
             The created alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res = client.add_runtime_alert(
+            >>>     name="A name",
+            >>>     description="A description",
+            >>>     scope="",
+            >>>     triggers=[ScanningAlertsClientV1.RuntimeAlertTrigger.unscanned_image,
+            >>>               ScanningAlertsClientV1.RuntimeAlertTrigger.scan_result_change_fail,
+            >>>               ScanningAlertsClientV1.RuntimeAlertTrigger.cve_update]
+            >>>)
+            >>> if not ok:
+            >>>    print(f"error creating alert: {res}")
+            >>> alert_id = res["alertId"]
         '''
         if not triggers:
             triggers = [ScanningAlertsClientV1.RuntimeAlertTrigger.unscanned_image]
@@ -195,7 +243,7 @@ class ScanningAlertsClientV1(_SdcCommon):
 
     def update_runtime_alert(self, id, name=None, description=None, scope=None, triggers=None, notification_channels=None, enabled=None):
         '''
-        Updates a runtime alert
+        Updates a runtime alert. Fields that are not specified, will not be modified.
 
         Args:
             id(str): Alert ID.
@@ -207,6 +255,20 @@ class ScanningAlertsClientV1(_SdcCommon):
             enabled(bool): Whether this alert should actually be applied. Defaults to true.
         Returns:
             The updated alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res = client.update_runtime_alert(
+            >>>     id=alert_id,
+            >>>     name="An updated name",
+            >>>     description="An updated description",
+            >>>     scope="agent.id = 'foo'",
+            >>>     triggers=[ScanningAlertsClientV1.RuntimeAlertTrigger.scan_result_change_fail]
+            >>> )
+            >>> if not ok:
+            >>>    print(f"error updating alert: {res}")
+            >>> alert_id = res["alertId"]
         '''
         ok, alert = self.get_alert(id)
         if not ok:
@@ -249,6 +311,14 @@ class ScanningAlertsClientV1(_SdcCommon):
 
         Returns:
             A JSON object containing the alert description.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res = client.get_alert(alert_id)
+            >>> if not ok:
+            >>>     print(f"error retrieving alert {alert_id}: {res}")
+            >>> alert = res
         '''
 
         res = self.http.get(f"{self.url}/api/scanning/v1/alerts/{alertid}", headers=self.hdrs, verify=self.ssl_verify)
@@ -265,6 +335,19 @@ class ScanningAlertsClientV1(_SdcCommon):
 
         Returns:
             A JSON containing the list of alerts in the 'alerts' field, and the current cursor position in the 'responseMetadata' field.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> ok, res =client.list_alerts()
+            >>> if not ok:
+            >>>     print(f"error listing alerts: {res}")
+            >>> for alert in res["alerts"]:
+            >>>     print(alert["alertId"])
+            >>>
+            >>> # Load more alerts
+            >>> if res["responseMetadata"] is not None:
+            >>>     ok, res = client.list_alerts(cursor=res["responseMetadata"]["next_cursor"])
         '''
 
         url = f"{self.url}/api/scanning/v1/alerts"
@@ -285,6 +368,11 @@ class ScanningAlertsClientV1(_SdcCommon):
 
         Args:
             policyid:  Unique identifier associated with this alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> client.delete_alert(alert_id)
         '''
 
         res = self.http.delete(f"{self.url}/api/scanning/v1/alerts/{policyid}", headers=self.hdrs, verify=self.ssl_verify)
