@@ -1247,7 +1247,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
                 "image_tag":       image_tag,
                 "total_stop":      json_res["nStop"],
                 "total_warn":      json_res["nWarn"],
-                "last_evaluation": datetime.utcfromtimestamp(json_res["at"]),
+                "last_evaluation": str(datetime.utcfromtimestamp(json_res["at"])),
                 "policy_id":       "*",
                 "policy_name":     "All policies",
                 "warn_results":    [],
