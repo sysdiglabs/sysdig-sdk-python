@@ -93,8 +93,8 @@ To log all the requests made by your script in significant detail, add to your s
 
 ``` python
 import logging
-import httplib
-httplib.HTTPConnection.debuglevel = 1
+import http.client
+http.client.HTTPConnection.debuglevel = 1
 
 logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
 logging.getLogger().setLevel(logging.DEBUG)
