@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from expects import equal, expect, be_empty, be_above_or_equal, be_an, have_keys, not_
+from expects import be_above_or_equal, be_an, equal, expect, have_keys
 from mamba import before, context, description, it
 
 from sdcclient import SdScanningClient
