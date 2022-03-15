@@ -26,7 +26,7 @@ with description("Custom Rules", "integration") as self:
                 ok, res = self.client.get_user_falco_rules()
 
                 expect((ok, res)).to_not(be_successful_api_call)
-                expect(res).to(equal("Bad credentials"))
+                expect(res).to(equal("cannot verify credentials"))
 
 
     with it("can push custom rules"):
