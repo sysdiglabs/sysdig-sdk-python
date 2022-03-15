@@ -4,14 +4,14 @@ import tempfile
 
 from expects import expect, have_key, have_keys, contain, equal, start_with
 from expects.matchers.built_in import be_false
-from mamba import before, it, context, after, description
+from mamba import before, it, context, after, _description
 
 from sdcclient.monitor import DashboardsClientV2
 from specs import be_successful_api_call
 
 _DASHBOARD_NAME = "test_dashboard_ci"
 
-with description("Dashboards v2", "integration") as self:
+with _description("Dashboards v2", "integration") as self:
     with before.all:
         self.client = DashboardsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
                                          token=os.getenv("SDC_MONITOR_TOKEN"))
