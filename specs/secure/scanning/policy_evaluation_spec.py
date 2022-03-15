@@ -18,12 +18,11 @@ with description("Policy Evaluation", "integration") as self:
 
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(
-            have_keys("image_digest", "image_id", "stop_results",
+            have_keys("image_digest", "image_id", "stop_results", "warn_results",
                       total_warn=be_above_or_equal(0), total_stop=be_above_or_equal(0),
                       last_evaluation=be_an(datetime),
                       status="pass", image_tag=self.image_name,
-                      policy_id="*", policy_name="All policies",
-                      warn_results=not_(be_empty))
+                      policy_id="*", policy_name="All policies")
         )
 
     with it("is able to retrieve the results for the default policy"):
@@ -32,12 +31,11 @@ with description("Policy Evaluation", "integration") as self:
 
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(
-            have_keys("image_digest", "image_id", "stop_results",
+            have_keys("image_digest", "image_id", "stop_results", "warn_results",
                       total_warn=be_above_or_equal(0), total_stop=be_above_or_equal(0),
                       last_evaluation=be_an(datetime),
                       status="pass", image_tag=self.image_name,
-                      policy_id="default", policy_name="DefaultPolicy",
-                      warn_results=not_(be_empty))
+                      policy_id="default", policy_name="DefaultPolicy")
         )
 
     with context("but the image has not been scanned yet"):
