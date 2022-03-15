@@ -88,4 +88,4 @@ with description("Policy Events v1", "integration") as self:
             ok, res = self.client.get_policy_event(event_id)
 
             expect((ok, res)).to(be_successful_api_call)
-            expect(res).to(have_keys("name", "timestamp", "customerId", "originator", "machineId", id=event_id))
+            expect(res).to(have_keys("name", "timestamp", "customerId", "originator", id=event_id))
