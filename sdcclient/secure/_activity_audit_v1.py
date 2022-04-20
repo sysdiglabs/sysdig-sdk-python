@@ -49,9 +49,9 @@ class ActivityAuditClientV1(_SdcCommon):
         number_of_events_per_query = 50
 
         if from_date is None:
-            from_date = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+            from_date = datetime.datetime.now() - datetime.timedelta(days=1)
         if to_date is None:
-            to_date = datetime.datetime.utcnow()
+            to_date = datetime.datetime.now()
 
         filters = scope_filter if scope_filter else []
         if data_sources:
