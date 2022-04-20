@@ -27,7 +27,7 @@ with description("Activity Audit v1", "integration") as self:
 
     with context("when listing the events from the last 3 days"):
         with it("retrieves all the events"):
-            three_days_ago = datetime.datetime.utcnow() - datetime.timedelta(days=3)
+            three_days_ago = datetime.datetime.now() - datetime.timedelta(days=3)
             ok, res = self.client.list_events(from_date=three_days_ago)
 
             expect((ok, res)).to(be_successful_api_call)
