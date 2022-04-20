@@ -33,7 +33,7 @@ class ActivityAuditClientV1(_SdcCommon):
         Examples:
             >>> client = ActivityAuditClientV1(token=SECURE_TOKEN)
             >>>
-            >>> now = datetime.datetime.utcnow()
+            >>> now = datetime.datetime.now()
             >>> three_days_ago = now - datetime.timedelta(days=3)
             >>> max_event_number_retrieved = 50
             >>> data_sources = [ActivityAuditDataSource.CMD, ActivityAuditDataSource.KUBE_EXEC]
