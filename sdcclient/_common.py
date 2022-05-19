@@ -765,7 +765,7 @@ class _SdcCommon(object):
             return [True, list(res.values())]
 
     def create_team(self, name, memberships=None, filter='', description='', show='host', theme='#7BB0B2',
-                    perm_capture=False, perm_custom_events=False, perm_aws_data=False):
+                    perm_capture=False, perm_custom_events=False, perm_aws_data=False, perm_rapid_response=False):
         '''
         **Description**
             Creates a new team
@@ -780,6 +780,7 @@ class _SdcCommon(object):
             - **perm_capture**: if True, this team will be allowed to take sysdig captures.
             - **perm_custom_events**: if True, this team will be allowed to view all custom events from every user and agent.
             - **perm_aws_data**: if True, this team will have access to all AWS metrics and tags, regardless of the team's scope.
+            - **perm_rapid_response**: if True, this team will have access rapid response feature.
 
         **Success Return Value**
             The newly created team.
@@ -795,6 +796,7 @@ class _SdcCommon(object):
             'canUseSysdigCapture': perm_capture,
             'canUseCustomEvents': perm_custom_events,
             'canUseAwsMetrics': perm_aws_data,
+            'canUseRapidResponse': perm_rapid_response,
         }
 
         # Map user-names to IDs
@@ -820,7 +822,7 @@ class _SdcCommon(object):
         return self._request_result(res)
 
     def edit_team(self, name, memberships=None, filter=None, description=None, show=None, theme=None,
-                  perm_capture=None, perm_custom_events=None, perm_aws_data=None):
+                  perm_capture=None, perm_custom_events=None, perm_aws_data=None, perm_rapid_response=False):
         '''
         **Description**
            Edits an existing team. All arguments are optional. Team settings for any arguments unspecified will remain at their current settings.
@@ -835,6 +837,7 @@ class _SdcCommon(object):
             - **perm_capture**: if True, this team will be allowed to take sysdig captures.
             - **perm_custom_events**: if True, this team will be allowed to view all custom events from every user and agent.
             - **perm_aws_data**: if True, this team will have access to all AWS metrics and tags, regardless of the team's scope.
+            - **perm_rapid_response**: if True, this team will have access rapid response feature.
 
         **Success Return Value**
             The edited team.
@@ -853,6 +856,7 @@ class _SdcCommon(object):
             'canUseSysdigCapture': perm_capture if perm_capture else team['canUseSysdigCapture'],
             'canUseCustomEvents': perm_custom_events if perm_custom_events else team['canUseCustomEvents'],
             'canUseAwsMetrics': perm_aws_data if perm_aws_data else team['canUseAwsMetrics'],
+            'canUseRapidResponse': perm_rapid_response,
             'defaultTeamRole': team['defaultTeamRole'],
             'entryPoint': team['entryPoint'],
             'id': team['id'],
