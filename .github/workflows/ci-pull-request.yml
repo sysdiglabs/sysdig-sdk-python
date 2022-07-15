@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python_version }}
 
@@ -79,7 +79,7 @@ jobs:
         run: git-chglog -c .github/git-chglog/config.yml -o RELEASE_CHANGELOG.md $(git describe --tags $(git rev-list --tags --max-count=1))
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
