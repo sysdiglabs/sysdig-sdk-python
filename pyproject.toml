@@ -24,7 +24,7 @@ doublex = "^1.9.2"
 doublex-expects = "^0.7.1"
 expects = "^0.9.0"
 flake8 = "^3.8.4"
-coverage = "^5.3"
+coverage = "^6.2"
 
 [tool.poetry.extras]
 docs = ["sphinx", "sphinx-material"]
