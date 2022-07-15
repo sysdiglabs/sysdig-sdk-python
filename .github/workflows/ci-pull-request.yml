@@ -21,16 +21,16 @@ jobs:
           - "3.9"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python_version }}
 
     - name: Install Poetry
       run: python -m pip install poetry poetry-dynamic-versioning
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       name: Cache Poetry dependencies
       with:
         path: |
@@ -61,7 +61,7 @@ jobs:
   test-release:
     runs-on: ubuntu-latest
     steps:  
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -79,7 +79,7 @@ jobs:
         run: git-chglog -c .github/git-chglog/config.yml -o RELEASE_CHANGELOG.md $(git describe --tags $(git rev-list --tags --max-count=1))
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 

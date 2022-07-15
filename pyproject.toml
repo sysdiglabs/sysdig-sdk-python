@@ -8,7 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = "^2.23"
-pyaml = "^20.4.0"
+pyaml = ">=20.4,<22.0"
 requests-toolbelt = "^0.9.1"
 urllib3 = "^1.26.0"
 tatsu = [
