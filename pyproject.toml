@@ -23,7 +23,7 @@ mamba = "^0.11.1"
 doublex = "^1.9.2"
 doublex-expects = "^0.7.1"
 expects = "^0.9.0"
-flake8 = "^3.8.4"
+flake8 = "^4.0.1"
 coverage = "^6.2"
 
 [tool.poetry.extras]
