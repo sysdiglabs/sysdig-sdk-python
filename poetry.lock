@@ -216,7 +216,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pyaml"
-version = "20.4.0"
+version = "21.10.1"
 description = "PyYAML-based module to produce pretty and readable YAML-serialized data"
 category = "main"
 optional = false
@@ -464,17 +464,6 @@ python-versions = "*"
 future-regex = ["regex"]
 
 [[package]]
-name = "tatsu"
-version = "5.7.0"
-description = "TatSu takes a grammar in a variation of EBNF as input, and outputs a memoizing PEG/Packrat parser in Python."
-category = "main"
-optional = false
-python-versions = ">=3.8"
-
-[package.extras]
-future-regex = ["regex"]
-
-[[package]]
 name = "typing-extensions"
 version = "4.0.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -513,7 +502,7 @@ docs = ["sphinx"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "1e0f81223d27040ce9435a3e5eda3dcd825ed6159b905bffe1d7099ededa07b2"
+content-hash = "89634b3f3852718c1efdaf4de333f14043399022c88a7c72336db2183bfcf2d0"
 
 [metadata.files]
 alabaster = [
@@ -712,8 +701,8 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 pyaml = [
-    {file = "pyaml-20.4.0-py2.py3-none-any.whl", hash = "sha256:67081749a82b72c45e5f7f812ee3a14a03b3f5c25ff36ec3b290514f8c4c4b99"},
-    {file = "pyaml-20.4.0.tar.gz", hash = "sha256:29a5c2a68660a799103d6949167bd6c7953d031449d08802386372de1db6ad71"},
+    {file = "pyaml-21.10.1-py2.py3-none-any.whl", hash = "sha256:19985ed303c3a985de4cf8fd329b6d0a5a5b5c9035ea240eccc709ebacbaf4a0"},
+    {file = "pyaml-21.10.1.tar.gz", hash = "sha256:c6519fee13bf06e3bb3f20cacdea8eba9140385a7c2546df5dbae4887f768383"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.7.0-py2.py3-none-any.whl", hash = "sha256:514f76d918fcc0b55c6680472f0a37970994e07bbb80725808c17089be302068"},
@@ -825,8 +814,6 @@ sphinxcontrib-serializinghtml = [
 tatsu = [
     {file = "TatSu-4.4.0-py2.py3-none-any.whl", hash = "sha256:c9211eeee9a2d4c90f69879ec0b518b1aa0d9450249cb0dd181f5f5b18be0a92"},
     {file = "TatSu-4.4.0.zip", hash = "sha256:80713413473a009f2081148d0f494884cabaf9d6866b71f2a68a92b6442f343d"},
-    {file = "TatSu-5.7.0-py2.py3-none-any.whl", hash = "sha256:9eebadfc2889d8e82e197df22913df56ff204bf4cfc62db49a5c7edd084e10b4"},
-    {file = "TatSu-5.7.0.zip", hash = "sha256:428136cd4aa9600fcd01428bd5667fc752062f54bd0148dc1e64fee7b8d05fa4"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
