@@ -3,6 +3,7 @@ import os
 import shutil
 
 import yaml
+import zlib
 
 from sdcclient._common import _SdcCommon
 
@@ -309,8 +310,12 @@ class FalcoRulesFilesClientOld(_SdcCommon):
         if "defaultPolicies" in rules_files:
             obj["defaultPolicies"] = rules_files["defaultPolicies"]
 
-        res = self.http.put(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers=self.hdrs,
-                            data=json.dumps(payload[1]), verify=self.ssl_verify)
+        headers = self.hdrs
+        headers['content-encoding'] = 'gzip'
+        data = zlib.compress(json.dumps(payload[1]))
+
+        res = self.http.put(self.url + '/api/settings/falco/{}RulesFiles'.format(kind), headers,
+                            data, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.json()]
