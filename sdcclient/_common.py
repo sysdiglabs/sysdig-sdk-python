@@ -715,7 +715,7 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         ret = [t for t in res.json()['teams'] if team_filter in t['name']]
         if product_filter:
-           ret = [t for t in ret if product_filter in t['products']]
+            ret = [t for t in ret if product_filter in t['products']]
         return [True, ret]
 
     def get_team(self, name):
