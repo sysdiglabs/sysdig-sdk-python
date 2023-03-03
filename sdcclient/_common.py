@@ -699,12 +699,13 @@ class _SdcCommon(object):
             return [False, self.lasterr]
         return [True, 'Successfully edited user']
 
-    def get_teams(self, team_filter=''):
+    def get_teams(self, team_filter='', product_filter=''):
         '''**Description**
             Return the set of teams that match the filter specified. The *team_filter* should be a substring of the names of the teams to be returned.
 
         **Arguments**
             - **team_filter**: the team filter to match when returning the list of teams
+            - **product_filter**: the product to match when returning the list of teams (SDC-Monitor, SDS-secure)
 
         **Success Return Value**
             The teams that match the filter.
@@ -713,6 +714,8 @@ class _SdcCommon(object):
         if not self._checkResponse(res):
             return [False, self.lasterr]
         ret = [t for t in res.json()['teams'] if team_filter in t['name']]
+        if product_filter:
+           ret = [t for t in ret if product_filter in t['products']]
         return [True, ret]
 
     def get_team(self, name):
