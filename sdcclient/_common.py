@@ -718,12 +718,12 @@ class _SdcCommon(object):
            ret = [t for t in ret if product_filter in t['products']]
         return [True, ret]
 
-    def get_team(self, name):
+    def get_team_by_id(self, id):
         '''**Description**
-            Return the team with the specified team name, if it is present.
+            Return the team with the specified team ID, if it is present.
 
         **Arguments**
-            - **name**: the name of the team to return
+            - **id**: the ID of the team to return
 
         **Success Return Value**
             The requested team.
@@ -731,13 +731,41 @@ class _SdcCommon(object):
         **Example**
             `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
         '''
-        ok, res = self.get_teams(name)
-        if not ok:
-            return ok, res
-        for team in res:
-            if team['name'] == name:
-                return [True, team]
-        return [False, 'Could not find team']
+        res = self.http.get(self.url + '/api/teams/' + str(id), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()['team']]
+
+    def get_team(self, name, with_memberships=True):
+        '''**Description**
+            Return the team with the specified team name, if it is present.
+
+        **Arguments**
+            - **name**: the name of the team to return
+            - **with_memberships**: also return team memberships
+
+        **Success Return Value**
+            The requested team.
+
+        **Example**
+            `examples/user_team_mgmt.py <https://github.com/draios/python-sdc-client/blob/master/examples/user_team_mgmt.py>`_
+        '''
+        res = self.http.get(self.url + '/api/v2/teams/light/name/' + str(name), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        light_team = res.json()['team']
+
+        if with_memberships:
+            ok, team_with_memberships = self.get_team_by_id(light_team['id'])
+
+            if not ok:
+                return [False, self.lasterr]
+
+            return [True, team_with_memberships]
+
+        return [True, light_team]
 
     def get_team_ids(self, teams):
         res = self.http.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
