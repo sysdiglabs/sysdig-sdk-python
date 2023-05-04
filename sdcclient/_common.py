@@ -737,13 +737,12 @@ class _SdcCommon(object):
 
         return [True, res.json()['team']]
 
-    def get_team(self, name, with_memberships=True):
+    def get_team(self, name):
         '''**Description**
             Return the team with the specified team name, if it is present.
 
         **Arguments**
             - **name**: the name of the team to return
-            - **with_memberships**: also return team memberships
 
         **Success Return Value**
             The requested team.
@@ -757,15 +756,12 @@ class _SdcCommon(object):
 
         light_team = res.json()['team']
 
-        if with_memberships:
-            ok, team_with_memberships = self.get_team_by_id(light_team['id'])
+        ok, team_with_memberships = self.get_team_by_id(light_team['id'])
 
-            if not ok:
-                return [False, self.lasterr]
+        if not ok:
+            return [False, self.lasterr]
 
-            return [True, team_with_memberships]
-
-        return [True, light_team]
+        return [True, team_with_memberships]
 
     def get_team_ids(self, teams):
         res = self.http.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
