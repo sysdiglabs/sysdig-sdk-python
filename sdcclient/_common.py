@@ -3,7 +3,7 @@ import os
 
 import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
 
 
 class SysdigHTTPAdapter(HTTPAdapter):
@@ -710,7 +710,7 @@ class _SdcCommon(object):
         **Success Return Value**
             The teams that match the filter.
         '''
-        res = self.http.get(self.url + '/api/teams', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(self.url + f'/api/teams?product={self.product}', headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         ret = [t for t in res.json()['teams'] if team_filter in t['name']]
