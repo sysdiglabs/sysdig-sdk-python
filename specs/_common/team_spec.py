@@ -47,7 +47,7 @@ with description("Teams", "integration", "teams") as self:
         secure_teams = [t for t in teams if 'SDS' in t['products']]
         expect(len(secure_teams)).to(equal(0))
 
-    with it("it should only list secure teams"):
+    with it("it should list only secure teams"):
         ok, team = self.monitor_client.create_team(f'{TEAM_PREFIX_NAME}{uuid.uuid4()}')
         expect((ok, team)).to(be_successful_api_call)
 
