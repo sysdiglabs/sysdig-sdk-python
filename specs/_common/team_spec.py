@@ -28,4 +28,3 @@ with description("Teams", "integration", "teams") as self:
 
         monitor_teams = [t for t in teams if 'SDC' in t['products']]
         expect(len(monitor_teams)).to(equal(0))
-
