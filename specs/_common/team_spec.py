@@ -25,7 +25,7 @@ with description("Teams", "integration", "teams") as self:
         ok, team = self.secure_client.create_team(self.team_name)
         expect((ok, team)).to(be_successful_api_call)
 
-        ok, teams = self.monitor_client.get_teams()
+        ok, teams = self.monitor_client.get_teams(product_filter='SDC')
         expect((ok, teams)).to(be_successful_api_call)
 
         secure_teams = [t for t in teams if 'SDS' in t['products']]
@@ -38,7 +38,7 @@ with description("Teams", "integration", "teams") as self:
         ok, team = self.monitor_client.create_team(self.team_name)
         expect((ok, team)).to(be_successful_api_call)
 
-        ok, teams = self.secure_client.get_teams()
+        ok, teams = self.secure_client.get_teams(product_filter='SDS')
         expect((ok, teams)).to(be_successful_api_call)
 
         monitor_teams = [t for t in teams if 'SDC' in t['products']]

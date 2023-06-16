@@ -710,12 +710,17 @@ class _SdcCommon(object):
         **Success Return Value**
             The teams that match the filter.
         '''
-        res = self.http.get(self.url + f'/api/teams?product={self.product}', headers=self.hdrs, verify=self.ssl_verify)
+        url = f'{self.url}/api/teams'
+        if product_filter:
+            if product_filter not in ['SDC', 'SDS']:
+                return [False, 'invalid product header, allowed only "SDC" or "SDS"']
+            url = f'{url}?product={product_filter}'
+
+        res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
             return [False, self.lasterr]
         ret = [t for t in res.json()['teams'] if team_filter in t['name']]
-        if product_filter:
-            ret = [t for t in ret if product_filter in t['products']]
+
         return [True, ret]
 
     def get_team_by_id(self, id):
