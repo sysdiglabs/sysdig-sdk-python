@@ -35,7 +35,7 @@ with description("Teams", "integration", "teams") as self:
         def count_products(teams, count):
             for team in teams:
                 for product in team['products']:
-                    count[product]+=1
+                    count[product] += 1
 
         count_products(teams_monitor, count_monitor)
         count_products(teams_secure, count_secure)
