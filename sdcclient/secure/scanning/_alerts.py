@@ -391,21 +391,19 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
             >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
             >>> alert = {
-            >>>     "teamId": 3203292,
-            >>>     "alertId": "alert_2SNfqleJM9T0C8eYPtkrVCpH8jl",
-            >>>     "enabled": false,
+            >>>     "enabled": True,
             >>>     "type": "runtime",
-            >>>     "name": "[sdc-cli-test] runtime-scanning-alert-asdfg",
+            >>>     "name": "runtime-scanning-alert",
             >>>     "triggers": {
-            >>>         "unscanned": true,
-            >>>         "analysis_update": false,
-            >>>         "vuln_update": false,
-            >>>         "policy_eval": false,
-            >>>         "failed": false
+            >>>         "unscanned": True,
+            >>>         "analysis_update": False,
+            >>>         "vuln_update": False,
+            >>>         "policy_eval": False,
+            >>>         "failed": False
             >>>     },
-            >>>     "autoscan": false,
-            >>>     "onlyPassFail": false,
-            >>>     "skipEventSend": false,
+            >>>     "autoscan": False,
+            >>>     "onlyPassFail": False,
+            >>>     "skipEventSend": False,
             >>>     "notificationChannelIds": []
             >>> }
             >>> client.add_alert_object(alert)

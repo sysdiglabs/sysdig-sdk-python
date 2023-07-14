@@ -1,12 +1,13 @@
 import os
+import uuid
 
-from expects import be_empty, be_false, be_true, contain, contain_exactly, expect, have_keys
+from expects import be_empty, be_false, be_true, contain, contain_exactly, expect, have_keys, equal
 from mamba import after, before, context, description, it
 
 from sdcclient import SdScanningClient
 from specs import be_successful_api_call
 
-with description("Scanning Alerts") as self:
+with description("Scanning Alerts", "integration") as self:
     with before.all:
         self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
                                        token=os.getenv("SDC_SECURE_TOKEN"))
@@ -17,6 +18,34 @@ with description("Scanning Alerts") as self:
 
         for alert in res["alerts"]:
             self.client.delete_alert(alert["alertId"])
+
+    with it("add alert object"):
+        alert = {
+            "enabled": True,
+            "type": "runtime",
+            "name": f"runtime-scanning-alert-{uuid.uuid4()}",
+            "triggers": {
+                "unscanned": True,
+                "analysis_update": False,
+                "vuln_update": False,
+                "policy_eval": False,
+                "failed": False
+            },
+            "autoscan": False,
+            "onlyPassFail": False,
+            "skipEventSend": False,
+            "notificationChannelIds": []
+        }
+        ok, res = self.client.add_alert_object(alert)
+        expect((ok, res)).to(be_successful_api_call)
+        expect(res['enabled']).to(equal(alert['enabled']))
+        expect(res['type']).to(equal(alert['type']))
+        expect(res['name']).to(equal(alert['name']))
+        expect(res['triggers']).to(equal(alert['triggers']))
+        expect(res['autoscan']).to(equal(alert['autoscan']))
+        expect(res['onlyPassFail']).to(equal(alert['onlyPassFail']))
+        expect(res['skipEventSend']).to(equal(alert['skipEventSend']))
+        expect(res['notificationChannelIds']).to(equal(alert['notificationChannelIds']))
 
     with it("lists all the scanning alerts"):
         ok, res = self.client.add_runtime_alert(
