@@ -417,4 +417,3 @@ class ScanningAlertsClientV1(_SdcCommon):
             return [False, self.lasterr]
 
         return [True, res.json()]
-
