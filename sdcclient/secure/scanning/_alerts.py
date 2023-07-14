@@ -379,3 +379,39 @@ class ScanningAlertsClientV1(_SdcCommon):
         if not self._checkResponse(res):
             return [False, self.lasterr]
         return [True, res.text]
+
+    def add_alert_object(self, object):
+        '''
+        Adds alert object as raw JSON object.
+
+        Args:
+            object: JSON repsentation of the alert.
+
+        Examples:
+            >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
+            >>> alert = {
+            >>>     "enabled": True,
+            >>>     "type": "runtime",
+            >>>     "name": "runtime-scanning-alert",
+            >>>     "triggers": {
+            >>>         "unscanned": True,
+            >>>         "analysis_update": False,
+            >>>         "vuln_update": False,
+            >>>         "policy_eval": False,
+            >>>         "failed": False
+            >>>     },
+            >>>     "autoscan": False,
+            >>>     "onlyPassFail": False,
+            >>>     "skipEventSend": False,
+            >>>     "notificationChannelIds": []
+            >>> }
+            >>> client.add_alert_object(alert)
+        '''
+        url = self.url + '/api/scanning/v1/alerts'
+        data = json.dumps(object)
+        res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
+        if not self._checkResponse(res):
+            return [False, self.lasterr]
+
+        return [True, res.json()]
