@@ -10,7 +10,7 @@ class SysdigHTTPAdapter(HTTPAdapter):
     def __init__(self, *args, **kwargs):
         retry_strategy = Retry(
             total=3,
-            status_forcelist=[403, 404, 429, 500, 502, 503, 504],
+            status_forcelist=[500, 502, 503, 504],
             allowed_methods=["HEAD", "GET", "OPTIONS", "PUSH", "PUT"],
             backoff_factor=2,
         )
