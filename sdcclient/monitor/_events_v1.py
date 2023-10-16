@@ -4,8 +4,8 @@ from sdcclient._common import _SdcCommon
 
 
 class EventsClientV1(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
-        super().__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None, proxies=None):
+        super().__init__(token, sdc_url, ssl_verify, custom_headers, proxies)
         self.product = "SDC"
 
     def get_events(self, from_s=None, to_s=None, last_s=None):

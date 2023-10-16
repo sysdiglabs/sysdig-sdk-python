@@ -19,8 +19,8 @@ from sdcclient._common import _SdcCommon
 
 
 class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
-        super(SdScanningClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None, proxies=None):
+        super(SdScanningClient, self).__init__(token, sdc_url, ssl_verify, custom_headers, proxies)
         self.product = "SDS"
 
     def add_image(self, image, force=False, dockerfile=None, annotations={}, autosubscribe=True):
