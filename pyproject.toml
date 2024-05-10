@@ -6,7 +6,7 @@ authors = ["Sysdig Inc. <info@sysdig.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8"
 requests = "^2.31"
 pyaml = ">=20.4,<22.0"
 requests-toolbelt = "^1.0.0"
