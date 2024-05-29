@@ -1044,7 +1044,7 @@ class _SdcCommon(object):
         res = self.http.get(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def create_access_key(self):
+    def create_access_key(self, agent_limit=None, agent_reserved=None, team_id=None):
         '''
         **Description**
             Create a new access key for Sysdig Monitor/Secure
@@ -1052,7 +1052,34 @@ class _SdcCommon(object):
         **Reslut**
             The access keys object
         '''
-        res = self.http.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify)
+        access_key_payload = {
+            "customerAccessKey": {
+                "limit": agent_limit,
+                "reservation": agent_reserved,
+                "teamId": team_id
+            }
+        }
+
+        res = self.http.post(self.url + '/api/customer/accessKeys', headers=self.hdrs, verify=self.ssl_verify, data=json.dumps(access_key_payload))
+        return self._request_result(res)
+
+    def update_access_key(self, access_key, agent_limit=None, agent_reserved=None, team_id=None):
+        '''
+        **Description**
+            Create a new access key for Sysdig Monitor/Secure
+
+        **Reslut**
+            The access keys object
+        '''
+        access_key_payload = {
+            "customerAccessKey": {
+                "limit": agent_limit,
+                "reservation": agent_reserved,
+                "teamId": team_id
+            }
+        }
+
+        res = self.http.put(self.url + '/api/customer/accessKeys/' + access_key, headers=self.hdrs, verify=self.ssl_verify, data=json.dumps(access_key_payload))
         return self._request_result(res)
 
     def disable_access_key(self, access_key):
