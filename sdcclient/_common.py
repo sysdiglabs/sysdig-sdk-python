@@ -509,7 +509,7 @@ class _SdcCommon(object):
         capture_agent = None
 
         for agent in res[1]:
-            if hostname == agent['hostName']:
+            if hostname == agent.get('hostName'):
                 capture_agent = agent
                 break
 
