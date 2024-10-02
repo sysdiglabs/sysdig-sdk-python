@@ -28,7 +28,7 @@ flake8 = "^3.8.4"
 coverage = "^6.2"
 
 [tool.poetry.extras]
-docs = ["sphinx", "sphinx-material"]
+docs = ["sphinx", "sphinx-material", "sphinx-rtd-theme"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
