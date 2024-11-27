@@ -41,7 +41,7 @@ class _SdcCommon(object):
     '''
     lasterr = None
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None, proxies=None):
         self.token = os.environ.get("SDC_TOKEN", token)
         self.hdrs = self.__get_headers(custom_headers)
         self.url = os.environ.get("SDC_URL", sdc_url).rstrip('/')
@@ -56,6 +56,8 @@ class _SdcCommon(object):
         self.http = requests.Session()
         self.http.mount("https://", adapter)
         self.http.mount("http://", adapter)
+        if proxies:
+            self.http.proxies = proxies
 
     def __get_headers(self, custom_headers):
         headers = {
