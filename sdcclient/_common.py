@@ -92,6 +92,8 @@ class _SdcCommon(object):
                 self.lasterr = '\n'.join(error_msgs)
             elif 'message' in j:
                 self.lasterr = j['message']
+            elif 'error' in j:
+                self.lasterr = j['error']
             else:
                 self.lasterr = 'status code ' + str(errorcode)
             return False
@@ -438,6 +440,74 @@ class _SdcCommon(object):
 
         res = self.http.post(self.url + '/api/data/', headers=self.hdrs, data=json.dumps(reqbody),
                              verify=self.ssl_verify)
+        return self._request_result(res)
+
+    def get_data_promql(self, query, start, end, step, timeout=None, limit=None):
+        '''**Description**
+            Evaluate an expression query over a specified time range.
+
+        **Arguments**
+            - **query**: the PromQL query to execute.
+            - **start**: the inclusive start timestamp of the query range as RFC3339 or a unix timestamp.
+            - **end**: the inclusive end timestamp of the query range as RFC3339 or a unix timestamp.
+            - **step**: the query resolution step width, specified as a duration or a floating-point number of seconds.
+            - **timeout**: the evaluation timeout. Defaults to and is capped at 2m.
+            - **limit**: the maximum number of returned series. A value of 0 disables the limit.
+
+        **Success Return Value**
+            A list of time series that matched the PromQL query, where each series is defined by a unique set of labels (metric) and a list
+            of timestamped values (values). Each entry represents one time series over the queried range, with values sampled at regular intervals.
+
+        **Examples**
+            - `examples/get_data_promql_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_promql_simple.py>`_
+            - `examples/get_data_promql_advanced.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_promql_advanced.py>`_
+        '''
+        params = {
+                "query": query,
+                "start": start,
+                "end":   end,
+                "step":  step,
+        }
+
+        if timeout:
+            params["timeout"] = timeout
+        if limit:
+            params["limit"] = limit
+
+        url = f"{self.url}/prometheus/api/v1/query_range"
+        res = self.http.get(url, headers=self.hdrs, params=params)
+        return self._request_result(res)
+
+    def get_data_promql_instant(self, query, time=None, timeout=None, limit=None):
+        '''**Description**
+            Evaluate an instant query at a single point in time.
+
+        **Arguments**
+            - **query**: the PromQL query to execute.
+            - **time**: The evaluation timestamp as RFC3339 or a unix timestamp. If omitted, the current server time is used.
+            - **timeout**: the evaluation timeout. Defaults to and is capped at 2m.
+            - **limit**: the maximum number of returned series. A value of 0 disables the limit.
+
+        **Success Return Value**
+            A list of time series that matched the PromQL query, where each series is defined by a unique set of labels (metric) and a list
+            of timestamped values (values). Each entry represents one time series over the queried range, with values sampled at regular intervals.
+
+        **Examples**
+            - `examples/get_data_promql_instant_simple.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_data_promql_instant_simple.py>`_
+        '''
+        params = {
+                "query": query,
+        }
+
+        if time:
+            params["time"] = time
+        if timeout:
+            params["timeout"] = timeout
+        if limit:
+            params["limit"] = limit
+
+        url = f"{self.url}/prometheus/api/v1/query"
+        res = self.http.get(url, headers=self.hdrs, params=params)
         return self._request_result(res)
 
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
