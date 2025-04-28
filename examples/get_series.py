@@ -42,8 +42,9 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 sdc_token = sys.argv[1]
+hostname = sys.argv[2]
 
-sdclient = SdcClient(sdc_token)
+sdclient = SdcClient(sdc_token, hostname)
 
 #
 # Matchers to filter the series. Example: `up` and `process_start_time_seconds{job="prometheus"}`
