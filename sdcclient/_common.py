@@ -592,6 +592,31 @@ class _SdcCommon(object):
         res = self.http.get(url, headers=self.hdrs, params=params)
         return self._request_result(res)
 
+    def get_metadata(self, metric_name=None, limit=None):
+        '''**Description**
+            Retrieve metadata about metrics.
+
+        **Arguments**
+            - **metric_name**: the metric name to filter metadata for. If omitted, metadata for all metrics is retrieved.
+            - **limit**: the maximum number of returned metadata entries. A value of 0 disables the limit.
+
+        **Success Return Value**
+            A list of metadata entries for the specified metric(s).
+
+        **Examples**
+            - `examples/get_metadata.py`
+        '''
+        params = {}
+
+        if metric_name:
+            params["metric"] = metric_name
+        if limit:
+            params["limit"] = limit
+
+        url = f"{self.url}/prometheus/api/v1/metadata"
+        res = self.http.get(url, headers=self.hdrs, params=params)
+        return self._request_result(res)
+
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
         '''**Description**
             Returns the list of sysdig captures for the user.
