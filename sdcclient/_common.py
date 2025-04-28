@@ -541,6 +541,31 @@ class _SdcCommon(object):
         res = self.http.get(url, headers=self.hdrs, params=params)
         return self._request_result(res)
 
+    def get_labels(self, match=None, limit=None):
+        '''**Description**
+            Retrieve metadata about label names.
+
+        **Arguments**
+            - **match**: a list of PromQL matchers to filter the labels.
+            - **limit**: the maximum number of returned labels. A value of 0 disables the limit.
+
+        **Success Return Value**
+            A list of available labels.
+
+        **Examples**
+            - `examples/get_labels.py`
+        '''
+        params = {}
+
+        if match:
+            params["match[]"] = match  # `match` should be a list of matchers
+        if limit:
+            params["limit"] = limit
+
+        url = f"{self.url}/prometheus/api/v1/labels"
+        res = self.http.get(url, headers=self.hdrs, params=params)
+        return self._request_result(res)
+
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
         '''**Description**
             Returns the list of sysdig captures for the user.
