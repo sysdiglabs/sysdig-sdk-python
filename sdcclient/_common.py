@@ -510,6 +510,37 @@ class _SdcCommon(object):
         res = self.http.get(url, headers=self.hdrs, params=params)
         return self._request_result(res)
 
+    def get_series(self, match, start=None, end=None, limit=None):
+        '''**Description**
+            Retrieve metadata about time series that match a set of label matchers.
+
+        **Arguments**
+            - **match**: a list of PromQL matchers (e.g., `['up', 'node_cpu_seconds_total']`).
+            - **start**: the inclusive start timestamp of the series query as RFC3339 or a unix timestamp.
+            - **end**: the inclusive end timestamp of the series query as RFC3339 or a unix timestamp.
+            - **limit**: the maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0.
+
+        **Success Return Value**
+            A list of series that match the provided matchers.
+
+        **Examples**
+            - `examples/get_series.py`
+        '''
+        params = {
+                "match[]": match, # `match` should be a list of matchers
+        }
+
+        if start:
+            params["start"] = start
+        if end:
+            params["end"] = end
+        if limit:
+            params["limit"] = limit
+
+        url = f"{self.url}/prometheus/api/v1/series"
+        res = self.http.get(url, headers=self.hdrs, params=params)
+        return self._request_result(res)
+
     def get_sysdig_captures(self, from_sec=None, to_sec=None, scope_filter=None):
         '''**Description**
             Returns the list of sysdig captures for the user.

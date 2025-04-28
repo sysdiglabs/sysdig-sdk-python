@@ -95,7 +95,7 @@ ok, response_json = sdclient.get_data_promql(query, start, end, step)
 #
 if ok:
     #
-    # Read response. The JSON looks like this:
+    # Read the response. The JSON looks like this:
     #
     # {
     #     "data":   {
