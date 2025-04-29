@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 
 # C extensions
 *.so
@@ -42,6 +43,11 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
+.hypothesis/
+venv/
+.venv/
+.python-version
+.pytest_cache
 
 # Translations
 *.mo
@@ -56,13 +62,5 @@ docs/_build/
 # PyBuilder
 target/
 
-# virtualenv
-venv/
-
-# Direnv
-.envrc
-
-# IntelliJ projects
-.idea/
-
-coverage/
+#Ipython Notebook
+.ipynb_checkpoints

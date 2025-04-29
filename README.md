@@ -15,6 +15,7 @@ Installation
 ------------
 #### Automatic with PyPI
     pip install sdcclient
+    # pip install ../path/to/this/repo
 
 #### Manual (development only)
 
