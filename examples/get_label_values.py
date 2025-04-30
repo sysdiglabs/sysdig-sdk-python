@@ -7,6 +7,7 @@
 import sys
 from sdcclient import SdcClient
 
+
 def render_label_values_as_table(label_values):
     if not label_values:
         print("No values found for the specified label.")

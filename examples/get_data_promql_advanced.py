@@ -11,6 +11,7 @@ from datetime import datetime
 
 from sdcclient import SdcClient
 
+
 def print_prometheus_results_as_table(results):
     if not results:
         print("No data found for the query.")
@@ -47,6 +48,7 @@ def print_prometheus_results_as_table(results):
             value = time_series_by_label.get(label, {}).get(ts, "N/A")
             row_values.append(value)
         print(f"{dt:<25} | " + " | ".join(f"{val:>20}" for val in row_values))
+
 
 #
 # Parse arguments
@@ -92,7 +94,7 @@ topk (5,
 #   - start is the current time minus 5 minutes
 #
 end = int(time.time())
-start = end - 5*60 # 5 minutes ago
+start = end - 5 * 60  # 5 minutes ago
 
 #
 # Step:
@@ -161,5 +163,3 @@ if ok:
 else:
     print(response_json)
     sys.exit(1)
-
-

@@ -527,7 +527,7 @@ class _SdcCommon(object):
             - `examples/get_series.py`
         '''
         params = {
-                "match[]": match, # `match` should be a list of matchers
+                "match[]": match,  # `match` should be a list of matchers
         }
 
         if start:

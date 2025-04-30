@@ -7,6 +7,7 @@
 import sys
 from sdcclient import SdcClient
 
+
 def render_json_as_table(results):
     if not data or len(data) == 0:
         print("No series found for the given matchers.")

@@ -7,6 +7,7 @@
 import sys
 from sdcclient import SdcClient
 
+
 def render_metadata_as_table(metadata):
     if not metadata:
         print("No metadata found.")

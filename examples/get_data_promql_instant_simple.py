@@ -11,6 +11,7 @@ from datetime import datetime
 
 from sdcclient import SdcClient
 
+
 def print_prometheus_instant_result(result):
     if not result:
         print("No data found for the instant query.")
@@ -36,6 +37,7 @@ def print_prometheus_instant_result(result):
             print(f"{dt:<25} | {label_str:<40} | {value:>10}")
         else:
             print(f"{dt:<25} | {value:>10}")
+
 
 #
 # Parse arguments
@@ -64,7 +66,7 @@ sum (
 # Time:
 #   - the parameter is optional; if not set, the current time is used
 #
-time = int(time.time()) - 5*60 # 5 minutes ago
+time = int(time.time()) - 5 * 60  # 5 minutes ago
 
 #
 # Load data
@@ -76,7 +78,7 @@ ok, response_json = sdclient.get_data_promql_instant(query, time)
 #
 if ok:
     #
-    # Read response. The JSON looks like this:
+    # Read the response. The JSON looks like this:
     #
     # {
     #     "result":     [
@@ -102,5 +104,3 @@ if ok:
 else:
     print(response_json)
     sys.exit(1)
-
-
