@@ -1,5 +1,34 @@
 # flake8: noqa
 
 # import apis into api package
+from sysdig_client.api.access_keys_api import AccessKeysApi
+from sysdig_client.api.activity_audit_api import ActivityAuditApi
+from sysdig_client.api.capture_storage_api import CaptureStorageApi
+from sysdig_client.api.certificates_api import CertificatesApi
+from sysdig_client.api.cost_advisor_custom_pricing_api import CostAdvisorCustomPricingApi
+from sysdig_client.api.cost_advisor_data_api import CostAdvisorDataApi
+from sysdig_client.api.events_forwarder_api import EventsForwarderApi
+from sysdig_client.api.group_mappings_api import GroupMappingsApi
+from sysdig_client.api.ip_filtering_api import IPFilteringApi
+from sysdig_client.api.inhibition_rules_api import InhibitionRulesApi
+from sysdig_client.api.inventory_api import InventoryApi
+from sysdig_client.api.jira_integrations_api import JiraIntegrationsApi
+from sysdig_client.api.metrics_collection_api import MetricsCollectionApi
+from sysdig_client.api.notification_channels_api import NotificationChannelsApi
+from sysdig_client.api.permissions_api import PermissionsApi
+from sysdig_client.api.platform_audit_api import PlatformAuditApi
+from sysdig_client.api.reporting_api import ReportingApi
+from sysdig_client.api.response_actions_api import ResponseActionsApi
+from sysdig_client.api.roles_api import RolesApi
+from sysdig_client.api.sbom_api import SBOMApi
+from sysdig_client.api.sso_settings_api import SSOSettingsApi
 from sysdig_client.api.secure_events_api import SecureEventsApi
+from sysdig_client.api.service_accounts_api import ServiceAccountsApi
+from sysdig_client.api.service_accounts_notification_settings_api import ServiceAccountsNotificationSettingsApi
+from sysdig_client.api.sys_ql_api import SysQLApi
+from sysdig_client.api.teams_api import TeamsApi
+from sysdig_client.api.user_deactivation_api import UserDeactivationApi
+from sysdig_client.api.users_api import UsersApi
 from sysdig_client.api.vulnerability_management_api import VulnerabilityManagementApi
+from sysdig_client.api.zones_api import ZonesApi
+

@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Sysdig Secure Events Feed API
+    Sysdig Secure Client API
 
-    Sysdig Secure Events Feed API enables you to deep-dive into specific security events.
+    Sysdig Secure Client API enables you to deep-dive into specific security events.
 
     The version of the OpenAPI document: 1.2.1
     Contact: info@sysdig.com
