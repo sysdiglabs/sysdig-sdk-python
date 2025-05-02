@@ -21,6 +21,7 @@
             packages = [
               python310 # Minimum supported python version in this project
               uv
+              ruff
             ];
           };
 

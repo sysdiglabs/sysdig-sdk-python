@@ -34,7 +34,7 @@ ok, res = sdclient.get_agents_config()
 # Return the result
 #
 if ok:
-    if not ("files" in res) or len(res["files"]) == 0:
+    if "files" not in res or len(res["files"]) == 0:
         print("No current auto configuration")
     else:
         print("Current contents of config file:")

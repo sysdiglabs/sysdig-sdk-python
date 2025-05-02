@@ -7,7 +7,7 @@ import time
 from expects import expect, have_key, contain
 from expects.matchers import _Or
 from expects.matchers.built_in import have_keys, equal
-from mamba import description, it, before, after
+from mamba import description, it, before, after, _it
 
 from sdcclient import SdMonitorClient
 from specs import be_successful_api_call

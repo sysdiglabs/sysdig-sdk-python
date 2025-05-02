@@ -157,12 +157,12 @@ def _convert_dashboard_v1_to_v2(dashboard):
             sorted_metrics = []
             timestamp_key = [m for m in migrated_metrics
                              if m['id'] == 'timestamp' and
-                             not ('timeAggregation' in m) or
+                             'timeAggregation' not in m or
                              not (m['timeAggregation'] is not None)
                              ]
             no_timestamp_keys = [m for m in migrated_metrics
                                  if m['id'] != 'timestamp' and
-                                 not ('timeAggregation' in m) or
+                                 'timeAggregation' not in m or
                                  not (m['timeAggregation'] is not None)
                                  ]
             values = [m for m in migrated_metrics

@@ -173,7 +173,7 @@ def run(sysdig_token, pager_duty_id, pager_duty_token, link, unlink, dry_run):
         # delete all PagerDuty notification channels in Sysdig that do NOT have an integration in PagerDuty
         #
         for channel in pager_duty_channels:
-            if not channel['options']['serviceKey'] in service_integration_keys:
+            if channel['options']['serviceKey'] not in service_integration_keys:
                 actions.append({
                     'info': 'Remove notification channel "{}" not connected to any integration'.format(channel['name']),
                     'fn': actions_factory.delete_notification_channel(channel)

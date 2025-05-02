@@ -1,5 +1,6 @@
 import json
 from typing import Any, Tuple, Union
+import re
 
 from sdcclient._common import _SdcCommon
 from sdcclient.monitor import EventsClientV2, DashboardsClientV3
