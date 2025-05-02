@@ -10,8 +10,10 @@ from specs import be_successful_api_call
 
 with description("User Provisioning", "integration") as self:
     with before.each:
-        self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdcClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
+            token=os.getenv("SDC_MONITOR_TOKEN"),
+        )
         self.user_name = "terraform-test+user@sysdig.com"
 
     with after.each:
@@ -32,7 +34,9 @@ with description("User Provisioning", "integration") as self:
 
     with it("is able to provision the user with name, lastname and password"):
         random_password = "".join(choice(ascii_letters) for _ in range(20))
-        ok, res = self.client.create_user(self.user_name, "Name", "LastName", random_password)
+        ok, res = self.client.create_user(
+            self.user_name, "Name", "LastName", random_password
+        )
         expect((ok, res)).to(be_successful_api_call)
 
     with context("when the customer already exists"):

@@ -11,10 +11,12 @@ from sdcclient import SdSecureClientV1
 
 
 def usage():
-    print(('usage: %s [-o|--order-only] <sysdig-token>' % sys.argv[0]))
-    print('-o|--order-only: Only display the list of policy ids in evaluation order. '
-          'Suitable for use by set_policy_order.py')
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(("usage: %s [-o|--order-only] <sysdig-token>" % sys.argv[0]))
+    print(
+        "-o|--order-only: Only display the list of policy ids in evaluation order. "
+        "Suitable for use by set_policy_order.py"
+    )
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -39,7 +41,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, "https://secure.sysdig.com")
 
 ok, res = sdclient.get_policy_priorities()
 
@@ -48,13 +50,13 @@ if not ok:
     sys.exit(1)
 
 # Strip the surrounding json to only keep the list of policy ids
-res = res['priorities']['policyIds']
+res = res["priorities"]["policyIds"]
 
 if not order_only:
     priorities = res
     ok, res = sdclient.list_policies()
     if ok:
-        res['policies'].sort(key=lambda p: priorities.index(p['id']))
+        res["policies"].sort(key=lambda p: priorities.index(p["id"]))
 
 #
 # Return the result

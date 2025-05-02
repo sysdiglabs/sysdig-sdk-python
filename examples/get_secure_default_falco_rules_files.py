@@ -19,9 +19,11 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 def usage():
-    print(('usage: %s [-s|--save <path>] <sysdig-token>' % sys.argv[0]))
-    print('-s|--save: save the retrieved files to a set of files below <path> using save_default_rules_files().')
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(("usage: %s [-s|--save <path>] <sysdig-token>" % sys.argv[0]))
+    print(
+        "-s|--save: save the retrieved files to a set of files below <path> using save_default_rules_files()."
+    )
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -46,7 +48,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClient(sdc_token, "https://secure.sysdig.com")
 
 #
 # Get the configuration

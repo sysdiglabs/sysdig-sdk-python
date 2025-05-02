@@ -9,18 +9,24 @@ from specs import be_successful_api_call
 
 with description("Events v1", "integration") as self:
     with before.all:
-        self.client = EventsClientV1(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                     token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = EventsClientV1(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
+            token=os.getenv("SDC_MONITOR_TOKEN"),
+        )
         self.event_name = "event_v1_test_ci"
 
     with it("is able to create a custom event"):
-        call = self.client.post_event(name=self.event_name,
-                                      description="This event was created in a CI pipeline for the Python SDK library")
+        call = self.client.post_event(
+            name=self.event_name,
+            description="This event was created in a CI pipeline for the Python SDK library",
+        )
         expect(call).to(be_successful_api_call)
 
     with it("is able to retrieve an event by ID"):
-        ok, res = self.client.post_event(name=self.event_name,
-                                         description="This event was created in a CI pipeline for the Python SDK library")
+        ok, res = self.client.post_event(
+            name=self.event_name,
+            description="This event was created in a CI pipeline for the Python SDK library",
+        )
         expect((ok, res)).to(be_successful_api_call)
 
         event = res["event"]

@@ -11,8 +11,8 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -31,10 +31,10 @@ if not ok:
     print(res)
     sys.exit(1)
 
-if len(res['dashboards']) > 0:
-    sdclient.save_dashboard_to_file(res['dashboards'][0], 'dashboard.json')
+if len(res["dashboards"]) > 0:
+    sdclient.save_dashboard_to_file(res["dashboards"][0], "dashboard.json")
 else:
-    print('the user has no dashboards. Exiting.')
+    print("the user has no dashboards. Exiting.")
     sys.exit(0)
 
 #
@@ -43,10 +43,12 @@ else:
 #
 dashboardFilter = 'proc.name = "cassandra"'
 
-ok, res = sdclient.create_dashboard_from_file('test dasboard from file', 'dashboard.json', dashboardFilter)
+ok, res = sdclient.create_dashboard_from_file(
+    "test dasboard from file", "dashboard.json", dashboardFilter
+)
 
 if ok:
-    print('Dashboard created successfully')
+    print("Dashboard created successfully")
 else:
     print(res)
     sys.exit(1)

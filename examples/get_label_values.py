@@ -33,8 +33,8 @@ def render_label_values_as_table(label_values):
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <label-name>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <label-name>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]

@@ -13,9 +13,9 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print(('usage: %s [-c|--channel <name>] <sysdig-token>' % sys.argv[0]))
-    print('-c|--channel: Set name of channel to create')
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s [-c|--channel <name>] <sysdig-token>" % sys.argv[0]))
+    print("-c|--channel: Set name of channel to create")
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 
@@ -43,8 +43,9 @@ sdclient = SdcClient(sdc_token)
 #
 # Create an email notification channel
 #
-ok, res = sdclient.create_email_notification_channel(channel_name, ['gianluca.borello@sysdig.com', 'foo@sysdig.com',
-                                                                    'bar@sysdig.com'])
+ok, res = sdclient.create_email_notification_channel(
+    channel_name, ["gianluca.borello@sysdig.com", "foo@sysdig.com", "bar@sysdig.com"]
+)
 if not ok:
     print(res)
     sys.exit(1)
@@ -52,7 +53,7 @@ if not ok:
 #
 # The notification channel will contain the id, that can be used when creating alerts
 #
-channel = res['notificationChannel']
+channel = res["notificationChannel"]
 print(channel)
 
 #

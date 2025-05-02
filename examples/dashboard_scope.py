@@ -16,10 +16,10 @@ from sdcclient import SdcClient
 #
 def evaluate(scope, expected):
     parsed_scope = SdcClient.convert_scope_string_to_expression(scope)
-    print('{} is valid: {}'.format(scope, parsed_scope[0] is True))
+    print("{} is valid: {}".format(scope, parsed_scope[0] is True))
 
     if parsed_scope[0] != expected:
-        print('Unexpected parsing result!')
+        print("Unexpected parsing result!")
         sys.exit(1)
 
 
@@ -28,7 +28,7 @@ evaluate('proc.name = "cassandra"', True)
 
 # NOTE: For now you can still leave values without quotes.
 # The API will be more strict, so please make sure you adopt the new format!
-evaluate('proc.name = cassandra', True)
+evaluate("proc.name = cassandra", True)
 
 # other operators
 evaluate('proc.name != "cassandra"', True)
@@ -47,7 +47,7 @@ evaluate('not proc.name in ("cassandra", "mysql")', True)
 evaluate('kubernetes.service.name = "database" and proc.name = "cassandra"', True)
 
 # the scope can obviously be omitted in the dashboard configuration
-evaluate('', True)
+evaluate("", True)
 evaluate(None, True)
 
 # invalid scopes will cause errors
@@ -62,6 +62,8 @@ evaluate('proc.name="cassandra"', False)
 #
 # Here some errors that will not be detected by the Python library, but the API will
 #
-evaluate('proc.name = "cassandra" or proc.name = "mysql"', True)  # not AND'd expressions are supported
-evaluate('proc.name in ("cassandra\', \'mysql")', True)  # mismatching quotes
+evaluate(
+    'proc.name = "cassandra" or proc.name = "mysql"', True
+)  # not AND'd expressions are supported
+evaluate("proc.name in (\"cassandra', 'mysql\")", True)  # mismatching quotes
 evaluate('proc.name in ("cassandra", "mysql"', True)  # missing parenthesis
