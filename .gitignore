@@ -61,6 +61,8 @@ venv/
 
 # Direnv
 .envrc
+.direnv/
+.secrets
 
 # IntelliJ projects
 .idea/
