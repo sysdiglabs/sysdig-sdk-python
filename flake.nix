@@ -22,7 +22,12 @@
               python310 # Minimum supported python version in this project
               uv
               ruff
+              pre-commit
             ];
+
+            shellHook = ''
+              pre-commit install
+            '';
           };
 
         formatter = pkgs.nixfmt-rfc-style;
