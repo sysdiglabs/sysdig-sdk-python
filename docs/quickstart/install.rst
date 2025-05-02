@@ -11,12 +11,12 @@ Automatic with PyPI
 Manual (development only)
 -------------------------
 
-This method requires `Poetry`_ installed.
+This method requires `uv`_ installed.
 
-.. _Poetry: https://python-poetry.org/
+.. _uv: https://docs.astral.sh/uv/
 
 ::
 
     $ git clone https://github.com/sysdiglabs/sysdig-sdk-python.git
     $ cd python-sdc-client
-    $ poetry install
+    $ uv build
