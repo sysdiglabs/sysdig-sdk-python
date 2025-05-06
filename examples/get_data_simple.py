@@ -63,7 +63,7 @@ ok, res = sdclient.get_data(metrics, start, end, sampling, filter=filter)
 #
 if ok:
     #
-    # Read response. The JSON looks like this:
+    # Read the response. The JSON looks like this:
     #
     # {
     #     start: timestamp,
