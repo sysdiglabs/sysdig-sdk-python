@@ -294,19 +294,6 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         else:
             return True, None
 
-    def get_metrics(self) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''**Description**
-            Return the metric list that can be used for data requests/alerts/dashboards.
-
-        **Success Return Value**
-            A dictionary containing the list of available metrics.
-
-        **Example**
-            `examples/list_metrics.py <https://github.com/draios/python-sdc-client/blob/master/examples/list_metrics.py>`_
-        '''
-        res = self.http.get(self.url + '/api/data/metrics', headers=self.hdrs, verify=self.ssl_verify)
-        return self._request_result(res)
-
     @staticmethod
     def convert_scope_string_to_expression(scope) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
         '''**Description**
