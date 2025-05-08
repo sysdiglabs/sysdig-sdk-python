@@ -46,4 +46,8 @@ with description("User Provisioning", "integration") as self:
 
             ok, res = self.client.create_user(self.user_name)
             expect((ok, res)).not_to(be_successful_api_call)
-            expect(res).to(contain(f"User {self.user_name} already exists"))
+            expect(res).to(
+                contain(
+                    "A user with the same email already exists for the same customer"
+                )
+            )
