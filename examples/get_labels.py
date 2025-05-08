@@ -33,8 +33,8 @@ def render_labels_as_table(labels):
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -45,9 +45,7 @@ sdclient = SdcClient(sdc_token, hostname)
 #
 # Optional matchers to filter the labels
 #
-match = [
-    'up'
-]  # Replace with a list of matchers if needed
+match = ["up"]  # Replace with a list of matchers if needed
 
 #
 # Optional limit

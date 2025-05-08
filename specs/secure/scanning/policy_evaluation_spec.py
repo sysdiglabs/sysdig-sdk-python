@@ -9,8 +9,10 @@ from specs import be_successful_api_call
 
 with description("Policy Evaluation", "integration") as self:
     with before.all:
-        self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                       token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = SdScanningClient(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            token=os.getenv("SDC_SECURE_TOKEN"),
+        )
         self.image_name = "quay.io/sysdig/agent:latest"
 
     with it("is able to retrieve the results for all the policies"):
@@ -18,12 +20,19 @@ with description("Policy Evaluation", "integration") as self:
 
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(
-            have_keys("image_digest", "image_id", "stop_results",
-                      total_warn=be_above_or_equal(0), total_stop=be_above_or_equal(0),
-                      last_evaluation=be_an(datetime),
-                      status="pass", image_tag=self.image_name,
-                      policy_id="*", policy_name="All policies",
-                      warn_results=not_(be_empty))
+            have_keys(
+                "image_digest",
+                "image_id",
+                "stop_results",
+                total_warn=be_above_or_equal(0),
+                total_stop=be_above_or_equal(0),
+                last_evaluation=be_an(datetime),
+                status="pass",
+                image_tag=self.image_name,
+                policy_id="*",
+                policy_name="All policies",
+                warn_results=not_(be_empty),
+            )
         )
 
     with it("is able to retrieve the results for the default policy"):
@@ -32,12 +41,19 @@ with description("Policy Evaluation", "integration") as self:
 
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(
-            have_keys("image_digest", "image_id", "stop_results",
-                      total_warn=be_above_or_equal(0), total_stop=be_above_or_equal(0),
-                      last_evaluation=be_an(datetime),
-                      status="pass", image_tag=self.image_name,
-                      policy_id="default", policy_name="DefaultPolicy",
-                      warn_results=not_(be_empty))
+            have_keys(
+                "image_digest",
+                "image_id",
+                "stop_results",
+                total_warn=be_above_or_equal(0),
+                total_stop=be_above_or_equal(0),
+                last_evaluation=be_an(datetime),
+                status="pass",
+                image_tag=self.image_name,
+                policy_id="default",
+                policy_name="DefaultPolicy",
+                warn_results=not_(be_empty),
+            )
         )
 
     with context("but the image has not been scanned yet"):
@@ -45,8 +61,12 @@ with description("Policy Evaluation", "integration") as self:
             ok, res = self.client.get_image_scanning_results("unknown_image")
 
             expect((ok, res)).to_not(be_successful_api_call)
-            expect(res).to(equal("could not retrieve image digest for the given image name, "
-                                 "ensure that the image has been scanned"))
+            expect(res).to(
+                equal(
+                    "could not retrieve image digest for the given image name, "
+                    "ensure that the image has been scanned"
+                )
+            )
 
     with context("but the provided policy id does not exist"):
         with it("returns an error saying that the policy id is not found"):

@@ -11,8 +11,8 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 if len(sys.argv) < 4:
-    print(('usage: %s <sysdig-token> name description [severity]' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> name description [severity]" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -40,7 +40,7 @@ ok, res = sdclient.post_event(name, description, severity, scope, tags)
 # Return the result
 #
 if ok:
-    print('Event Posted Successfully')
+    print("Event Posted Successfully")
 else:
     print(res)
     sys.exit(1)

@@ -1,18 +1,26 @@
 import json
 from typing import Any, Tuple, Union
+import re
 
 from sdcclient._common import _SdcCommon
 from sdcclient.monitor import EventsClientV2, DashboardsClientV3
 
 
 class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
-
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
-        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(
+        self,
+        token="",
+        sdc_url="https://app.sysdigcloud.com",
+        ssl_verify=True,
+        custom_headers=None,
+    ):
+        super(SdMonitorClient, self).__init__(
+            token, sdc_url, ssl_verify, custom_headers
+        )
         self.product = "SDC"
 
     def get_alerts(self) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''
+        """
         Retrieve the list of alerts configured by the user.
 
         Returns:
@@ -24,12 +32,16 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             >>> ok, res = client.get_alerts()
             >>> for alert in res['alerts']:
             >>>     print(f'enabled: {str(alert["enabled"])}, name: {alert["name"]}' )
-        '''
-        res = self.http.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify
+        )
         return self._request_result(res)
 
-    def get_notifications(self, from_ts, to_ts, state=None, resolved=None) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''
+    def get_notifications(
+        self, from_ts, to_ts, state=None, resolved=None
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """
         Returns the list of Sysdig Monitor alert notifications.
 
         Args:
@@ -52,28 +64,35 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             >>> ok, res = client.get_notifications(from_ts=int(time.time() - 86400), to_ts=int(time.time()), state='OK')
             >>> # Get the notifications in the last day and resolved state
             >>> ok, res = client.get_notifications(from_ts=int(time.time() - 86400), to_ts=int(time.time()), resolved=True)
-        '''
+        """
         params = {}
 
         if from_ts is not None:
-            params['from'] = from_ts * 1000000
+            params["from"] = from_ts * 1000000
 
         if to_ts is not None:
-            params['to'] = to_ts * 1000000
+            params["to"] = to_ts * 1000000
 
         if state is not None:
-            params['state'] = state
+            params["state"] = state
 
         if resolved is not None:
-            params['resolved'] = resolved
+            params["resolved"] = resolved
 
-        res = self.http.get(self.url + '/api/notifications', headers=self.hdrs, params=params, verify=self.ssl_verify)
+        res = self.http.get(
+            self.url + "/api/notifications",
+            headers=self.hdrs,
+            params=params,
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
         return True, res.json()
 
-    def update_notification_resolution(self, notification, resolved) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''
+    def update_notification_resolution(
+        self, notification, resolved
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """
         Updates the resolution status of an alert notification.
 
         Args:
@@ -91,21 +110,38 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             >>> # Resolve all of them
             >>> for notification in notifications:
             >>>     ok, res = sdclient.update_notification_resolution(notification, True)
-        '''
-        if 'id' not in notification:
-            return False, 'Invalid notification format'
+        """
+        if "id" not in notification:
+            return False, "Invalid notification format"
 
-        notification['resolved'] = resolved
-        data = {'notification': notification}
+        notification["resolved"] = resolved
+        data = {"notification": notification}
 
-        res = self.http.put(self.url + '/api/notifications/' + str(notification['id']), headers=self.hdrs,
-                            data=json.dumps(data), verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/notifications/" + str(notification["id"]),
+            headers=self.hdrs,
+            data=json.dumps(data),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def create_alert(self, name=None, description=None, severity=None, for_atleast_s=None, condition=None,
-                     segmentby=None, segment_condition='ANY', user_filter='', notify=None, enabled=True,
-                     annotations=None, alert_obj=None, type="MANUAL") -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''
+    def create_alert(
+        self,
+        name=None,
+        description=None,
+        severity=None,
+        for_atleast_s=None,
+        condition=None,
+        segmentby=None,
+        segment_condition="ANY",
+        user_filter="",
+        notify=None,
+        enabled=True,
+        annotations=None,
+        alert_obj=None,
+        type="MANUAL",
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """
         Create a threshold-based alert.
 
         Args:
@@ -127,7 +163,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             A tuple where the first parameter indicates if the call was successful,
             and the second parameter holds either the error as string, or the
             response object.
-        '''
+        """
 
         if annotations is None:
             annotations = {}
@@ -138,59 +174,68 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         #
         # Get the list of alerts from the server
         #
-        res = self.http.get(self.url + '/api/alerts', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(
+            self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
         res.json()
 
         if alert_obj is None:
             if None in (name, description, severity, for_atleast_s, condition):
-                return False, 'Must specify a full Alert object or all parameters: ' \
-                              'name, description, severity, for_atleast_s, condition'
+                return (
+                    False,
+                    "Must specify a full Alert object or all parameters: "
+                    "name, description, severity, for_atleast_s, condition",
+                )
             else:
                 #
                 # Populate the alert information
                 #
                 alert_json = {
-                    'alert': {
-                        'type': type,
-                        'name': name,
-                        'description': description,
-                        'enabled': enabled,
-                        'severity': severity,
-                        'timespan': for_atleast_s * 1000000,
-                        'condition': condition,
-                        'filter': user_filter
+                    "alert": {
+                        "type": type,
+                        "name": name,
+                        "description": description,
+                        "enabled": enabled,
+                        "severity": severity,
+                        "timespan": for_atleast_s * 1000000,
+                        "condition": condition,
+                        "filter": user_filter,
                     }
                 }
 
                 if segmentby:
-                    alert_json['alert']['segmentBy'] = segmentby
-                    alert_json['alert']['segmentCondition'] = {'type': segment_condition}
+                    alert_json["alert"]["segmentBy"] = segmentby
+                    alert_json["alert"]["segmentCondition"] = {
+                        "type": segment_condition
+                    }
 
                 if annotations:
-                    alert_json['alert']['annotations'] = annotations
+                    alert_json["alert"]["annotations"] = annotations
 
                 if notify is not None:
-                    alert_json['alert']['notificationChannelIds'] = notify
+                    alert_json["alert"]["notificationChannelIds"] = notify
         else:
             # The REST API enforces "Alert ID and version must be null", so remove them if present,
             # since these would have been there in a dump from the list_alerts.py example.
-            alert_obj.pop('id', None)
-            alert_obj.pop('version', None)
-            alert_json = {
-                'alert': alert_obj
-            }
+            alert_obj.pop("id", None)
+            alert_obj.pop("version", None)
+            alert_json = {"alert": alert_obj}
 
         #
         # Create the new alert
         #
-        res = self.http.post(self.url + '/api/alerts', headers=self.hdrs, data=json.dumps(alert_json),
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/alerts",
+            headers=self.hdrs,
+            data=json.dumps(alert_json),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def update_alert(self, alert) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''
+        """
         Update a modified threshold-based alert.
 
         Args:
@@ -208,17 +253,21 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             >>>     if alert['name'] == alert_name:
             >>>         alert['timespan'] = alert['timespan'] * 2  # Note: Expressed in seconds * 1000000
             >>>         ok, res_update = client.update_alert(alert)
-        '''
+        """
 
-        if 'id' not in alert:
+        if "id" not in alert:
             return False, "Invalid alert format"
 
-        res = self.http.put(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs,
-                            data=json.dumps({"alert": alert}), verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/alerts/" + str(alert["id"]),
+            headers=self.hdrs,
+            data=json.dumps({"alert": alert}),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_alert(self, alert) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''**Description**
+        """**Description**
             Deletes an alert.
 
         **Arguments**
@@ -229,18 +278,24 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
         **Example**
             `examples/delete_alert.py <https://github.com/draios/python-sdc-client/blob/master/examples/delete_alert.py>`_
-        '''
-        if 'id' not in alert:
-            return False, 'Invalid alert format'
+        """
+        if "id" not in alert:
+            return False, "Invalid alert format"
 
-        res = self.http.delete(self.url + '/api/alerts/' + str(alert['id']), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(
+            self.url + "/api/alerts/" + str(alert["id"]),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
 
         return True, None
 
-    def get_explore_grouping_hierarchy(self) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''**Description**
+    def get_explore_grouping_hierarchy(
+        self,
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """**Description**
             Return the user's current grouping hierarchy as visible in the Explore tab of Sysdig Monitor.
 
         **Success Return Value**
@@ -248,57 +303,69 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
         **Example**
             `examples/print_explore_grouping.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_explore_grouping.py>`_
-        '''
-        res = self.http.get(self.url + '/api/groupConfigurations', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/groupConfigurations",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
 
         data = res.json()
 
-        if 'groupConfigurations' not in data:
-            return False, 'corrupted groupConfigurations API response'
+        if "groupConfigurations" not in data:
+            return False, "corrupted groupConfigurations API response"
 
-        gconfs = data['groupConfigurations']
+        gconfs = data["groupConfigurations"]
 
         for gconf in gconfs:
-            if gconf['id'] == 'explore':
+            if gconf["id"] == "explore":
                 res = []
-                items = gconf['groups'][0]['groupBy']
+                items = gconf["groups"][0]["groupBy"]
 
                 for item in items:
-                    res.append(item['metric'])
+                    res.append(item["metric"])
 
                 return True, res
 
-        return False, 'corrupted groupConfigurations API response, missing "explore" entry'
+        return (
+            False,
+            'corrupted groupConfigurations API response, missing "explore" entry',
+        )
 
-    def set_explore_grouping_hierarchy(self, new_hierarchy) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''**Description**
+    def set_explore_grouping_hierarchy(
+        self, new_hierarchy
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """**Description**
             Changes the grouping hierarchy in the Explore panel of the current user.
 
         **Arguments**
             - **new_hierarchy**: a list of sysdig segmentation metrics indicating the new grouping hierarchy.
-        '''
-        body = {
-            'id': 'explore',
-            'groups': [{'groupBy': []}]
-        }
+        """
+        body = {"id": "explore", "groups": [{"groupBy": []}]}
 
         for item in new_hierarchy:
-            body['groups'][0]['groupBy'].append({'metric': item})
+            body["groups"][0]["groupBy"].append({"metric": item})
 
-        res = self.http.put(self.url + '/api/groupConfigurations/explore', headers=self.hdrs,
-                            data=json.dumps(body), verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/groupConfigurations/explore",
+            headers=self.hdrs,
+            data=json.dumps(body),
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
         else:
             return True, None
 
     @staticmethod
-    def convert_scope_string_to_expression(scope) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
-        '''**Description**
-            Internal function to convert a filter string to a filter object to be used with dashboards.
-        '''
+    def convert_scope_string_to_expression(
+        scope,
+    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+        """**Description**
+        Internal function to convert a filter string to a filter object to be used with dashboards.
+        """
         #
         # NOTE: The supported grammar is not perfectly aligned with the grammar supported by the Sysdig backend.
         # Proper grammar implementation will happen soon.
@@ -309,47 +376,52 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             return True, []
 
         expressions = []
-        string_expressions = scope.strip(' \t\n\r').split(' and ')
+        string_expressions = scope.strip(" \t\n\r").split(" and ")
         expression_re = re.compile(
-            '^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?"[^"]+"|\'[^\']+\'|(.+)|.+))$')
+            "^(?P<not>not )?(?P<operand>[^ ]+) (?P<operator>=|!=|in|contains|starts with) (?P<value>(:?\"[^\"]+\"|'[^']+'|(.+)|.+))$"
+        )
 
         for string_expression in string_expressions:
             matches = expression_re.match(string_expression)
 
             if matches is None:
-                return False, 'invalid scope format'
+                return False, "invalid scope format"
 
-            is_not_operator = matches.group('not') is not None
+            is_not_operator = matches.group("not") is not None
 
-            if matches.group('operator') == 'in':
-                list_value = matches.group('value').strip(' ()')
-                value_matches = re.findall('(:?\'[^\',]+\')|(:?"[^",]+")|(:?[,]+)', list_value)
+            if matches.group("operator") == "in":
+                list_value = matches.group("value").strip(" ()")
+                value_matches = re.findall(
+                    "(:?'[^',]+')|(:?\"[^\",]+\")|(:?[,]+)", list_value
+                )
 
                 if len(value_matches) == 0:
-                    return False, 'invalid scope value list format'
+                    return False, "invalid scope value list format"
 
                 value_matches = map(lambda v: v[0] if v[0] else v[1], value_matches)
-                values = map(lambda v: v.strip(' "\''), value_matches)
+                values = map(lambda v: v.strip(" \"'"), value_matches)
             else:
-                values = [matches.group('value').strip('"\'')]
+                values = [matches.group("value").strip("\"'")]
 
             operator_parse_dict = {
-                'in': 'in' if not is_not_operator else 'notIn',
-                '=': 'equals' if not is_not_operator else 'notEquals',
-                '!=': 'notEquals' if not is_not_operator else 'equals',
-                'contains': 'contains' if not is_not_operator else 'notContains',
-                'starts with': 'startsWith'
+                "in": "in" if not is_not_operator else "notIn",
+                "=": "equals" if not is_not_operator else "notEquals",
+                "!=": "notEquals" if not is_not_operator else "equals",
+                "contains": "contains" if not is_not_operator else "notContains",
+                "starts with": "startsWith",
             }
 
-            operator = operator_parse_dict.get(matches.group('operator'), None)
+            operator = operator_parse_dict.get(matches.group("operator"), None)
             if operator is None:
-                return False, 'invalid scope operator'
+                return False, "invalid scope operator"
 
-            expressions.append({
-                'operand': matches.group('operand'),
-                'operator': operator,
-                'value': values
-            })
+            expressions.append(
+                {
+                    "operand": matches.group("operand"),
+                    "operator": operator,
+                    "value": values,
+                }
+            )
 
         return True, expressions
 

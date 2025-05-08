@@ -9,8 +9,10 @@ from sdcclient import SdScanningClient
 
 
 def usage():
-    print(('usage: %s <sysdig-token> <image_id> <full_tag_name> <detail>' % sys.argv[0]))
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(
+        ("usage: %s <sysdig-token> <image_id> <full_tag_name> <detail>" % sys.argv[0])
+    )
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -28,7 +30,7 @@ detail = sys.argv[4]
 #
 # Instantiate the SDC client
 #
-sdclient = SdScanningClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdScanningClient(sdc_token, "https://secure.sysdig.com")
 
 ok, res = sdclient.get_image_scan_result_by_id(image_id, full_tag_name, detail)
 

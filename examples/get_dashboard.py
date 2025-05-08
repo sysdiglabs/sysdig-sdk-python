@@ -22,7 +22,7 @@ def cleanup_dir(path):
     if not os.path.exists(path):
         return
     if not os.path.isdir(path):
-        print('Provided path is not a directory')
+        print("Provided path is not a directory")
         sys.exit(-1)
 
     for file in os.listdir(path):
@@ -31,7 +31,12 @@ def cleanup_dir(path):
             if os.path.isfile(file_path):
                 os.unlink(file_path)
             else:
-                print(('Cannot clean the provided directory due to delete failure on %s' % file_path))
+                print(
+                    (
+                        "Cannot clean the provided directory due to delete failure on %s"
+                        % file_path
+                    )
+                )
         except Exception as e:
             print(e)
     os.rmdir(path)
@@ -41,8 +46,10 @@ def cleanup_dir(path):
 # Parse arguments
 #
 if len(sys.argv) != 4:
-    print(('usage: %s <sysdig-token> "<dashboard-name>" <output-file-name>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(
+        ('usage: %s <sysdig-token> "<dashboard-name>" <output-file-name>' % sys.argv[0])
+    )
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 
@@ -50,7 +57,7 @@ if len(sys.argv) != 4:
 sdc_token = sys.argv[1]
 dashboard_name = sys.argv[2]
 dashboard_state_file = sys.argv[3]
-sysdig_dashboard_dir = 'sysdig-dashboard-dir'
+sysdig_dashboard_dir = "sysdig-dashboard-dir"
 
 #
 # Instantiate the SDC client
@@ -65,9 +72,9 @@ ok, res = sdclient.find_dashboard_by(dashboard_name)
 
 # Check the result
 if ok and len(res) > 0:
-    print('Dashboard found, ID: ', res[0]['dashboard']['id'])
-    dashboard_id = res[0]['dashboard']['id']
-    dashboard_configuration = res[0]['dashboard']
+    print("Dashboard found, ID: ", res[0]["dashboard"]["id"])
+    dashboard_id = res[0]["dashboard"]["id"]
+    dashboard_configuration = res[0]["dashboard"]
 else:
     print(res)
     sys.exit(1)
@@ -90,13 +97,21 @@ if not os.path.exists(sysdig_dashboard_dir):
 #
 # Check for successful retrieval and save it
 #
-if len(res['dashboard']) > 0:
-    print('Downloading Dashboard ID: ', dashboard_id)
-    sdclient.save_dashboard_to_file(res['dashboard'], os.path.join(sysdig_dashboard_dir, str(res['dashboard']['id'])))
-    print('Dashboard Name: "%s"' % (res['dashboard']['name']), 'ID:', dashboard_id, 'downloaded')
+if len(res["dashboard"]) > 0:
+    print("Downloading Dashboard ID: ", dashboard_id)
+    sdclient.save_dashboard_to_file(
+        res["dashboard"],
+        os.path.join(sysdig_dashboard_dir, str(res["dashboard"]["id"])),
+    )
+    print(
+        'Dashboard Name: "%s"' % (res["dashboard"]["name"]),
+        "ID:",
+        dashboard_id,
+        "downloaded",
+    )
 
 
-zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
+zipf = zipfile.ZipFile(dashboard_state_file, "w", zipfile.ZIP_DEFLATED)
 zipdir(sysdig_dashboard_dir, zipf)
 zipf.close()
 

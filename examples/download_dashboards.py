@@ -21,7 +21,7 @@ def cleanup_dir(path):
     if not os.path.exists(path):
         return
     if not os.path.isdir(path):
-        print('Provided path is not a directory')
+        print("Provided path is not a directory")
         sys.exit(-1)
 
     for file in os.listdir(path):
@@ -30,7 +30,12 @@ def cleanup_dir(path):
             if os.path.isfile(file_path):
                 os.unlink(file_path)
             else:
-                print(('Cannot clean the provided directory due to delete failure on %s' % file_path))
+                print(
+                    (
+                        "Cannot clean the provided directory due to delete failure on %s"
+                        % file_path
+                    )
+                )
         except Exception as e:
             print(e)
     os.rmdir(path)
@@ -40,13 +45,13 @@ def cleanup_dir(path):
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <file-name>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <file-name>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
 dashboard_state_file = sys.argv[2]
-sysdig_dashboard_dir = 'sysdig-dashboard-dir'
+sysdig_dashboard_dir = "sysdig-dashboard-dir"
 
 #
 # Instantiate the SDC client
@@ -72,12 +77,14 @@ cleanup_dir(sysdig_dashboard_dir)
 if not os.path.exists(sysdig_dashboard_dir):
     os.makedirs(sysdig_dashboard_dir)
 
-for db in res['dashboards']:
-    sdclient.save_dashboard_to_file(db, os.path.join(sysdig_dashboard_dir, str(db['id'])))
+for db in res["dashboards"]:
+    sdclient.save_dashboard_to_file(
+        db, os.path.join(sysdig_dashboard_dir, str(db["id"]))
+    )
 
-    print(("Name: %s" % (db['name'])))
+    print(("Name: %s" % (db["name"])))
 
-zipf = zipfile.ZipFile(dashboard_state_file, 'w', zipfile.ZIP_DEFLATED)
+zipf = zipfile.ZipFile(dashboard_state_file, "w", zipfile.ZIP_DEFLATED)
 zipdir(sysdig_dashboard_dir, zipf)
 zipf.close()
 

@@ -64,10 +64,9 @@ def convert_scope_string_to_expression(scope=None):
         grammar = tatsu.compile(_SCOPE_GRAMMAR)
         scope_list = []
 
-        scope_expressions = scope.strip(' \t\n\r').split(' and ')
+        scope_expressions = scope.strip(" \t\n\r").split(" and ")
 
         for scope in scope_expressions:
-
             operand, parsed_operator, value = grammar.parse(scope)
 
             operator_match = {
@@ -85,19 +84,25 @@ def convert_scope_string_to_expression(scope=None):
                 value = flatten(value)
                 if len(value) > 1:
                     value = list(value[1:-1])  # Remove '[' and ']'
-                    value = [elem for elem in value if elem != ',']  # Remove ','
+                    value = [elem for elem in value if elem != ","]  # Remove ','
             else:
                 value = [value]
 
-            operator = "" if parsed_operator not in operator_match else operator_match[parsed_operator]
+            operator = (
+                ""
+                if parsed_operator not in operator_match
+                else operator_match[parsed_operator]
+            )
 
-            scope_list.append({
-                'displayName': "",
-                "isVariable": False,
-                'operand': operand,
-                'operator': operator,
-                'value': value
-            })
+            scope_list.append(
+                {
+                    "displayName": "",
+                    "isVariable": False,
+                    "operand": operand,
+                    "operator": operator,
+                    "value": value,
+                }
+            )
         return [True, scope_list]
     except Exception as ex:
         return [False, f"invalid scope: {scope}, {ex.message}"]

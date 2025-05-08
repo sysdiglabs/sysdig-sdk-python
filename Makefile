@@ -2,15 +2,15 @@
 
 .PHONY: test
 test:
-	poetry run mamba -f documentation
+	uv run mamba -f documentation
 
 .coverage:
-	poetry run coverage run $(shell poetry run which mamba) -f documentation || true
+	uv run coverage run $(shell uv run which mamba) -f documentation || true
 
 cover: .coverage
-	poetry run coverage report --include 'sdcclient/*'
+	uv run coverage report --include 'sdcclient/*'
 
 .PHONY: cover-html
 cover-html: .coverage
-	poetry run coverage html -d coverage --include 'sdcclient/*'
+	uv run coverage html -d coverage --include 'sdcclient/*'
 

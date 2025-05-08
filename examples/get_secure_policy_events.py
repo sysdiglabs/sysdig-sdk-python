@@ -18,11 +18,17 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print(('usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]' %
-           sys.argv[0]))
-    print('-s|--summarize: group policy events by sanitized output and print by frequency')
-    print('-l|--limit: with -s, only print the first <limit> outputs')
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(
+        (
+            "usage: %s [-s|--summarize] [-l|--limit <limit>] <sysdig-token> [<duration sec>|<from sec> <to sec>]"
+            % sys.argv[0]
+        )
+    )
+    print(
+        "-s|--summarize: group policy events by sanitized output and print by frequency"
+    )
+    print("-l|--limit: with -s, only print the first <limit> outputs")
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -61,7 +67,7 @@ else:
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClient(sdc_token, "https://secure.sysdig.com")
 
 if duration is not None:
     ok, res = sdclient.get_policy_events_duration(duration)

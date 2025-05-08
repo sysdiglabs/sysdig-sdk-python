@@ -2,15 +2,28 @@ import json
 import time
 
 from sdcclient._common import _SdcCommon
-from sdcclient.secure import FalcoRulesFilesClientOld, PolicyEventsClientV1, PolicyEventsClientOld, PolicyClientV2
+from sdcclient.secure import (
+    FalcoRulesFilesClientOld,
+    PolicyEventsClientV1,
+    PolicyEventsClientOld,
+    PolicyClientV2,
+)
 
 
-class SdSecureClient(FalcoRulesFilesClientOld,
-                     PolicyEventsClientV1,
-                     PolicyEventsClientOld,
-                     PolicyClientV2,
-                     _SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
+class SdSecureClient(
+    FalcoRulesFilesClientOld,
+    PolicyEventsClientV1,
+    PolicyEventsClientOld,
+    PolicyClientV2,
+    _SdcCommon,
+):
+    def __init__(
+        self,
+        token="",
+        sdc_url="https://secure.sysdig.com",
+        ssl_verify=True,
+        custom_headers=None,
+    ):
         super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
 
         self.product = "SDS"
@@ -18,16 +31,20 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
     @property
     def policy_v2(self):
-        '''**Description**
-            True if policy V2 API is available
-        '''
+        """**Description**
+        True if policy V2 API is available
+        """
         if self._policy_v2 is None:
-            res = self.http.get(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
+            res = self.http.get(
+                self.url + "/api/v2/policies/default",
+                headers=self.hdrs,
+                verify=self.ssl_verify,
+            )
             self._policy_v2 = res.status_code != 404
         return self._policy_v2
 
     def list_rules(self):
-        '''**Description**
+        """**Description**
             Returns the list of rules in the system. These are grouped by name
             and do not necessarily represent individual rule objects, as multiple
             rules can have the same name.
@@ -37,12 +54,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of rules.
-        '''
-        res = self.http.get(self.url + '/api/secure/rules/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/rules/summaries",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_rules_group(self, name):
-        '''**Description**
+        """**Description**
             Retrieve a group of all rules having the given name. This is used to
             show how a base rule is modified by later rules that override/append
             to the rule.
@@ -52,13 +73,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of rules.
-        '''
-        res = self.http.get(self.url + '/api/secure/rules/groups?name={}'.format(name), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/rules/groups?name={}".format(name),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_rule_id(self, id):
-        '''**Description**
+        """**Description**
             Retrieve info about a single rule
 
         **Arguments**
@@ -66,12 +90,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the rule.
-        '''
-        res = self.http.get(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/rules/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def add_rule(self, name, details={}, description="", tags=[]):
-        '''**Description**
+        """**Description**
             Create a new rule
 
         **Arguments**
@@ -82,19 +110,23 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the rule.
-        '''
+        """
         rule = {
             "name": name,
             "description": description,
             "details": details,
-            "tags": tags
+            "tags": tags,
         }
-        res = self.http.post(self.url + '/api/secure/rules', data=json.dumps(rule), headers=self.hdrs,
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/secure/rules",
+            data=json.dumps(rule),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def update_rule(self, id, details={}, description="", tags=[]):
-        '''**Description**
+        """**Description**
             Update info associated with a rule
 
         **Arguments**
@@ -105,24 +137,28 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the rule.
-        '''
+        """
         ok, res = self.get_rule_id(id)
         if not ok:
             return [False, res]
         rule = res
 
         if details:
-            rule['details'] = details
+            rule["details"] = details
         if description:
-            rule['description'] = description
+            rule["description"] = description
         if tags:
-            rule['tags'] = tags
-        res = self.http.put(self.url + '/api/secure/rules/{}'.format(id), data=json.dumps(rule), headers=self.hdrs,
-                            verify=self.ssl_verify)
+            rule["tags"] = tags
+        res = self.http.put(
+            self.url + "/api/secure/rules/{}".format(id),
+            data=json.dumps(rule),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_rule(self, id):
-        '''**Description**
+        """**Description**
             Delete the rule with given id.
 
         **Arguments**
@@ -130,12 +166,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the rule.
-        '''
-        res = self.http.delete(self.url + '/api/secure/rules/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.delete(
+            self.url + "/api/secure/rules/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def list_falco_macros(self):
-        '''**Description**
+        """**Description**
             Returns the list of macros in the system. These are grouped by name
             and do not necessarily represent individual macro objects, as multiple
             macros can have the same name.
@@ -145,12 +185,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of falco macros.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/macros/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/macros/summaries",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_falco_macros_group(self, name):
-        '''**Description**
+        """**Description**
             Retrieve a group of all falco groups having the given name. This is used
             to show how a base macro is modified by later macrosthat override/append
             to the macro.
@@ -160,13 +204,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of falco macros.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/macros/groups?name={}'.format(name), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/macros/groups?name={}".format(name),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_falco_macro_id(self, id):
-        '''**Description**
+        """**Description**
             Retrieve info about a single falco macro
 
         **Arguments**
@@ -174,13 +221,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the falco macro.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/macros/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def add_falco_macro(self, name, condition, append=False):
-        '''**Description**
+        """**Description**
             Create a new macro
 
         **Arguments**
@@ -189,21 +239,22 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the falco macro.
-        '''
+        """
         macro = {
             "name": name,
-            "condition": {
-                "components": [],
-                "condition": condition
-            },
-            "append": append
+            "condition": {"components": [], "condition": condition},
+            "append": append,
         }
-        res = self.http.post(self.url + '/api/secure/falco/macros', data=json.dumps(macro), headers=self.hdrs,
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/secure/falco/macros",
+            data=json.dumps(macro),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def update_falco_macro(self, id, condition):
-        '''**Description**
+        """**Description**
             Update info associated with a macro
 
         **Arguments**
@@ -212,19 +263,23 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the macro.
-        '''
+        """
         ok, res = self.get_falco_macro_id(id)
         if not ok:
             return [False, res]
         macro = res
-        macro['condition']['condition'] = condition
+        macro["condition"]["condition"] = condition
 
-        res = self.http.put(self.url + '/api/secure/falco/macros/{}'.format(id), data=json.dumps(macro),
-                            headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/secure/falco/macros/{}".format(id),
+            data=json.dumps(macro),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_falco_macro(self, id):
-        '''**Description**
+        """**Description**
             Delete the macro with given id.
 
         **Arguments**
@@ -232,13 +287,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the macro.
-        '''
-        res = self.http.delete(self.url + '/api/secure/falco/macros/{}'.format(id), headers=self.hdrs,
-                               verify=self.ssl_verify)
+        """
+        res = self.http.delete(
+            self.url + "/api/secure/falco/macros/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def list_falco_lists(self):
-        '''**Description**
+        """**Description**
             Returns the list of falco lists in the system. These are grouped by
             name and do not necessarily represent individual falco list objects,
             as multiple falco lists can have the same name.
@@ -248,12 +306,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of falco lists.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/lists/summaries', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/lists/summaries",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_falco_lists_group(self, name):
-        '''**Description**
+        """**Description**
             Retrieve a group of all falco lists having the given name. This is used
             to show how a base list is modified by later lists that override/append
             to the list.
@@ -263,13 +325,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list of falco lists.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/lists/groups?name={}'.format(name), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/lists/groups?name={}".format(name),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_falco_list_id(self, id):
-        '''**Description**
+        """**Description**
             Retrieve info about a single falco list
 
         **Arguments**
@@ -277,13 +342,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the falco list.
-        '''
-        res = self.http.get(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/secure/falco/lists/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def add_falco_list(self, name, items, append=False):
-        '''**Description**
+        """**Description**
             Create a new list
 
         **Arguments**
@@ -292,20 +360,18 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the falco list.
-        '''
-        flist = {
-            "name": name,
-            "items": {
-                "items": items
-            },
-            "append": append
-        }
-        res = self.http.post(self.url + '/api/secure/falco/lists', data=json.dumps(flist), headers=self.hdrs,
-                             verify=self.ssl_verify)
+        """
+        flist = {"name": name, "items": {"items": items}, "append": append}
+        res = self.http.post(
+            self.url + "/api/secure/falco/lists",
+            data=json.dumps(flist),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def update_falco_list(self, id, items):
-        '''**Description**
+        """**Description**
             Update info associated with a list
 
         **Arguments**
@@ -314,19 +380,23 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list.
-        '''
+        """
         ok, res = self.get_falco_list_id(id)
         if not ok:
             return [False, res]
         flist = res
-        flist['items']['items'] = items
+        flist["items"]["items"] = items
 
-        res = self.http.put(self.url + '/api/secure/falco/lists/{}'.format(id), data=json.dumps(flist),
-                            headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/secure/falco/lists/{}".format(id),
+            data=json.dumps(flist),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_falco_list(self, id):
-        '''**Description**
+        """**Description**
             Delete the list with given id.
 
         **Arguments**
@@ -334,14 +404,23 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON object representing the list.
-        '''
-        res = self.http.delete(self.url + '/api/secure/falco/lists/{}'.format(id), headers=self.hdrs,
-                               verify=self.ssl_verify)
+        """
+        res = self.http.delete(
+            self.url + "/api/secure/falco/lists/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def add_compliance_task(self, name, module_name='docker-bench-security', schedule='06:00:00Z/PT12H', scope=None,
-                            enabled=True):
-        '''**Description**
+    def add_compliance_task(
+        self,
+        name,
+        module_name="docker-bench-security",
+        schedule="06:00:00Z/PT12H",
+        scope=None,
+        enabled=True,
+    ):
+        """**Description**
             Add a new compliance task.
 
         **Arguments**
@@ -353,21 +432,25 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the compliance task.
-        '''
+        """
         task = {
             "id": None,
             "name": name,
             "moduleName": module_name,
             "enabled": enabled,
             "scope": scope,
-            "schedule": schedule
+            "schedule": schedule,
         }
-        res = self.http.post(self.url + '/api/complianceTasks', data=json.dumps(task), headers=self.hdrs,
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/complianceTasks",
+            data=json.dumps(task),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def list_compliance_tasks(self):
-        '''**Description**
+        """**Description**
             Get the list of all compliance tasks.
 
         **Arguments**
@@ -375,12 +458,14 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON list with the representation of each compliance task.
-        '''
-        res = self.http.get(self.url + '/api/complianceTasks', headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/complianceTasks", headers=self.hdrs, verify=self.ssl_verify
+        )
         return self._request_result(res)
 
     def get_compliance_task(self, id):
-        '''**Description**
+        """**Description**
             Get a compliance task.
 
         **Arguments**
@@ -388,12 +473,18 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the compliance task.
-        '''
-        res = self.http.get(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/complianceTasks/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def update_compliance_task(self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None):
-        '''**Description**
+    def update_compliance_task(
+        self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None
+    ):
+        """**Description**
             Update an existing compliance task.
 
         **Arguments**
@@ -406,40 +497,47 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the compliance task.
-        '''
+        """
         ok, res = self.get_compliance_task(id)
         if not ok:
             return ok, res
 
         task = res
         options = {
-            'name': name,
-            'moduleName': module_name,
-            'schedule': schedule,
-            'scope': scope,
-            'enabled': enabled
+            "name": name,
+            "moduleName": module_name,
+            "schedule": schedule,
+            "scope": scope,
+            "enabled": enabled,
         }
         task.update({k: v for k, v in options.items() if v is not None})
-        res = self.http.put(self.url + '/api/complianceTasks/{}'.format(id), data=json.dumps(task), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/complianceTasks/{}".format(id),
+            data=json.dumps(task),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_compliance_task(self, id):
-        '''**Description**
+        """**Description**
             Delete the compliance task with the given id
 
         **Arguments**
             - id: the id of the compliance task to delete
-        '''
-        res = self.http.delete(self.url + '/api/complianceTasks/{}'.format(id), headers=self.hdrs,
-                               verify=self.ssl_verify)
+        """
+        res = self.http.delete(
+            self.url + "/api/complianceTasks/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
 
         return True, None
 
     def list_compliance_results(self, limit=50, direction=None, cursor=None, filter=""):
-        '''**Description**
+        """**Description**
             Get the list of all compliance tasks runs.
 
         **Arguments**
@@ -450,18 +548,19 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON list with the representation of each compliance task run.
-        '''
+        """
         url = "{url}/api/complianceResults?cursor{cursor}&filter={filter}&limit={limit}{direction}".format(
             url=self.url,
             limit=limit,
             direction="&direction=%s" % direction if direction else "",
             cursor="=%d" % cursor if cursor is not None else "",
-            filter=filter)
+            filter=filter,
+        )
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_compliance_results(self, id):
-        '''**Description**
+        """**Description**
             Retrieve the details for a specific compliance task run result.
 
         **Arguments**
@@ -469,13 +568,16 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the compliance task run result.
-        '''
-        res = self.http.get(self.url + '/api/complianceResults/{}'.format(id), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/complianceResults/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def get_compliance_results_csv(self, id):
-        '''**Description**
+        """**Description**
             Retrieve the details for a specific compliance task run result in csv.
 
         **Arguments**
@@ -483,17 +585,28 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A CSV representation of the compliance task run result.
-        '''
-        res = self.http.get(self.url + '/api/complianceResults/{}/csv'.format(id), headers=self.hdrs,
-                            verify=self.ssl_verify)
+        """
+        res = self.http.get(
+            self.url + "/api/complianceResults/{}/csv".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
 
         return True, res.text
 
-    def list_commands_audit(self, from_sec=None, to_sec=None, scope_filter=None, command_filter=None, limit=100,
-                            offset=0, metrics=[]):
-        '''**Description**
+    def list_commands_audit(
+        self,
+        from_sec=None,
+        to_sec=None,
+        scope_filter=None,
+        command_filter=None,
+        limit=100,
+        offset=0,
+        metrics=[],
+    ):
+        """**Description**
             List the commands audit.
 
         **DEPRECATED**: Use sdcclient.secure.ActivityAuditClientV1 instead. This is maintained for old on-prem versions, but will be removed over time.
@@ -508,7 +621,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the commands audit.
-        '''
+        """
         if to_sec is None:
             to_sec = time.time()
         if from_sec is None:
@@ -518,16 +631,17 @@ class SdSecureClient(FalcoRulesFilesClientOld,
             url=self.url,
             offset=offset,
             limit=limit,
-            frm=int(from_sec * 10 ** 6),
-            to=int(to_sec * 10 ** 6),
+            frm=int(from_sec * 10**6),
+            to=int(to_sec * 10**6),
             scope="&scopeFilter=" + scope_filter if scope_filter else "",
             commandFilter="&commandFilter=" + command_filter if command_filter else "",
-            metrics="&metrics=" + json.dumps(metrics) if metrics else "")
+            metrics="&metrics=" + json.dumps(metrics) if metrics else "",
+        )
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_command_audit(self, id, metrics=[]):
-        '''**Description**
+        """**Description**
             Get a command audit.
 
         **DEPRECATED**: Use sdcclient.secure.ActivityAuditClientV1 instead. This is maintained for old on-prem versions, but will be removed over time.
@@ -537,17 +651,18 @@ class SdSecureClient(FalcoRulesFilesClientOld,
 
         **Success Return Value**
             A JSON representation of the command audit.
-        '''
+        """
         url = "{url}/api/commands/{id}?from=0&to={to}{metrics}".format(
             url=self.url,
             id=id,
-            to=int(time.time() * 10 ** 6),
-            metrics="&metrics=" + json.dumps(metrics) if metrics else "")
+            to=int(time.time() * 10**6),
+            metrics="&metrics=" + json.dumps(metrics) if metrics else "",
+        )
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def list_image_profiles(self):
-        '''**Description**
+        """**Description**
             List the current set of image profiles.
 
         **Arguments**
@@ -556,16 +671,14 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         **Success Return Value**
             A JSON object containing the details of each profile.
 
-        '''
-        url = "{url}/api/v1/profiling/profileGroups/0/profiles".format(
-            url=self.url
-        )
+        """
+        url = "{url}/api/v1/profiling/profileGroups/0/profiles".format(url=self.url)
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_image_profile(self, profileId):
-        '''**Description**
+        """**Description**
             Find the image profile with a (partial) profile ID <profileId> and return its json description.
 
         **Arguments**
@@ -578,7 +691,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
             collision profiles is returned, and the full complete ID string is printed. In this case, it returns
             false.
 
-        '''
+        """
 
         # RETRIEVE ALL THE IMAGE PROFILES
         ok, image_profiles = self.list_image_profiles()
@@ -586,7 +699,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         if not ok:
             return [False, self.lasterr]
 
-        '''
+        """
         The content of the json stored in the image_profiles dictionary:
 
         {
@@ -597,9 +710,11 @@ class SdSecureClient(FalcoRulesFilesClientOld,
             ...
             ]
         }
-        '''
+        """
 
-        matched_profiles = self.__get_matched_profileIDs(profileId, image_profiles['profiles'])
+        matched_profiles = self.__get_matched_profileIDs(
+            profileId, image_profiles["profiles"]
+        )
 
         # Profile ID not found
         if len(matched_profiles) == 0:
@@ -609,8 +724,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
         elif len(matched_profiles) == 1:
             # Matched id. Return information
             url = "{url}/api/v1/profiling/profiles/{profileId}".format(
-                url=self.url,
-                profileId=matched_profiles[0]['profileId']
+                url=self.url, profileId=matched_profiles[0]["profileId"]
             )
 
             res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
@@ -621,7 +735,7 @@ class SdSecureClient(FalcoRulesFilesClientOld,
             return [False, matched_profiles]
 
     def __get_matched_profileIDs(self, requested_profile, profile_list):
-        '''
+        """
         **Description**
             Helper function for  retrieving the list of matching profile
 
@@ -705,17 +819,19 @@ class SdSecureClient(FalcoRulesFilesClientOld,
             },
             ...
         ]
-        '''
+        """
 
         matched_profiles = []
 
         request_len = len(requested_profile)
         for profile in profile_list:
-
             # get the length of the substring to match
             str_len_match = min(len(profile), request_len)
 
-            if profile['profileId'][0:str_len_match] == requested_profile[0:str_len_match]:
+            if (
+                profile["profileId"][0:str_len_match]
+                == requested_profile[0:str_len_match]
+            ):
                 matched_profiles.append(profile)
 
         return matched_profiles

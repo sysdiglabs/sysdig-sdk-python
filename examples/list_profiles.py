@@ -9,7 +9,7 @@ from sdcclient import SdSecureClient
 
 
 def usage():
-    print(('usage: %s <secure-endpoint> <sysdig-token>' % sys.argv[0]))
+    print(("usage: %s <secure-endpoint> <sysdig-token>" % sys.argv[0]))
     sys.exit(1)
 
 
@@ -37,7 +37,7 @@ if not ok:
     sys.exit(1)
 
 # Strip the surrounding json to only keep the list of profiles
-res = res['profiles']
+res = res["profiles"]
 
 for profile in res:
     print(("ID: {}, Name: {}".format(profile["profileId"], profile["imageName"])))

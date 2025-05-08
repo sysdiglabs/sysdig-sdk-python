@@ -18,11 +18,11 @@ Installation
 
 #### Manual (development only)
 
-This method requires [Poetry](https://python-poetry.org/) installed
+This method requires [uv](https://docs.astral.sh/uv/) installed
 
     git clone https://github.com/sysdiglabs/sysdig-sdk-python.git
     cd python-sdc-client
-    poetry install
+    uv build
 
 Quick start
 -----------

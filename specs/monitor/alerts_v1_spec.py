@@ -12,15 +12,16 @@ _ALERT_DESCRIPTION = "This alert was automatically created using the Sysdig SDK 
 
 with description("Alerts v1", "integration") as self:
     with before.all:
-        self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                      token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdMonitorClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
+            token=os.getenv("SDC_MONITOR_TOKEN"),
+        )
 
     with before.each:
         self.cleanup_alerts()
 
     with after.each:
         self.cleanup_alerts()
-
 
     def cleanup_alerts(self):
         ok, res = self.client.get_alerts()
@@ -31,26 +32,25 @@ with description("Alerts v1", "integration") as self:
                 call = self.client.delete_alert(alert)
                 expect(call).to(be_successful_api_call)
 
-
     def create_test_alert(self):
         ok, res = self.client.create_alert(
             name=_ALERT_NAME,
             description=_ALERT_DESCRIPTION,
             severity=6,
             for_atleast_s=60,
-            condition='avg(cpu.used.percent) > 80',
+            condition="avg(cpu.used.percent) > 80",
             # We want to check this metric for every process on every machine.
-            segmentby=['host.mac', 'proc.name'],
-            segment_condition='ANY',
+            segmentby=["host.mac", "proc.name"],
+            segment_condition="ANY",
             # if there is more than one tomcat process, this alert will fire when a single one of them crosses the
             # 80% threshold.
             user_filter='proc.name = "tomcat"',
-            enabled=False)
+            enabled=False,
+        )
 
         if ok:
             self.test_alert = res["alert"]
         return ok, res
-
 
     with it("is able to create an alert"):
         ok, res = self.create_test_alert()

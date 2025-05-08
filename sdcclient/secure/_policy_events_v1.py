@@ -4,32 +4,43 @@ from sdcclient._common import _SdcCommon
 
 
 class PolicyEventsClientV1(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
-        super(PolicyEventsClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(
+        self,
+        token="",
+        sdc_url="https://secure.sysdig.com",
+        ssl_verify=True,
+        custom_headers=None,
+    ):
+        super(PolicyEventsClientV1, self).__init__(
+            token, sdc_url, ssl_verify, custom_headers
+        )
         self.product = "SDS"
 
     def _get_policy_events_int(self, ctx):
         limit = ctx.get("limit", 50)
-        policy_events_url = self.url + '/api/v1/secureEvents?limit={limit}{frm}{to}{filter}{cursor}'.format(
-            limit=limit,
-            frm=f"&from={int(ctx['from']):d}" if "from" in ctx else "",
-            to=f"&to={int(ctx['to']):d}" if "to" in ctx else "",
-            filter=f'&filter={ctx["filter"]}' if "filter" in ctx else "",
-            cursor=f'&cursor={ctx["cursor"]}' if "cursor" in ctx else "")
+        policy_events_url = (
+            self.url
+            + "/api/v1/secureEvents?limit={limit}{frm}{to}{filter}{cursor}".format(
+                limit=limit,
+                frm=f"&from={int(ctx['from']):d}" if "from" in ctx else "",
+                to=f"&to={int(ctx['to']):d}" if "to" in ctx else "",
+                filter=f"&filter={ctx['filter']}" if "filter" in ctx else "",
+                cursor=f"&cursor={ctx['cursor']}" if "cursor" in ctx else "",
+            )
+        )
 
-        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(
+            policy_events_url, headers=self.hdrs, verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
-        ctx = {
-            "limit": limit,
-            "cursor": res.json()["page"].get("prev", None)
-        }
+        ctx = {"limit": limit, "cursor": res.json()["page"].get("prev", None)}
 
         return [True, {"ctx": ctx, "data": res.json()["data"]}]
 
     def get_policy_events_range(self, from_sec, to_sec, filter=None):
-        '''**Description**
+        """**Description**
             Fetch all policy events that occurred in the time range [from_sec:to_sec]. This method is used in conjunction
             with :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
 
@@ -47,16 +58,18 @@ class PolicyEventsClientV1(_SdcCommon):
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
-        '''
-        options = {"from": int(from_sec) * 1_000_000_000,
-                   "to": int(to_sec) * 1_000_000_000,
-                   "limit": 999,
-                   "filter": filter}
+        """
+        options = {
+            "from": int(from_sec) * 1_000_000_000,
+            "to": int(to_sec) * 1_000_000_000,
+            "limit": 999,
+            "filter": filter,
+        }
         ctx = {k: v for k, v in options.items() if v is not None}
         return self._get_policy_events_int(ctx)
 
     def get_policy_events_duration(self, duration_sec, filter=None):
-        '''**Description**
+        """**Description**
             Fetch all policy events that occurred in the last duration_sec seconds. This method is used in conjunction with
             :func:`~sdcclient.SdSecureClient.get_more_policy_events` to provide paginated access to policy events.
 
@@ -73,14 +86,18 @@ class PolicyEventsClientV1(_SdcCommon):
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
-        '''
-        to_sec = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+        """
+        to_sec = int(
+            (
+                datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)
+            ).total_seconds()
+        )
         from_sec = to_sec - (int(duration_sec))
 
         return self.get_policy_events_range(from_sec, to_sec, filter)
 
     def get_more_policy_events(self, ctx):
-        '''**Description**
+        """**Description**
             Fetch additional policy events after an initial call to :func:`~sdcclient.SdSecureClient.get_policy_events_range` /
             :func:`~sdcclient.SdSecureClient.get_policy_events_duration` or a prior call to get_more_policy_events.
 
@@ -113,7 +130,7 @@ class PolicyEventsClientV1(_SdcCommon):
 
         **Example**
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
-        '''
+        """
         return self._get_policy_events_int(ctx)
 
     def get_policy_event(self, event_id):
@@ -126,9 +143,11 @@ class PolicyEventsClientV1(_SdcCommon):
             A tuple where the first parameter indicates if the request was successful, and the second parameter
             holds the info from the policy event or the error.
         """
-        policy_events_url = f'{self.url}/api/v1/secureEvents/{event_id}'
+        policy_events_url = f"{self.url}/api/v1/secureEvents/{event_id}"
 
-        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(
+            policy_events_url, headers=self.hdrs, verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return False, self.lasterr
 

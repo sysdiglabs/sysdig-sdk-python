@@ -15,8 +15,8 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <falco-rules-file>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <falco-rules-file>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -29,7 +29,7 @@ with open(sys.argv[2]) as cfile:
     # Verify that the content is valid yaml
     parsed_yaml_conf = yaml.safe_load(yaml_conf)
 
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClient(sdc_token, "https://secure.sysdig.com")
 
 #
 # Push the configuration
@@ -40,7 +40,7 @@ ok, res = sdclient.set_system_falco_rules(yaml_conf)
 # Check if everything went well
 #
 if ok:
-    print('system falco rules set successfully')
+    print("system falco rules set successfully")
 else:
     print(res)
     sys.exit(1)

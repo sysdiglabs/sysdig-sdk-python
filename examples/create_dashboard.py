@@ -16,9 +16,9 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 def usage():
-    print(('usage: %s [-d|--dashboard <name>] <sysdig-token>' % sys.argv[0]))
-    print('-d|--dashboard: Set name of dashboard to create')
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s [-d|--dashboard <name>] <sysdig-token>" % sys.argv[0]))
+    print("-d|--dashboard: Set name of dashboard to create")
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 
@@ -55,13 +55,13 @@ viewName = "Overview by Process"
 # You can also refer to AWS tags by using "cloudProvider.tag.*" metadata or
 # agent tags by using "agent.tag.*" metadata
 dashboardFilter = 'proc.name = "cassandra"'
-print('Creating dashboard from view')
+print("Creating dashboard from view")
 ok, res = sdclient.create_dashboard_from_view(dashboardName, viewName, dashboardFilter)
 #
 # Check the result
 #
 if ok:
-    print('Dashboard created successfully')
+    print("Dashboard created successfully")
 else:
     print(res)
     sys.exit(1)
@@ -76,14 +76,16 @@ dashboardCopy = "Copy of {}".format(dashboardName)
 # Filter to apply to the new dashboard. Same as above.
 dashboardFilter = 'proc.name != "cassandra"'
 
-print('Creating dashboard from dashboard')
-ok, res = sdclient.create_dashboard_from_dashboard(dashboardCopy, dashboardName, dashboardFilter)
+print("Creating dashboard from dashboard")
+ok, res = sdclient.create_dashboard_from_dashboard(
+    dashboardCopy, dashboardName, dashboardFilter
+)
 
 #
 # Check the result
 #
 if ok:
-    print('Dashboard copied successfully')
+    print("Dashboard copied successfully")
 else:
     print(res)
     sys.exit(1)

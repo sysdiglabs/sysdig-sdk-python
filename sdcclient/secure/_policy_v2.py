@@ -18,7 +18,7 @@ def policy_action_capture(file_name, secs_before=5, secs_after=15, filter=""):
         "filter": filter,
         "name": file_name,
         "bucketName": "",
-        "storageType": "S3"
+        "storageType": "S3",
     }
 
 
@@ -35,7 +35,13 @@ def policy_action_kill():
 
 
 class PolicyClientV2(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
+    def __init__(
+        self,
+        token="",
+        sdc_url="https://secure.sysdig.com",
+        ssl_verify=True,
+        custom_headers=None,
+    ):
         super(PolicyClientV2, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
@@ -54,7 +60,11 @@ class PolicyClientV2(_SdcCommon):
             >>> ok, res = client.create_default_policies()
         """
 
-        res = self.http.post(self.url + '/api/v2/policies/default', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/v2/policies/default",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_all_policies(self):
@@ -92,7 +102,9 @@ class PolicyClientV2(_SdcCommon):
             >>> ok, res = client.list_policies()
         """
 
-        res = self.http.get(self.url + '/api/v2/policies', headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(
+            self.url + "/api/v2/policies", headers=self.hdrs, verify=self.ssl_verify
+        )
         return self._request_result(res)
 
     def get_policy(self, name):
@@ -145,11 +157,25 @@ class PolicyClientV2(_SdcCommon):
             >>>     print((json.dumps(res, indent=2)))
         """
 
-        res = self.http.get(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.get(
+            self.url + "/api/v2/policies/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def add_policy(self, name, description, rule_names=[], actions=[], scope=None, severity=0, enabled=True,
-                   notification_channels=[], type="falco"):
+    def add_policy(
+        self,
+        name,
+        description,
+        rule_names=[],
+        actions=[],
+        scope=None,
+        severity=0,
+        enabled=True,
+        notification_channels=[],
+        type="falco",
+    ):
         """
         Adds a new policy.
 
@@ -188,8 +214,12 @@ class PolicyClientV2(_SdcCommon):
             "type": type,
         }
 
-        res = self.http.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy),
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/v2/policies",
+            headers=self.hdrs,
+            data=json.dumps(policy),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def add_policy_json(self, policy_json):
@@ -217,12 +247,26 @@ class PolicyClientV2(_SdcCommon):
         except Exception as e:
             return [False, "policy json is not valid json: {}".format(str(e))]
 
-        res = self.http.post(self.url + '/api/v2/policies', headers=self.hdrs, data=json.dumps(policy_obj),
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + "/api/v2/policies",
+            headers=self.hdrs,
+            data=json.dumps(policy_obj),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def update_policy(self, id, name=None, description=None, rule_names=None, actions=None, scope=None,
-                      severity=None, enabled=None, notification_channels=None):
+    def update_policy(
+        self,
+        id,
+        name=None,
+        description=None,
+        rule_names=None,
+        actions=None,
+        scope=None,
+        severity=None,
+        enabled=None,
+        notification_channels=None,
+    ):
         """
         Update policy with the provided values. Only the defined values will be updated.
 
@@ -270,8 +314,12 @@ class PolicyClientV2(_SdcCommon):
         if notification_channels is not None:
             policy["notificationChannelIds"] = notification_channels
 
-        res = self.http.put(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, data=json.dumps(policy),
-                            verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/v2/policies/{}".format(id),
+            headers=self.hdrs,
+            data=json.dumps(policy),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def update_policy_json(self, policy_json):
@@ -302,8 +350,12 @@ class PolicyClientV2(_SdcCommon):
         if "id" not in policy_obj:
             return [False, "Policy Json does not have an 'id' field"]
 
-        res = self.http.put(self.url + '/api/v2/policies/{}'.format(policy_obj["id"]), headers=self.hdrs,
-                            data=json.dumps(policy_obj), verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + "/api/v2/policies/{}".format(policy_obj["id"]),
+            headers=self.hdrs,
+            data=json.dumps(policy_obj),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def delete_policy_name(self, name):
@@ -347,5 +399,9 @@ class PolicyClientV2(_SdcCommon):
             >>> ok, res = client.delete_policy_id(id=123456)
         """
 
-        res = self.http.delete(self.url + '/api/v2/policies/{}'.format(id), headers=self.hdrs, verify=self.ssl_verify)
+        res = self.http.delete(
+            self.url + "/api/v2/policies/{}".format(id),
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
