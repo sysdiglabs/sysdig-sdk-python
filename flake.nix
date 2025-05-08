@@ -23,6 +23,10 @@
               uv
               ruff
               pre-commit
+
+              # LSPs
+              python3Packages.python-lsp-server
+              basedpyright
             ];
 
             shellHook = ''
