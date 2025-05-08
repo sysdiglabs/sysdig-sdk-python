@@ -38,7 +38,7 @@ with description("Events v2", "integration") as self:
         call = self.client.post_event(
             name=self.event_name,
             description="This event was created in a CI pipeline for the Python SDK library",
-            event_filter="host.hostName='ci'",
+            event_filter="host_hostName='ci'",
         )
         expect(call).to(be_successful_api_call)
         sleep(2)  # sleep to guarantee the event is created
