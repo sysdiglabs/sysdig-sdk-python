@@ -47,7 +47,7 @@ with description("Events v2", "integration") as self:
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_key("events"))
         expect(res["events"]).to(
-            contain(have_key("scope", equal("host.hostName = 'ci'")))
+            contain(have_key("scope", equal("host_hostName = 'ci'")))
         )
 
     with it("is able to retrieve an event by ID"):
@@ -56,6 +56,7 @@ with description("Events v2", "integration") as self:
             description="This event was created in a CI pipeline for the Python SDK library",
         )
         expect((ok, res)).to(be_successful_api_call)
+        time.sleep(5)  # Wait for the API to stabilize the events
 
         event = res["event"]
         event_id = event["id"]
