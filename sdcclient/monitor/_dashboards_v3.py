@@ -3,7 +3,6 @@ import json
 
 from sdcclient._common import _SdcCommon
 from sdcclient.monitor.dashboard_converters import (
-    convert_dashboard_between_versions,
     convert_scope_string_to_expression,
 )
 
@@ -379,7 +378,7 @@ class DashboardsClientV3(_SdcCommon):
             The file can contain the following JSON formats:
             1. dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
             2. JSON object with the following properties:
-                * version: dashboards API version (e.g. 'v2')
+                * version: dashboards API version (e.g. 'v3')
                 * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
 
         **Arguments**
@@ -411,17 +410,6 @@ class DashboardsClientV3(_SdcCommon):
             }
 
         dashboard = loaded_object["dashboard"]
-
-        if loaded_object["version"] != self._dashboards_api_version:
-            #
-            # Convert the dashboard (if possible)
-            #
-            conversion_result, dashboard = convert_dashboard_between_versions(
-                dashboard, loaded_object["version"], self._dashboards_api_version
-            )
-
-            if not conversion_result:
-                return conversion_result, dashboard
 
         #
         # Create the new dashboard
@@ -605,7 +593,7 @@ class DashboardsClientV3(_SdcCommon):
             Save a dashboard to disk. See :func:`~SdcClient.create_dashboard_from_file` to use the file to create a dashboard (usefl to create and restore backups).
 
             The file will contain a JSON object with the following properties:
-            * version: dashboards API version (e.g. 'v2')
+            * version: dashboards API version (e.g. 'v3')
             * dashboard: dashboard object in the format of an array element returned by :func:`~SdcClient.get_dashboards`
 
         **Arguments**
