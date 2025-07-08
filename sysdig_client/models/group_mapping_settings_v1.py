@@ -43,8 +43,8 @@ class GroupMappingSettingsV1(BaseModel):
     @field_validator('different_roles_same_team_strategy')
     def different_roles_same_team_strategy_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['UNAUTHORIZED', 'FIRST_MATCH', 'WEIGHTED']):
-            raise ValueError("must be one of enum values ('UNAUTHORIZED', 'FIRST_MATCH', 'WEIGHTED')")
+        if value not in set(['UNAUTHORIZED', 'FIRST_MATCH', 'WEIGHTED', 'WEIGHTED_BY_TEAM']):
+            raise ValueError("must be one of enum values ('UNAUTHORIZED', 'FIRST_MATCH', 'WEIGHTED', 'WEIGHTED_BY_TEAM')")
         return value
 
     model_config = ConfigDict(

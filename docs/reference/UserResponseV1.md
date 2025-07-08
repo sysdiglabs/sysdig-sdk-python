@@ -10,10 +10,12 @@ Name | Type | Description | Notes
 **first_name** | **str** | The name of the user.  | [optional] 
 **last_name** | **str** | The last name of the user.  | [optional] 
 **is_admin** | **bool** | **True** if the user has Administration permissions.  | [optional] 
+**is_enabled** | **bool** | **True** if the user is enabled.  | [optional] 
 **activation_status** | **str** | The current activation status of the user.  | [optional] 
 **date_created** | **datetime** | The date and time when the user was created.  | [optional] 
 **last_updated** | **datetime** | The date and time when the user was last updated.  | [optional] 
 **version** | **int** | The current version of the resource.  | [optional] 
+**bypass_sso_enforcement** | **bool** | When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled.  | [optional] 
 
 ## Example
 

@@ -30,12 +30,12 @@ class SequenceInner(BaseModel):
     SequenceInner
     """ # noqa: E501
     event_id: Annotated[str, Field(strict=True, max_length=36)] = Field(description="The unique identifier of the log event.", alias="eventId")
-    event_name: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The name of the event.", alias="eventName")
+    event_name: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The name of the event.", alias="eventName")
     event_time: datetime = Field(description="The time when the event occurred.", alias="eventTime")
     ingestion_id: Annotated[str, Field(strict=True, max_length=32)] = Field(description="The unique identifier of the ingestion.", alias="ingestionId")
-    region: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The region where the event occurred.")
-    source: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The source of the event.")
-    source_ip_address: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The IP address of the source.", alias="sourceIpAddress")
+    region: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The region where the event occurred.")
+    source: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The source of the event.")
+    source_ip_address: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The IP address of the source.", alias="sourceIpAddress")
     sub_ingestion_id: Annotated[str, Field(strict=True, max_length=32)] = Field(description="The unique identifier of the sub ingestion.", alias="subIngestionId")
     __properties: ClassVar[List[str]] = ["eventId", "eventName", "eventTime", "ingestionId", "region", "source", "sourceIpAddress", "subIngestionId"]
 

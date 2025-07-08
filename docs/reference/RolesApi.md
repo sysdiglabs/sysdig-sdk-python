@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create Role
 
-Create a new role.\\ \\ **Required permissions:** _roles.edit_ 
+Create a new role.\
+\
+**Required permissions:** _roles.edit_
+
 
 ### Example
 
@@ -103,7 +106,10 @@ Name | Type | Description  | Notes
 
 Delete Role
 
-Delete a role by its ID.\\ \\ **Required permissions:** _roles.edit_ 
+Delete a role by its ID.\
+\
+**Required permissions:** _roles.edit_
+
 
 ### Example
 
@@ -185,7 +191,10 @@ void (empty response body)
 
 Get Role
 
-Return a role by its ID.\\ \\ **Required permissions:** _roles.read_ 
+Return a role by its ID.\
+\
+**Required permissions:** _roles.read_
+
 
 ### Example
 
@@ -268,7 +277,10 @@ Name | Type | Description  | Notes
 
 List Roles
 
-Retrieve a paginated list of roles.\\ \\ **Required permissions:** _roles.read_ 
+Retrieve a paginated list of roles.\
+\
+**Required permissions:** _roles.read_
+
 
 ### Example
 
@@ -356,7 +368,10 @@ Name | Type | Description  | Notes
 
 Update Role
 
-Update a role by its ID.\\ \\ **Required permissions:** _roles.edit_ 
+Update a role by its ID.\
+\
+**Required permissions:** _roles.edit_
+
 
 ### Example
 

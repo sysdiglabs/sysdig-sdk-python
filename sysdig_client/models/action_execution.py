@@ -25,6 +25,7 @@ from typing_extensions import Annotated
 from sysdig_client.models.action_execution_parameter_value import ActionExecutionParameterValue
 from sysdig_client.models.action_execution_status import ActionExecutionStatus
 from sysdig_client.models.failure import Failure
+from sysdig_client.models.responder_type import ResponderType
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -32,9 +33,10 @@ class ActionExecution(BaseModel):
     """
     The submitted Response Action.
     """ # noqa: E501
-    id: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The ID of the Response Action.")
+    id: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The ID of the Response Action.")
     caller_id: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The ID of the user that executed the Response action.", alias="callerId")
-    action_type: Annotated[str, Field(strict=True, max_length=32)] = Field(description="The name of the Response Action to execute. It may be one of the following: - KILL_PROCESS - KILL_CONTAINER - STOP_CONTAINER - PAUSE_CONTAINER - FILE_QUARANTINE - FILE_ACQUIRE - UNPAUSE_CONTAINER - FILE_UNQUARANTINE - START_CONTAINER  The following actions serve as the undo for previous actions: - START_CONTAINER: undo for STOP_CONTAINER\\ - UNPAUSE_CONTAINER: undo for PAUSE_CONTAINER\\ - FILE_UNQUARANTINE: undo for FILE_QUARANTINE\\  Do not use undo actions in [submitActionExecutionv1](#tag/Response-actions/operation/submitActionExecutionv1).  You can execute an undo actions using the service [undoActionExecutionV1](#tag/Response-actions/operation/undoActionExecutionV1). ", alias="actionType")
+    action_type: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The name of the Response Action to execute. It may be one of the following: - KILL_PROCESS - KILL_CONTAINER - STOP_CONTAINER - PAUSE_CONTAINER - FILE_QUARANTINE - FILE_ACQUIRE - UNPAUSE_CONTAINER - FILE_UNQUARANTINE - START_CONTAINER - DELETE_POD - ROLLOUT_RESTART - KUBERNETES_VOLUME_SNAPSHOT - KUBERNETES_DELETE_VOLUME_SNAPSHOT - GET_LOGS - ISOLATE_NETWORK - DELETE_NETWORK_POLICY  The following actions serve as the undo for previous actions: - START_CONTAINER: undo for STOP_CONTAINER\\ - UNPAUSE_CONTAINER: undo for PAUSE_CONTAINER\\ - FILE_UNQUARANTINE: undo for FILE_QUARANTINE\\ - KUBERNETES_DELETE_VOLUME_SNAPSHOT: undo for KUBERNETES_VOLUME_SNAPSHOT\\ - DELETE_NETWORK_POLICY: undo for ISOLATE_NETWORK\\  Do not use undo actions in [submitActionExecutionv1](#tag/Response-actions/operation/submitActionExecutionv1).  You can execute an undo actions using the service [undoActionExecutionV1](#tag/Response-actions/operation/undoActionExecutionV1). ", alias="actionType")
+    responder_type: ResponderType = Field(alias="responderType")
     execution_context: Dict[str, Annotated[str, Field(strict=True, max_length=1024)]] = Field(description="The context in which the Response Action is executed.\\ It may contain additional information on the Response Action being executed, such as the host name or the MAC address.\\ For example:\\ ```json {     \"host.hostName\": \"my-host\",     \"host.mac\": \"00:00:00:00:00:00\",     \"host.id\": \"abc123\" } ``` ", alias="executionContext")
     parameters: Dict[str, ActionExecutionParameterValue] = Field(description="The parameters used to request the Response Action execution.")
     outputs: Optional[Dict[str, ActionExecutionParameterValue]] = Field(default=None, description="The parameters used to request the Response Action execution.")
@@ -43,8 +45,8 @@ class ActionExecution(BaseModel):
     user_id: Optional[Annotated[int, Field(le=9223372036854775616, strict=True, ge=0)]] = Field(default=None, description="The ID of the user that submitted the Response Action.", alias="userId")
     created_at: datetime = Field(description="The date and time the Response Action was submitted.", alias="createdAt")
     updated_at: Optional[datetime] = Field(default=None, description="The date and time the Response Action was last updated.", alias="updatedAt")
-    action_execution_id_being_undone: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The ID of the Response Action being undone.", alias="actionExecutionIdBeingUndone")
-    __properties: ClassVar[List[str]] = ["id", "callerId", "actionType", "executionContext", "parameters", "outputs", "failure", "status", "userId", "createdAt", "updatedAt", "actionExecutionIdBeingUndone"]
+    action_execution_id_being_undone: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The ID of the Response Action being undone.", alias="actionExecutionIdBeingUndone")
+    __properties: ClassVar[List[str]] = ["id", "callerId", "actionType", "responderType", "executionContext", "parameters", "outputs", "failure", "status", "userId", "createdAt", "updatedAt", "actionExecutionIdBeingUndone"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -117,6 +119,7 @@ class ActionExecution(BaseModel):
             "id": obj.get("id"),
             "callerId": obj.get("callerId"),
             "actionType": obj.get("actionType"),
+            "responderType": obj.get("responderType"),
             "executionContext": obj.get("executionContext"),
             "parameters": dict(
                 (_k, ActionExecutionParameterValue.from_dict(_v))

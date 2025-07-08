@@ -12,7 +12,10 @@ Method | HTTP request | Description
 
 Get Platform Audit Events
 
-Retrieve a paginated list of Platform Audit Events.\\ \\ **Required permissions:** _audit-trail-events.read_ 
+Retrieve a paginated list of Platform Audit Events.\
+\
+**Required permissions:** _audit-trail-events.read_
+
 
 ### Example
 

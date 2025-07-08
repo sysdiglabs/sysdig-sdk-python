@@ -31,8 +31,10 @@ class UpdateUserRequestV1(BaseModel):
     first_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The name of the user. ", alias="firstName")
     last_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The surname of the user. ", alias="lastName")
     is_admin: Optional[StrictBool] = Field(default=None, description="**True** if the user has Administration permissions. ", alias="isAdmin")
+    is_enabled: Optional[StrictBool] = Field(default=None, description="When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled. ", alias="isEnabled")
     version: Annotated[int, Field(strict=True, ge=0)] = Field(description="The current version of the resource. ")
-    __properties: ClassVar[List[str]] = ["firstName", "lastName", "isAdmin", "version"]
+    bypass_sso_enforcement: Optional[StrictBool] = Field(default=None, description="When **True**, the user can bypass SSO enforcement. **Warning:** This allows the user to log in without SSO even when username and password login is disabled. If a field is omitted, its value will be left unchanged. ", alias="bypassSsoEnforcement")
+    __properties: ClassVar[List[str]] = ["firstName", "lastName", "isAdmin", "isEnabled", "version", "bypassSsoEnforcement"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -88,7 +90,9 @@ class UpdateUserRequestV1(BaseModel):
             "firstName": obj.get("firstName"),
             "lastName": obj.get("lastName"),
             "isAdmin": obj.get("isAdmin"),
-            "version": obj.get("version")
+            "isEnabled": obj.get("isEnabled"),
+            "version": obj.get("version"),
+            "bypassSsoEnforcement": obj.get("bypassSsoEnforcement")
         })
         return _obj
 

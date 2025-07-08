@@ -30,7 +30,7 @@ class SupportedFilter(BaseModel):
     """
     A supported field for filtering events.
     """ # noqa: E501
-    id: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Attribute onto which filtering is supported.")
+    id: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Attribute onto which filtering is supported.")
     type: SupportedFilterType
     operands: Optional[Annotated[List[Operand], Field(min_length=0, max_length=10)]] = Field(default=None, description="The list of supported operands for filtering events.")
     __properties: ClassVar[List[str]] = ["id", "type", "operands"]

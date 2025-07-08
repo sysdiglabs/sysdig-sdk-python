@@ -13,7 +13,10 @@ Method | HTTP request | Description
 
 Get Capture Storage Configuration
 
-Retrieve the capture storage configuration.\\ \\ **Required permissions:** _sysdig-storage.read_ 
+Retrieve the capture storage configuration.\
+\
+**Required permissions:** _sysdig-storage.read_
+
 
 ### Example
 
@@ -91,7 +94,10 @@ This endpoint does not need any parameter.
 
 Update or Create Capture Storage Configuration
 
-Update or Create Capture Storage configuration.\\ \\ **Required permissions:** _sysdig-storage.edit_ 
+Update or Create Capture Storage configuration.\
+\
+**Required permissions:** _sysdig-storage.edit_
+
 
 ### Example
 

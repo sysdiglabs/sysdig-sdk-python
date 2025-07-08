@@ -37,8 +37,9 @@ class Package(BaseModel):
     path: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default=None, description="path of the package")
     suggested_fix: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default=None, description="suggested fix for the package", alias="suggestedFix")
     layer_ref: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default=None, description="reference to layer", alias="layerRef")
+    risk_accept_refs: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=255)]], Field(min_length=0, max_length=2147483647)]] = Field(default=None, description="Reference to the accepted risk.", alias="riskAcceptRefs")
     vulnerabilities_refs: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=1024)]], Field(min_length=0, max_length=8192)]] = Field(default=None, description="reference to vulnerabilities of the package", alias="vulnerabilitiesRefs")
-    __properties: ClassVar[List[str]] = ["type", "name", "isRunning", "isRemoved", "version", "license", "path", "suggestedFix", "layerRef", "vulnerabilitiesRefs"]
+    __properties: ClassVar[List[str]] = ["type", "name", "isRunning", "isRemoved", "version", "license", "path", "suggestedFix", "layerRef", "riskAcceptRefs", "vulnerabilitiesRefs"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -79,6 +80,11 @@ class Package(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if risk_accept_refs (nullable) is None
+        # and model_fields_set contains the field
+        if self.risk_accept_refs is None and "risk_accept_refs" in self.model_fields_set:
+            _dict['riskAcceptRefs'] = None
+
         # set to None if vulnerabilities_refs (nullable) is None
         # and model_fields_set contains the field
         if self.vulnerabilities_refs is None and "vulnerabilities_refs" in self.model_fields_set:
@@ -105,6 +111,7 @@ class Package(BaseModel):
             "path": obj.get("path"),
             "suggestedFix": obj.get("suggestedFix"),
             "layerRef": obj.get("layerRef"),
+            "riskAcceptRefs": obj.get("riskAcceptRefs"),
             "vulnerabilitiesRefs": obj.get("vulnerabilitiesRefs")
         })
         return _obj

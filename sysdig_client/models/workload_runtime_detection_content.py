@@ -35,8 +35,8 @@ class WorkloadRuntimeDetectionContent(BaseModel):
     policy_id: Annotated[int, Field(le=9223372036854775616, strict=True, ge=1)] = Field(description="ID of the policy that generated the event", alias="policyId")
     rule_name: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="Name of the rule the event is generated after", alias="ruleName")
     rule_type: Annotated[int, Field(le=14, strict=True, ge=1)] = Field(description="Rule type: - 1 - List matching - process - 2 - List matching - container - 3 - List matching - file - 4 - List matching - network - 5 - List matching - syscall - 6 - Falco - 7 - Drift detection - 8 - Malware detection - 11 - ML - Cryptominer detection - 13 - ML - AWS anomalous login - 14 - ML - Okta anomalous login ", alias="ruleType")
-    rule_sub_type: Annotated[int, Field(le=5, strict=True, ge=0)] = Field(description="Rule subtype: - 1 - List matching - network - inbound - 2 - List matching - network - outbound - 3 - List matching - network - listening - 4 - List matching - file - readwrite - 5 - List matching - file - read only ", alias="ruleSubType")
-    rule_tags: Annotated[List[Annotated[str, Field(strict=True, max_length=128)]], Field(max_length=1000)] = Field(description="The tags attached to the rule", alias="ruleTags")
+    rule_sub_type: Annotated[int, Field(le=5, strict=True, ge=1)] = Field(description="Rule subtype: - 1 - List matching - network - inbound - 2 - List matching - network - outbound - 3 - List matching - network - listening - 4 - List matching - file - readwrite - 5 - List matching - file - read only ", alias="ruleSubType")
+    rule_tags: Annotated[List[Annotated[str, Field(strict=True, max_length=64)]], Field(max_length=1000)] = Field(description="The tags attached to the rule", alias="ruleTags")
     output: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="Event output, generated after the configured rule")
     fields: WorkloadRuntimeDetectionContentAllOfFields
     run_book: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The runbook URL as configured in the policy.", alias="runBook")

@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create User
 
-Create a new user.\\ \\ **Required permissions:** _users.create_ 
+Create a new user.\
+\
+**Required permissions:** _users.create_
+
 
 ### Example
 
@@ -103,7 +106,10 @@ Name | Type | Description  | Notes
 
 Delete User
 
-Delete a user by its ID.\\ \\ **Required permissions:** _users.edit_ 
+Delete a user by its ID.\
+\
+**Required permissions:** _users.edit_
+
 
 ### Example
 
@@ -184,7 +190,10 @@ void (empty response body)
 
 Get User
 
-Display a user by ID.\\ \\ **Required permissions:** _users.read_ 
+Display a user by ID.\
+\
+**Required permissions:** _users.read_
+
 
 ### Example
 
@@ -267,7 +276,10 @@ Name | Type | Description  | Notes
 
 List Users
 
-Retrieve a paginated list of users.\\ \\ **Required permissions:** _users.read_ 
+Retrieve a paginated list of users.\
+\
+**Required permissions:** _users.read_
+
 
 ### Example
 
@@ -355,7 +367,10 @@ Name | Type | Description  | Notes
 
 Update User
 
-Update a user by its ID. \\ \\ **Required permissions:** _users.edit_ 
+Update a user by its ID. \
+\
+**Required permissions:** _users.edit_
+
 
 ### Example
 

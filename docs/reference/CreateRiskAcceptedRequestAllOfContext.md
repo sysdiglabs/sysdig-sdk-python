@@ -1,6 +1,6 @@
 # CreateRiskAcceptedRequestAllOfContext
 
-If entityType is not `vulnerability` or `policyRule`, you should use `Empty Matcher` in the context.
+If entityType is not `vulnerability`, `policyRule` or `package`, you should use `Empty Matcher` in the context.
 
 ## Properties
 

@@ -14,7 +14,8 @@ Method | HTTP request | Description
 
 Get available filters
 
-Activity Audit entries can be filtered by a set of attributes. This endpoint returns the list of those for which filtering is supported. 
+Activity Audit entries can be filtered by a set of attributes. This endpoint returns the list of those for which filtering is supported.
+
 
 ### Example
 
@@ -94,7 +95,15 @@ This endpoint does not need any parameter.
 
 List entries
 
-Retrieves the list of entries matching the expressed search criteria. The pair `from` and `to` and the `cursor` parameter are mutually exclusive. If you supply a `from` and `to` you must not supply a `cursor` and vice-versa. The time criteria is required and can be specified in two different ways: - Using `from` and `to`, the list of entries within the timeframe (max 2 weeks) will be returned, starting from the most recent ones. - Using a `cursor` the entries returned will be in the before, after or around the entry, depending on the entry the cursor is taken from and the cursor type. More details are available in the `cursor` attribute in the response. The entry content can be filtered using `zones`, to select one or more zones, or with the filter, directly expressing a condition on fields and labels.  **Required permissions:** _commands.read_ | _connections.read_ | _fileaccesses.read_ | _kubernetes.read_ 
+Retrieves the list of entries matching the expressed search criteria.
+The pair `from` and `to` and the `cursor` parameter are mutually exclusive. If you supply a `from` and `to` you must not supply a `cursor` and vice-versa.
+The time criteria is required and can be specified in two different ways:
+- Using `from` and `to`, the list of entries within the timeframe (max 2 weeks) will be returned, starting from the most recent ones.
+- Using a `cursor` the entries returned will be in the before, after or around the entry, depending on the entry the cursor is taken from and the cursor type. More details are available in the `cursor` attribute in the response.
+The entry content can be filtered using `zones`, to select one or more zones, or with the filter, directly expressing a condition on fields and labels.
+
+**Required permissions:** _commands.read_ | _connections.read_ | _fileaccesses.read_ | _kubernetes.read_
+
 
 ### Example
 
@@ -191,7 +200,9 @@ Name | Type | Description  | Notes
 
 Get entry
 
-Retrieves an Actvity Audit entry given its id. **Required permissions:** _commands.read_ | _connections.read_ | _fileaccesses.read_ | _kubernetes.read_ 
+Retrieves an Actvity Audit entry given its id.
+**Required permissions:** _commands.read_ | _connections.read_ | _fileaccesses.read_ | _kubernetes.read_
+
 
 ### Example
 

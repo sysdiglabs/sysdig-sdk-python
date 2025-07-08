@@ -18,13 +18,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from sysdig_client.models.promql_matcher import PromqlMatcher
-from sysdig_client.models.workload_cost_trends_data_response_current_range import WorkloadCostTrendsDataResponseCurrentRange
+from sysdig_client.models.date_range import DateRange
 from sysdig_client.models.workload_cost_trends_data_response_group_by_data_inner import WorkloadCostTrendsDataResponseGroupByDataInner
-from sysdig_client.models.workload_cost_trends_data_response_previous_range import WorkloadCostTrendsDataResponsePreviousRange
 from sysdig_client.models.workload_cost_trends_data_response_total import WorkloadCostTrendsDataResponseTotal
 from typing import Optional, Set
 from typing_extensions import Self
@@ -33,13 +31,11 @@ class WorkloadCostTrendsDataResponse(BaseModel):
     """
     Cost trends observed between two consecutive time periods in the past.
     """ # noqa: E501
-    current_range: Optional[WorkloadCostTrendsDataResponseCurrentRange] = Field(default=None, alias="currentRange")
-    previous_range: Optional[WorkloadCostTrendsDataResponsePreviousRange] = Field(default=None, alias="previousRange")
+    current_range: Optional[DateRange] = Field(default=None, alias="currentRange")
+    previous_range: Optional[DateRange] = Field(default=None, alias="previousRange")
     total: Optional[WorkloadCostTrendsDataResponseTotal] = None
-    scope: Optional[Annotated[List[PromqlMatcher], Field(max_length=512)]] = Field(default=None, description="A list of PromQL-style filters.")
-    group_by: Optional[Annotated[List[Annotated[str, Field(min_length=1, strict=True, max_length=1024)]], Field(max_length=10)]] = Field(default=None, description="The label keys used to group the returned cost data.", alias="groupBy")
     group_by_data: Optional[Annotated[List[WorkloadCostTrendsDataResponseGroupByDataInner], Field(max_length=10000)]] = Field(default=None, description="Grouped cost data for each combination of label values.", alias="groupByData")
-    __properties: ClassVar[List[str]] = ["currentRange", "previousRange", "total", "scope", "groupBy", "groupByData"]
+    __properties: ClassVar[List[str]] = ["currentRange", "previousRange", "total", "groupByData"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,13 +85,6 @@ class WorkloadCostTrendsDataResponse(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of total
         if self.total:
             _dict['total'] = self.total.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of each item in scope (list)
-        _items = []
-        if self.scope:
-            for _item_scope in self.scope:
-                if _item_scope:
-                    _items.append(_item_scope.to_dict())
-            _dict['scope'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in group_by_data (list)
         _items = []
         if self.group_by_data:
@@ -115,11 +104,9 @@ class WorkloadCostTrendsDataResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "currentRange": WorkloadCostTrendsDataResponseCurrentRange.from_dict(obj["currentRange"]) if obj.get("currentRange") is not None else None,
-            "previousRange": WorkloadCostTrendsDataResponsePreviousRange.from_dict(obj["previousRange"]) if obj.get("previousRange") is not None else None,
+            "currentRange": DateRange.from_dict(obj["currentRange"]) if obj.get("currentRange") is not None else None,
+            "previousRange": DateRange.from_dict(obj["previousRange"]) if obj.get("previousRange") is not None else None,
             "total": WorkloadCostTrendsDataResponseTotal.from_dict(obj["total"]) if obj.get("total") is not None else None,
-            "scope": [PromqlMatcher.from_dict(_item) for _item in obj["scope"]] if obj.get("scope") is not None else None,
-            "groupBy": obj.get("groupBy"),
             "groupByData": [WorkloadCostTrendsDataResponseGroupByDataInner.from_dict(_item) for _item in obj["groupByData"]] if obj.get("groupByData") is not None else None
         })
         return _obj

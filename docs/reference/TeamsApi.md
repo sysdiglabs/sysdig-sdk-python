@@ -20,7 +20,10 @@ Method | HTTP request | Description
 
 Create Team
 
-Create a new team.\\ \\ **Required permissions:** _teams.create_ 
+Create a new team.\
+\
+**Required permissions:** _teams.create_
+
 
 ### Example
 
@@ -106,7 +109,10 @@ Name | Type | Description  | Notes
 
 Delete Team
 
-Delete a team by its ID.\\ \\ **Required permissions:** _teams.edit_ 
+Delete a team by its ID.\
+\
+**Required permissions:** _teams.edit_
+
 
 ### Example
 
@@ -188,7 +194,10 @@ void (empty response body)
 
 Delete Membership
 
-Delete a membership defined by its ID.\\ \\ **Required permissions:** _memberships.edit_ 
+Delete a membership defined by its ID.\
+\
+**Required permissions:** _memberships.edit_
+
 
 ### Example
 
@@ -271,7 +280,10 @@ void (empty response body)
 
 Get Team
 
-Return a team by ID.\\ \\ **Required permissions:** _customer-teams.read_ 
+Return a team by ID.\
+\
+**Required permissions:** _customer-teams.read_
+
 
 ### Example
 
@@ -354,7 +366,10 @@ Name | Type | Description  | Notes
 
 Get Membership
 
-Return a membership by its ID.\\ \\ **Required permissions:** _memberships.read_ 
+Return a membership by its ID.\
+\
+**Required permissions:** _memberships.read_
+
 
 ### Example
 
@@ -435,11 +450,14 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_team_users_v1**
-> GetTeamUsersPaginatedResponseV1 get_team_users_v1(team_id, offset=offset, limit=limit)
+> GetTeamUsersPaginatedResponseV1 get_team_users_v1(team_id, offset=offset, limit=limit, with_admin_users=with_admin_users)
 
 List Memberships
 
-Retrieve a paginated list of memberships in a given team ID.\\ \\ **Required permissions:** _memberships.read_ 
+Retrieve a paginated list of memberships in a given team ID.\
+\
+**Required permissions:** _memberships.read_
+
 
 ### Example
 
@@ -474,10 +492,11 @@ with sysdig_client.ApiClient(configuration) as api_client:
     team_id = 56 # int | The team ID.
     offset = 0 # int | The offset number of items to start with (optional) (default to 0)
     limit = 25 # int | The number of items to return (optional) (default to 25)
+    with_admin_users = False # bool | Include admin users in the response. (optional) (default to False)
 
     try:
         # List Memberships
-        api_response = api_instance.get_team_users_v1(team_id, offset=offset, limit=limit)
+        api_response = api_instance.get_team_users_v1(team_id, offset=offset, limit=limit, with_admin_users=with_admin_users)
         print("The response of TeamsApi->get_team_users_v1:\n")
         pprint(api_response)
     except Exception as e:
@@ -494,6 +513,7 @@ Name | Type | Description  | Notes
  **team_id** | **int**| The team ID. | 
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
+ **with_admin_users** | **bool**| Include admin users in the response. | [optional] [default to False]
 
 ### Return type
 
@@ -526,7 +546,10 @@ Name | Type | Description  | Notes
 
 List Teams
 
-Retrieve a paginated list of teams.\\ \\ **Required permissions:** _customer-teams.read_ 
+Retrieve a paginated list of teams.\
+\
+**Required permissions:** _customer-teams.read_
+
 
 ### Example
 
@@ -614,7 +637,13 @@ Name | Type | Description  | Notes
 
 Save Membership
 
-Add or update a membership.  | Permission             | Description                                                                                             | | -----------------------| --------------------------------------------------------------------------------------------------------| | memberships.edit       | Required to create a new membership.                                                                    | | memberships-roles.edit | Required to change roles of an existing membership or to create a new membership with a specific role.  | 
+Add or update a membership.
+
+| Permission             | Description                                                                                             |
+| -----------------------| --------------------------------------------------------------------------------------------------------|
+| memberships.edit       | Required to create a new membership.                                                                    |
+| memberships-roles.edit | Required to change roles of an existing membership or to create a new membership with a specific role.  |
+
 
 ### Example
 
@@ -705,7 +734,10 @@ Name | Type | Description  | Notes
 
 Update Team
 
-Update a team by its ID.\\ \\ **Required permissions:** _teams.edit_ 
+Update a team by its ID.\
+\
+**Required permissions:** _teams.edit_
+
 
 ### Example
 

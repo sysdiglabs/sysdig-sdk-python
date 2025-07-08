@@ -19,7 +19,10 @@ Method | HTTP request | Description
 
 Create a Global Service Account
 
-Create a new global service account.\\ \\ **Required permissions:** _global-service-accounts.edit_ 
+Create a new global service account.\
+\
+**Required permissions:** _global-service-accounts.edit_
+
 
 ### Example
 
@@ -105,7 +108,10 @@ Name | Type | Description  | Notes
 
 Create a Team Service Account
 
-Create a new team service account.\\ \\ **Required permissions:** _team-service-accounts.edit_ 
+Create a new team service account.\
+\
+**Required permissions:** _team-service-accounts.edit_
+
 
 ### Example
 
@@ -193,7 +199,10 @@ Name | Type | Description  | Notes
 
 Delete a Global Service Account
 
-Delete a global service account by ID.\\ \\ **Required permissions:** _global-service-accounts.edit_ 
+Delete a global service account by ID.\
+\
+**Required permissions:** _global-service-accounts.edit_
+
 
 ### Example
 
@@ -275,7 +284,10 @@ void (empty response body)
 
 Delete a Team Service Account
 
-Delete a team service account by ID.\\ \\ **Required permissions:** _team-service-accounts.edit_ 
+Delete a team service account by ID.\
+\
+**Required permissions:** _team-service-accounts.edit_
+
 
 ### Example
 
@@ -359,7 +371,10 @@ void (empty response body)
 
 Get a Global Service Account
 
-Return a global service account by ID.\\ \\ **Required permissions:** _global-service-accounts.read_ 
+Return a global service account by ID.\
+\
+**Required permissions:** _global-service-accounts.read_
+
 
 ### Example
 
@@ -442,7 +457,10 @@ Name | Type | Description  | Notes
 
 List Global Service Accounts
 
-Retrieve a paginated list of all service accounts.\\ \\ **Required permissions:** _global-service-accounts.read_ 
+Retrieve a paginated list of all service accounts.\
+\
+**Required permissions:** _global-service-accounts.read_
+
 
 ### Example
 
@@ -530,7 +548,10 @@ Name | Type | Description  | Notes
 
 Get a Team Service Account
 
-Return a team service account by ID.\\ \\ **Required permissions:** _team-service-accounts.read_ 
+Return a team service account by ID.\
+\
+**Required permissions:** _team-service-accounts.read_
+
 
 ### Example
 
@@ -615,7 +636,10 @@ Name | Type | Description  | Notes
 
 List Team Service Accounts
 
-Retrieve a paginated list of team service accounts.\\ \\ **Required permissions:** _team-service-accounts.read_ 
+Retrieve a paginated list of team service accounts.\
+\
+**Required permissions:** _team-service-accounts.read_
+
 
 ### Example
 

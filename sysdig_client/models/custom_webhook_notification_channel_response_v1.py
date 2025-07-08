@@ -18,8 +18,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import ConfigDict
-from typing import Any, ClassVar, Dict, List
+from pydantic import ConfigDict, Field, StrictBool
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from sysdig_client.models.custom_webhook_notification_channel_options_v1 import CustomWebhookNotificationChannelOptionsV1
 from sysdig_client.models.notification_channel_response_v1 import NotificationChannelResponseV1
 from typing import Optional, Set
@@ -29,8 +30,12 @@ class CustomWebhookNotificationChannelResponseV1(NotificationChannelResponseV1):
     """
     CustomWebhookNotificationChannelResponseV1
     """ # noqa: E501
+    team_id: Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]] = Field(default=None, description="ID of team that owns the notification channel. If null, this will be a global notification channel", alias="teamId")
+    is_enabled: Optional[StrictBool] = Field(default=False, description="Indicates if the notification channel is enabled or not.", alias="isEnabled")
+    name: Annotated[str, Field(strict=True, max_length=255)] = Field(description="Name of the notification channel. It must be unique.")
+    has_test_notification_enabled: Optional[StrictBool] = Field(default=False, description="Indicates whether or not a test notification should be sent upon creation or update of this notification channel resource", alias="hasTestNotificationEnabled")
     options: CustomWebhookNotificationChannelOptionsV1
-    __properties: ClassVar[List[str]] = ["teamId", "isEnabled", "name", "hasTestNotificationEnabled", "type", "customerId", "id", "version", "createdOn", "modifiedOn", "options"]
+    __properties: ClassVar[List[str]] = ["type", "customerId", "id", "version", "createdOn", "modifiedOn", "teamId", "isEnabled", "name", "hasTestNotificationEnabled", "options"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -91,16 +96,16 @@ class CustomWebhookNotificationChannelResponseV1(NotificationChannelResponseV1):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "teamId": obj.get("teamId"),
-            "isEnabled": obj.get("isEnabled") if obj.get("isEnabled") is not None else False,
-            "name": obj.get("name"),
-            "hasTestNotificationEnabled": obj.get("hasTestNotificationEnabled") if obj.get("hasTestNotificationEnabled") is not None else False,
             "type": obj.get("type"),
             "customerId": obj.get("customerId"),
             "id": obj.get("id"),
             "version": obj.get("version"),
             "createdOn": obj.get("createdOn"),
             "modifiedOn": obj.get("modifiedOn"),
+            "teamId": obj.get("teamId"),
+            "isEnabled": obj.get("isEnabled") if obj.get("isEnabled") is not None else False,
+            "name": obj.get("name"),
+            "hasTestNotificationEnabled": obj.get("hasTestNotificationEnabled") if obj.get("hasTestNotificationEnabled") is not None else False,
             "options": CustomWebhookNotificationChannelOptionsV1.from_dict(obj["options"]) if obj.get("options") is not None else None
         })
         return _obj

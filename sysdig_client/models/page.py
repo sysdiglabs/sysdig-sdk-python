@@ -29,8 +29,8 @@ class Page(BaseModel):
     Pagination information.
     """ # noqa: E501
     total: Annotated[int, Field(le=9223372036854775616, strict=True, ge=0)] = Field(description="The number of events matching the search criteria. This number is always major or equal to the number of events returned. ")
-    prev: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The cursor that can be used to fetch a set of events before the first event returned in the `data` array. If this value is unset, then there are no events before the first event returned in the `data` array. By providing this value as `cursor` you will get the events preceding the first event returned in the `data` array. ")
-    next: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The cursor that can be used to fetch a set of events after the last event returned in the `data` array. If this value is unset, then there are no events after the last event returned  in the `data` array. By providing this value as `cursor` you will get the events following last event returned in the `data` array. ")
+    prev: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The cursor that can be used to fetch a set of events before the first event returned in the `data` array. If this value is unset, then there are no events before the first event returned in the `data` array. By providing this value as `cursor` you will get the events preceding the first event returned in the `data` array. ")
+    next: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The cursor that can be used to fetch a set of events after the last event returned in the `data` array. If this value is unset, then there are no events after the last event returned  in the `data` array. By providing this value as `cursor` you will get the events following last event returned in the `data` array. ")
     __properties: ClassVar[List[str]] = ["total", "prev", "next"]
 
     model_config = ConfigDict(

@@ -18,8 +18,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import ConfigDict
-from typing import Any, ClassVar, Dict, List
+from pydantic import ConfigDict, Field, StrictBool
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from sysdig_client.models.create_notification_channel_request_v1 import CreateNotificationChannelRequestV1
 from sysdig_client.models.notification_channel_type_v1 import NotificationChannelTypeV1
 from sysdig_client.models.opsgenie_notification_channel_options_v1 import OpsgenieNotificationChannelOptionsV1
@@ -30,6 +31,10 @@ class CreateOpsgenieNotificationChannelRequestV1(CreateNotificationChannelReques
     """
     CreateOpsgenieNotificationChannelRequestV1
     """ # noqa: E501
+    team_id: Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]] = Field(default=None, description="ID of team that owns the notification channel. If null, this will be a global notification channel", alias="teamId")
+    is_enabled: Optional[StrictBool] = Field(default=False, description="Indicates if the notification channel is enabled or not.", alias="isEnabled")
+    name: Annotated[str, Field(strict=True, max_length=255)] = Field(description="Name of the notification channel. It must be unique.")
+    has_test_notification_enabled: Optional[StrictBool] = Field(default=False, description="Indicates whether or not a test notification should be sent upon creation or update of this notification channel resource", alias="hasTestNotificationEnabled")
     options: OpsgenieNotificationChannelOptionsV1
     __properties: ClassVar[List[str]] = ["teamId", "isEnabled", "name", "hasTestNotificationEnabled", "type", "options"]
 

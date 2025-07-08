@@ -36,7 +36,7 @@ class AgentlessRuntimeDetectionContent(BaseModel):
     integration_type: StrictStr = Field(description="The type of integration that generated the event.", alias="integrationType")
     rule_name: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="Name of the rule the event is generated after", alias="ruleName")
     rule_type: Annotated[int, Field(le=14, strict=True, ge=1)] = Field(description="Rule type: - 1 - List matching - process - 2 - List matching - container - 3 - List matching - file - 4 - List matching - network - 5 - List matching - syscall - 6 - Falco - 7 - Drift detection - 8 - Malware detection - 11 - ML - Cryptominer detection - 13 - ML - AWS anomalous login - 14 - ML - Okta anomalous login ", alias="ruleType")
-    rule_tags: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=128)]], Field(max_length=1000)]] = Field(default=None, description="The tags attached to the rule", alias="ruleTags")
+    rule_tags: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=64)]], Field(max_length=1000)]] = Field(default=None, description="The tags attached to the rule", alias="ruleTags")
     policy_id: Annotated[int, Field(le=9223372036854775616, strict=True, ge=1)] = Field(description="ID of the policy that generated the event", alias="policyId")
     policy_origin: PolicyOrigin = Field(alias="policyOrigin")
     policy_notification_channel_ids: Optional[Annotated[List[Annotated[int, Field(le=9223372036854775616, strict=True, ge=1)]], Field(max_length=100)]] = Field(default=None, description="The list of notification channels where an alert is sent after event is generated. Doesn't account for aggregations and eventual thresholds. ", alias="policyNotificationChannelIds")
@@ -48,8 +48,8 @@ class AgentlessRuntimeDetectionContent(BaseModel):
     @field_validator('integration_type')
     def integration_type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['cloudtrail', 'okta', 'github', 'gcp', 'azure', 'entra']):
-            raise ValueError("must be one of enum values ('cloudtrail', 'okta', 'github', 'gcp', 'azure', 'entra')")
+        if value not in set(['cloudtrail', 'okta', 'github', 'gcp', 'azure']):
+            raise ValueError("must be one of enum values ('cloudtrail', 'okta', 'github', 'gcp', 'azure')")
         return value
 
     @field_validator('priority')
@@ -57,9 +57,7 @@ class AgentlessRuntimeDetectionContent(BaseModel):
         """Validates the enum"""
         if value is None:
             return value
-        
-        # convert to lower case to match enum values
-        value = value.lower()
+
         if value not in set(['emergency', 'alert', 'critical', 'error', 'warning', 'informational', 'notice', 'debug']):
             raise ValueError("must be one of enum values ('emergency', 'alert', 'critical', 'error', 'warning', 'informational', 'notice', 'debug')")
         return value
@@ -127,7 +125,7 @@ class AgentlessRuntimeDetectionContent(BaseModel):
             "policyId": obj.get("policyId"),
             "policyOrigin": obj.get("policyOrigin"),
             "policyNotificationChannelIds": obj.get("policyNotificationChannelIds"),
-            "priority": obj.get("priority").lower(),
+            "priority": obj.get("priority"),
             "output": obj.get("output"),
             "fields": AgentlessRuntimeDetectionContentAllOfFields.from_dict(obj["fields"]) if obj.get("fields") is not None else None
         })

@@ -13,7 +13,10 @@ Method | HTTP request | Description
 
 Get User Deactivation Configuration
 
-Retrieve the user deactivation configuration.\\ \\ **Required permissions:** _customer-user-deactivation-configuration.read_ 
+Retrieve the user deactivation configuration.\
+\
+**Required permissions:** _customer-user-deactivation-configuration.read_
+
 
 ### Example
 
@@ -92,7 +95,10 @@ This endpoint does not need any parameter.
 
 Update or Create User Deactivation Configuration
 
-Update or Create User deactivation configuration.\\ \\ **Required permissions:** _customer-user-deactivation-configuration.edit_ 
+Update or Create User deactivation configuration.\
+\
+**Required permissions:** _customer-user-deactivation-configuration.edit_
+
 
 ### Example
 

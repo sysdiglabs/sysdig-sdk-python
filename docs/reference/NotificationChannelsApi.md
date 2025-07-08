@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create Notification Channel
 
-Create a notification channel.\\ \\ **Required permissions:** _notification-channels.edit_ 
+Create a notification channel.\
+\
+**Required permissions:** _notification-channels.edit_
+
 
 ### Example
 
@@ -102,7 +105,10 @@ Name | Type | Description  | Notes
 
 Delete Notification Channel
 
-Delete a notification channel by its ID.\\ \\ **Required permissions:** _notification-channels.edit_ 
+Delete a notification channel by its ID.\
+\
+**Required permissions:** _notification-channels.edit_
+
 
 ### Example
 
@@ -182,7 +188,10 @@ void (empty response body)
 
 Get Notification Channel
 
-Returns a specific notification channel by its ID.\\ \\ **Required permissions:** _notification-channels.read_ 
+Returns a specific notification channel by its ID.\
+\
+**Required permissions:** _notification-channels.read_
+
 
 ### Example
 
@@ -266,7 +275,10 @@ Name | Type | Description  | Notes
 
 List Notification Channels
 
-Retrieve a paginated list of notification channels.\\ \\ **Required permissions:** _notification-channels.read_ 
+Retrieve a paginated list of notification channels.\
+\
+**Required permissions:** _notification-channels.read_
+
 
 ### Example
 
@@ -350,7 +362,10 @@ Name | Type | Description  | Notes
 
 Update Notification Channel
 
-Update a notification channel by its ID.\\ \\ **Required permissions:** _notification-channels.edit_ 
+Update a notification channel by its ID.\
+\
+**Required permissions:** _notification-channels.edit_
+
 
 ### Example
 

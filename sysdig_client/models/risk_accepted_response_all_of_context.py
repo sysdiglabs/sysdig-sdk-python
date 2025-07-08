@@ -27,15 +27,18 @@ from sysdig_client.models.image_prefix import ImagePrefix
 from sysdig_client.models.image_suffix import ImageSuffix
 from sysdig_client.models.package_name import PackageName
 from sysdig_client.models.package_name_version import PackageNameVersion
+from sysdig_client.models.package_path import PackagePath
+from sysdig_client.models.package_path_version import PackagePathVersion
+from sysdig_client.models.package_version import PackageVersion
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self
 
-RISKACCEPTEDRESPONSEALLOFCONTEXT_ONE_OF_SCHEMAS = ["List[HostNameContains]", "List[HostName]", "List[ImageNameContains]", "List[ImageName]", "List[ImagePrefix]", "List[ImageSuffix]", "List[PackageNameVersion]", "List[PackageName]", "List[object]"]
+RISKACCEPTEDRESPONSEALLOFCONTEXT_ONE_OF_SCHEMAS = ["List[HostNameContains]", "List[HostName]", "List[ImageNameContains]", "List[ImageName]", "List[ImagePrefix]", "List[ImageSuffix]", "List[PackageNameVersion]", "List[PackageName]", "List[PackagePathVersion]", "List[PackagePath]", "List[PackageVersion]", "List[object]"]
 
 class RiskAcceptedResponseAllOfContext(BaseModel):
     """
-    If entityType is not `vulnerability` or `policyRule`, you should use `Empty Matcher` in the context.
+    If entityType is not `vulnerability`, `policyRule` or `package`, you should use `Empty Matcher` in the context.
     """
     # data type: List[object]
     oneof_schema_1_validator: Optional[Annotated[List[Dict[str, Any]], Field(max_length=0)]] = Field(default=None, description="To be used when `entityType` is not `vulnerability` or `policyRule`.")
@@ -55,8 +58,14 @@ class RiskAcceptedResponseAllOfContext(BaseModel):
     oneof_schema_8_validator: Optional[Annotated[List[HostName], Field(min_length=1, max_length=1)]] = Field(default=None, description="Context host name")
     # data type: List[HostNameContains]
     oneof_schema_9_validator: Optional[Annotated[List[HostNameContains], Field(min_length=1, max_length=1)]] = Field(default=None, description="Context to apply")
-    actual_instance: Optional[Union[List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]]] = None
-    one_of_schemas: Set[str] = { "List[HostNameContains]", "List[HostName]", "List[ImageNameContains]", "List[ImageName]", "List[ImagePrefix]", "List[ImageSuffix]", "List[PackageNameVersion]", "List[PackageName]", "List[object]" }
+    # data type: List[PackagePath]
+    oneof_schema_10_validator: Optional[Annotated[List[PackagePath], Field(min_length=1, max_length=1)]] = Field(default=None, description="Context to apply")
+    # data type: List[PackageVersion]
+    oneof_schema_11_validator: Optional[Annotated[List[PackageVersion], Field(min_length=1, max_length=1)]] = Field(default=None, description="Context to apply")
+    # data type: List[PackagePathVersion]
+    oneof_schema_12_validator: Optional[Annotated[List[PackagePathVersion], Field(min_length=2, max_length=2)]] = Field(default=None, description="Context to apply")
+    actual_instance: Optional[Union[List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]]] = None
+    one_of_schemas: Set[str] = { "List[HostNameContains]", "List[HostName]", "List[ImageNameContains]", "List[ImageName]", "List[ImagePrefix]", "List[ImageSuffix]", "List[PackageNameVersion]", "List[PackageName]", "List[PackagePathVersion]", "List[PackagePath]", "List[PackageVersion]", "List[object]" }
 
     model_config = ConfigDict(
         validate_assignment=True,
@@ -133,12 +142,30 @@ class RiskAcceptedResponseAllOfContext(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        # validate data type: List[PackagePath]
+        try:
+            instance.oneof_schema_10_validator = v
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # validate data type: List[PackageVersion]
+        try:
+            instance.oneof_schema_11_validator = v
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # validate data type: List[PackagePathVersion]
+        try:
+            instance.oneof_schema_12_validator = v
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -234,13 +261,40 @@ class RiskAcceptedResponseAllOfContext(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        # deserialize data into List[PackagePath]
+        try:
+            # validation
+            instance.oneof_schema_10_validator = json.loads(json_str)
+            # assign value to actual_instance
+            instance.actual_instance = instance.oneof_schema_10_validator
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # deserialize data into List[PackageVersion]
+        try:
+            # validation
+            instance.oneof_schema_11_validator = json.loads(json_str)
+            # assign value to actual_instance
+            instance.actual_instance = instance.oneof_schema_11_validator
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # deserialize data into List[PackagePathVersion]
+        try:
+            # validation
+            instance.oneof_schema_12_validator = json.loads(json_str)
+            # assign value to actual_instance
+            instance.actual_instance = instance.oneof_schema_12_validator
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into RiskAcceptedResponseAllOfContext with oneOf schemas: List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]. Details: " + ", ".join(error_messages))
         else:
             return instance
 
@@ -254,7 +308,7 @@ class RiskAcceptedResponseAllOfContext(BaseModel):
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[object]]]:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], List[HostNameContains], List[HostName], List[ImageNameContains], List[ImageName], List[ImagePrefix], List[ImageSuffix], List[PackageNameVersion], List[PackageName], List[PackagePathVersion], List[PackagePath], List[PackageVersion], List[object]]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None

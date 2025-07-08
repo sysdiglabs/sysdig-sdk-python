@@ -28,10 +28,10 @@ class OpenIdMetadataV1(BaseModel):
     """
     OpenIdMetadataV1
     """ # noqa: E501
-    issuer: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The base issuer URL of the OpenID Connect provider.")
+    issuer: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The base issuer URL of the OpenID Connect provider.")
     authorization_endpoint: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The authorization endpoint of the OpenID Connect provider.", alias="authorizationEndpoint")
     token_endpoint: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The token endpoint of the OpenID Connect provider.", alias="tokenEndpoint")
-    jwks_uri: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The JSON Web Key Set URI of the OpenID Connect provider.", alias="jwksUri")
+    jwks_uri: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The JSON Web Key Set URI of the OpenID Connect provider.", alias="jwksUri")
     end_session_endpoint: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="Single sign-out endpoint of the OpenID Connect provider.", alias="endSessionEndpoint")
     user_info_endpoint: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The user info endpoint of the OpenID Connect provider.", alias="userInfoEndpoint")
     token_auth_method: StrictStr = Field(description="The token authentication method of the OpenID Connect provider.", alias="tokenAuthMethod")

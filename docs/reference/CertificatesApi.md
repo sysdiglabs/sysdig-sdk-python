@@ -17,7 +17,11 @@ Method | HTTP request | Description
 
 Create CSR
 
-Creates a Certificate Signing Request generated from the customer unique private key. The CSR is generated on the fly.\\ \\ **Required permissions:** _certman.read_ 
+Creates a Certificate Signing Request generated from the customer unique
+private key. The CSR is generated on the fly.\
+\
+**Required permissions:** _certman.read_
+
 
 ### Example
 
@@ -94,7 +98,14 @@ This endpoint does not need any parameter.
 
 Delete Certificate
 
-Deletes a certificate given its id.  A certificate cannot be deleted if it's being used (i.e. by the events forwarder to connect to third parties).\\ \\ **Required permissions:** _certman.edit_ 
+Deletes a certificate given its id.
+
+A certificate cannot be deleted if
+it's being used (i.e. by the events forwarder to connect to third
+parties).\
+\
+**Required permissions:** _certman.edit_
+
 
 ### Example
 
@@ -176,7 +187,10 @@ void (empty response body)
 
 List Services
 
-Returns he list of integrations using this certificate.\\ \\ **Required permissions:** _certman.read_ 
+Returns he list of integrations using this certificate.\
+\
+**Required permissions:** _certman.read_
+
 
 ### Example
 
@@ -260,7 +274,10 @@ Name | Type | Description  | Notes
 
 Get Certificate
 
-Get a single certificate.\\ \\ **Required permissions:** _certman.read_ 
+Get a single certificate.\
+\
+**Required permissions:** _certman.read_
+
 
 ### Example
 
@@ -344,7 +361,10 @@ Name | Type | Description  | Notes
 
 List Certificates
 
-Returns the list of certificates.\\ \\ **Required permissions:** _certman.read_ 
+Returns the list of certificates.\
+\
+**Required permissions:** _certman.read_
+
 
 ### Example
 
@@ -422,7 +442,11 @@ This endpoint does not need any parameter.
 
 Upload Certificate
 
-Uploads a certificate that has been created by signing a CSR obtained via Certificates Management.\\ \\ **Required permissions:** _certman.edit_ 
+Uploads a certificate that has been created by signing a CSR obtained
+via Certificates Management.\
+\
+**Required permissions:** _certman.edit_
+
 
 ### Example
 

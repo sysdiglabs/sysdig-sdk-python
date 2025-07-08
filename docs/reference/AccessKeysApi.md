@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create Access Key
 
-Create a new access key.\\ \\ **Required permissions:** _customer-access-keys.edit_ 
+Create a new access key.\
+\
+**Required permissions:** _customer-access-keys.edit_
+
 
 ### Example
 
@@ -103,7 +106,10 @@ Name | Type | Description  | Notes
 
 Delete Access Key
 
-Delete an access key by id.\\ \\ **Required permissions:** customer-access-keys.edit_ 
+Delete an access key by id.\
+\
+**Required permissions:** customer-access-keys.edit_
+
 
 ### Example
 
@@ -185,7 +191,10 @@ void (empty response body)
 
 Get Access Key
 
-Return an access key by id.\\ \\ **Required permissions:** _customer-access-keys.read_ 
+Return an access key by id.\
+\
+**Required permissions:** _customer-access-keys.read_
+
 
 ### Example
 
@@ -268,7 +277,10 @@ Name | Type | Description  | Notes
 
 List Access Keys
 
-Retrieve a paginated list of access keys.\\ \\ **Required permissions:** _customer-access-keys.read_ 
+Retrieve a paginated list of access keys.\
+\
+**Required permissions:** _customer-access-keys.read_
+
 
 ### Example
 
@@ -356,7 +368,10 @@ Name | Type | Description  | Notes
 
 Update Access Key
 
-Update an access key by id.\\ \\ **Required permissions:** _customer-access-keys.edit_ 
+Update an access key by id.\
+\
+**Required permissions:** _customer-access-keys.edit_
+
 
 ### Example
 

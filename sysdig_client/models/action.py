@@ -28,7 +28,6 @@ from sysdig_client.models.process_killed_action import ProcessKilledAction
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self
-from sysdig_client.models.action_type import ActionType
 
 ACTION_ONE_OF_SCHEMAS = ["CaptureAction", "ContainerKilledAction", "ContainerPausedAction", "ContainerStoppedAction", "DriftPreventedAction", "MalwarePreventedAction", "ProcessKilledAction"]
 
@@ -131,55 +130,47 @@ class Action(BaseModel):
         instance = cls.model_construct()
         error_messages = []
         match = 0
-        raw_action = json.loads(json_str)
 
         # deserialize data into CaptureAction
         try:
-            if raw_action.get('type') == ActionType.CAPTURE :
-                instance.actual_instance = CaptureAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = CaptureAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into ContainerPausedAction
         try:
-            if raw_action.get('type') == ActionType.CONTAINER_PAUSED:
-                instance.actual_instance = ContainerPausedAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = ContainerPausedAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into ContainerStoppedAction
         try:
-            if raw_action.get('type') == ActionType.CONTAINER_STOPPED:
-                instance.actual_instance = ContainerStoppedAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = ContainerStoppedAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into ContainerKilledAction
         try:
-            if raw_action.get('type') == ActionType.CONTAINER_KILLED:
-                instance.actual_instance = ContainerKilledAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = ContainerKilledAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into DriftPreventedAction
         try:
-            if raw_action.get('type') == ActionType.DRIFT_PREVENTED:
-                instance.actual_instance = DriftPreventedAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = DriftPreventedAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into MalwarePreventedAction
         try:
-            if raw_action.get('type') == ActionType.MALWARE_PREVENTED:
-                instance.actual_instance = MalwarePreventedAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = MalwarePreventedAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into ProcessKilledAction
         try:
-            if raw_action.get('type') == ActionType.PROCESS_KILLED:
-                instance.actual_instance = ProcessKilledAction.from_json(json_str)
-                match += 1
+            instance.actual_instance = ProcessKilledAction.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 

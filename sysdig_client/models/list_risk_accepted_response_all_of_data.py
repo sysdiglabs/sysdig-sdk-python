@@ -48,8 +48,8 @@ class ListRiskAcceptedResponseAllOfData(BaseModel):
     @field_validator('entity_type')
     def entity_type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['imageName', 'imagePrefix', 'imageSuffix', 'vulnerability', 'hostName', 'hostNameContains', 'imageNameContains', 'policyRule']):
-            raise ValueError("must be one of enum values ('imageName', 'imagePrefix', 'imageSuffix', 'vulnerability', 'hostName', 'hostNameContains', 'imageNameContains', 'policyRule')")
+        if value not in set(['imageName', 'imagePrefix', 'imageSuffix', 'vulnerability', 'hostName', 'hostNameContains', 'imageNameContains', 'policyRule', 'package']):
+            raise ValueError("must be one of enum values ('imageName', 'imagePrefix', 'imageSuffix', 'vulnerability', 'hostName', 'hostNameContains', 'imageNameContains', 'policyRule', 'package')")
         return value
 
     @field_validator('status')

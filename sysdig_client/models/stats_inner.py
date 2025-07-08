@@ -28,7 +28,7 @@ class StatsInner(BaseModel):
     """
     StatsInner
     """ # noqa: E501
-    api: Optional[Annotated[str, Field(strict=True, max_length=128)]] = None
+    api: Optional[Annotated[str, Field(strict=True, max_length=64)]] = None
     count: Optional[Annotated[int, Field(le=2147483647, strict=True, ge=1)]] = None
     __properties: ClassVar[List[str]] = ["api", "count"]
 

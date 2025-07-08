@@ -28,7 +28,7 @@ class Failure(BaseModel):
     """
     The reason a Response Action failed to execute.
     """ # noqa: E501
-    failure_reason: Annotated[str, Field(strict=True, max_length=128)] = Field(description="The reason for the failure.", alias="failureReason")
+    failure_reason: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The reason for the failure.", alias="failureReason")
     log_message: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="The log message of the action failure.", alias="logMessage")
     __properties: ClassVar[List[str]] = ["failureReason", "logMessage"]
 

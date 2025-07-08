@@ -35,7 +35,7 @@ class Event(BaseModel):
     Event feed
     """ # noqa: E501
     id: Annotated[str, Field(strict=True, max_length=32)] = Field(description="The event id.")
-    cursor: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as `cursor` in a GET `secureEvents` request, you will get the set of events surrounding this current event. ")
+    cursor: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as `cursor` in a GET `secureEvents` request, you will get the set of events surrounding this current event. ")
     timestamp: Annotated[int, Field(le=9223372036854775616, strict=True, ge=0)] = Field(description="The event timestamp in nanoseconds.")
     originator: Originator
     category: Category
@@ -44,7 +44,7 @@ class Event(BaseModel):
     raw_event_originator: Optional[Annotated[str, Field(strict=True, max_length=32)]] = Field(default=None, description="The agent type, hosting the `engine`, that generated the event after the raw event - `admissionController` - Admission Controller, part of the Cluster Shield - `agentless` - Agentless - `cloudConnector` - Cloud Connector - `linuxAgent` - Linux Host Agent - `serverlessAgent` - Serverless workloads Agent (CaaS) generated events - `windowsAgent` - Windows Host Agent ", alias="rawEventOriginator")
     raw_event_category: Optional[Annotated[str, Field(strict=True, max_length=32)]] = Field(default=None, description="The semantic category (area) of the event in the Sysdig product: - `kspm` -  Kubernetes Security Posture Management events - `runtime` - Threat detection events ", alias="rawEventCategory")
     engine: Optional[Annotated[str, Field(strict=True, max_length=32)]] = Field(default=None, description="The engine used to generate the event out of the raw signal: - `drift` - engine to detect container drifts  - `falco` - Falco open source engine - `list` - list matching engine for list matching rules - `machineLearning` - ML engine - `malware` - malware detection engine ")
-    name: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Name of the policy the event is generated after.")
+    name: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Name of the policy the event is generated after.")
     description: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="Description of the policy the event is generated after.")
     severity: Annotated[int, Field(le=7, strict=True, ge=0)] = Field(description="The policy severity: - `0-3` - High - `4-5` - Medium - `6` - Low - `7` - Info ")
     actions: Optional[Annotated[List[Action], Field(max_length=1000)]] = Field(default=None, description="actions that have been triggered by the event")

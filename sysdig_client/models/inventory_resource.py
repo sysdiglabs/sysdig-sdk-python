@@ -32,7 +32,7 @@ class InventoryResource(BaseModel):
     """
     An Inventory Resource
     """ # noqa: E501
-    hash: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Resource unique identifier")
+    hash: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Resource unique identifier")
     name: Annotated[str, Field(strict=True, max_length=8192)] = Field(description="Resource name")
     platform: Annotated[str, Field(strict=True, max_length=256)] = Field(description="The resource platform (such as AWS, GCP, Kubernetes, or Azure)")
     type: Annotated[str, Field(strict=True, max_length=256)] = Field(description="The resource type")
@@ -40,7 +40,7 @@ class InventoryResource(BaseModel):
     last_seen: Annotated[int, Field(le=9223372036854775616, strict=True, ge=0)] = Field(description="Last scan date as unix timestamp", alias="lastSeen")
     is_exposed: Optional[StrictBool] = Field(default=None, description="Indicates if a resource is exposed to the internet", alias="isExposed")
     validated_exposure: Optional[StrictBool] = Field(default=None, description="Indicates if a resource which is exposed to the internet could be reach by our network exposure validator", alias="validatedExposure")
-    labels: Annotated[Optional[List[Annotated[str, Field(strict=True, max_length=8192)]]], Field(max_length=10000)] = Field(description="The resource labels")
+    labels: Annotated[List[Annotated[str, Field(strict=True, max_length=8192)]], Field(max_length=10000)] = Field(description="The resource labels")
     metadata: Dict[str, Any] = Field(description="The resource metadata")
     resource_origin: Annotated[str, Field(strict=True, max_length=256)] = Field(description="Where a resource was collected (Code, Deployed)", alias="resourceOrigin")
     posture_policy_summary: Optional[PosturePolicySummary] = Field(default=None, alias="posturePolicySummary")

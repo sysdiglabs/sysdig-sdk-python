@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **path** | **str** | path of the package | [optional] 
 **suggested_fix** | **str** | suggested fix for the package | [optional] 
 **layer_ref** | **str** | reference to layer | [optional] 
+**risk_accept_refs** | **List[str]** | Reference to the accepted risk. | [optional] 
 **vulnerabilities_refs** | **List[str]** | reference to vulnerabilities of the package | [optional] 
 
 ## Example

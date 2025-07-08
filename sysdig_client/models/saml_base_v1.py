@@ -31,8 +31,8 @@ class SamlBaseV1(BaseModel):
     metadata_url: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The metadata URL of the SAML provider. **Mutually exclusive with metadata*", alias="metadataUrl")
     metadata_xml: Optional[Annotated[str, Field(strict=True, max_length=65356)]] = Field(default=None, description="The metadata XML of the SAML provider. **Mutually exclusive with metadataUrl*", alias="metadataXml")
     email_parameter: Optional[Annotated[str, Field(strict=True, max_length=2048)]] = Field(default=None, description="The email parameter of the SAML provider.", alias="emailParameter")
-    is_signature_validation_enabled: Optional[StrictBool] = Field(default=None, description="Flag that indicates if the signature validation is enabled.", alias="isSignatureValidationEnabled")
-    is_signed_assertion_enabled: Optional[StrictBool] = Field(default=None, description="Flag that indicates if the signed assertion is enabled.", alias="isSignedAssertionEnabled")
+    is_signature_validation_enabled: Optional[StrictBool] = Field(default=True, description="Flag that indicates if the signature validation is enabled.", alias="isSignatureValidationEnabled")
+    is_signed_assertion_enabled: Optional[StrictBool] = Field(default=True, description="Flag that indicates if the signed assertion is enabled.", alias="isSignedAssertionEnabled")
     is_destination_verification_enabled: Optional[StrictBool] = Field(default=None, description="Flag that indicates if the destination verification is enabled.", alias="isDestinationVerificationEnabled")
     is_encryption_support_enabled: Optional[StrictBool] = Field(default=None, description="Flag that indicates if the encryption support is enabled.", alias="isEncryptionSupportEnabled")
     __properties: ClassVar[List[str]] = ["metadataUrl", "metadataXml", "emailParameter", "isSignatureValidationEnabled", "isSignedAssertionEnabled", "isDestinationVerificationEnabled", "isEncryptionSupportEnabled"]
@@ -91,8 +91,8 @@ class SamlBaseV1(BaseModel):
             "metadataUrl": obj.get("metadataUrl"),
             "metadataXml": obj.get("metadataXml"),
             "emailParameter": obj.get("emailParameter"),
-            "isSignatureValidationEnabled": obj.get("isSignatureValidationEnabled"),
-            "isSignedAssertionEnabled": obj.get("isSignedAssertionEnabled"),
+            "isSignatureValidationEnabled": obj.get("isSignatureValidationEnabled") if obj.get("isSignatureValidationEnabled") is not None else True,
+            "isSignedAssertionEnabled": obj.get("isSignedAssertionEnabled") if obj.get("isSignedAssertionEnabled") is not None else True,
             "isDestinationVerificationEnabled": obj.get("isDestinationVerificationEnabled"),
             "isEncryptionSupportEnabled": obj.get("isEncryptionSupportEnabled")
         })

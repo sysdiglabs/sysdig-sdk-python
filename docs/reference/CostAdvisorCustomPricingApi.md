@@ -17,7 +17,16 @@ Method | HTTP request | Description
 
 Create Pricing
 
-Change a new pricing to use as default (for cloud providers that Cost Advisor doesn't automatically support) or for a specific Kubernetes cluster.\\ \\ You need to specify hourly costs for 1 CPU, 1GB of RAM and 1GB of storage. \\ Different CPU and RAM costs can be specified for spot instances; to enable Cost Advisor to identify the spot node, a label and spot value must also be set. \\ \\ Cluster hourly cost = sum(node hourly costs) + (total storage * storage unit cost). \\ Node hourly cost = (total CPUs * CPU unit cost) + (total RAM * RAM unit cost) \\ \\ **Required permissions:** _cost-advisor.edit_ 
+Change a new pricing to use as default (for cloud providers that Cost Advisor doesn't automatically support) or for a specific Kubernetes cluster.\
+\
+You need to specify hourly costs for 1 CPU, 1GB of RAM and 1GB of storage. \
+Different CPU and RAM costs can be specified for spot instances; to enable Cost Advisor to identify the spot node, a label and spot value must also be set. \
+\
+Cluster hourly cost = sum(node hourly costs) + (total storage * storage unit cost). \
+Node hourly cost = (total CPUs * CPU unit cost) + (total RAM * RAM unit cost) \
+\
+**Required permissions:** _cost-advisor.edit_
+
 
 ### Example
 
@@ -103,7 +112,10 @@ Name | Type | Description  | Notes
 
 Delete Pricing
 
-Delete a pricing by its ID. If the pricing deleted is the DEFAULT one. Cost Advisor will continue to compute costs for the unsupported Kubernetes cluster using the Sysdig default pricing.\\ \\ **Required permissions:** _cost-advisor.edit_ 
+Delete a pricing by its ID. If the pricing deleted is the DEFAULT one. Cost Advisor will continue to compute costs for the unsupported Kubernetes cluster using the Sysdig default pricing.\
+\
+**Required permissions:** _cost-advisor.edit_
+
 
 ### Example
 
@@ -185,7 +197,10 @@ void (empty response body)
 
 Get Pricing
 
-Retrieve a pricing by ID.\\ \\ **Required permissions:** _cost-advisor.read_ 
+Retrieve a pricing by ID.\
+\
+**Required permissions:** _cost-advisor.read_
+
 
 ### Example
 
@@ -268,7 +283,13 @@ Name | Type | Description  | Notes
 
 Get Pricing Projected Costs
 
-Retrieve the monthly projected costs for the clusters using the specified pricing.\\ The computation is done using the total CPU and RAM for the current cluster's nodes and the total storage used by the cluster.\\ \\ Projected monthly cost = 730 * (total CPUs * CPU unit cost) + (total RAM * RAM unit cost) + (total storage * storage unit cost). \\ \\ **Required permissions:** _cost-advisor.read_ 
+Retrieve the monthly projected costs for the clusters using the specified pricing.\
+The computation is done using the total CPU and RAM for the current cluster's nodes and the total storage used by the cluster.\
+\
+Projected monthly cost = 730 * (total CPUs * CPU unit cost) + (total RAM * RAM unit cost) + (total storage * storage unit cost). \
+\
+**Required permissions:** _cost-advisor.read_
+
 
 ### Example
 
@@ -355,7 +376,10 @@ Name | Type | Description  | Notes
 
 List Pricing
 
-Retrieve a paginated list of pricing.\\ \\ **Required permissions:** _cost-advisor.read_ 
+Retrieve a paginated list of pricing.\
+\
+**Required permissions:** _cost-advisor.read_
+
 
 ### Example
 
@@ -445,7 +469,10 @@ Name | Type | Description  | Notes
 
 Update Pricing
 
-The pricing payload containing the changes you want to apply to the pricing.\\ \\ **Required permissions:** _cost-advisor.edit_ 
+The pricing payload containing the changes you want to apply to the pricing.\
+\
+**Required permissions:** _cost-advisor.edit_
+
 
 ### Example
 

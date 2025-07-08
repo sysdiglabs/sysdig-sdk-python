@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **trend_range_in_days** | **float** | Specifies the number of days used to calculate and extract cost data. Must be a positive integer.  | 
-**var_date** | **date** | The reference date used to define the time window for cost trend calculation. When combined with &#x60;trendRangeInDays&#x60;, this date represents the exclusive upper bound of the time range — the trend is calculated from (&#x60;date - trendRangeInDays&#x60;) up to but not including &#x60;date&#x60;. For example, if &#x60;date&#x60; is 2025-02-12 and &#x60;trendRangeInDays&#x60; is 10, the time range used for calculation is from 2025-02-02 to 2025-02-11 (inclusive).  Must be in YYYY-MM-DD format.  | 
+**var_date** | **date** | The reference date used to define the time window for cost trend calculation. When combined with &#x60;trendRangeInDays&#x60;, this date represents the inclusive upper bound of the time range — the trend is calculated from (&#x60;date - trendRangeInDays&#x60;). For example, if &#x60;date&#x60; is 2025-02-12 and &#x60;trendRangeInDays&#x60; is 10, the time range used for calculation is from 2025-02-03 to 2025-02-12 (inclusive).  Must be in YYYY-MM-DD format.  | 
 **scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters | [optional] 
 **group_by** | **List[str]** |  | [optional] 
 

@@ -30,7 +30,7 @@ class AuditEvent(BaseModel):
     Platform Audit Event
     """ # noqa: E501
     id: Optional[Annotated[str, Field(strict=True, max_length=32)]] = Field(default=None, description="The event id.")
-    cursor: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as `cursor` in a GET request, you will get the set of events surrounding this current event. ")
+    cursor: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as `cursor` in a GET request, you will get the set of events surrounding this current event. ")
     timestamp: Optional[Annotated[int, Field(le=9223372036854775616, strict=True, ge=0)]] = Field(default=None, description="The event timestamp in nanoseconds.")
     content: Optional[AuditTrailContent] = None
     labels: Optional[Dict[str, Annotated[str, Field(strict=True, max_length=256)]]] = Field(default=None, description="Key value pairs of values, represents entityType where the Audit Event was generated. ")

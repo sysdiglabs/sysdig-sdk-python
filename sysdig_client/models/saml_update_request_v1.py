@@ -94,8 +94,8 @@ class SamlUpdateRequestV1(SsoSettingsUpdateRequestBaseV1):
             "metadataUrl": obj.get("metadataUrl"),
             "metadataXml": obj.get("metadataXml"),
             "emailParameter": obj.get("emailParameter"),
-            "isSignatureValidationEnabled": obj.get("isSignatureValidationEnabled"),
-            "isSignedAssertionEnabled": obj.get("isSignedAssertionEnabled"),
+            "isSignatureValidationEnabled": obj.get("isSignatureValidationEnabled") if obj.get("isSignatureValidationEnabled") is not None else True,
+            "isSignedAssertionEnabled": obj.get("isSignedAssertionEnabled") if obj.get("isSignedAssertionEnabled") is not None else True,
             "isDestinationVerificationEnabled": obj.get("isDestinationVerificationEnabled"),
             "isEncryptionSupportEnabled": obj.get("isEncryptionSupportEnabled")
         })

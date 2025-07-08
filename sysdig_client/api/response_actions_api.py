@@ -24,7 +24,6 @@ from sysdig_client.models.action_execution import ActionExecution
 from sysdig_client.models.action_executions import ActionExecutions
 from sysdig_client.models.actions import Actions
 from sysdig_client.models.submit_action_execution_request import SubmitActionExecutionRequest
-from sysdig_client.models.submit_undo_action_execution_request import SubmitUndoActionExecutionRequest
 
 from sysdig_client.api_client import ApiClient, RequestSerialized
 from sysdig_client.api_response import ApiResponse
@@ -47,7 +46,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_file_acquire_v1(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -120,7 +119,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_file_acquire_v1_with_http_info(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -193,7 +192,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_file_acquire_v1_without_preload_content(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -327,7 +326,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_v1(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -399,7 +398,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_v1_with_http_info(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -471,7 +470,7 @@ class ResponseActionsApi:
     @validate_call
     def get_action_execution_v1_without_preload_content(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1533,8 +1532,8 @@ class ResponseActionsApi:
     @validate_call
     def undo_action_execution_v1(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
-        submit_undo_action_execution_request: Annotated[Optional[SubmitUndoActionExecutionRequest], Field(description="Metadata for the undo action execution.")] = None,
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
+        caller_id: Optional[Annotated[str, Field(strict=True, max_length=128)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1554,8 +1553,8 @@ class ResponseActionsApi:
 
         :param action_execution_id: ID of the action execution (required)
         :type action_execution_id: str
-        :param submit_undo_action_execution_request: Metadata for the undo action execution.
-        :type submit_undo_action_execution_request: SubmitUndoActionExecutionRequest
+        :param caller_id:
+        :type caller_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1580,7 +1579,7 @@ class ResponseActionsApi:
 
         _param = self._undo_action_execution_v1_serialize(
             action_execution_id=action_execution_id,
-            submit_undo_action_execution_request=submit_undo_action_execution_request,
+            caller_id=caller_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1610,8 +1609,8 @@ class ResponseActionsApi:
     @validate_call
     def undo_action_execution_v1_with_http_info(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
-        submit_undo_action_execution_request: Annotated[Optional[SubmitUndoActionExecutionRequest], Field(description="Metadata for the undo action execution.")] = None,
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
+        caller_id: Optional[Annotated[str, Field(strict=True, max_length=128)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1631,8 +1630,8 @@ class ResponseActionsApi:
 
         :param action_execution_id: ID of the action execution (required)
         :type action_execution_id: str
-        :param submit_undo_action_execution_request: Metadata for the undo action execution.
-        :type submit_undo_action_execution_request: SubmitUndoActionExecutionRequest
+        :param caller_id:
+        :type caller_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1657,7 +1656,7 @@ class ResponseActionsApi:
 
         _param = self._undo_action_execution_v1_serialize(
             action_execution_id=action_execution_id,
-            submit_undo_action_execution_request=submit_undo_action_execution_request,
+            caller_id=caller_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1687,8 +1686,8 @@ class ResponseActionsApi:
     @validate_call
     def undo_action_execution_v1_without_preload_content(
         self,
-        action_execution_id: Annotated[str, Field(strict=True, max_length=128, description="ID of the action execution")],
-        submit_undo_action_execution_request: Annotated[Optional[SubmitUndoActionExecutionRequest], Field(description="Metadata for the undo action execution.")] = None,
+        action_execution_id: Annotated[str, Field(strict=True, max_length=64, description="ID of the action execution")],
+        caller_id: Optional[Annotated[str, Field(strict=True, max_length=128)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1708,8 +1707,8 @@ class ResponseActionsApi:
 
         :param action_execution_id: ID of the action execution (required)
         :type action_execution_id: str
-        :param submit_undo_action_execution_request: Metadata for the undo action execution.
-        :type submit_undo_action_execution_request: SubmitUndoActionExecutionRequest
+        :param caller_id:
+        :type caller_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1734,7 +1733,7 @@ class ResponseActionsApi:
 
         _param = self._undo_action_execution_v1_serialize(
             action_execution_id=action_execution_id,
-            submit_undo_action_execution_request=submit_undo_action_execution_request,
+            caller_id=caller_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1760,7 +1759,7 @@ class ResponseActionsApi:
     def _undo_action_execution_v1_serialize(
         self,
         action_execution_id,
-        submit_undo_action_execution_request,
+        caller_id,
         _request_auth,
         _content_type,
         _headers,
@@ -1785,11 +1784,13 @@ class ResponseActionsApi:
         if action_execution_id is not None:
             _path_params['actionExecutionId'] = action_execution_id
         # process the query parameters
+        if caller_id is not None:
+            
+            _query_params.append(('callerId', caller_id))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if submit_undo_action_execution_request is not None:
-            _body_params = submit_undo_action_execution_request
 
 
         # set the HTTP header `Accept`
@@ -1800,19 +1801,6 @@ class ResponseActionsApi:
                 ]
             )
 
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [

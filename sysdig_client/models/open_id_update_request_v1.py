@@ -35,9 +35,9 @@ class OpenIdUpdateRequestV1(SsoSettingsUpdateRequestBaseV1):
     client_id: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The client ID of the OpenID Connect provider.", alias="clientId")
     is_metadata_discovery_enabled: StrictBool = Field(description="Flag to indicate if the metadata discovery is enabled.", alias="isMetadataDiscoveryEnabled")
     metadata: Optional[OpenIdMetadataV1] = Field(default=None, description="The metadata of the OpenID Connect provider.")
-    group_attribute_name: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The group attribute name of the OpenID Connect provider.", alias="groupAttributeName")
+    group_attribute_name: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The group attribute name of the OpenID Connect provider.", alias="groupAttributeName")
     is_additional_scopes_check_enabled: StrictBool = Field(description="Flag to indicate if the additional scopes verification on login.", alias="isAdditionalScopesCheckEnabled")
-    additional_scopes: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=128)]], Field(max_length=128)]] = Field(default=None, description="List of additional scopes to be verified on login.", alias="additionalScopes")
+    additional_scopes: Optional[Annotated[List[Annotated[str, Field(strict=True, max_length=64)]], Field(max_length=64)]] = Field(default=None, description="List of additional scopes to be verified on login.", alias="additionalScopes")
     client_secret: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="The client secret of the OpenID Connect provider.", alias="clientSecret")
     __properties: ClassVar[List[str]] = ["type", "issuerUrl", "clientId", "isMetadataDiscoveryEnabled", "metadata", "groupAttributeName", "isAdditionalScopesCheckEnabled", "additionalScopes", "clientSecret"]
 

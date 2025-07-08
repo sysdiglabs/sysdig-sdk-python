@@ -18,7 +18,10 @@ Method | HTTP request | Description
 
 Create Group Mapping
 
-Create a new group mapping.\\ \\ **Required permissions:** _group-mappings.edit_ 
+Create a new group mapping.\
+\
+**Required permissions:** _group-mappings.edit_
+
 
 ### Example
 
@@ -104,7 +107,10 @@ Name | Type | Description  | Notes
 
 Delete Group Mapping
 
-Delete a group mapping by its ID.\\ \\ **Required permissions:** _group-mappings.edit_ 
+Delete a group mapping by its ID.\
+\
+**Required permissions:** _group-mappings.edit_
+
 
 ### Example
 
@@ -185,7 +191,10 @@ void (empty response body)
 
 Get Group Mapping
 
-Return a group mapping by its ID.\\ \\ **Required permissions:** _group-mappings.read_ 
+Return a group mapping by its ID.\
+\
+**Required permissions:** _group-mappings.read_
+
 
 ### Example
 
@@ -268,7 +277,10 @@ Name | Type | Description  | Notes
 
 Get Group Mappings Settings
 
-Retrieves your group mapping settings.\\ \\ **Required permissions:** _group-mappings.read_ 
+Retrieves your group mapping settings.\
+\
+**Required permissions:** _group-mappings.read_
+
 
 ### Example
 
@@ -345,7 +357,10 @@ This endpoint does not need any parameter.
 
 List Group Mappings
 
-Retrieve a paginated list of group mappings.\\ \\ **Required permissions:** _group-mappings.read_ 
+Retrieve a paginated list of group mappings.\
+\
+**Required permissions:** _group-mappings.read_
+
 
 ### Example
 
@@ -433,7 +448,10 @@ Name | Type | Description  | Notes
 
 Save Group Mapping settings
 
-Saves your group mapping settings.\\ \\ **Required permissions:** _group-mappings.edit_ 
+Saves your group mapping settings.\
+\
+**Required permissions:** _group-mappings.edit_
+
 
 ### Example
 
@@ -518,7 +536,10 @@ Name | Type | Description  | Notes
 
 Update Group Mapping
 
-Update a group mapping by its ID.\\ \\ **Required permissions:** _group-mappings.edit_ 
+Update a group mapping by its ID.\
+\
+**Required permissions:** _group-mappings.edit_
+
 
 ### Example
 

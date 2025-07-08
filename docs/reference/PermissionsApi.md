@@ -12,7 +12,10 @@ Method | HTTP request | Description
 
 Get Customer Permissions
 
-Retrieve a list of permissions that are used in custom roles.\\ \\ **Required permissions:** _permissions.read_ 
+Retrieve a list of permissions that are used in custom roles.\
+\
+**Required permissions:** _permissions.read_
+
 
 ### Example
 

@@ -44,7 +44,7 @@ class InventoryApi:
     @validate_call
     def get_resource(
         self,
-        hash: Annotated[str, Field(strict=True, max_length=128, description="resource hash")],
+        hash: Annotated[str, Field(strict=True, max_length=64, description="resource hash")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -116,7 +116,7 @@ class InventoryApi:
     @validate_call
     def get_resource_with_http_info(
         self,
-        hash: Annotated[str, Field(strict=True, max_length=128, description="resource hash")],
+        hash: Annotated[str, Field(strict=True, max_length=64, description="resource hash")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -188,7 +188,7 @@ class InventoryApi:
     @validate_call
     def get_resource_without_preload_content(
         self,
-        hash: Annotated[str, Field(strict=True, max_length=128, description="resource hash")],
+        hash: Annotated[str, Field(strict=True, max_length=64, description="resource hash")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],

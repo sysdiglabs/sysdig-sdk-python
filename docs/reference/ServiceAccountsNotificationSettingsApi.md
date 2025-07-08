@@ -19,7 +19,10 @@ Method | HTTP request | Description
 
 Create Global Service Accounts Notification Settings
 
-Create a new Notification Settings for Global Service Accounts.\\ \\ **Required permissions:** _global-service-accounts-notification-settings.edit_ 
+Create a new Notification Settings for Global Service Accounts.\
+\
+**Required permissions:** _global-service-accounts-notification-settings.edit_
+
 
 ### Example
 
@@ -105,7 +108,10 @@ Name | Type | Description  | Notes
 
 Create Service Accounts Notification Settings
 
-Create a new Notification Settings for Service Accounts which belong to a specific team.\\ \\ **Required permissions:** _service-accounts-notification-settings.edit_ 
+Create a new Notification Settings for Service Accounts which belong to a specific team.\
+\
+**Required permissions:** _service-accounts-notification-settings.edit_
+
 
 ### Example
 
@@ -193,7 +199,10 @@ Name | Type | Description  | Notes
 
 Delete Global Service Accounts Notification Settings
 
-Delete Notification Settings for Global Service Accounts.\\ \\ **Required permissions:** _global-service-accounts-notification-settings.edit_ 
+Delete Notification Settings for Global Service Accounts.\
+\
+**Required permissions:** _global-service-accounts-notification-settings.edit_
+
 
 ### Example
 
@@ -270,7 +279,10 @@ void (empty response body)
 
 Delete Service Accounts Notification Settings
 
-Delete Service Accounts Notification Settings for a given team.\\ \\ **Required permissions:** _service-accounts-notification-settings.edit_ 
+Delete Service Accounts Notification Settings for a given team.\
+\
+**Required permissions:** _service-accounts-notification-settings.edit_
+
 
 ### Example
 
@@ -351,7 +363,10 @@ void (empty response body)
 
 Get Global Service Accounts Notification Settings
 
-Return Notification Settings for Global Service Accounts.\\ \\ **Required permissions:** _global-service-accounts-notification-settings.read_ 
+Return Notification Settings for Global Service Accounts.\
+\
+**Required permissions:** _global-service-accounts-notification-settings.read_
+
 
 ### Example
 
@@ -430,7 +445,10 @@ This endpoint does not need any parameter.
 
 Get Service Accounts Notification Settings
 
-Return Service Accounts Notification Settings for a given team.\\ \\ **Required permissions:** _service-accounts-notification-settings.read_ 
+Return Service Accounts Notification Settings for a given team.\
+\
+**Required permissions:** _service-accounts-notification-settings.read_
+
 
 ### Example
 
@@ -513,7 +531,10 @@ Name | Type | Description  | Notes
 
 Update Global Service Accounts Notification Settings
 
-Update Notification Settings for Global Service Accounts.\\ \\ **Required permissions:** _global-service-accounts-notification-settings.edit_ 
+Update Notification Settings for Global Service Accounts.\
+\
+**Required permissions:** _global-service-accounts-notification-settings.edit_
+
 
 ### Example
 
@@ -599,7 +620,10 @@ Name | Type | Description  | Notes
 
 Update Service Accounts Notification Settings
 
-Update Service Accounts Notification Settings for a given team.\\ \\ **Required permissions:** _service-accounts-notification-settings.edit_ 
+Update Service Accounts Notification Settings for a given team.\
+\
+**Required permissions:** _service-accounts-notification-settings.edit_
+
 
 ### Example
 

@@ -29,7 +29,7 @@ class UpdateChronicleIntegrationConnInfo(BaseModel):
     Update Chronicle Integration Connection Info
     """ # noqa: E501
     region: Optional[StrictStr] = Field(default='us', description="The target region")
-    api_key: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The Chronicle v1 API key", alias="apiKey")
+    api_key: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The Chronicle v1 API key", alias="apiKey")
     __properties: ClassVar[List[str]] = ["region", "apiKey"]
 
     @field_validator('region')

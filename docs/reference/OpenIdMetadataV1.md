@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**issuer** | **str** | The base issuer URL of the OpenID Connect provider. | [optional] 
+**issuer** | **str** | The base issuer URL of the OpenID Connect provider. | 
 **authorization_endpoint** | **str** | The authorization endpoint of the OpenID Connect provider. | 
 **token_endpoint** | **str** | The token endpoint of the OpenID Connect provider. | 
-**jwks_uri** | **str** | The JSON Web Key Set URI of the OpenID Connect provider. | [optional] 
+**jwks_uri** | **str** | The JSON Web Key Set URI of the OpenID Connect provider. | 
 **end_session_endpoint** | **str** | Single sign-out endpoint of the OpenID Connect provider. | [optional] 
 **user_info_endpoint** | **str** | The user info endpoint of the OpenID Connect provider. | [optional] 
 **token_auth_method** | **str** | The token authentication method of the OpenID Connect provider. | 

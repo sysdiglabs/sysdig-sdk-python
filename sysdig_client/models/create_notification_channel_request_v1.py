@@ -19,9 +19,8 @@ import re  # noqa: F401
 import json
 
 from importlib import import_module
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from typing_extensions import Annotated
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List, Union
 from sysdig_client.models.notification_channel_type_v1 import NotificationChannelTypeV1
 from typing import Optional, Set
 from typing_extensions import Self
@@ -46,12 +45,8 @@ class CreateNotificationChannelRequestV1(BaseModel):
     """
     CreateNotificationChannelRequestV1
     """ # noqa: E501
-    team_id: Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]] = Field(default=None, description="ID of team that owns the notification channel. If null, this will be a global notification channel", alias="teamId")
-    is_enabled: Optional[StrictBool] = Field(default=False, description="Indicates if the notification channel is enabled or not.", alias="isEnabled")
-    name: Annotated[str, Field(strict=True, max_length=255)] = Field(description="Name of the notification channel. It must be unique.")
-    has_test_notification_enabled: Optional[StrictBool] = Field(default=False, description="Indicates whether or not a test notification should be sent upon creation or update of this notification channel resource", alias="hasTestNotificationEnabled")
     type: NotificationChannelTypeV1
-    __properties: ClassVar[List[str]] = ["teamId", "isEnabled", "name", "hasTestNotificationEnabled", "type"]
+    __properties: ClassVar[List[str]] = ["type"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -109,11 +104,6 @@ class CreateNotificationChannelRequestV1(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if team_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.team_id is None and "team_id" in self.model_fields_set:
-            _dict['teamId'] = None
-
         return _dict
 
     @classmethod

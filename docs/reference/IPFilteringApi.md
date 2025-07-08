@@ -18,7 +18,10 @@ Method | HTTP request | Description
 
 Create IP Filter
 
-Create a new IP filter.\\ \\ **Required permissions:** _ip-filters.edit_ 
+Create a new IP filter.\
+\
+**Required permissions:** _ip-filters.edit_
+
 
 ### Example
 
@@ -104,7 +107,10 @@ Name | Type | Description  | Notes
 
 Delete IP Filter
 
-Delete IP filter by its ID.\\ \\ **Required permissions:** _ip-filters.edit_ 
+Delete IP filter by its ID.\
+\
+**Required permissions:** _ip-filters.edit_
+
 
 ### Example
 
@@ -186,7 +192,10 @@ void (empty response body)
 
 Get IP Filter by ID
 
-Get IP Filter by ID.\\ \\ **Required permissions:** _ip-filters.read_ 
+Get IP Filter by ID.\
+\
+**Required permissions:** _ip-filters.read_
+
 
 ### Example
 
@@ -269,7 +278,10 @@ Name | Type | Description  | Notes
 
 Get IP Filters Settings
 
-Retrieves your IP filters settings.\\ \\ **Required permissions:** _ip-filters.read_ 
+Retrieves your IP filters settings.\
+\
+**Required permissions:** _ip-filters.read_
+
 
 ### Example
 
@@ -346,7 +358,10 @@ This endpoint does not need any parameter.
 
 List IP Filters
 
-Retrieve a paginated list of IP filters.\\ \\ **Required permissions:** _ip-filters.read_ 
+Retrieve a paginated list of IP filters.\
+\
+**Required permissions:** _ip-filters.read_
+
 
 ### Example
 
@@ -432,7 +447,10 @@ Name | Type | Description  | Notes
 
 Save IP Filters settings
 
-Saves your IP filters settings.\\ \\ **Required permissions:** _ip-filters.edit_ 
+Saves your IP filters settings.\
+\
+**Required permissions:** _ip-filters.edit_
+
 
 ### Example
 
@@ -518,7 +536,10 @@ Name | Type | Description  | Notes
 
 Update IP Filter
 
-Update IP filter by its ID. \\ \\ **Required permissions:** _ip-filters.edit_ 
+Update IP filter by its ID. \
+\
+**Required permissions:** _ip-filters.edit_
+
 
 ### Example
 

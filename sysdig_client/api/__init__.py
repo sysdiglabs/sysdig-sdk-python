@@ -17,6 +17,7 @@ from sysdig_client.api.metrics_collection_api import MetricsCollectionApi
 from sysdig_client.api.notification_channels_api import NotificationChannelsApi
 from sysdig_client.api.permissions_api import PermissionsApi
 from sysdig_client.api.platform_audit_api import PlatformAuditApi
+from sysdig_client.api.prometheus_api import PrometheusApi
 from sysdig_client.api.reporting_api import ReportingApi
 from sysdig_client.api.response_actions_api import ResponseActionsApi
 from sysdig_client.api.roles_api import RolesApi

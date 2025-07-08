@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create Zone
 
-Create a new Zone.\\ \\ **Required permissions:** zones.edit 
+Create a new Zone.\
+\
+**Required permissions:** zones.edit
+
 
 ### Example
 
@@ -102,7 +105,10 @@ Name | Type | Description  | Notes
 
 Delete Zone
 
-Delete a Zone by its ID.\\ \\ **Required permissions:** zones.edit 
+Delete a Zone by its ID.\
+\
+**Required permissions:** zones.edit
+
 
 ### Example
 
@@ -185,7 +191,10 @@ void (empty response body)
 
 Update Zone
 
-Update an existing Zone by its ID.\\ \\ **Required permissions:** zones.edit 
+Update an existing Zone by its ID.\
+\
+**Required permissions:** zones.edit
+
 
 ### Example
 
@@ -273,7 +282,10 @@ Name | Type | Description  | Notes
 
 Get Zone
 
-Retrieve a single Zone by ID.\\ \\ **Required permissions:** zones.read 
+Retrieve a single Zone by ID.\
+\
+**Required permissions:** zones.read
+
 
 ### Example
 
@@ -358,7 +370,10 @@ Name | Type | Description  | Notes
 
 List Zones
 
-Retrieve a paginated list of Zones.\\ \\ **Required permissions:** zones.read or teams.edit 
+Retrieve a paginated list of Zones.\
+\
+**Required permissions:** zones.read or teams.edit
+
 
 ### Example
 

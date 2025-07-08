@@ -23,6 +23,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from sysdig_client.models.action_outputs_metadata import ActionOutputsMetadata
 from sysdig_client.models.action_parameter_metadata import ActionParameterMetadata
+from sysdig_client.models.responder_type import ResponderType
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,12 +31,13 @@ class ResponseAction(BaseModel):
     """
     The action metadata
     """ # noqa: E501
-    type: Annotated[str, Field(strict=True, max_length=32)] = Field(description="The name of the Response Action to execute. It may be one of the following: - KILL_PROCESS - KILL_CONTAINER - STOP_CONTAINER - PAUSE_CONTAINER - FILE_QUARANTINE - FILE_ACQUIRE - UNPAUSE_CONTAINER - FILE_UNQUARANTINE - START_CONTAINER  The following actions serve as the undo for previous actions: - START_CONTAINER: undo for STOP_CONTAINER\\ - UNPAUSE_CONTAINER: undo for PAUSE_CONTAINER\\ - FILE_UNQUARANTINE: undo for FILE_QUARANTINE\\  Do not use undo actions in [submitActionExecutionv1](#tag/Response-actions/operation/submitActionExecutionv1).  You can execute an undo actions using the service [undoActionExecutionV1](#tag/Response-actions/operation/undoActionExecutionV1). ")
+    type: Annotated[str, Field(strict=True, max_length=64)] = Field(description="The name of the Response Action to execute. It may be one of the following: - KILL_PROCESS - KILL_CONTAINER - STOP_CONTAINER - PAUSE_CONTAINER - FILE_QUARANTINE - FILE_ACQUIRE - UNPAUSE_CONTAINER - FILE_UNQUARANTINE - START_CONTAINER - DELETE_POD - ROLLOUT_RESTART - KUBERNETES_VOLUME_SNAPSHOT - KUBERNETES_DELETE_VOLUME_SNAPSHOT - GET_LOGS - ISOLATE_NETWORK - DELETE_NETWORK_POLICY  The following actions serve as the undo for previous actions: - START_CONTAINER: undo for STOP_CONTAINER\\ - UNPAUSE_CONTAINER: undo for PAUSE_CONTAINER\\ - FILE_UNQUARANTINE: undo for FILE_QUARANTINE\\ - KUBERNETES_DELETE_VOLUME_SNAPSHOT: undo for KUBERNETES_VOLUME_SNAPSHOT\\ - DELETE_NETWORK_POLICY: undo for ISOLATE_NETWORK\\  Do not use undo actions in [submitActionExecutionv1](#tag/Response-actions/operation/submitActionExecutionv1).  You can execute an undo actions using the service [undoActionExecutionV1](#tag/Response-actions/operation/undoActionExecutionV1). ")
+    responder_type: ResponderType = Field(alias="responderType")
     parameters: Annotated[List[ActionParameterMetadata], Field(max_length=100)] = Field(description="the list of parameters that the action supports")
     outputs: Optional[Annotated[List[ActionOutputsMetadata], Field(max_length=100)]] = None
     description: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="The description of the action.")
     is_undoable: StrictBool = Field(description="Whether the action is undoable.", alias="isUndoable")
-    __properties: ClassVar[List[str]] = ["type", "parameters", "outputs", "description", "isUndoable"]
+    __properties: ClassVar[List[str]] = ["type", "responderType", "parameters", "outputs", "description", "isUndoable"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -103,6 +105,7 @@ class ResponseAction(BaseModel):
 
         _obj = cls.model_validate({
             "type": obj.get("type"),
+            "responderType": obj.get("responderType"),
             "parameters": [ActionParameterMetadata.from_dict(_item) for _item in obj["parameters"]] if obj.get("parameters") is not None else None,
             "outputs": [ActionOutputsMetadata.from_dict(_item) for _item in obj["outputs"]] if obj.get("outputs") is not None else None,
             "description": obj.get("description"),

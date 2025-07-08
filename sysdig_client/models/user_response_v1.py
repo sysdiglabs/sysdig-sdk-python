@@ -34,11 +34,13 @@ class UserResponseV1(BaseModel):
     first_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The name of the user. ", alias="firstName")
     last_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The last name of the user. ", alias="lastName")
     is_admin: Optional[StrictBool] = Field(default=None, description="**True** if the user has Administration permissions. ", alias="isAdmin")
+    is_enabled: Optional[StrictBool] = Field(default=None, description="**True** if the user is enabled. ", alias="isEnabled")
     activation_status: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The current activation status of the user. ", alias="activationStatus")
     date_created: Optional[datetime] = Field(default=None, description="The date and time when the user was created. ", alias="dateCreated")
     last_updated: Optional[datetime] = Field(default=None, description="The date and time when the user was last updated. ", alias="lastUpdated")
     version: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, description="The current version of the resource. ")
-    __properties: ClassVar[List[str]] = ["id", "email", "firstName", "lastName", "isAdmin", "activationStatus", "dateCreated", "lastUpdated", "version"]
+    bypass_sso_enforcement: Optional[StrictBool] = Field(default=None, description="When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled. ", alias="bypassSsoEnforcement")
+    __properties: ClassVar[List[str]] = ["id", "email", "firstName", "lastName", "isAdmin", "isEnabled", "activationStatus", "dateCreated", "lastUpdated", "version", "bypassSsoEnforcement"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -111,10 +113,12 @@ class UserResponseV1(BaseModel):
             "firstName": obj.get("firstName"),
             "lastName": obj.get("lastName"),
             "isAdmin": obj.get("isAdmin"),
+            "isEnabled": obj.get("isEnabled"),
             "activationStatus": obj.get("activationStatus"),
             "dateCreated": obj.get("dateCreated"),
             "lastUpdated": obj.get("lastUpdated"),
-            "version": obj.get("version")
+            "version": obj.get("version"),
+            "bypassSsoEnforcement": obj.get("bypassSsoEnforcement")
         })
         return _obj
 

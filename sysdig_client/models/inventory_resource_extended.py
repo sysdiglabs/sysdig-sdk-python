@@ -33,7 +33,7 @@ class InventoryResourceExtended(BaseModel):
     """
     Extended information about an Inventory Resource
     """ # noqa: E501
-    hash: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Resource unique identifier")
+    hash: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Resource unique identifier")
     name: Annotated[str, Field(strict=True, max_length=8192)] = Field(description="Resource name")
     platform: Annotated[str, Field(strict=True, max_length=256)] = Field(description="The resource platform (such as AWS, GCP, Kubernetes, or Azure)")
     type: Annotated[str, Field(strict=True, max_length=256)] = Field(description="The resource type")

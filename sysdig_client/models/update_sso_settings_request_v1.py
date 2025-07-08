@@ -33,10 +33,10 @@ class UpdateSsoSettingsRequestV1(BaseModel):
     product: Product = Field(description="The product to which SSO settings is applied to. SSO settings are configured per specific product.")
     is_active: StrictBool = Field(description="Flag to indicate if the SSO settings is active.", alias="isActive")
     create_user_on_login: StrictBool = Field(description="Flag to indicate if the user will be created automatically if not found in the system.", alias="createUserOnLogin")
-    is_password_login_enabled: StrictBool = Field(description="Flag to indicate if the user will be able to login with password.", alias="isPasswordLoginEnabled")
+    is_password_login_enabled: Optional[StrictBool] = Field(default=None, description="Flag to indicate if the user will be able to login with password. Deprecated: use the API endpoint `/platform/v1/global-sso-settings` for this functionality. This is now a global setting: if this flag is defined here and this SSO setting is set to be active, the setting will be applied at global level.", alias="isPasswordLoginEnabled")
     is_single_logout_enabled: StrictBool = Field(description="Flag to indicate if the single logout support is enabled.", alias="isSingleLogoutEnabled")
     is_group_mapping_enabled: StrictBool = Field(description="Flag to indicate if group mapping support is enabled.", alias="isGroupMappingEnabled")
-    group_mapping_attribute_name: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The group mapping attribute name.", alias="groupMappingAttributeName")
+    group_mapping_attribute_name: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The group mapping attribute name.", alias="groupMappingAttributeName")
     version: Annotated[int, Field(strict=True, ge=0)] = Field(description=" ")
     config: SsoSettingsUpdateRequestBaseV1
     __properties: ClassVar[List[str]] = ["product", "isActive", "createUserOnLogin", "isPasswordLoginEnabled", "isSingleLogoutEnabled", "isGroupMappingEnabled", "groupMappingAttributeName", "version", "config"]

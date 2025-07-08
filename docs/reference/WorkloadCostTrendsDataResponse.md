@@ -6,11 +6,9 @@ Cost trends observed between two consecutive time periods in the past.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**current_range** | [**WorkloadCostTrendsDataResponseCurrentRange**](WorkloadCostTrendsDataResponseCurrentRange.md) |  | [optional] 
-**previous_range** | [**WorkloadCostTrendsDataResponsePreviousRange**](WorkloadCostTrendsDataResponsePreviousRange.md) |  | [optional] 
+**current_range** | [**DateRange**](DateRange.md) |  | [optional] 
+**previous_range** | [**DateRange**](DateRange.md) |  | [optional] 
 **total** | [**WorkloadCostTrendsDataResponseTotal**](WorkloadCostTrendsDataResponseTotal.md) |  | [optional] 
-**scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters. | [optional] 
-**group_by** | **List[str]** | The label keys used to group the returned cost data. | [optional] 
 **group_by_data** | [**List[WorkloadCostTrendsDataResponseGroupByDataInner]**](WorkloadCostTrendsDataResponseGroupByDataInner.md) | Grouped cost data for each combination of label values. | [optional] 
 
 ## Example

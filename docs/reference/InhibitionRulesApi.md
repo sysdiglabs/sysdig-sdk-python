@@ -16,7 +16,10 @@ Method | HTTP request | Description
 
 Create Inhibition Rule
 
-Create an inhibition rule.\\ \\ **Required permissions:** _inhibition-rules.edit_ or _alerts.edit_ 
+Create an inhibition rule.\
+\
+**Required permissions:** _inhibition-rules.edit_ or _alerts.edit_
+
 
 ### Example
 
@@ -102,7 +105,10 @@ Name | Type | Description  | Notes
 
 Delete Inhibition Rule
 
-Delete an inhibition rule by its ID.\\ \\ **Required permissions:** _inhibition-rules.edit_ or _alerts.edit_ 
+Delete an inhibition rule by its ID.\
+\
+**Required permissions:** _inhibition-rules.edit_ or _alerts.edit_
+
 
 ### Example
 
@@ -182,7 +188,10 @@ void (empty response body)
 
 Get Inhibition Rule
 
-Retrieve an inhibition rule by ID.\\ \\ **Required permissions:** _inhibition-rules.read_ or _alerts.read_ 
+Retrieve an inhibition rule by ID.\
+\
+**Required permissions:** _inhibition-rules.read_ or _alerts.read_
+
 
 ### Example
 
@@ -265,7 +274,10 @@ Name | Type | Description  | Notes
 
 List Inhibition Rules
 
-Retrieve the list of inhibition rules.\\ \\ **Required permissions:** _inhibition-rules.read_ or _alerts.read_ 
+Retrieve the list of inhibition rules.\
+\
+**Required permissions:** _inhibition-rules.read_ or _alerts.read_
+
 
 ### Example
 
@@ -349,7 +361,10 @@ Name | Type | Description  | Notes
 
 Update Inhibition Rule
 
-Update an inhibition rule.\\ \\ **Required permissions:** _inhibition-rules.edit_ or _alerts.edit_ 
+Update an inhibition rule.\
+\
+**Required permissions:** _inhibition-rules.edit_ or _alerts.edit_
+
 
 ### Example
 

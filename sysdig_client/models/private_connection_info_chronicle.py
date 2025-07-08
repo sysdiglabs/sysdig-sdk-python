@@ -28,7 +28,7 @@ class PrivateConnectionInfoChronicle(BaseModel):
     """
     PrivateConnectionInfoChronicle
     """ # noqa: E501
-    api_key: Optional[Annotated[str, Field(strict=True, max_length=128)]] = Field(default=None, description="The Chronicle v1 API key", alias="apiKey")
+    api_key: Optional[Annotated[str, Field(strict=True, max_length=64)]] = Field(default=None, description="The Chronicle v1 API key", alias="apiKey")
     __properties: ClassVar[List[str]] = ["apiKey"]
 
     model_config = ConfigDict(

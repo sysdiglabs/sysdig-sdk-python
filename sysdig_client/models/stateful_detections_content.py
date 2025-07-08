@@ -36,7 +36,7 @@ class StatefulDetectionsContent(BaseModel):
     type: EventContentType
     rule_name: Annotated[str, Field(strict=True, max_length=1024)] = Field(description="Name of the rule the event is generated after", alias="ruleName")
     rule_type: Annotated[int, Field(le=14, strict=True, ge=1)] = Field(description="Rule type: - 1 - List matching - process - 2 - List matching - container - 3 - List matching - file - 4 - List matching - network - 5 - List matching - syscall - 6 - Falco - 7 - Drift detection - 8 - Malware detection - 11 - ML - Cryptominer detection - 13 - ML - AWS anomalous login - 14 - ML - Okta anomalous login ", alias="ruleType")
-    rule_tags: Annotated[List[Annotated[str, Field(strict=True, max_length=128)]], Field(max_length=1000)] = Field(description="The tags attached to the rule", alias="ruleTags")
+    rule_tags: Annotated[List[Annotated[str, Field(strict=True, max_length=64)]], Field(max_length=1000)] = Field(description="The tags attached to the rule", alias="ruleTags")
     policy_id: Annotated[int, Field(le=9223372036854775616, strict=True, ge=1)] = Field(description="ID of the policy that generated the event", alias="policyId")
     policy_origin: PolicyOrigin = Field(alias="policyOrigin")
     policy_notification_channel_ids: Annotated[List[Annotated[int, Field(le=9223372036854775616, strict=True, ge=1)]], Field(max_length=100)] = Field(description="The list of notification channels where an alert is sent after event is generated. Doesn't account for aggregations and eventual thresholds. ", alias="policyNotificationChannelIds")

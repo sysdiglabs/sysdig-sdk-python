@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **metadata_url** | **str** | The metadata URL of the SAML provider. **Mutually exclusive with metadata* | [optional] 
 **metadata_xml** | **str** | The metadata XML of the SAML provider. **Mutually exclusive with metadataUrl* | [optional] 
 **email_parameter** | **str** | The email parameter of the SAML provider. | 
-**is_signature_validation_enabled** | **bool** | Flag that indicates if the signature validation is enabled. | 
-**is_signed_assertion_enabled** | **bool** | Flag that indicates if the signed assertion is enabled. | 
+**is_signature_validation_enabled** | **bool** | Flag that indicates if the signature validation is enabled. | [default to True]
+**is_signed_assertion_enabled** | **bool** | Flag that indicates if the signed assertion is enabled. | [default to True]
 **is_destination_verification_enabled** | **bool** | Flag that indicates if the destination verification is enabled. | 
 **is_encryption_support_enabled** | **bool** | Flag that indicates if the encryption support is enabled. | 
 

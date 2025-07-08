@@ -17,7 +17,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field
+from pydantic import Field, StrictBool
 from typing import Optional
 from typing_extensions import Annotated
 from sysdig_client.models.create_team_request_v1 import CreateTeamRequestV1
@@ -1490,6 +1490,7 @@ class TeamsApi:
         team_id: Annotated[int, Field(strict=True, ge=0, description="The team ID.")],
         offset: Annotated[Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]], Field(description="The offset number of items to start with")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=200, strict=True, ge=1)]], Field(description="The number of items to return")] = None,
+        with_admin_users: Annotated[Optional[StrictBool], Field(description="Include admin users in the response.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1513,6 +1514,8 @@ class TeamsApi:
         :type offset: int
         :param limit: The number of items to return
         :type limit: int
+        :param with_admin_users: Include admin users in the response.
+        :type with_admin_users: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1539,6 +1542,7 @@ class TeamsApi:
             team_id=team_id,
             offset=offset,
             limit=limit,
+            with_admin_users=with_admin_users,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1570,6 +1574,7 @@ class TeamsApi:
         team_id: Annotated[int, Field(strict=True, ge=0, description="The team ID.")],
         offset: Annotated[Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]], Field(description="The offset number of items to start with")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=200, strict=True, ge=1)]], Field(description="The number of items to return")] = None,
+        with_admin_users: Annotated[Optional[StrictBool], Field(description="Include admin users in the response.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1593,6 +1598,8 @@ class TeamsApi:
         :type offset: int
         :param limit: The number of items to return
         :type limit: int
+        :param with_admin_users: Include admin users in the response.
+        :type with_admin_users: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1619,6 +1626,7 @@ class TeamsApi:
             team_id=team_id,
             offset=offset,
             limit=limit,
+            with_admin_users=with_admin_users,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1650,6 +1658,7 @@ class TeamsApi:
         team_id: Annotated[int, Field(strict=True, ge=0, description="The team ID.")],
         offset: Annotated[Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]], Field(description="The offset number of items to start with")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=200, strict=True, ge=1)]], Field(description="The number of items to return")] = None,
+        with_admin_users: Annotated[Optional[StrictBool], Field(description="Include admin users in the response.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1673,6 +1682,8 @@ class TeamsApi:
         :type offset: int
         :param limit: The number of items to return
         :type limit: int
+        :param with_admin_users: Include admin users in the response.
+        :type with_admin_users: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1699,6 +1710,7 @@ class TeamsApi:
             team_id=team_id,
             offset=offset,
             limit=limit,
+            with_admin_users=with_admin_users,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1725,6 +1737,7 @@ class TeamsApi:
         team_id,
         offset,
         limit,
+        with_admin_users,
         _request_auth,
         _content_type,
         _headers,
@@ -1756,6 +1769,10 @@ class TeamsApi:
         if limit is not None:
             
             _query_params.append(('limit', limit))
+            
+        if with_admin_users is not None:
+            
+            _query_params.append(('withAdminUsers', with_admin_users))
             
         # process the header parameters
         # process the form parameters

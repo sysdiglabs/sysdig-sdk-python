@@ -17,7 +17,10 @@ Method | HTTP request | Description
 
 Get Acquired File
 
-Download a Capture file created by an executed \"File Acquire\" Response Action.\\ \\ **Required permissions:** _data-gathering-response-actions.read_ 
+Download a Capture file created by an executed "File Acquire" Response Action.\
+\
+**Required permissions:** _data-gathering-response-actions.read_
+
 
 ### Example
 
@@ -100,7 +103,10 @@ Name | Type | Description  | Notes
 
 Get Action Execution
 
-Get an action execution.\\ \\ **Required permissions:** _containment-response-actions.read_ or _data-gathering-response-actions.read_, depending on the action type. Results will include the executions of the Response Actions you are allowed to see. 
+Get an action execution.\
+\
+**Required permissions:** _containment-response-actions.read_ or _data-gathering-response-actions.read_, depending on the action type. Results will include the executions of the Response Actions you are allowed to see.
+
 
 ### Example
 
@@ -183,7 +189,9 @@ Name | Type | Description  | Notes
 
 Returns the list of Response Actions executions. You can filter them with the available query parameters.
 
-Returns a list of action executions. **Required permissions:** _containment-response-actions.read_ or _data-gathering-response-actions.read_, depending on the action type. 
+Returns a list of action executions.
+**Required permissions:** _containment-response-actions.read_ or _data-gathering-response-actions.read_, depending on the action type.
+
 
 ### Example
 
@@ -276,7 +284,10 @@ Name | Type | Description  | Notes
 
 Get All Response Actions
 
-Get the list of available executable Response Actions.\\ \\ **Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type. 
+Get the list of available executable Response Actions.\
+\
+**Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type.
+
 
 ### Example
 
@@ -359,7 +370,9 @@ Name | Type | Description  | Notes
 
 Submit the execution of an action
 
-Submits the execution of an action. The action will be executed asynchronously and the response will contain the action execution ID.\\ **Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type. 
+Submits the execution of an action. The action will be executed asynchronously and the response will contain the action execution ID.\
+**Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type.
+
 
 ### Example
 
@@ -439,11 +452,14 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **undo_action_execution_v1**
-> ActionExecution undo_action_execution_v1(action_execution_id, submit_undo_action_execution_request=submit_undo_action_execution_request)
+> ActionExecution undo_action_execution_v1(action_execution_id, caller_id=caller_id)
 
 Undoes an Action Execution
 
-Undoes an action execution.\\ \\ **Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type. 
+Undoes an action execution.\
+\
+**Required permissions:** _containment-response-actions.exec_ or _data-gathering-response-actions.exec_, depending on the action type.
+
 
 ### Example
 
@@ -452,7 +468,6 @@ Undoes an action execution.\\ \\ **Required permissions:** _containment-response
 ```python
 import sysdig_client
 from sysdig_client.models.action_execution import ActionExecution
-from sysdig_client.models.submit_undo_action_execution_request import SubmitUndoActionExecutionRequest
 from sysdig_client.rest import ApiException
 from pprint import pprint
 
@@ -477,11 +492,11 @@ with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.ResponseActionsApi(api_client)
     action_execution_id = '1234567890123456789012345678901234567890123456789012345678901234' # str | ID of the action execution
-    submit_undo_action_execution_request = sysdig_client.SubmitUndoActionExecutionRequest() # SubmitUndoActionExecutionRequest | Metadata for the undo action execution. (optional)
+    caller_id = 'caller_id_example' # str |  (optional)
 
     try:
         # Undoes an Action Execution
-        api_response = api_instance.undo_action_execution_v1(action_execution_id, submit_undo_action_execution_request=submit_undo_action_execution_request)
+        api_response = api_instance.undo_action_execution_v1(action_execution_id, caller_id=caller_id)
         print("The response of ResponseActionsApi->undo_action_execution_v1:\n")
         pprint(api_response)
     except Exception as e:
@@ -496,7 +511,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **action_execution_id** | **str**| ID of the action execution | 
- **submit_undo_action_execution_request** | [**SubmitUndoActionExecutionRequest**](SubmitUndoActionExecutionRequest.md)| Metadata for the undo action execution. | [optional] 
+ **caller_id** | **str**|  | [optional] 
 
 ### Return type
 
@@ -508,7 +523,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 ### HTTP response details

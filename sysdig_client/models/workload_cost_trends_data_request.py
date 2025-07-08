@@ -31,7 +31,7 @@ class WorkloadCostTrendsDataRequest(BaseModel):
     WorkloadCostTrendsDataRequest
     """ # noqa: E501
     trend_range_in_days: Union[Annotated[float, Field(le=30, strict=True, ge=1)], Annotated[int, Field(le=30, strict=True, ge=1)]] = Field(description="Specifies the number of days used to calculate and extract cost data. Must be a positive integer. ", alias="trendRangeInDays")
-    var_date: date = Field(description="The reference date used to define the time window for cost trend calculation. When combined with `trendRangeInDays`, this date represents the exclusive upper bound of the time range — the trend is calculated from (`date - trendRangeInDays`) up to but not including `date`. For example, if `date` is 2025-02-12 and `trendRangeInDays` is 10, the time range used for calculation is from 2025-02-02 to 2025-02-11 (inclusive).  Must be in YYYY-MM-DD format. ", alias="date")
+    var_date: date = Field(description="The reference date used to define the time window for cost trend calculation. When combined with `trendRangeInDays`, this date represents the inclusive upper bound of the time range — the trend is calculated from (`date - trendRangeInDays`). For example, if `date` is 2025-02-12 and `trendRangeInDays` is 10, the time range used for calculation is from 2025-02-03 to 2025-02-12 (inclusive).  Must be in YYYY-MM-DD format. ", alias="date")
     scope: Optional[Annotated[List[PromqlMatcher], Field(max_length=512)]] = Field(default=None, description="A list of PromQL-style filters")
     group_by: Optional[Annotated[List[Annotated[str, Field(min_length=1, strict=True, max_length=1024)]], Field(max_length=10)]] = Field(default=None, alias="groupBy")
     __properties: ClassVar[List[str]] = ["trendRangeInDays", "date", "scope", "groupBy"]

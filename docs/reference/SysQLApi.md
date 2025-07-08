@@ -14,7 +14,10 @@ Method | HTTP request | Description
 
 Get SysQL Schema
 
-Retrieve the schema information for all entities and their relationships in YAML format. This endpoint returns the graph schema definition that describes available entities, their fields, and relationships. 
+Retrieve the schema information for all entities and their relationships in YAML format.
+This endpoint returns the graph schema definition that describes available entities,
+their fields, and relationships.
+
 
 ### Example
 
@@ -92,7 +95,11 @@ This endpoint does not need any parameter.
 
 Execute SysQL query via GET
 
-[DEPRECATED] Retrieve resources from the graph datastore using the GET method.  > The GET method for this endpoint is deprecated and will be removed in future versions. > Please use the POST method instead, which provides better support for complex queries. 
+[DEPRECATED] Retrieve resources from the graph datastore using the GET method.
+
+> The GET method for this endpoint is deprecated and will be removed in future versions.
+> Please use the POST method instead, which provides better support for complex queries.
+
 
 ### Example
 

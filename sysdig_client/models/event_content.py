@@ -24,7 +24,6 @@ from sysdig_client.models.k8s_admission_review_content import K8sAdmissionReview
 from sysdig_client.models.stateful_detections_content import StatefulDetectionsContent
 from sysdig_client.models.workload_ml_runtime_detection_content import WorkloadMlRuntimeDetectionContent
 from sysdig_client.models.workload_runtime_detection_content import WorkloadRuntimeDetectionContent
-from sysdig_client.models.event_content_type import EventContentType
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self
@@ -123,48 +122,41 @@ class EventContent(BaseModel):
         instance = cls.model_construct()
         error_messages = []
         match = 0
-        raw_event_content = json.loads(json_str)
 
         # deserialize data into K8sAdmissionReviewContent
         try:
-            if raw_event_content.get("type") == EventContentType.K8SADMISSIONREVIEW:
-                instance.actual_instance = K8sAdmissionReviewContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = K8sAdmissionReviewContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into AgentlessRuntimeDetectionContent
         try:
-            if raw_event_content.get("type") == EventContentType.AGENTLESSRUNTIMEDETECTION:
-                instance.actual_instance = AgentlessRuntimeDetectionContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = AgentlessRuntimeDetectionContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into WorkloadRuntimeDetectionContent
         try:
-            if raw_event_content.get("type") == EventContentType.WORKLOADRUNTIMEDETECTION:
-                instance.actual_instance = WorkloadRuntimeDetectionContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = WorkloadRuntimeDetectionContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into WorkloadMlRuntimeDetectionContent
         try:
-            if raw_event_content.get("type") == EventContentType.WORKLOADMLRUNTIMEDETECTION:
-                instance.actual_instance = WorkloadMlRuntimeDetectionContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = WorkloadMlRuntimeDetectionContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into AgentlessMlRuntimeDetectionContent
         try:
-            if raw_event_content.get("type") == EventContentType.AGENTLESSMLRUNTIMEDETECTION:
-                instance.actual_instance = AgentlessMlRuntimeDetectionContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = AgentlessMlRuntimeDetectionContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         # deserialize data into StatefulDetectionsContent
         try:
-            if raw_event_content.get("type") == EventContentType.STATEFULDETECTIONS:
-                instance.actual_instance = StatefulDetectionsContent.from_json(json_str)
-                match += 1
+            instance.actual_instance = StatefulDetectionsContent.from_json(json_str)
+            match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 

@@ -33,8 +33,9 @@ class CreateUserRequestV1(BaseModel):
     first_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The name of the user. ", alias="firstName")
     last_name: Optional[Annotated[str, Field(strict=True, max_length=256)]] = Field(default=None, description="The surname of the user. ", alias="lastName")
     is_admin: Optional[StrictBool] = Field(default=False, description="**True** if the user has Administration permissions. ", alias="isAdmin")
+    bypass_sso_enforcement: Optional[StrictBool] = Field(default=False, description="When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled. ", alias="bypassSsoEnforcement")
     products: Optional[Annotated[List[Product], Field(max_length=2)]] = Field(default=None, description="The user will be added to the default teams specified by this field.")
-    __properties: ClassVar[List[str]] = ["email", "firstName", "lastName", "isAdmin", "products"]
+    __properties: ClassVar[List[str]] = ["email", "firstName", "lastName", "isAdmin", "bypassSsoEnforcement", "products"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -91,6 +92,7 @@ class CreateUserRequestV1(BaseModel):
             "firstName": obj.get("firstName"),
             "lastName": obj.get("lastName"),
             "isAdmin": obj.get("isAdmin") if obj.get("isAdmin") is not None else False,
+            "bypassSsoEnforcement": obj.get("bypassSsoEnforcement") if obj.get("bypassSsoEnforcement") is not None else False,
             "products": obj.get("products")
         })
         return _obj

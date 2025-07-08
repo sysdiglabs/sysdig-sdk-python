@@ -29,8 +29,8 @@ class CreateChronicleIntegrationConnInfoV2(BaseModel):
     Create Chronicle Integration Connection V2 Info
     """ # noqa: E501
     region: Optional[StrictStr] = Field(default='us', description="The target region")
-    chronicle_customer_id: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Unique identifier (UUID) corresponding to a particular Chronicle instance", alias="chronicleCustomerId")
-    namespace: Annotated[str, Field(strict=True, max_length=128)] = Field(description="User-configured environment namespace to identify the data domain the logs originated from")
+    chronicle_customer_id: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Unique identifier (UUID) corresponding to a particular Chronicle instance", alias="chronicleCustomerId")
+    namespace: Annotated[str, Field(strict=True, max_length=64)] = Field(description="User-configured environment namespace to identify the data domain the logs originated from")
     credentials_o_auth2: Annotated[str, Field(strict=True, max_length=1048576)] = Field(description="The Chronicle v2 OAuth2 credentials", alias="credentialsOAuth2")
     __properties: ClassVar[List[str]] = ["region", "chronicleCustomerId", "namespace", "credentialsOAuth2"]
 

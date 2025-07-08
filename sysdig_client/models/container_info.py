@@ -29,7 +29,7 @@ class ContainerInfo(BaseModel):
     Kubernetes container information.
     """ # noqa: E501
     pod_name: Annotated[str, Field(strict=True, max_length=63)] = Field(description="Pod name", alias="podName")
-    container_id: Annotated[str, Field(strict=True, max_length=128)] = Field(description="Container id.", alias="containerId")
+    container_id: Annotated[str, Field(strict=True, max_length=64)] = Field(description="Container id.", alias="containerId")
     container_name: Annotated[str, Field(strict=True, max_length=253)] = Field(description="Container name.", alias="containerName")
     pull_string: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default=None, description="Pull string for image used for the container.", alias="pullString")
     __properties: ClassVar[List[str]] = ["podName", "containerId", "containerName", "pullString"]

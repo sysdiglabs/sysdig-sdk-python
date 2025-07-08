@@ -13,7 +13,10 @@ Method | HTTP request | Description
 
 List Report Job Runs
 
-Retrieve a list of Report Job runs.\\ \\ **Required permissions:** platform.reporting.report-downloads.read 
+Retrieve a list of Report Job runs.\
+\
+**Required permissions:** platform.reporting.report-downloads.read
+
 
 ### Example
 
@@ -112,7 +115,10 @@ Name | Type | Description  | Notes
 
 List Report Schedules
 
-Retrieve a paginated list of Report Schedules.\\ \\ **Required permissions:** platform.reporting.schedules.read 
+Retrieve a paginated list of Report Schedules.\
+\
+**Required permissions:** platform.reporting.schedules.read
+
 
 ### Example
 

@@ -21,7 +21,10 @@ Method | HTTP request | Description
 
 Create Jira integration
 
-This operation creates a Jira integration on the Sysdig platform.  **Required permissions:** *ticketing-integration.write* 
+This operation creates a Jira integration on the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
@@ -105,7 +108,10 @@ Name | Type | Description  | Notes
 
 Create Jira issue type
 
-This operation creates a Jira issue type on the Sysdig platform for the particular Jira integration.  **Required permissions:** *ticketing-integration.write* 
+This operation creates a Jira issue type on the Sysdig platform for the particular Jira integration.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
@@ -192,7 +198,10 @@ Name | Type | Description  | Notes
 
 Delete Jira integration
 
-This operation deletes a specific Jira integration on the Sysdig platform.  **Required permissions:** *ticketing-integration.write* 
+This operation deletes a specific Jira integration on the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
@@ -274,7 +283,10 @@ void (empty response body)
 
 Delete Jira issue type
 
-This operation deletes a specific Jira issue type on the Sysdig platform.  **Required permissions:** *ticketing-integration.write* 
+This operation deletes a specific Jira issue type on the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
@@ -357,7 +369,10 @@ void (empty response body)
 
 Get Jira integration
 
-This operation returns a specific Jira integration from the Sysdig platform.  **Required permissions:** *ticketing-integration.read* 
+This operation returns a specific Jira integration from the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.read*
+
 
 ### Example
 
@@ -441,7 +456,10 @@ Name | Type | Description  | Notes
 
 List Jira integrations
 
-This operation returns a paginated list of Jira integrations from the Sysdig platform.  **Required permissions:** *ticketing-integration.read* 
+This operation returns a paginated list of Jira integrations from the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.read*
+
 
 ### Example
 
@@ -528,7 +546,10 @@ Name | Type | Description  | Notes
 
 Get Jira issue type
 
-This operation returns a specific Jira issue type from the Sysdig platform.  **Required permissions:** *ticketing-integration.read* 
+This operation returns a specific Jira issue type from the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.read*
+
 
 ### Example
 
@@ -614,7 +635,10 @@ Name | Type | Description  | Notes
 
 List Jira issue types
 
-This operation returns a list of Jira issue types from the Sysdig platform, associated with a particular Jira integration.  **Required permissions:** *ticketing-integration.read* 
+This operation returns a list of Jira issue types from the Sysdig platform, associated with a particular Jira integration.
+
+**Required permissions:** *ticketing-integration.read*
+
 
 ### Example
 
@@ -697,7 +721,10 @@ Name | Type | Description  | Notes
 
 Update Jira integration
 
-This operation updates a specific Jira integration on the Sysdig platform.  **Required permissions:** *ticketing-integration.write* 
+This operation updates a specific Jira integration on the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
@@ -784,7 +811,10 @@ Name | Type | Description  | Notes
 
 Update Jira issue type
 
-This operation updates a specific Jira issue type on the Sysdig platform.  **Required permissions:** *ticketing-integration.write* 
+This operation updates a specific Jira issue type on the Sysdig platform.
+
+**Required permissions:** *ticketing-integration.write*
+
 
 ### Example
 
