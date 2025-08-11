@@ -6,8 +6,8 @@ Number of days remaining until the CISA KEV-listed vulnerability is fixed.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**CisaKevPublishDateExtra**](CisaKevPublishDateExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**CisaKevPublishDateExtra**](CisaKevPublishDateExtra.md) |  |
 
 ## Example
 

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**ScopeTypeV1**](ScopeTypeV1.md) |  | 
-**expression** | **str** |  | 
+**type** | [**ScopeTypeV1**](ScopeTypeV1.md) |  |
+**expression** | **str** |  |
 
 ## Example
 

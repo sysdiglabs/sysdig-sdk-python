@@ -6,11 +6,11 @@ total vulnerabilities by severity
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**critical** | **int** | number of critical vulnerabilities | [optional] 
-**high** | **int** | number of high severity vulnerabilities | [optional] 
-**medium** | **int** | number of medium severity vulnerabilities | [optional] 
-**low** | **int** | number of low severity vulnerabilities | [optional] 
-**negligible** | **int** | number of negligible severity vulnerabilities | [optional] 
+**critical** | **int** | number of critical vulnerabilities | [optional]
+**high** | **int** | number of high severity vulnerabilities | [optional]
+**medium** | **int** | number of medium severity vulnerabilities | [optional]
+**low** | **int** | number of low severity vulnerabilities | [optional]
+**negligible** | **int** | number of negligible severity vulnerabilities | [optional]
 
 ## Example
 

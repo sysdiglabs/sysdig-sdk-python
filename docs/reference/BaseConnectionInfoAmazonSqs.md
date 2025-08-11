@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**owner_account** | **str** | The AWS account ID of the account that created the queue | [optional] 
-**region** | **str** | Region in which the SQS queue is hosted | 
-**queue** | **str** | Queue name | 
-**delay** | **int** | Delay, in seconds, applied to the data | [optional] 
-**headers** | [**List[KeyValueObject]**](KeyValueObject.md) | Extra headers to add to the payload. Each header mapping requires 2 keys: &#39;key&#39; for the header key and &#39;value&#39; for its value | [optional] 
+**owner_account** | **str** | The AWS account ID of the account that created the queue | [optional]
+**region** | **str** | Region in which the SQS queue is hosted |
+**queue** | **str** | Queue name |
+**delay** | **int** | Delay, in seconds, applied to the data | [optional]
+**headers** | [**List[KeyValueObject]**](KeyValueObject.md) | Extra headers to add to the payload. Each header mapping requires 2 keys: &#39;key&#39; for the header key and &#39;value&#39; for its value | [optional]
 
 ## Example
 

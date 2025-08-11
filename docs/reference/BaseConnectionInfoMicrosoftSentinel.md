@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**workspace_id** | **str** | Log Analytics workspace ID | 
+**workspace_id** | **str** | Log Analytics workspace ID |
 
 ## Example
 

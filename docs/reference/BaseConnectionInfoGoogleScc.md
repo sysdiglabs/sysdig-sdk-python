@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**organization** | **str** | ID of your GCP organization | 
-**security_marks** | [**List[KeyValueObject]**](KeyValueObject.md) | additional annotations to add to assets or findings as they get forwarded to Security Command Center | [optional] 
+**organization** | **str** | ID of your GCP organization |
+**security_marks** | [**List[KeyValueObject]**](KeyValueObject.md) | additional annotations to add to assets or findings as they get forwarded to Security Command Center | [optional]
 
 ## Example
 

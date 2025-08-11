@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**timestamp** | **int** | Epoch timestamp (milliseconds) when the error occurred. | 
-**status** | **int** | HTTP status code of the response. | 
-**error** | **str** | A human-readable error message. | 
-**path** | **str** | The requested endpoint path that triggered the error. | 
+**timestamp** | **int** | Epoch timestamp (milliseconds) when the error occurred. |
+**status** | **int** | HTTP status code of the response. |
+**error** | **str** | A human-readable error message. |
+**path** | **str** | The requested endpoint path that triggered the error. |
 
 ## Example
 

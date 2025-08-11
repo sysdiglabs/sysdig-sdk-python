@@ -6,12 +6,12 @@ The custom webhook notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**url** | **str** | The url to which the request should be sent | 
-**template** | **str** | The custom template used by this webhook, currently a JSON potentially enriched by Sysdig Templating Language | 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**url** | **str** | The url to which the request should be sent |
+**template** | **str** | The custom template used by this webhook, currently a JSON potentially enriched by Sysdig Templating Language |
 **http_method** | **str** | The HTTP method to use when doing the request to the target url | [optional] [default to 'POST']
-**is_allows_insecure_connections** | **bool** | Specifies if the channel allows insecure connections (e.g. plain http, self-signed https) | [optional] 
-**additional_headers** | **Dict[str, str]** | Additional headers to send as part of the request to the target url | [optional] 
+**is_allows_insecure_connections** | **bool** | Specifies if the channel allows insecure connections (e.g. plain http, self-signed https) | [optional]
+**additional_headers** | **Dict[str, str]** | Additional headers to send as part of the request to the target url | [optional]
 
 ## Example
 

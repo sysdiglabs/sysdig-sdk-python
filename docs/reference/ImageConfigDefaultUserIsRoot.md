@@ -1,12 +1,12 @@
 # ImageConfigDefaultUserIsRoot
 
-Predicate expressing \"the container user defaults to root user\". 
+Predicate expressing \"the container user defaults to root user\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

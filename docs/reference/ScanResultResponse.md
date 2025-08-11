@@ -5,16 +5,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**asset_type** | **str** | scan result asset type | 
-**stage** | **str** | scan result stage | 
-**metadata** | [**ScanResultResponseMetadata**](ScanResultResponseMetadata.md) |  | 
-**packages** | [**Dict[str, Package]**](Package.md) |  | 
-**vulnerabilities** | [**Dict[str, Vulnerability]**](Vulnerability.md) |  | [optional] 
-**layers** | [**Dict[str, Layer]**](Layer.md) |  | [optional] 
-**base_images** | [**Dict[str, BaseImage]**](BaseImage.md) |  | [optional] 
-**policies** | [**Policies**](Policies.md) |  | [optional] 
-**risk_accepts** | [**Dict[str, RiskAcceptanceDefinition]**](RiskAcceptanceDefinition.md) |  | [optional] 
-**producer** | [**Producer**](Producer.md) |  | [optional] 
+**asset_type** | **str** | scan result asset type |
+**stage** | **str** | scan result stage |
+**metadata** | [**ScanResultResponseMetadata**](ScanResultResponseMetadata.md) |  |
+**packages** | [**Dict[str, Package]**](Package.md) |  |
+**vulnerabilities** | [**Dict[str, Vulnerability]**](Vulnerability.md) |  | [optional]
+**layers** | [**Dict[str, Layer]**](Layer.md) |  | [optional]
+**base_images** | [**Dict[str, BaseImage]**](BaseImage.md) |  | [optional]
+**policies** | [**Policies**](Policies.md) |  | [optional]
+**risk_accepts** | [**Dict[str, RiskAcceptanceDefinition]**](RiskAcceptanceDefinition.md) |  | [optional]
+**producer** | [**Producer**](Producer.md) |  | [optional]
 
 ## Example
 

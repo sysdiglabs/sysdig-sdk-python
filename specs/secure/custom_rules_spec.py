@@ -8,8 +8,9 @@ from specs import be_successful_api_call
 
 with description("Custom Rules", "integration") as self:
     with before.each:
-        self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                     token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = SdSecureClient(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"), token=os.getenv("SDC_SECURE_TOKEN")
+        )
 
     with context("when the custom rules file exists"):
         with it("can be retrieved"):
@@ -20,14 +21,12 @@ with description("Custom Rules", "integration") as self:
 
         with context("when the credentials are not valid"):
             with it("can't be retrieved"):
-                self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                             token="foo-bar")
+                self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"), token="foo-bar")
 
                 ok, res = self.client.get_user_falco_rules()
 
                 expect((ok, res)).to_not(be_successful_api_call)
                 expect(res).to(equal("Bad credentials"))
-
 
     with it("can push custom rules"):
         _, previous_rules = self.client.get_user_falco_rules()
@@ -52,11 +51,9 @@ with description("Custom Rules", "integration") as self:
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(equal(previous_rules))
 
-
     def user_falco_rules(self):
         with open("fixtures/custom_rules.yaml", "r") as f:
             return f.read()
-
 
     def empty_falco_rules(self):
         return """####################
@@ -73,7 +70,6 @@ with description("Custom Rules", "integration") as self:
 
 # Or override any rule, macro, or list from the Default Rules
 """
-
 
     def rules_without_header(self):
         return """\

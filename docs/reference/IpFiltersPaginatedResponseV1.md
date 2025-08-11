@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional] 
-**data** | [**List[IpFilterResponseV1]**](IpFilterResponseV1.md) |  | [optional] 
+**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional]
+**data** | [**List[IpFilterResponseV1]**](IpFilterResponseV1.md) |  | [optional]
 
 ## Example
 

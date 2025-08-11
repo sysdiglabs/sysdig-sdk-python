@@ -6,8 +6,8 @@ Determines the teams to which a group is mapped.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_for_all_teams** | **bool** | If true, the group is mapped to all teams.  | [optional] 
-**team_ids** | **List[int]** | The list of teams to which group is mapped. It is empty when &#39;isForAllTeams&#39; is true, otherwise it should have at least 1 element.  | [optional] 
+**is_for_all_teams** | **bool** | If true, the group is mapped to all teams.  | [optional]
+**team_ids** | **List[int]** | The list of teams to which group is mapped. It is empty when &#39;isForAllTeams&#39; is true, otherwise it should have at least 1 element.  | [optional]
 
 ## Example
 

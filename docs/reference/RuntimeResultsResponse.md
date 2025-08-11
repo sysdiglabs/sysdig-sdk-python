@@ -6,8 +6,8 @@ runtime results response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional] 
-**data** | [**List[RuntimeResult]**](RuntimeResult.md) |  | [optional] 
+**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional]
+**data** | [**List[RuntimeResult]**](RuntimeResult.md) |  | [optional]
 
 ## Example
 

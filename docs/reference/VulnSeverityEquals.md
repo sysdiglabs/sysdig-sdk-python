@@ -1,13 +1,13 @@
 # VulnSeverityEquals
 
-Predicate expressing \"the Vulnerability Severity is exactly <level>\". 
+Predicate expressing \"the Vulnerability Severity is exactly <level>\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnSeverityExtra**](VulnSeverityExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnSeverityExtra**](VulnSeverityExtra.md) |  |
 
 ## Example
 

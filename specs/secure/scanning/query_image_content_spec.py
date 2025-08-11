@@ -8,8 +8,9 @@ from specs import be_successful_api_call
 
 with description("Query Image Content", "integration") as self:
     with before.each:
-        self.client = SdScanningClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                       token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = SdScanningClient(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"), token=os.getenv("SDC_SECURE_TOKEN")
+        )
         self.image_to_scan = "quay.io/sysdig/agent:latest"
 
     with it("is able to retrieve the OS contents"):
@@ -47,8 +48,7 @@ with description("Query Image Content", "integration") as self:
         ok, res = self.client.query_image_content(self.image_to_scan, "files")
 
         expect((ok, res)).to(be_successful_api_call)
-        expect(res["content"]).to(
-            contain(have_keys("filename", "gid", "linkdest", "mode", "sha256", "size", "type", "uid")))
+        expect(res["content"]).to(contain(have_keys("filename", "gid", "linkdest", "mode", "sha256", "size", "type", "uid")))
         expect(res["content_type"]).to(equal("files"))
 
     with context("when the type is not in the supported list"):
@@ -56,5 +56,6 @@ with description("Query Image Content", "integration") as self:
             ok, res = self.client.query_image_content(self.image_to_scan, "Unknown")
 
             expect((ok, res)).not_to(be_successful_api_call)
-            expect(res).to(equal(
-                "unsupported type provided: unknown, must be one of ['os', 'files', 'npm', 'gem', 'python', 'java']"))
+            expect(res).to(
+                equal("unsupported type provided: unknown, must be one of ['os', 'files', 'npm', 'gem', 'python', 'java']")
+            )

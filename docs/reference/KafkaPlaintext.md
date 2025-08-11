@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_tls_enabled** | **bool** |  | [optional] 
+**is_tls_enabled** | **bool** |  | [optional]
 
 ## Example
 

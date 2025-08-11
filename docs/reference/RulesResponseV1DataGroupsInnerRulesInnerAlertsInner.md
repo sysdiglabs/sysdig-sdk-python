@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**state** | **str** | Current state of the alert. | 
-**active_at** | **datetime** | Timestamp when the alert became active. | 
-**value** | **str** | The numerical value that triggered the alert. | 
+**state** | **str** | Current state of the alert. |
+**active_at** | **datetime** | Timestamp when the alert became active. |
+**value** | **str** | The numerical value that triggered the alert. |
 
 ## Example
 

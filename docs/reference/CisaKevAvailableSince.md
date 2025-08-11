@@ -1,13 +1,13 @@
 # CisaKevAvailableSince
 
-Number of days since the vulnerability was added to CISA's Known Exploited Vulnerabilities (KEV) catalog. Calculated from initial inclusion date to current date. 
+Number of days since the vulnerability was added to CISA's Known Exploited Vulnerabilities (KEV) catalog. Calculated from initial inclusion date to current date.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**CisaKevPublishDateExtra**](CisaKevPublishDateExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**CisaKevPublishDateExtra**](CisaKevPublishDateExtra.md) |  |
 
 ## Example
 

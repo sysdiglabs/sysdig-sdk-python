@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**metric** | **Dict[str, str]** |  | 
-**values** | **List[List[str]]** |  | 
+**metric** | **Dict[str, str]** |  |
+**values** | **List[List[str]]** |  |
 
 ## Example
 

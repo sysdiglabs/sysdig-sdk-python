@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rule_id** | **str** | rule&#39;s id | [optional] 
-**rule_type** | **str** | rule type | 
-**evaluation_result** | **str** | result of rule evaluation | [optional] 
-**predicates** | [**List[Predicate]**](Predicate.md) | list of rule&#39;s predicates | [optional] 
-**failure_type** | **str** | rule failure type | 
-**description** | **str** | rule description | 
-**failures** | [**List[RuleFailuresInner]**](RuleFailuresInner.md) | list of rule failures | [optional] 
+**rule_id** | **str** | rule&#39;s id | [optional]
+**rule_type** | **str** | rule type |
+**evaluation_result** | **str** | result of rule evaluation | [optional]
+**predicates** | [**List[Predicate]**](Predicate.md) | list of rule&#39;s predicates | [optional]
+**failure_type** | **str** | rule failure type |
+**description** | **str** | rule description |
+**failures** | [**List[RuleFailuresInner]**](RuleFailuresInner.md) | list of rule failures | [optional]
 
 ## Example
 

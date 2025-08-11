@@ -1,13 +1,13 @@
 # ImageConfigCreationDateWithAge
 
-Predicate expressing \"the image has been created before the specified amount of days\". 
+Predicate expressing \"the image has been created before the specified amount of days\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigCreationDateWithAgeExtra**](ImageConfigCreationDateWithAgeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigCreationDateWithAgeExtra**](ImageConfigCreationDateWithAgeExtra.md) |  |
 
 ## Example
 

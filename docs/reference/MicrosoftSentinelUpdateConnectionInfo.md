@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**workspace_id** | **str** | Log Analytics workspace ID | 
-**secret** | **str** | Log analytics primary key | [optional] 
+**workspace_id** | **str** | Log Analytics workspace ID |
+**secret** | **str** | Log analytics primary key | [optional]
 
 ## Example
 

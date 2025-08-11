@@ -6,9 +6,9 @@ The total number of pages the matched the filter, and the next and previous page
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**next** | **int** | The next page | [optional] 
-**previous** | **int** | The previous page | [optional] 
-**total** | **int** | Total page count | 
+**next** | **int** | The next page | [optional]
+**previous** | **int** | The previous page | [optional]
+**total** | **int** | Total page count |
 
 ## Example
 

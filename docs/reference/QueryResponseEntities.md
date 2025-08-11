@@ -6,7 +6,7 @@ Metadata about the returned fields.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fields** | [**EntityDefinition**](EntityDefinition.md) |  | [optional] 
+**fields** | [**EntityDefinition**](EntityDefinition.md) |  | [optional]
 
 ## Example
 

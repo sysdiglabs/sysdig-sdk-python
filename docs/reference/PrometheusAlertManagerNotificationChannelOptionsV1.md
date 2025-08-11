@@ -6,10 +6,10 @@ The Prometheus Alert Manager notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**url** | **str** | The prometheus alert manager url to which the request should be posted | 
-**is_allows_insecure_connections** | **bool** | Specifies if the channel allows insecure connections (e.g. plain http, self-signed https) | [optional] 
-**additional_headers** | **Dict[str, str]** | Additional headers to send in the request to the alert manager url | [optional] 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**url** | **str** | The prometheus alert manager url to which the request should be posted |
+**is_allows_insecure_connections** | **bool** | Specifies if the channel allows insecure connections (e.g. plain http, self-signed https) | [optional]
+**additional_headers** | **Dict[str, str]** | Additional headers to send in the request to the alert manager url | [optional]
 
 ## Example
 

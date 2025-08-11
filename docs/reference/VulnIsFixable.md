@@ -1,12 +1,12 @@
 # VulnIsFixable
 
-Predicate expressing \"the Vulnerability is Fixable\". 
+Predicate expressing \"the Vulnerability is Fixable\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

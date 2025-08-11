@@ -6,10 +6,10 @@ Kubernetes container information.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pod_name** | **str** | Pod name | 
-**container_id** | **str** | Container id. | 
-**container_name** | **str** | Container name. | 
-**pull_string** | **str** | Pull string for image used for the container. | [optional] 
+**pod_name** | **str** | Pod name |
+**container_id** | **str** | Container id. |
+**container_name** | **str** | Container name. |
+**pull_string** | **str** | Pull string for image used for the container. | [optional]
 
 ## Example
 

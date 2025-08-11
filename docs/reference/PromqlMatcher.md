@@ -1,14 +1,14 @@
 # PromqlMatcher
 
-A PromQL-style filter that narrows the dataset to resources matching specific labels. If not provided, no additional filtering is applied. 
+A PromQL-style filter that narrows the dataset to resources matching specific labels. If not provided, no additional filtering is applied.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**label** | **str** | A valid Prometheus label name. Must match ^[a-zA-Z_][a-zA-Z0-9_]*$ | 
-**operator** | **str** | The operator to use in the filter:   - &#x60;EQUAL&#x60; (&#x60;&#x3D;&#x60;): Exact match   - &#x60;NOT_EQUAL&#x60; (&#x60;!&#x3D;&#x60;): Exclude exact match   - &#x60;REGEX_MATCH&#x60; (&#x60;&#x3D;~&#x60;): Regular expression match   - &#x60;REGEX_NOT_MATCH&#x60; (&#x60;!~&#x60;): Regular expression mismatch  | 
-**value** | **str** | The value to match against. | 
+**label** | **str** | A valid Prometheus label name. Must match ^[a-zA-Z_][a-zA-Z0-9_]*$ |
+**operator** | **str** | The operator to use in the filter:   - &#x60;EQUAL&#x60; (&#x60;&#x3D;&#x60;): Exact match   - &#x60;NOT_EQUAL&#x60; (&#x60;!&#x3D;&#x60;): Exclude exact match   - &#x60;REGEX_MATCH&#x60; (&#x60;&#x3D;~&#x60;): Regular expression match   - &#x60;REGEX_NOT_MATCH&#x60; (&#x60;!~&#x60;): Regular expression mismatch  |
+**value** | **str** | The value to match against. |
 
 ## Example
 

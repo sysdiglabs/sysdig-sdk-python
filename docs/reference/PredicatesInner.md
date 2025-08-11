@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigCreationDateWithAgeExtra**](ImageConfigCreationDateWithAgeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigCreationDateWithAgeExtra**](ImageConfigCreationDateWithAgeExtra.md) |  |
 
 ## Example
 

@@ -6,8 +6,8 @@ pipeline results
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional] 
-**data** | [**List[PipelineResult]**](PipelineResult.md) |  | [optional] 
+**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional]
+**data** | [**List[PipelineResult]**](PipelineResult.md) |  | [optional]
 
 ## Example
 

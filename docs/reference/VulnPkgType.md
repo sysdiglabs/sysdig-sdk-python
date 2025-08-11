@@ -1,13 +1,13 @@
 # VulnPkgType
 
-Predicate expressing \"the Vulnerability is related to a package of <type>\". 
+Predicate expressing \"the Vulnerability is related to a package of <type>\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnPkgTypeExtra**](VulnPkgTypeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnPkgTypeExtra**](VulnPkgTypeExtra.md) |  |
 
 ## Example
 

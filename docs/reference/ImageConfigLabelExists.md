@@ -1,13 +1,13 @@
 # ImageConfigLabelExists
 
-Predicate expressing \"the image has the specified label\". 
+Predicate expressing \"the image has the specified label\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigLabelExistsExtra**](ImageConfigLabelExistsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigLabelExistsExtra**](ImageConfigLabelExistsExtra.md) |  |
 
 ## Example
 

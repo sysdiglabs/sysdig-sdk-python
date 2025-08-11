@@ -6,8 +6,8 @@ The posture policy summary
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pass_percentage** | **int** | Percentage of policies passing | 
-**policies** | [**List[PoliciesSummaryEntry]**](PoliciesSummaryEntry.md) | The policies list | 
+**pass_percentage** | **int** | Percentage of policies passing |
+**policies** | [**List[PoliciesSummaryEntry]**](PoliciesSummaryEntry.md) | The policies list |
 
 ## Example
 

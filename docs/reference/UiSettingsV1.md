@@ -6,8 +6,8 @@ UI related settings.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**entry_point** | [**EntryPointV1**](EntryPointV1.md) |  | [optional] 
-**theme** | **str** | The color assigned to the team. | [optional] 
+**entry_point** | [**EntryPointV1**](EntryPointV1.md) |  | [optional]
+**theme** | **str** | The color assigned to the team. | [optional]
 
 ## Example
 

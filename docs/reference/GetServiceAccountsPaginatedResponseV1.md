@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional] 
-**data** | [**List[ServiceAccountResponseV1]**](ServiceAccountResponseV1.md) |  | [optional] 
+**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional]
+**data** | [**List[ServiceAccountResponseV1]**](ServiceAccountResponseV1.md) |  | [optional]
 
 ## Example
 

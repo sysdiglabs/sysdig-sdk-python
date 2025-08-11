@@ -6,9 +6,9 @@ The VictorOps notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**api_key** | **str** | The VictorOps api key | [optional] 
-**routing_key** | **str** | The VictorOps routing key | [optional] 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**api_key** | **str** | The VictorOps api key | [optional]
+**routing_key** | **str** | The VictorOps routing key | [optional]
 
 ## Example
 

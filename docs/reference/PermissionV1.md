@@ -6,10 +6,10 @@ Permission to perform an action on the Sysdig platform.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Permission Authority.  | [optional] 
-**description** | **str** | Permission description.  | [optional] 
-**products** | **List[str]** | Specifies the Sysdig product the permission applies to (Secure &#x3D; SDS; Monitor &#x3D; SDC).  | [optional] 
-**dependencies** | **List[str]** | List of permissions that this permission depends on.  | [optional] 
+**id** | **str** | Permission Authority.  | [optional]
+**description** | **str** | Permission description.  | [optional]
+**products** | **List[str]** | Specifies the Sysdig product the permission applies to (Secure &#x3D; SDS; Monitor &#x3D; SDC).  | [optional]
+**dependencies** | **List[str]** | List of permissions that this permission depends on.  | [optional]
 
 ## Example
 

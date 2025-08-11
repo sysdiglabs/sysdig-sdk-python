@@ -6,9 +6,9 @@ The Team Email notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**team_id** | **int** | ID of team to notify | [optional] 
-**is_include_admin_users** | **bool** | Whether the admin users of the team should be notified or not | [optional] 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**team_id** | **int** | ID of team to notify | [optional]
+**is_include_admin_users** | **bool** | Whether the admin users of the team should be notified or not | [optional]
 
 ## Example
 

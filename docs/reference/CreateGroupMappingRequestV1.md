@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_name** | **str** | The group name matching the external provider name. | 
-**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) | The standard team role assigned for the user in this team. **Mutually exclusive with customTeamRoleId**.  | [optional] 
-**custom_team_role_id** | **int** | The custom team role ID assigned for the user in this team. **Mutually exclusive with standardTeamRole**.  | [optional] 
-**is_admin** | **bool** | Flag that indicates if the group is an admin group. | [optional] 
-**team_map** | [**TeamMapV1**](TeamMapV1.md) |  | 
+**group_name** | **str** | The group name matching the external provider name. |
+**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) | The standard team role assigned for the user in this team. **Mutually exclusive with customTeamRoleId**.  | [optional]
+**custom_team_role_id** | **int** | The custom team role ID assigned for the user in this team. **Mutually exclusive with standardTeamRole**.  | [optional]
+**is_admin** | **bool** | Flag that indicates if the group is an admin group. | [optional]
+**team_map** | [**TeamMapV1**](TeamMapV1.md) |  |
 **weight** | **int** | The weight of the group mapping is used to determine the priority - a lower number has higher priority. | [optional] [default to 32767]
 
 ## Example

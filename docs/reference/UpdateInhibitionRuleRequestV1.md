@@ -6,12 +6,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **is_enabled** | **bool** | Indicates if the inhibition rule is enabled or not. | [optional] [default to True]
-**name** | **str** | Name of the inhibition rule. If provided, must be unique. | [optional] 
-**description** | **str** | Description of the inhibition rule. | [optional] 
-**source_matchers** | [**List[LabelMatcherV1]**](LabelMatcherV1.md) | List of source matchers for which one or more alerts have to exist for the inhibition to take effect. | 
-**target_matchers** | [**List[LabelMatcherV1]**](LabelMatcherV1.md) | List of target matchers that have to be fulfilled by the target alerts to be muted. | 
-**equal** | **List[str]** | List of labels that must have an equal value in the source and target alert for the inhibition to take effect. | [optional] 
-**version** | **int** | The current version of the resource. | 
+**name** | **str** | Name of the inhibition rule. If provided, must be unique. | [optional]
+**description** | **str** | Description of the inhibition rule. | [optional]
+**source_matchers** | [**List[LabelMatcherV1]**](LabelMatcherV1.md) | List of source matchers for which one or more alerts have to exist for the inhibition to take effect. |
+**target_matchers** | [**List[LabelMatcherV1]**](LabelMatcherV1.md) | List of target matchers that have to be fulfilled by the target alerts to be muted. |
+**equal** | **List[str]** | List of labels that must have an equal value in the source and target alert for the inhibition to take effect. | [optional]
+**version** | **int** | The current version of the resource. |
 
 ## Example
 

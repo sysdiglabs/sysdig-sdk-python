@@ -6,7 +6,7 @@ The list of supported attributes for filtering Activity Audit entries.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[AuditSupportedFilter]**](AuditSupportedFilter.md) | The list of supported attributes for filtering Activity Audit entries. | 
+**data** | [**List[AuditSupportedFilter]**](AuditSupportedFilter.md) | The list of supported attributes for filtering Activity Audit entries. |
 
 ## Example
 

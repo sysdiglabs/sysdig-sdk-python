@@ -20,13 +20,13 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
 
-SECURE_TEAM_NAME = 'Secure Operations'
+SECURE_TEAM_NAME = "Secure Operations"
 
 #
 # As of when this script was written, the Secure Operations team does
@@ -34,24 +34,24 @@ SECURE_TEAM_NAME = 'Secure Operations'
 # Rather, all members of the Secure team have full visibility within
 # Secure, which is associated with ROLE_TEAM_EDIT.
 #
-SECURE_TEAM_ROLE = 'ROLE_TEAM_EDIT'
+SECURE_TEAM_ROLE = "ROLE_TEAM_EDIT"
 
 #
 # Instantiate the SDC client
 #
-sdclient = SdcClient(sdc_token, sdc_url='https://app.sysdigcloud.com')
+sdclient = SdcClient(sdc_token, sdc_url="https://app.sysdigcloud.com")
 
 ok, res = sdclient.list_memberships(SECURE_TEAM_NAME)
 
 if not ok:
-    print(('Unable to get memberships for ' + SECURE_TEAM_NAME + ' team: ', res))
+    print(("Unable to get memberships for " + SECURE_TEAM_NAME + " team: ", res))
     sys.exit(1)
 memberships = res
 
 ok, res = sdclient.get_users()
 
 if not ok:
-    print(('Unable to get users: ', res))
+    print(("Unable to get users: ", res))
     sys.exit(1)
 all_users = res
 
@@ -60,15 +60,15 @@ all_users = res
 # rather than ID, so convert the IDs.
 #
 for user in all_users:
-    if user['username'] in memberships:
-        print(('Will preserve existing membership for: ' + user['username']))
+    if user["username"] in memberships:
+        print(("Will preserve existing membership for: " + user["username"]))
     else:
-        print(('Will add new member: ' + user['username']))
-        memberships[user['username']] = SECURE_TEAM_ROLE
+        print(("Will add new member: " + user["username"]))
+        memberships[user["username"]] = SECURE_TEAM_ROLE
 
 ok, res = sdclient.save_memberships(SECURE_TEAM_NAME, memberships=memberships)
 if not ok:
-    print(('Could not edit team:', res, '. Exiting.'))
+    print(("Could not edit team:", res, ". Exiting."))
     sys.exit(1)
 else:
     print(('Finished syncing memberships of "' + SECURE_TEAM_NAME + '" team'))

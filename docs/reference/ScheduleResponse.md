@@ -6,32 +6,32 @@ Schema for a scheduled report
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Unique identifier for the schedule | 
-**user_id** | **int** | ID of the user who created the schedule | 
-**team_id** | **int** | ID of the team associated with the schedule | 
-**customer_id** | **int** | ID of the customer associated with the schedule | 
-**name** | **str** | Name of the schedule | [optional] 
-**description** | **str** | Description of the schedule | [optional] 
-**report_id** | **int** | ID of the report | 
-**report_name** | **str** | Name of the report | [optional] 
-**is_report_template** | **bool** | Indicates if the report is a template | 
-**report_format** | **str** | Format of the report | 
-**zones** | **List[int]** | List of zone IDs | 
-**policies** | **List[int]** | List of policy IDs | [optional] 
-**timezone** | **str** | Timezone for the schedule | [optional] 
-**schedule** | **str** | Cron expression for the schedule | 
-**enabled** | **bool** | Indicates if the schedule is enabled | 
-**notification_channels** | [**List[NotificationChannel]**](NotificationChannel.md) | List of notification channels | [optional] 
-**iac_task_id** | **int** | ID of the IaC task | [optional] 
-**password_enabled** | **bool** | Indicates if password protection is enabled | [optional] 
-**compression** | **str** | Compression format | [optional] 
-**created_by** | **str** | Email of the user who created the schedule | 
-**updated_by** | **str** | Email of the user who last updated the schedule | [optional] 
-**created_on** | **datetime** | Timestamp when the schedule was created | 
-**modified_on** | **datetime** | Timestamp when the schedule was last modified | [optional] 
-**last_scheduled_on** | **datetime** | Timestamp when the schedule was last run | [optional] 
-**last_started_on** | **datetime** | Timestamp when the schedule was last started | [optional] 
-**last_completed_on** | **datetime** | Timestamp when the schedule was last completed | [optional] 
+**id** | **str** | Unique identifier for the schedule |
+**user_id** | **int** | ID of the user who created the schedule |
+**team_id** | **int** | ID of the team associated with the schedule |
+**customer_id** | **int** | ID of the customer associated with the schedule |
+**name** | **str** | Name of the schedule | [optional]
+**description** | **str** | Description of the schedule | [optional]
+**report_id** | **int** | ID of the report |
+**report_name** | **str** | Name of the report | [optional]
+**is_report_template** | **bool** | Indicates if the report is a template |
+**report_format** | **str** | Format of the report |
+**zones** | **List[int]** | List of zone IDs |
+**policies** | **List[int]** | List of policy IDs | [optional]
+**timezone** | **str** | Timezone for the schedule | [optional]
+**schedule** | **str** | Cron expression for the schedule |
+**enabled** | **bool** | Indicates if the schedule is enabled |
+**notification_channels** | [**List[NotificationChannel]**](NotificationChannel.md) | List of notification channels | [optional]
+**iac_task_id** | **int** | ID of the IaC task | [optional]
+**password_enabled** | **bool** | Indicates if password protection is enabled | [optional]
+**compression** | **str** | Compression format | [optional]
+**created_by** | **str** | Email of the user who created the schedule |
+**updated_by** | **str** | Email of the user who last updated the schedule | [optional]
+**created_on** | **datetime** | Timestamp when the schedule was created |
+**modified_on** | **datetime** | Timestamp when the schedule was last modified | [optional]
+**last_scheduled_on** | **datetime** | Timestamp when the schedule was last run | [optional]
+**last_started_on** | **datetime** | Timestamp when the schedule was last started | [optional]
+**last_completed_on** | **datetime** | Timestamp when the schedule was last completed | [optional]
 
 ## Example
 

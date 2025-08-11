@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |   | [optional] 
-**ip_range** | **str** | IP range in CIDR notation | [optional] 
-**note** | **str** |  | [optional] 
-**is_enabled** | **bool** |  | [optional] 
-**is_allowed** | **bool** | Whether the IP range is allowed or not. | [optional] 
-**last_updated** | **datetime** | The date when IP filter was last updated. | [optional] 
+**id** | **int** |   | [optional]
+**ip_range** | **str** | IP range in CIDR notation | [optional]
+**note** | **str** |  | [optional]
+**is_enabled** | **bool** |  | [optional]
+**is_allowed** | **bool** | Whether the IP range is allowed or not. | [optional]
+**last_updated** | **datetime** | The date when IP filter was last updated. | [optional]
 
 ## Example
 

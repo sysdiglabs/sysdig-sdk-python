@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**age** | **int** | The age of the vulnerability in days. | [optional] 
+**age** | **int** | The age of the vulnerability in days. | [optional]
 
 ## Example
 

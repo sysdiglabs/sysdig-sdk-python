@@ -6,7 +6,7 @@ Customer certificates
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[Certificate]**](Certificate.md) |  | 
+**data** | [**List[Certificate]**](Certificate.md) |  |
 
 ## Example
 

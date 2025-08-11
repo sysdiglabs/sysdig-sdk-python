@@ -6,8 +6,8 @@ The list of events matching a search criteria.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**EventsFeedPage**](EventsFeedPage.md) |  | 
-**data** | [**List[Event]**](Event.md) | The list of events | 
+**page** | [**EventsFeedPage**](EventsFeedPage.md) |  |
+**data** | [**List[Event]**](Event.md) | The list of events |
 
 ## Example
 

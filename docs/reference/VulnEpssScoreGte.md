@@ -6,8 +6,8 @@ The EPSS score that meets or exceeds the specified threshold value.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnEpssScoreGteExtra**](VulnEpssScoreGteExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnEpssScoreGteExtra**](VulnEpssScoreGteExtra.md) |  |
 
 ## Example
 

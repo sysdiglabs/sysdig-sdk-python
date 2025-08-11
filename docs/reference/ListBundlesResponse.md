@@ -6,8 +6,8 @@ Bundles list response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PoliciesPage**](PoliciesPage.md) |  | 
-**data** | [**List[GetBundleResponse]**](GetBundleResponse.md) | Bundles collection | 
+**page** | [**PoliciesPage**](PoliciesPage.md) |  |
+**data** | [**List[GetBundleResponse]**](GetBundleResponse.md) | Bundles collection |
 
 ## Example
 

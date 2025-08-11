@@ -5,15 +5,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |   | [optional] 
-**name** | **str** | Service Account display name. | [optional] 
-**date_created** | **datetime** | Date and time when the Service Account was created. | [optional] 
-**last_updated** | **datetime** | Date and time when the Service Account was last updated. | [optional] 
-**last_used** | **datetime** | Date and time when the Service Account API key was last used. | [optional] 
-**expiration_date** | **datetime** | Date and time when the Service Account API key expires. | [optional] 
-**team_id** | **int** | Team ID of the team the service account is associated with. | [optional] 
-**team_role** | **str** | The predefined team role for a Service Account, or an ID of a custom role. | [optional] 
-**system_roles** | **List[str]** | Array of System roles assigned to the global service account. | [optional] 
+**id** | **int** |   | [optional]
+**name** | **str** | Service Account display name. | [optional]
+**date_created** | **datetime** | Date and time when the Service Account was created. | [optional]
+**last_updated** | **datetime** | Date and time when the Service Account was last updated. | [optional]
+**last_used** | **datetime** | Date and time when the Service Account API key was last used. | [optional]
+**expiration_date** | **datetime** | Date and time when the Service Account API key expires. | [optional]
+**team_id** | **int** | Team ID of the team the service account is associated with. | [optional]
+**team_role** | **str** | The predefined team role for a Service Account, or an ID of a custom role. | [optional]
+**system_roles** | **List[str]** | Array of System roles assigned to the global service account. | [optional]
 
 ## Example
 

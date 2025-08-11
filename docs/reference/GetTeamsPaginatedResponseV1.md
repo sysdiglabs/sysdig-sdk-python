@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional] 
-**data** | [**List[TeamResponseV1]**](TeamResponseV1.md) |  | [optional] 
+**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional]
+**data** | [**List[TeamResponseV1]**](TeamResponseV1.md) |  | [optional]
 
 ## Example
 

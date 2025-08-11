@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group** | **Dict[str, str]** | Key-value pairs representing grouping labels. | [optional] 
-**accrued** | **float** | Accrued cost for this group. | [optional] 
-**estimated** | **float** | Estimated cost for this group. | [optional] 
-**wasted** | **float** | Wasted cost for this group. | [optional] 
+**group** | **Dict[str, str]** | Key-value pairs representing grouping labels. | [optional]
+**accrued** | **float** | Accrued cost for this group. | [optional]
+**estimated** | **float** | Estimated cost for this group. | [optional]
+**wasted** | **float** | Wasted cost for this group. | [optional]
 
 ## Example
 

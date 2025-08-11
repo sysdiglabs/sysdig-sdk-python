@@ -72,7 +72,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_sso_settings_request_v1** | [**CreateSsoSettingsRequestV1**](CreateSsoSettingsRequestV1.md)| The payload required to create SSO settings. | [optional] 
+ **create_sso_settings_request_v1** | [**CreateSsoSettingsRequestV1**](CreateSsoSettingsRequestV1.md)| The payload required to create SSO settings. | [optional]
 
 ### Return type
 
@@ -156,7 +156,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sso_settings_id** | **int**| SSO settings ID. | 
+ **sso_settings_id** | **int**| SSO settings ID. |
 
 ### Return type
 
@@ -243,7 +243,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sso_product_id** | **str**| Sysdig Product. | 
+ **sso_product_id** | **str**| Sysdig Product. |
 
 ### Return type
 
@@ -327,7 +327,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sso_settings_id** | **int**| SSO settings ID. | 
+ **sso_settings_id** | **int**| SSO settings ID. |
 
 ### Return type
 
@@ -500,8 +500,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sso_product_id** | **str**| Sysdig Product. | 
- **global_sso_settings_request_v1** | [**GlobalSsoSettingsRequestV1**](GlobalSsoSettingsRequestV1.md)| The payload required to update the Global SSO Settigs. | 
+ **sso_product_id** | **str**| Sysdig Product. |
+ **global_sso_settings_request_v1** | [**GlobalSsoSettingsRequestV1**](GlobalSsoSettingsRequestV1.md)| The payload required to update the Global SSO Settigs. |
 
 ### Return type
 
@@ -589,8 +589,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sso_settings_id** | **int**| SSO settings ID. | 
- **update_sso_settings_request_v1** | [**UpdateSsoSettingsRequestV1**](UpdateSsoSettingsRequestV1.md)|  | [optional] 
+ **sso_settings_id** | **int**| SSO settings ID. |
+ **update_sso_settings_request_v1** | [**UpdateSsoSettingsRequestV1**](UpdateSsoSettingsRequestV1.md)|  | [optional]
 
 ### Return type
 

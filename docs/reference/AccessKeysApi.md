@@ -70,7 +70,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_access_key_request_v1** | [**CreateAccessKeyRequestV1**](CreateAccessKeyRequestV1.md)|  | [optional] 
+ **create_access_key_request_v1** | [**CreateAccessKeyRequestV1**](CreateAccessKeyRequestV1.md)|  | [optional]
 
 ### Return type
 
@@ -156,7 +156,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **access_key_id** | **int**| The access key id. | 
+ **access_key_id** | **int**| The access key id. |
 
 ### Return type
 
@@ -244,7 +244,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **access_key_id** | **int**| The access key id. | 
+ **access_key_id** | **int**| The access key id. |
 
 ### Return type
 
@@ -423,8 +423,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **access_key_id** | **int**| The access key id. | 
- **update_access_key_request_v1** | [**UpdateAccessKeyRequestV1**](UpdateAccessKeyRequestV1.md)|  | [optional] 
+ **access_key_id** | **int**| The access key id. |
+ **update_access_key_request_v1** | [**UpdateAccessKeyRequestV1**](UpdateAccessKeyRequestV1.md)|  | [optional]
 
 ### Return type
 

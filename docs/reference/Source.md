@@ -1,6 +1,6 @@
 # Source
 
-Source of the event: - `syscall` - a syscall within a workload - `windows` - Windows event log - `profiling` - ML workload threat detections - `K8SAdmissionController` - Admission control request coming from the Kubernetes admission controller - `k8s_audit` - Kubernetes audit logs, if the category is `runtime`, otherwise Admission control request - `aws_cloudtrail` - AWS CloudTrail log, from CloudConnector - `awscloudtrail` - AWS CloudTrail log, agentless only - `agentless-aws-ml` - ML threat detections for AWS - `gcp_auditlog` - GCP Audit log - `azure_platformlogs` - Azure platform logs - `okta` - Okta System Logs - `agentless-okta-ml` - ML threat detections for Okta - `github` - Github organization logs 
+Source of the event: - `syscall` - a syscall within a workload - `windows` - Windows event log - `profiling` - ML workload threat detections - `K8SAdmissionController` - Admission control request coming from the Kubernetes admission controller - `k8s_audit` - Kubernetes audit logs, if the category is `runtime`, otherwise Admission control request - `aws_cloudtrail` - AWS CloudTrail log, from CloudConnector - `awscloudtrail` - AWS CloudTrail log, agentless only - `agentless-aws-ml` - ML threat detections for AWS - `gcp_auditlog` - GCP Audit log - `azure_platformlogs` - Azure platform logs - `okta` - Okta System Logs - `agentless-okta-ml` - ML threat detections for Okta - `github` - Github organization logs
 
 ## Enum
 

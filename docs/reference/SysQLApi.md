@@ -152,7 +152,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **q** | **str**| The SysQL statement. | 
+ **q** | **str**| The SysQL statement. |
  **limit** | **int**|  | [optional] [default to 50]
  **offset** | **int**|  | [optional] [default to 0]
  **deterministic_order** | **bool**|  | [optional] [default to False]
@@ -221,7 +221,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.SysQLApi(api_client)
-    query_sysql_post_request = sysdig_client.QuerySysqlPostRequest() # QuerySysqlPostRequest | 
+    query_sysql_post_request = sysdig_client.QuerySysqlPostRequest() # QuerySysqlPostRequest |
 
     try:
         # Execute SysQL query via POST
@@ -239,7 +239,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query_sysql_post_request** | [**QuerySysqlPostRequest**](QuerySysqlPostRequest.md)|  | 
+ **query_sysql_post_request** | [**QuerySysqlPostRequest**](QuerySysqlPostRequest.md)|  |
 
 ### Return type
 

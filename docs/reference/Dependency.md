@@ -6,8 +6,8 @@ Defines the direct dependencies of a component or service. Components or service
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ref** | **str** | References a component or service by its bom-ref attribute | 
-**depends_on** | **List[str]** | The bom-ref identifiers of the components or services that are dependencies of this dependency object. | [optional] 
+**ref** | **str** | References a component or service by its bom-ref attribute |
+**depends_on** | **List[str]** | The bom-ref identifiers of the components or services that are dependencies of this dependency object. | [optional]
 
 ## Example
 

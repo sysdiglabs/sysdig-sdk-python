@@ -6,8 +6,8 @@ The EPSS percentile score that is greater than or equal to the specified value.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnEpssPercentileGteExtra**](VulnEpssPercentileGteExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnEpssPercentileGteExtra**](VulnEpssPercentileGteExtra.md) |  |
 
 ## Example
 

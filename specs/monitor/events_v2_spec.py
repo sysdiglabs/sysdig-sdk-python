@@ -11,19 +11,23 @@ from specs import be_successful_api_call
 
 with description("Events v2", "integration") as self:
     with before.all:
-        self.client = EventsClientV2(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                     token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = EventsClientV2(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"), token=os.getenv("SDC_MONITOR_TOKEN")
+        )
         self.event_name = "event_v2_test_ci"
 
     with it("is able to create a custom event"):
-        call = self.client.post_event(name=self.event_name,
-                                      description="This event was created in a CI pipeline for the Python SDK library")
+        call = self.client.post_event(
+            name=self.event_name, description="This event was created in a CI pipeline for the Python SDK library"
+        )
         expect(call).to(be_successful_api_call)
 
     with it("is able to create a custom event with a scope"):
-        call = self.client.post_event(name=self.event_name,
-                                      description="This event was created in a CI pipeline for the Python SDK library",
-                                      event_filter="host.hostName='ci'")
+        call = self.client.post_event(
+            name=self.event_name,
+            description="This event was created in a CI pipeline for the Python SDK library",
+            event_filter="host.hostName='ci'",
+        )
         expect(call).to(be_successful_api_call)
         sleep(2)  # sleep to guarantee the event is created
 
@@ -33,8 +37,9 @@ with description("Events v2", "integration") as self:
         expect(res["events"]).to(contain(have_key("scope", equal("host.hostName = 'ci'"))))
 
     with it("is able to retrieve an event by ID"):
-        ok, res = self.client.post_event(name=self.event_name,
-                                         description="This event was created in a CI pipeline for the Python SDK library")
+        ok, res = self.client.post_event(
+            name=self.event_name, description="This event was created in a CI pipeline for the Python SDK library"
+        )
         expect((ok, res)).to(be_successful_api_call)
 
         event = res["event"]
@@ -58,18 +63,18 @@ with description("Events v2", "integration") as self:
         expect(res).to(have_key("events", contain(have_keys(name=self.event_name))))
 
     with it("fails to retrieve the events with an incorrect category"):
-        ok, res = self.client.get_events(category=['incorrect_category'])
+        ok, res = self.client.get_events(category=["incorrect_category"])
 
         expect(ok).to(be_false)
         expect(res).to(equal("Invalid category 'incorrect_category'"))
 
     with it("is able to retrieve events that match a status"):
-        ok, res = self.client.get_events(status=['triggered'])
+        ok, res = self.client.get_events(status=["triggered"])
         expect((ok, res)).to(be_successful_api_call)
         expect(res).to(have_key("events", contain(have_keys(name=self.event_name))))
 
     with it("fails to retrieve the events with an incorrect status"):
-        ok, res = self.client.get_events(status=['incorrect_status'])
+        ok, res = self.client.get_events(status=["incorrect_status"])
 
         expect(ok).to(be_false)
         expect(res).to(equal("Invalid status 'incorrect_status'"))
@@ -78,13 +83,13 @@ with description("Events v2", "integration") as self:
         ok, res = self.client.get_events(direction="before")
 
         expect((ok, res)).to(be_successful_api_call)
-        expect(res).to(have_keys('events', 'total', 'matched'))
+        expect(res).to(have_keys("events", "total", "matched"))
 
     with it("retrieves the events correctly specifying direction 'after'"):
         ok, res = self.client.get_events(direction="after")
 
         expect((ok, res)).to(be_successful_api_call)
-        expect(res).to(have_keys('events', 'total', 'matched'))
+        expect(res).to(have_keys("events", "total", "matched"))
 
     with it("fails to retrieve the events with an incorrect direction"):
         ok, res = self.client.get_events(direction="incorrect_direction")
@@ -125,10 +130,8 @@ with description("Events v2", "integration") as self:
 
             expect((ok1, res1)).not_to(be_successful_api_call)
             expect((ok2, res2)).not_to(be_successful_api_call)
-            expect(res1).to(equal("only one of 'from_s' or 'to_s' has been specified, "
-                                  "both are required when filtering by time"))
-            expect(res2).to(equal("only one of 'from_s' or 'to_s' has been specified, "
-                                  "both are required when filtering by time"))
+            expect(res1).to(equal("only one of 'from_s' or 'to_s' has been specified, both are required when filtering by time"))
+            expect(res2).to(equal("only one of 'from_s' or 'to_s' has been specified, both are required when filtering by time"))
 
         with it("returns an error if they are specified in the wrong order"):
             to_s = datetime.now()

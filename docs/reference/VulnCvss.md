@@ -1,13 +1,13 @@
 # VulnCvss
 
-Predicate expressing \"the Vulnerability CVSS Score is higher than <value>\" 
+Predicate expressing \"the Vulnerability CVSS Score is higher than <value>\"
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnCvssExtra**](VulnCvssExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnCvssExtra**](VulnCvssExtra.md) |  |
 
 ## Example
 

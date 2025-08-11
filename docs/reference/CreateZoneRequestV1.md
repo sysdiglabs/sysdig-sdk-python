@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The name of the Zone. It must be unique | 
-**description** | **str** | The Zone description. It can be useful for adding extra information | [optional] 
-**scopes** | [**List[CreateZoneScopeRequestV1]**](CreateZoneScopeRequestV1.md) | Zone attached scopes | 
+**name** | **str** | The name of the Zone. It must be unique |
+**description** | **str** | The Zone description. It can be useful for adding extra information | [optional]
+**scopes** | [**List[CreateZoneScopeRequestV1]**](CreateZoneScopeRequestV1.md) | Zone attached scopes |
 
 ## Example
 

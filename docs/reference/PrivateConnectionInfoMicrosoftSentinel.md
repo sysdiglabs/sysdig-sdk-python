@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**secret** | **str** | Log analytics primary key | [optional] 
+**secret** | **str** | Log analytics primary key | [optional]
 
 ## Example
 

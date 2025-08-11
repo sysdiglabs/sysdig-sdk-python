@@ -6,9 +6,9 @@ A Rule definition
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rule_type** | **str** | The type of the rule. It may be one of the following: - vulnSeverityAndThreats - vulnDenyList - imageConfigDefaultUser - imageConfigLabel - imageConfigEnvVariable - imageConfigInstructionNotRecommended - imageConfigInstructionIsPkgManager - imageConfigCreationDate - imageConfigSensitiveInformationAndSecrets - pkgDenyList  | 
-**predicates** | [**List[BundleRulePredicatesInner]**](BundleRulePredicatesInner.md) | The Predicates defining this Rule | 
-**rule_id** | **str** |  | 
+**rule_type** | **str** | The type of the rule. It may be one of the following: - vulnSeverityAndThreats - vulnDenyList - imageConfigDefaultUser - imageConfigLabel - imageConfigEnvVariable - imageConfigInstructionNotRecommended - imageConfigInstructionIsPkgManager - imageConfigCreationDate - imageConfigSensitiveInformationAndSecrets - pkgDenyList  |
+**predicates** | [**List[BundleRulePredicatesInner]**](BundleRulePredicatesInner.md) | The Predicates defining this Rule |
+**rule_id** | **str** |  |
 
 ## Example
 

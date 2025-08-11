@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_password_login_enabled** | **bool** | Indicates whether password login is enabled. | [optional] 
+**is_password_login_enabled** | **bool** | Indicates whether password login is enabled. | [optional]
 
 ## Example
 

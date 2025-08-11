@@ -6,7 +6,7 @@ The list of supported attributes for filtering events.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[SupportedFilter]**](SupportedFilter.md) | The list of supported attributes for filtering events. | 
+**data** | [**List[SupportedFilter]**](SupportedFilter.md) | The list of supported attributes for filtering events. |
 
 ## Example
 

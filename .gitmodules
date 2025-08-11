@@ -1,0 +1,3 @@
+[submodule "api-spec"]
+	path = api-spec
+	url = git@github.com:draios/api-spec.git@0d4b5a9fb72b1bb2275878f0b46ec1cba3ee91a4

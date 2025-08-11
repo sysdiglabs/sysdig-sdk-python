@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**expiration_date** | **str** | Date when the accepted risk expires. Setting this to null will make the accepted risk never expire.  | [optional] 
-**reason** | **str** | Reason for acceptance | [optional] 
-**description** | **str** | Description of why the accepted risk was created | [optional] 
+**expiration_date** | **str** | Date when the accepted risk expires. Setting this to null will make the accepted risk never expire.  | [optional]
+**reason** | **str** | Reason for acceptance | [optional]
+**description** | **str** | Description of why the accepted risk was created | [optional]
 
 ## Example
 

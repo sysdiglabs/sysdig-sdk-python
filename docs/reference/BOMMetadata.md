@@ -6,10 +6,10 @@ Provides additional information about a BOM.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**timestamp** | **datetime** | The date and time (timestamp) when the BOM was created. | [optional] 
-**lifecycle** | **str** | The product lifecycle(s) that this BOM represents. | [optional] 
-**tools** | **object** | The tool(s) used in the creation of the BOM. | [optional] 
-**component** | [**SbomComponent**](SbomComponent.md) |  | [optional] 
+**timestamp** | **datetime** | The date and time (timestamp) when the BOM was created. | [optional]
+**lifecycle** | **str** | The product lifecycle(s) that this BOM represents. | [optional]
+**tools** | **object** | The tool(s) used in the creation of the BOM. | [optional]
+**component** | [**SbomComponent**](SbomComponent.md) |  | [optional]
 
 ## Example
 

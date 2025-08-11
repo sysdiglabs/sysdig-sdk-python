@@ -1,12 +1,12 @@
 # ImageConfigSensitiveInformationAndSecrets
 
-Predicate expressing \"the image contains sensitive information and secrets\". 
+Predicate expressing \"the image contains sensitive information and secrets\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

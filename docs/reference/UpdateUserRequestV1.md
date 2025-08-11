@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**first_name** | **str** | The name of the user.  | [optional] 
-**last_name** | **str** | The surname of the user.  | [optional] 
-**is_admin** | **bool** | **True** if the user has Administration permissions.  | [optional] 
-**is_enabled** | **bool** | When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled.  | [optional] 
-**version** | **int** | The current version of the resource.  | 
-**bypass_sso_enforcement** | **bool** | When **True**, the user can bypass SSO enforcement. **Warning:** This allows the user to log in without SSO even when username and password login is disabled. If a field is omitted, its value will be left unchanged.  | [optional] 
+**first_name** | **str** | The name of the user.  | [optional]
+**last_name** | **str** | The surname of the user.  | [optional]
+**is_admin** | **bool** | **True** if the user has Administration permissions.  | [optional]
+**is_enabled** | **bool** | When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled.  | [optional]
+**version** | **int** | The current version of the resource.  |
+**bypass_sso_enforcement** | **bool** | When **True**, the user can bypass SSO enforcement. **Warning:** This allows the user to log in without SSO even when username and password login is disabled. If a field is omitted, its value will be left unchanged.  | [optional]
 
 ## Example
 

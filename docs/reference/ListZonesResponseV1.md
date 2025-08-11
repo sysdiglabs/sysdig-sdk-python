@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional] 
-**data** | [**List[ListZonesResponseV1AllOfData]**](ListZonesResponseV1AllOfData.md) |  | [optional] 
+**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional]
+**data** | [**List[ListZonesResponseV1AllOfData]**](ListZonesResponseV1AllOfData.md) |  | [optional]
 
 ## Example
 

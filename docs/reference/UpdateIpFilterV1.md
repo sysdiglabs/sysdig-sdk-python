@@ -6,9 +6,9 @@ Request to update IP filter.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ip_range** | **str** | IP range in CIDR notation | 
-**note** | **str** |  | 
-**is_enabled** | **bool** |  | 
+**ip_range** | **str** | IP range in CIDR notation |
+**note** | **str** |  |
+**is_enabled** | **bool** |  |
 
 ## Example
 

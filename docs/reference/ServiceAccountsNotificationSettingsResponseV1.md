@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_enabled** | **bool** | Whether the notification settings are enabled or not. | [optional] 
-**notification_channel_ids** | **List[int]** | The list of notification channel IDs to which the notifications are to be sent.\\ \\ Supported types are **EMAIL** and **SLACK**.  | [optional] 
+**is_enabled** | **bool** | Whether the notification settings are enabled or not. | [optional]
+**notification_channel_ids** | **List[int]** | The list of notification channel IDs to which the notifications are to be sent.\\ \\ Supported types are **EMAIL** and **SLACK**.  | [optional]
 **days_before_expiry** | **List[int]** | The number of days before the expiry of the service account when the notifications are to be sent. | [optional] [default to [30, 7, 1]]
 
 ## Example

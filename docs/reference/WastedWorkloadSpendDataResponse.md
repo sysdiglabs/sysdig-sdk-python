@@ -6,8 +6,8 @@ Aggregated and grouped cost data representing Wasted Workload Spend over a speci
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**total** | [**WastedWorkloadSpendDataResponseTotal**](WastedWorkloadSpendDataResponseTotal.md) |  | [optional] 
-**group_by_data** | [**List[WastedWorkloadSpendDataResponseGroupByDataInner]**](WastedWorkloadSpendDataResponseGroupByDataInner.md) | Grouped cost data for each combination of Prometheus label values. | [optional] 
+**total** | [**WastedWorkloadSpendDataResponseTotal**](WastedWorkloadSpendDataResponseTotal.md) |  | [optional]
+**group_by_data** | [**List[WastedWorkloadSpendDataResponseGroupByDataInner]**](WastedWorkloadSpendDataResponseGroupByDataInner.md) | Grouped cost data for each combination of Prometheus label values. | [optional]
 
 ## Example
 

@@ -6,9 +6,9 @@ Aggregated cost values for the specified time range.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**accrued** | **float** | Total cost accrued during the reporting period. | [optional] 
-**estimated** | **float** | Estimated efficient cost during the reporting period. | [optional] 
-**wasted** | **float** | Difference between accrued and estimated cost. | [optional] 
+**accrued** | **float** | Total cost accrued during the reporting period. | [optional]
+**estimated** | **float** | Estimated efficient cost during the reporting period. | [optional]
+**wasted** | **float** | Difference between accrued and estimated cost. | [optional]
 
 ## Example
 

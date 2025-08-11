@@ -6,8 +6,8 @@ The Google Chat notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**url** | **str** | Google Chat Webhook URL | 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**url** | **str** | Google Chat Webhook URL |
 
 ## Example
 

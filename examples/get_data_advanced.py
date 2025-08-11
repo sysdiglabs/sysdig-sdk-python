@@ -16,8 +16,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <hostname>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -38,12 +38,7 @@ metrics = [
     # utilization for each container separately.
     {"id": "container.name"},
     # The second metric we request is the CPU. We aggregate it as an average.
-    {"id": "cpu.used.percent",
-     "aggregations": {
-         "time": "avg",
-         "group": "avg"
-     }
-     }
+    {"id": "cpu.used.percent", "aggregations": {"time": "avg", "group": "avg"}},
 ]
 
 #
@@ -60,13 +55,15 @@ paging = {"from": 0, "to": 4}
 #
 # Fire the query.
 #
-ok, res = sdclient.get_data(metrics=metrics,  # List of metrics to query
-                            start_ts=-600,  # Start of query span is 600 seconds ago
-                            end_ts=0,  # End the query span now
-                            sampling_s=60,  # 1 data point per minute
-                            filter=filter,  # The filter specifying the target host
-                            paging=paging,  # Paging to limit to just the 5 most busy
-                            datasource_type='container')  # The source for our metrics is the container
+ok, res = sdclient.get_data(
+    metrics=metrics,  # List of metrics to query
+    start_ts=-600,  # Start of query span is 600 seconds ago
+    end_ts=0,  # End the query span now
+    sampling_s=60,  # 1 data point per minute
+    filter=filter,  # The filter specifying the target host
+    paging=paging,  # Paging to limit to just the 5 most busy
+    datasource_type="container",
+)  # The source for our metrics is the container
 
 #
 # Show the result!

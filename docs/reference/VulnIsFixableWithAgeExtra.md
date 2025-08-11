@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**age** | **int** | The age of the fix in days | [optional] 
+**age** | **int** | The age of the fix in days | [optional]
 
 ## Example
 

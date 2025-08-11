@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**global_evaluation** | **str** |  | [optional] 
-**evaluations** | [**List[PolicyEvaluation]**](PolicyEvaluation.md) |  | [optional] 
+**global_evaluation** | **str** |  | [optional]
+**evaluations** | [**List[PolicyEvaluation]**](PolicyEvaluation.md) |  | [optional]
 
 ## Example
 

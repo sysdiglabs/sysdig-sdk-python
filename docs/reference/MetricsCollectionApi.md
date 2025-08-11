@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 Create Custom Prometheus job
 
-Create a custom Prometheus job. 
+Create a custom Prometheus job.
 \
 The body of the request must be a valid `scrape_config` as defined here: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config\
 \
@@ -81,8 +81,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
- **body** | **str**| The payload to create a custom job. Content must be a valid Prometheus &#x60;scrape_config&#x60;. | [optional] 
+ **job_name** | **str**| The custom Prometheus job name. |
+ **body** | **str**| The payload to create a custom job. Content must be a valid Prometheus &#x60;scrape_config&#x60;. | [optional]
 
 ### Return type
 
@@ -167,7 +167,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
+ **job_name** | **str**| The custom Prometheus job name. |
 
 ### Return type
 
@@ -254,7 +254,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
+ **job_name** | **str**| The custom Prometheus job name. |
 
 ### Return type
 
@@ -340,7 +340,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
+ **job_name** | **str**| The custom Prometheus job name. |
 
 ### Return type
 
@@ -515,8 +515,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The name of the Prometheus Job whose excluded metrics are to be listed.  | [optional] 
- **metric_name** | **str**| The exact name of the metric to be filtered.  | [optional] 
+ **job_name** | **str**| The name of the Prometheus Job whose excluded metrics are to be listed.  | [optional]
+ **metric_name** | **str**| The exact name of the metric to be filtered.  | [optional]
 
 ### Return type
 
@@ -605,7 +605,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request_body_disabled_metrics_v1** | [**RequestBodyDisabledMetricsV1**](RequestBodyDisabledMetricsV1.md)|  | [optional] 
+ **request_body_disabled_metrics_v1** | [**RequestBodyDisabledMetricsV1**](RequestBodyDisabledMetricsV1.md)|  | [optional]
 
 ### Return type
 
@@ -639,7 +639,7 @@ Name | Type | Description  | Notes
 
 Update Custom Prometheus Job
 
-Update a custom Prometheus job. 
+Update a custom Prometheus job.
 \
 The body of the request must be a valid `scrape_config` as defined here: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config\
 \
@@ -698,8 +698,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
- **body** | **str**| The custom Prometheus job yaml content | [optional] 
+ **job_name** | **str**| The custom Prometheus job name. |
+ **body** | **str**| The custom Prometheus job yaml content | [optional]
 
 ### Return type
 
@@ -789,8 +789,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **job_name** | **str**| The custom Prometheus job name. | 
- **custom_jobs_enablement_v1** | [**CustomJobsEnablementV1**](CustomJobsEnablementV1.md)| The payload required to enable the custom Prometheus job. | [optional] 
+ **job_name** | **str**| The custom Prometheus job name. |
+ **custom_jobs_enablement_v1** | [**CustomJobsEnablementV1**](CustomJobsEnablementV1.md)| The payload required to enable the custom Prometheus job. | [optional]
 
 ### Return type
 

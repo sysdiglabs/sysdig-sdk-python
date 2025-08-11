@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[IssueTypeResponseV1]**](IssueTypeResponseV1.md) | List of issue types. | [optional] 
+**data** | [**List[IssueTypeResponseV1]**](IssueTypeResponseV1.md) | List of issue types. | [optional]
 
 ## Example
 

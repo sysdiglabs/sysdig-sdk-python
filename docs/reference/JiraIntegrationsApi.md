@@ -75,7 +75,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_integration_request_v1** | [**CreateIntegrationRequestV1**](CreateIntegrationRequestV1.md)| A Jira integration to create | 
+ **create_integration_request_v1** | [**CreateIntegrationRequestV1**](CreateIntegrationRequestV1.md)| A Jira integration to create |
 
 ### Return type
 
@@ -163,8 +163,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
- **create_issue_type_request_v1** | [**CreateIssueTypeRequestV1**](CreateIssueTypeRequestV1.md)| A Jira issue type to create | 
+ **integration_id** | **int**| Jira integration identifier |
+ **create_issue_type_request_v1** | [**CreateIssueTypeRequestV1**](CreateIssueTypeRequestV1.md)| A Jira issue type to create |
 
 ### Return type
 
@@ -248,7 +248,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
+ **integration_id** | **int**| Jira integration identifier |
 
 ### Return type
 
@@ -334,8 +334,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
- **issue_type_id** | **int**| Jira issue type identifier | 
+ **integration_id** | **int**| Jira integration identifier |
+ **issue_type_id** | **int**| Jira issue type identifier |
 
 ### Return type
 
@@ -422,7 +422,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
+ **integration_id** | **int**| Jira integration identifier |
 
 ### Return type
 
@@ -513,7 +513,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **limit** | **int**| The number of items to return | [optional] [default to 25]
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
- **enabled** | **bool**| Enabled status of the integration | [optional] 
+ **enabled** | **bool**| Enabled status of the integration | [optional]
 
 ### Return type
 
@@ -600,8 +600,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
- **issue_type_id** | **int**| Jira issue type identifier | 
+ **integration_id** | **int**| Jira integration identifier |
+ **issue_type_id** | **int**| Jira issue type identifier |
 
 ### Return type
 
@@ -688,7 +688,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
+ **integration_id** | **int**| Jira integration identifier |
 
 ### Return type
 
@@ -776,8 +776,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
- **update_integration_request_v1** | [**UpdateIntegrationRequestV1**](UpdateIntegrationRequestV1.md)| The Jira integration to update | [optional] 
+ **integration_id** | **int**| Jira integration identifier |
+ **update_integration_request_v1** | [**UpdateIntegrationRequestV1**](UpdateIntegrationRequestV1.md)| The Jira integration to update | [optional]
 
 ### Return type
 
@@ -867,9 +867,9 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| Jira integration identifier | 
- **issue_type_id** | **int**| Jira issue type identifier | 
- **update_issue_type_request_v1** | [**UpdateIssueTypeRequestV1**](UpdateIssueTypeRequestV1.md)| A Jira issue type to update | [optional] 
+ **integration_id** | **int**| Jira integration identifier |
+ **issue_type_id** | **int**| Jira issue type identifier |
+ **update_issue_type_request_v1** | [**UpdateIssueTypeRequestV1**](UpdateIssueTypeRequestV1.md)| A Jira issue type to update | [optional]
 
 ### Return type
 

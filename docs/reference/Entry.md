@@ -1,13 +1,13 @@
 # Entry
 
-The base structure of an Activity Audit entry 
+The base structure of an Activity Audit entry
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The audit event id. | 
-**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. | 
+**id** | **str** | The audit event id. |
+**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. |
 
 ## Example
 

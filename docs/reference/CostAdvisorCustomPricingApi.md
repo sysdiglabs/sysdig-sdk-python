@@ -77,7 +77,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_pricing_request_v1** | [**CreatePricingRequestV1**](CreatePricingRequestV1.md)| The payload to create pricing. Use the type field to create a default pricing or pricing for a specific Kubernetes cluster. | [optional] 
+ **create_pricing_request_v1** | [**CreatePricingRequestV1**](CreatePricingRequestV1.md)| The payload to create pricing. Use the type field to create a default pricing or pricing for a specific Kubernetes cluster. | [optional]
 
 ### Return type
 
@@ -162,7 +162,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **pricing_id** | **int**| The pricing ID. | 
+ **pricing_id** | **int**| The pricing ID. |
 
 ### Return type
 
@@ -250,7 +250,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **pricing_id** | **int**| The pricing ID. | 
+ **pricing_id** | **int**| The pricing ID. |
 
 ### Return type
 
@@ -341,7 +341,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **pricing_id** | **int**| The pricing ID. | 
+ **pricing_id** | **int**| The pricing ID. |
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
 
@@ -435,8 +435,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
- **cluster_name** | **str**| The name of the Kubernetes cluster for which you want to retrive the pricing.  | [optional] 
- **type** | [**PricingType**](.md)| The type of pricing to find.  | [optional] 
+ **cluster_name** | **str**| The name of the Kubernetes cluster for which you want to retrive the pricing.  | [optional]
+ **type** | [**PricingType**](.md)| The type of pricing to find.  | [optional]
 
 ### Return type
 
@@ -524,8 +524,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **pricing_id** | **int**| The pricing ID. | 
- **update_pricing_request_v1** | [**UpdatePricingRequestV1**](UpdatePricingRequestV1.md)| The payload required to create the pricing. | [optional] 
+ **pricing_id** | **int**| The pricing ID. |
+ **update_pricing_request_v1** | [**UpdatePricingRequestV1**](UpdatePricingRequestV1.md)| The payload required to create the pricing. | [optional]
 
 ### Return type
 

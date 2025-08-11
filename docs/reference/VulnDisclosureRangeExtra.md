@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**start_date** | **date** | The start date (inclusive) of disclosed vulnerabilities. | [optional] 
-**end_date** | **date** | The end date (inclusive) of disclosed vulnerabilities. | [optional] 
+**start_date** | **date** | The start date (inclusive) of disclosed vulnerabilities. | [optional]
+**end_date** | **date** | The end date (inclusive) of disclosed vulnerabilities. | [optional]
 
 ## Example
 

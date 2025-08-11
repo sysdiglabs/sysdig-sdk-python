@@ -9,8 +9,9 @@ from specs import be_successful_api_call
 
 with description("Activity Audit v1", "integration") as self:
     with before.all:
-        self.client = ActivityAuditClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                          token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = ActivityAuditClient(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"), token=os.getenv("SDC_SECURE_TOKEN")
+        )
 
     with it("is able to list the most recent commands with the default parameters"):
         ok, res = self.client.list_events()

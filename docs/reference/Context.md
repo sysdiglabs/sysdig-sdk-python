@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**value** | **str** | Value for the context entry | 
+**type** | **str** | Type for the context entry |
+**value** | **str** | Value for the context entry |
 
 ## Example
 

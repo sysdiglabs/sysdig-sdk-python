@@ -73,7 +73,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_service_accounts_notification_settings_request_v1** | [**CreateServiceAccountsNotificationSettingsRequestV1**](CreateServiceAccountsNotificationSettingsRequestV1.md)| The payload required to create Service Accounts Notification Settings. | [optional] 
+ **create_service_accounts_notification_settings_request_v1** | [**CreateServiceAccountsNotificationSettingsRequestV1**](CreateServiceAccountsNotificationSettingsRequestV1.md)| The payload required to create Service Accounts Notification Settings. | [optional]
 
 ### Return type
 
@@ -163,8 +163,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **create_service_accounts_notification_settings_request_v1** | [**CreateServiceAccountsNotificationSettingsRequestV1**](CreateServiceAccountsNotificationSettingsRequestV1.md)| The payload required to create Service Accounts Notification Settings. | [optional] 
+ **team_id** | **int**| The team ID. |
+ **create_service_accounts_notification_settings_request_v1** | [**CreateServiceAccountsNotificationSettingsRequestV1**](CreateServiceAccountsNotificationSettingsRequestV1.md)| The payload required to create Service Accounts Notification Settings. | [optional]
 
 ### Return type
 
@@ -329,7 +329,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
 
 ### Return type
 
@@ -498,7 +498,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
 
 ### Return type
 
@@ -585,7 +585,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **update_service_accounts_notification_settings_request_v1** | [**UpdateServiceAccountsNotificationSettingsRequestV1**](UpdateServiceAccountsNotificationSettingsRequestV1.md)|  | [optional] 
+ **update_service_accounts_notification_settings_request_v1** | [**UpdateServiceAccountsNotificationSettingsRequestV1**](UpdateServiceAccountsNotificationSettingsRequestV1.md)|  | [optional]
 
 ### Return type
 
@@ -675,8 +675,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **update_service_accounts_notification_settings_request_v1** | [**UpdateServiceAccountsNotificationSettingsRequestV1**](UpdateServiceAccountsNotificationSettingsRequestV1.md)|  | [optional] 
+ **team_id** | **int**| The team ID. |
+ **update_service_accounts_notification_settings_request_v1** | [**UpdateServiceAccountsNotificationSettingsRequestV1**](UpdateServiceAccountsNotificationSettingsRequestV1.md)|  | [optional]
 
 ### Return type
 

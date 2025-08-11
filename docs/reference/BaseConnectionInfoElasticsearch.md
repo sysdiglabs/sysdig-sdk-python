@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**endpoint** | **str** | Elasticsearch instance endpoint URL | 
-**index** | **str** | Name of the index to store the data in | 
+**endpoint** | **str** | Elasticsearch instance endpoint URL |
+**index** | **str** | Name of the index to store the data in |
 **is_insecure** | **bool** | Don&#39;t verify TLS certificate | [optional] [default to False]
-**auth** | **str** | Authentication method | [optional] 
-**format** | **str** | If specified, transforms &#x60;content.fields&#x60; and &#x60;labels&#x60; * &#x60;KV_PAIRS&#x60; - from objects (i.e. &#x60;{\&quot;foo\&quot;: \&quot;bar\&quot;, ...}&#x60;) to arrays of objects with \&quot;key\&quot; and \&quot;value\&quot; properties {i.e. &#x60;[{\&quot;key\&quot; : \&quot;foo\&quot;, \&quot;value\&quot;: \&quot;bar\&quot;}, ...]&#x60;)  | [optional] 
+**auth** | **str** | Authentication method | [optional]
+**format** | **str** | If specified, transforms &#x60;content.fields&#x60; and &#x60;labels&#x60; * &#x60;KV_PAIRS&#x60; - from objects (i.e. &#x60;{\&quot;foo\&quot;: \&quot;bar\&quot;, ...}&#x60;) to arrays of objects with \&quot;key\&quot; and \&quot;value\&quot; properties {i.e. &#x60;[{\&quot;key\&quot; : \&quot;foo\&quot;, \&quot;value\&quot;: \&quot;bar\&quot;}, ...]&#x60;)  | [optional]
 
 ## Example
 

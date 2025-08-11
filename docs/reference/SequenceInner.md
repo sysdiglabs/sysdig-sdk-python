@@ -5,14 +5,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**event_id** | **str** | The unique identifier of the log event. | 
-**event_name** | **str** | The name of the event. | 
-**event_time** | **datetime** | The time when the event occurred. | 
-**ingestion_id** | **str** | The unique identifier of the ingestion. | 
-**region** | **str** | The region where the event occurred. | 
-**source** | **str** | The source of the event. | 
-**source_ip_address** | **str** | The IP address of the source. | 
-**sub_ingestion_id** | **str** | The unique identifier of the sub ingestion. | 
+**event_id** | **str** | The unique identifier of the log event. |
+**event_name** | **str** | The name of the event. |
+**event_time** | **datetime** | The time when the event occurred. |
+**ingestion_id** | **str** | The unique identifier of the ingestion. |
+**region** | **str** | The region where the event occurred. |
+**source** | **str** | The source of the event. |
+**source_ip_address** | **str** | The IP address of the source. |
+**sub_ingestion_id** | **str** | The unique identifier of the sub ingestion. |
 
 ## Example
 

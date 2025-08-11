@@ -6,12 +6,12 @@ The Slack read notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**channel** | **str** | The name of the Slack channel the user selected as a destination for messages. | [optional] 
-**url** | **str** | The Slack webhook URL | 
-**is_private_channel** | **bool** | Whether the Slack channel is private or not | [optional] 
-**private_channel_url** | **str** | The channel URL, if channel is private | [optional] 
-**channel_creator_user_id** | **int** | The ID of the user that created the channel. | [optional] 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**channel** | **str** | The name of the Slack channel the user selected as a destination for messages. | [optional]
+**url** | **str** | The Slack webhook URL |
+**is_private_channel** | **bool** | Whether the Slack channel is private or not | [optional]
+**private_channel_url** | **str** | The channel URL, if channel is private | [optional]
+**channel_creator_user_id** | **int** | The ID of the user that created the channel. | [optional]
 
 ## Example
 

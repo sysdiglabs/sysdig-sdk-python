@@ -70,7 +70,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_inhibition_rule_request_v1** | [**CreateInhibitionRuleRequestV1**](CreateInhibitionRuleRequestV1.md)| The inhibition rule to be created. | 
+ **create_inhibition_rule_request_v1** | [**CreateInhibitionRuleRequestV1**](CreateInhibitionRuleRequestV1.md)| The inhibition rule to be created. |
 
 ### Return type
 
@@ -155,7 +155,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inhibition_rule_id** | **int**| The inhibition rule ID. | 
+ **inhibition_rule_id** | **int**| The inhibition rule ID. |
 
 ### Return type
 
@@ -241,7 +241,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inhibition_rule_id** | **int**| The inhibition rule ID. | 
+ **inhibition_rule_id** | **int**| The inhibition rule ID. |
 
 ### Return type
 
@@ -416,8 +416,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inhibition_rule_id** | **int**| The inhibition rule ID. | 
- **update_inhibition_rule_request_v1** | [**UpdateInhibitionRuleRequestV1**](UpdateInhibitionRuleRequestV1.md)| The new version of the inhibition rule. | 
+ **inhibition_rule_id** | **int**| The inhibition rule ID. |
+ **update_inhibition_rule_request_v1** | [**UpdateInhibitionRuleRequestV1**](UpdateInhibitionRuleRequestV1.md)| The new version of the inhibition rule. |
 
 ### Return type
 

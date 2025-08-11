@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | **str** | Indicates an error response. | [optional] 
-**error_type** | **str** | Type of error encountered. | [optional] 
-**error** | **str** | Error message describing the issue. | [optional] 
+**status** | **str** | Indicates an error response. | [optional]
+**error_type** | **str** | Type of error encountered. | [optional]
+**error** | **str** | Error message describing the issue. | [optional]
 
 ## Example
 

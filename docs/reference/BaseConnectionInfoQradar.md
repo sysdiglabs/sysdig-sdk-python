@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**address** | **str** | DNS name or IP of the QRadar instance | 
-**port** | **int** | QRadar Management Port | 
-**is_insecure** | **bool** | Don&#39;t verify TLS certificate | [optional] 
+**address** | **str** | DNS name or IP of the QRadar instance |
+**port** | **int** | QRadar Management Port |
+**is_insecure** | **bool** | Don&#39;t verify TLS certificate | [optional]
 **is_tls** | **bool** | Use TLS encryption | [optional] [default to False]
 
 ## Example

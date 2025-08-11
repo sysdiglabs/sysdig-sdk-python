@@ -69,7 +69,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_integration_request** | [**CreateIntegrationRequest**](CreateIntegrationRequest.md)| Configuration for the new integration | 
+ **create_integration_request** | [**CreateIntegrationRequest**](CreateIntegrationRequest.md)| Configuration for the new integration |
 
 ### Return type
 
@@ -150,7 +150,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| ID of the integration to return | 
+ **integration_id** | **int**| ID of the integration to return |
 
 ### Return type
 
@@ -234,7 +234,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| ID of the integration to return | 
+ **integration_id** | **int**| ID of the integration to return |
 
 ### Return type
 
@@ -318,7 +318,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **type** | [**IntegrationType**](.md)| the Events Forwarder Integration Type | 
+ **type** | [**IntegrationType**](.md)| the Events Forwarder Integration Type |
 
 ### Return type
 
@@ -555,8 +555,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **integration_id** | **int**| ID of the integration to return | 
- **update_integration_request** | [**UpdateIntegrationRequest**](UpdateIntegrationRequest.md)| Update an  events forwarder integration in Sysdig Secure | 
+ **integration_id** | **int**| ID of the integration to return |
+ **update_integration_request** | [**UpdateIntegrationRequest**](UpdateIntegrationRequest.md)| Update an  events forwarder integration in Sysdig Secure |
 
 ### Return type
 

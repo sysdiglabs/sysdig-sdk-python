@@ -6,24 +6,24 @@ Represents a connection.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The audit event id. | 
-**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. | 
-**type** | **str** | The entry type | 
-**cmdline** | **str** | Full command line | 
-**comm** | **str** | The name of the command. | 
+**id** | **str** | The audit event id. |
+**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. |
+**type** | **str** | The entry type |
+**cmdline** | **str** | Full command line |
+**comm** | **str** | The name of the command. |
 **dns_domains** | **List[str]** | DNS information for the connection event. | [default to []]
-**container_id** | **str** | The container id. &#x60;containerId&#x60; is present only if the audit event was collected in a container context.  | 
-**pid** | **int** | Id of the process owning the connection. | 
-**process_name** | **str** | Name of the process owning the connection. | 
-**client_ipv4** | **str** | The IPv4 dotted notation of the client address. | 
-**client_port** | **int** | The client port. | 
-**server_ipv4** | **str** | The IPv4 dotted notation of the server address. | 
-**server_port** | **int** | The server port. | 
-**direction** | **str** | The direction of the connection. | 
-**l4protocol** | **str** | The layer 4 protocol. | 
-**hostname** | **str** | The Kubernetes hostname. | 
-**tty** | **int** | TTY number. | 
-**labels** | **Dict[str, str]** | Key value pairs of labels. | [optional] 
+**container_id** | **str** | The container id. &#x60;containerId&#x60; is present only if the audit event was collected in a container context.  |
+**pid** | **int** | Id of the process owning the connection. |
+**process_name** | **str** | Name of the process owning the connection. |
+**client_ipv4** | **str** | The IPv4 dotted notation of the client address. |
+**client_port** | **int** | The client port. |
+**server_ipv4** | **str** | The IPv4 dotted notation of the server address. |
+**server_port** | **int** | The server port. |
+**direction** | **str** | The direction of the connection. |
+**l4protocol** | **str** | The layer 4 protocol. |
+**hostname** | **str** | The Kubernetes hostname. |
+**tty** | **int** | TTY number. |
+**labels** | **Dict[str, str]** | Key value pairs of labels. | [optional]
 
 ## Example
 

@@ -70,7 +70,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **role_request_v1** | [**RoleRequestV1**](RoleRequestV1.md)|  | [optional] 
+ **role_request_v1** | [**RoleRequestV1**](RoleRequestV1.md)|  | [optional]
 
 ### Return type
 
@@ -156,7 +156,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **role_id** | **int**| The role id. | 
+ **role_id** | **int**| The role id. |
 
 ### Return type
 
@@ -244,7 +244,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **role_id** | **int**| The role id. | 
+ **role_id** | **int**| The role id. |
 
 ### Return type
 
@@ -423,8 +423,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **role_id** | **int**| The role id. | 
- **role_request_v1** | [**RoleRequestV1**](RoleRequestV1.md)|  | [optional] 
+ **role_id** | **int**| The role id. |
+ **role_request_v1** | [**RoleRequestV1**](RoleRequestV1.md)|  | [optional]
 
 ### Return type
 

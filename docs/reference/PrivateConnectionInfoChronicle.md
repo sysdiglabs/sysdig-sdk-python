@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**api_key** | **str** | The Chronicle v1 API key | [optional] 
+**api_key** | **str** | The Chronicle v1 API key | [optional]
 
 ## Example
 

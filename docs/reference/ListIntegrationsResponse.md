@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[IntegrationResponse]**](IntegrationResponse.md) |  | 
+**data** | [**List[IntegrationResponse]**](IntegrationResponse.md) |  |
 
 ## Example
 

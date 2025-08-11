@@ -6,12 +6,12 @@ Bundle definition
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | The Bundle ID | 
-**name** | **str** | The human readable Bundle name | 
-**identifier** | **str** | The Policy identifier generated from the name | 
-**description** | **str** | The Bundle description | [optional] 
-**bundle_type** | **str** | Specifies whether the Bundle was defined by the Customer or by Sysdig | 
-**rules** | [**List[BundleRule]**](BundleRule.md) | The Rules defining this Bundle | 
+**id** | **int** | The Bundle ID |
+**name** | **str** | The human readable Bundle name |
+**identifier** | **str** | The Policy identifier generated from the name |
+**description** | **str** | The Bundle description | [optional]
+**bundle_type** | **str** | Specifies whether the Bundle was defined by the Customer or by Sysdig |
+**rules** | [**List[BundleRule]**](BundleRule.md) | The Rules defining this Bundle |
 
 ## Example
 

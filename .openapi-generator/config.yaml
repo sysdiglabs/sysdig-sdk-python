@@ -1,0 +1,3 @@
+additionalProperties:
+  packageName: sysdig_client
+  projectName: sysdig-sdk-python

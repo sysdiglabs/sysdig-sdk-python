@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**version** | **str** |  | 
-**score** | **float** | CVSS score | 
-**vector** | **str** | attack vector | [optional] 
+**version** | **str** |  |
+**score** | **float** | CVSS score |
+**vector** | **str** | attack vector | [optional]
 
 ## Example
 

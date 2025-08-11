@@ -6,8 +6,8 @@ Get Disabled Metrics by Job name Response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**job_name** | **str** | The Prometheus Job for which the collection of one or more metrics is disabled.  | [optional] 
-**metrics** | [**List[DisableMetricV1]**](DisableMetricV1.md) | List of metrics to be disabled.  | [optional] 
+**job_name** | **str** | The Prometheus Job for which the collection of one or more metrics is disabled.  | [optional]
+**metrics** | [**List[DisableMetricV1]**](DisableMetricV1.md) | List of metrics to be disabled.  | [optional]
 
 ## Example
 

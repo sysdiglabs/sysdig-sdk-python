@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**jira_id** | **str** | Jira issue type id. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-group-issue-types \&quot;Jira issue types documentation\&quot;) for more info.  | 
-**jira_open_status_id** | **str** | Jira status id mapped to open status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  | 
-**jira_in_progress_status_id** | **str** | Jira status id mapped to in progress status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  | 
-**jira_closed_status_id** | **str** | Jira status id mapped to closed status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  | 
-**custom_field_ids** | **List[str]** | List of supported custom field ids for the issue type. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get \&quot;Jira issue type fields documentation\&quot;) for more info.  | [optional] 
+**jira_id** | **str** | Jira issue type id. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-group-issue-types \&quot;Jira issue types documentation\&quot;) for more info.  |
+**jira_open_status_id** | **str** | Jira status id mapped to open status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  |
+**jira_in_progress_status_id** | **str** | Jira status id mapped to in progress status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  |
+**jira_closed_status_id** | **str** | Jira status id mapped to closed status. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-group-status \&quot;Jira status documentation\&quot;) for more info.  |
+**custom_field_ids** | **List[str]** | List of supported custom field ids for the issue type. Please refer to the [Jira documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get \&quot;Jira issue type fields documentation\&quot;) for more info.  | [optional]
 
 ## Example
 

@@ -6,8 +6,8 @@ The list of events matching a search criteria.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**AuditPage**](AuditPage.md) |  | 
-**data** | [**List[AuditEvent]**](AuditEvent.md) | The list of Audit events. | 
+**page** | [**AuditPage**](AuditPage.md) |  |
+**data** | [**List[AuditEvent]**](AuditEvent.md) | The list of Audit events. |
 
 ## Example
 

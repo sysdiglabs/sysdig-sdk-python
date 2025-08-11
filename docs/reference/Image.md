@@ -6,13 +6,13 @@ An Image resource that returns as part of of the image summary.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**hash** | **str** | Resource unique identifier | 
-**name** | **str** | Resource name | 
-**type** | **str** | The resource type | 
-**pull_string** | **str** | The pull string for the image. | 
-**vulnerability_summary** | [**VulnerabilitySummary**](VulnerabilitySummary.md) |  | 
-**in_use_vulnerability_summary** | [**VulnerabilitySummary**](VulnerabilitySummary.md) |  | 
-**vm_api_endpoint** | **str** | A link that provides vulnerability management information about an image (Images only). | 
+**hash** | **str** | Resource unique identifier |
+**name** | **str** | Resource name |
+**type** | **str** | The resource type |
+**pull_string** | **str** | The pull string for the image. |
+**vulnerability_summary** | [**VulnerabilitySummary**](VulnerabilitySummary.md) |  |
+**in_use_vulnerability_summary** | [**VulnerabilitySummary**](VulnerabilitySummary.md) |  |
+**vm_api_endpoint** | **str** | A link that provides vulnerability management information about an image (Images only). |
 
 ## Example
 

@@ -6,7 +6,7 @@ A list of Response Actions
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[ResponseAction]**](ResponseAction.md) | The list of Response Actions. | 
+**data** | [**List[ResponseAction]**](ResponseAction.md) | The list of Response Actions. |
 
 ## Example
 

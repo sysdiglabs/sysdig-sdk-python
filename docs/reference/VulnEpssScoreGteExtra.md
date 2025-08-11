@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**score** | **int** | Score value to compare. | [optional] 
+**score** | **int** | Score value to compare. | [optional]
 
 ## Example
 

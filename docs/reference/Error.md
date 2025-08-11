@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | The error code. | [optional] 
-**message** | **str** | A human readable error message. | [optional] 
-**details** | **List[object]** | A list of details related to the error. | [optional] 
+**type** | **str** | The error code. | [optional]
+**message** | **str** | A human readable error message. | [optional]
+**details** | **List[object]** | A list of details related to the error. | [optional]
 
 ## Example
 

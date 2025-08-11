@@ -1,13 +1,13 @@
 # DenyPkg
 
-Predicate expressing \"any of these packages is present\". 
+Predicate expressing \"any of these packages is present\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**DenyPkgExtra**](DenyPkgExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**DenyPkgExtra**](DenyPkgExtra.md) |  |
 
 ## Example
 

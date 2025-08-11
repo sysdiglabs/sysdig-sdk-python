@@ -6,9 +6,9 @@ Page information.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**previous** | **str** |  | [optional] 
-**next** | **str** |  | [optional] 
-**total** | **int** |  | [optional] 
+**previous** | **str** |  | [optional]
+**next** | **str** |  | [optional]
+**total** | **int** |  | [optional]
 
 ## Example
 

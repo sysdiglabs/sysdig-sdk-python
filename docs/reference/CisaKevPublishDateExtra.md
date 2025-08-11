@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**days** | **int** | Number of days. | [optional] 
+**days** | **int** | Number of days. | [optional]
 
 ## Example
 

@@ -1,13 +1,13 @@
 # VulnCvssEquals
 
-Predicate expressing \"the Vulnerability CVSS Score is exactly equal to <value>\" 
+Predicate expressing \"the Vulnerability CVSS Score is exactly equal to <value>\"
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnCvssEqualsExtra**](VulnCvssEqualsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnCvssEqualsExtra**](VulnCvssEqualsExtra.md) |  |
 
 ## Example
 

@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**architecture** | **str** | host architecture | [optional] 
-**host_id** | **str** | host id | 
-**host_name** | **str** | host name | 
-**os** | **str** | host os | 
+**architecture** | **str** | host architecture | [optional]
+**host_id** | **str** | host id |
+**host_name** | **str** | host name |
+**os** | **str** | host os |
 
 ## Example
 

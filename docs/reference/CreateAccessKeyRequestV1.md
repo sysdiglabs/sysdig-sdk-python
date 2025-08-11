@@ -6,10 +6,10 @@ Create access key request
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**agent_limit** | **int** | Maximum number of agents that can be connected with the access key | [optional] 
-**agent_reservation** | **int** | Number of agents that are guaranteed to be available for the access key | [optional] 
-**team_id** | **int** | ID of team that owns the access key | [optional] 
-**metadata** | **Dict[str, str]** | Access key metadata (maximum of 20 key-value pairs where key can be up to 25 characters long and value can be up to 50 characters long) | [optional] 
+**agent_limit** | **int** | Maximum number of agents that can be connected with the access key | [optional]
+**agent_reservation** | **int** | Number of agents that are guaranteed to be available for the access key | [optional]
+**team_id** | **int** | ID of team that owns the access key | [optional]
+**metadata** | **Dict[str, str]** | Access key metadata (maximum of 20 key-value pairs where key can be up to 25 characters long and value can be up to 50 characters long) | [optional]
 
 ## Example
 

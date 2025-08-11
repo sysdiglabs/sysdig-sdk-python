@@ -1,13 +1,13 @@
 # ImageConfigDefaultUserIsNot
 
-Predicate expressing \"the container user does not default to the specified user\". 
+Predicate expressing \"the container user does not default to the specified user\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigDefaultUserIsNotExtra**](ImageConfigDefaultUserIsNotExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigDefaultUserIsNotExtra**](ImageConfigDefaultUserIsNotExtra.md) |  |
 
 ## Example
 

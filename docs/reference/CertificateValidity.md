@@ -6,8 +6,8 @@ The certificate validity interval.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**after** | **datetime** | The beginning of the certificate validity period. | [optional] 
-**before** | **datetime** | The end of the certificate validity period. | [optional] 
+**after** | **datetime** | The beginning of the certificate validity period. | [optional]
+**before** | **datetime** | The end of the certificate validity period. | [optional]
 
 ## Example
 

@@ -1,13 +1,13 @@
 # EntryPointV1
 
-The page you see after logging into Sysdig UI. It is defined by a Module and a Selection. **The Entry Point is not supported in Sysdig Secure.** 
+The page you see after logging into Sysdig UI. It is defined by a Module and a Selection. **The Entry Point is not supported in Sysdig Secure.**
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**module** | [**EntryPointModuleV1**](EntryPointModuleV1.md) |  | [optional] 
-**selection** | **str** | The selection is the specific page within the Module, usually defined by the resource ID. It is supported only supported by **Dashboards** and **DashboardTemplates** Modules.  | [optional] 
+**module** | [**EntryPointModuleV1**](EntryPointModuleV1.md) |  | [optional]
+**selection** | **str** | The selection is the specific page within the Module, usually defined by the resource ID. It is supported only supported by **Dashboards** and **DashboardTemplates** Modules.  | [optional]
 
 ## Example
 

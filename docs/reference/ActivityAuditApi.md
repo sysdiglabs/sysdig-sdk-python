@@ -160,13 +160,13 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **var_from** | **int**|  | [optional] 
- **to** | **int**|  | [optional] 
- **cursor** | **str**|  | [optional] 
- **zones** | [**List[int]**](int.md)|  | [optional] 
- **filter** | **str**|  | [optional] 
+ **var_from** | **int**|  | [optional]
+ **to** | **int**|  | [optional]
+ **cursor** | **str**|  | [optional]
+ **zones** | [**List[int]**](int.md)|  | [optional]
+ **filter** | **str**|  | [optional]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
- **types** | [**Types**](.md)|  | [optional] 
+ **types** | [**Types**](.md)|  | [optional]
 
 ### Return type
 
@@ -234,7 +234,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.ActivityAuditApi(api_client)
-    entry_id = 'entry_id_example' # str | 
+    entry_id = 'entry_id_example' # str |
 
     try:
         # Get entry
@@ -252,7 +252,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **entry_id** | **str**|  | 
+ **entry_id** | **str**|  |
 
 ### Return type
 

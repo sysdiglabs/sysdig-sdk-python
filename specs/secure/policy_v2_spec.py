@@ -34,8 +34,9 @@ def policy_json():
 
 with description("Policies v2", "integration") as self:
     with before.all:
-        self.client = SdSecureClient(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                     token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = SdSecureClient(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"), token=os.getenv("SDC_SECURE_TOKEN")
+        )
 
     with before.each:
         self.cleanup_policies()
@@ -43,14 +44,12 @@ with description("Policies v2", "integration") as self:
     with after.each:
         self.cleanup_policies()
 
-
     def cleanup_policies(self):
         _, res = self.client.list_policies()
         for policy in res:
             if str(policy["name"]).startswith("Test - "):
                 ok, res = self.client.delete_policy_id(policy["id"])
                 expect((ok, res)).to(be_successful_api_call)
-
 
     with it("is able to list all existing policies"):
         ok, res = self.client.list_policies()
@@ -61,11 +60,9 @@ with description("Policies v2", "integration") as self:
         expect(call).to(be_successful_api_call)
 
     with it("is able to create a policy with parameters"):
-        ok, res = self.client.add_policy(name=_POLICY_NAME,
-                                         description=_POLICY_DESCRIPTION,
-                                         rule_names=_POLICY_RULES,
-                                         actions=_POLICY_ACTIONS,
-                                         type="falco")
+        ok, res = self.client.add_policy(
+            name=_POLICY_NAME, description=_POLICY_DESCRIPTION, rule_names=_POLICY_RULES, actions=_POLICY_ACTIONS, type="falco"
+        )
 
         expect((ok, res)).to(be_successful_api_call)
 
@@ -73,7 +70,7 @@ with description("Policies v2", "integration") as self:
         _, policies = self.client.list_policies()
 
         for policy in policies:
-            ok, res = self.client.delete_policy_id(policy['id'])
+            ok, res = self.client.delete_policy_id(policy["id"])
             expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to create the default policies"):

@@ -6,11 +6,11 @@ Platform Audit Event
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The event id. | [optional] 
-**cursor** | **str** | The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as &#x60;cursor&#x60; in a GET request, you will get the set of events surrounding this current event.  | [optional] 
-**timestamp** | **int** | The event timestamp in nanoseconds. | [optional] 
-**content** | [**AuditTrailContent**](AuditTrailContent.md) |  | [optional] 
-**labels** | **Dict[str, str]** | Key value pairs of values, represents entityType where the Audit Event was generated.  | [optional] 
+**id** | **str** | The event id. | [optional]
+**cursor** | **str** | The cursor that can be used to fetch a set of events surrounding this same event. By providing this value as &#x60;cursor&#x60; in a GET request, you will get the set of events surrounding this current event.  | [optional]
+**timestamp** | **int** | The event timestamp in nanoseconds. | [optional]
+**content** | [**AuditTrailContent**](AuditTrailContent.md) |  | [optional]
+**labels** | **Dict[str, str]** | Key value pairs of values, represents entityType where the Audit Event was generated.  | [optional]
 
 ## Example
 

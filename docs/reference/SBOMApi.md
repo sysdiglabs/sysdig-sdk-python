@@ -64,9 +64,9 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **asset_id** | **str**| The ID of the asset for which we want to retrieve the SBOM. It&#39;s the imageId for container-image and the hostId for hosts Provide this with assetType if not providing bomIdentifier  | [optional] 
- **asset_type** | **str**| The type of the asset for which we want to retrieve the SBOM. Provide this with assetId if not providing bomIdentifier | [optional] 
- **bom_identifier** | **str**| The ID of a single SBOM. Either provide this or both assetId and assetType | [optional] 
+ **asset_id** | **str**| The ID of the asset for which we want to retrieve the SBOM. It&#39;s the imageId for container-image and the hostId for hosts Provide this with assetType if not providing bomIdentifier  | [optional]
+ **asset_type** | **str**| The type of the asset for which we want to retrieve the SBOM. Provide this with assetId if not providing bomIdentifier | [optional]
+ **bom_identifier** | **str**| The ID of a single SBOM. Either provide this or both assetId and assetType | [optional]
 
 ### Return type
 

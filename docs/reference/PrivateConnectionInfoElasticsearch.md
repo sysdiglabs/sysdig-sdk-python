@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**auth** | **str** | Authentication method | [optional] 
-**secret** | **str** | Authentication secret. To be set if auth is specified | [optional] 
+**auth** | **str** | Authentication method | [optional]
+**secret** | **str** | Authentication secret. To be set if auth is specified | [optional]
 
 ## Example
 

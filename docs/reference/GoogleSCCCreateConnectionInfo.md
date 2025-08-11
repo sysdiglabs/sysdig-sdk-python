@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**organization** | **str** | ID of your GCP organization | 
-**security_marks** | [**List[KeyValueObject]**](KeyValueObject.md) | additional annotations to add to assets or findings as they get forwarded to Security Command Center | [optional] 
-**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data | 
+**organization** | **str** | ID of your GCP organization |
+**security_marks** | [**List[KeyValueObject]**](KeyValueObject.md) | additional annotations to add to assets or findings as they get forwarded to Security Command Center | [optional]
+**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data |
 
 ## Example
 

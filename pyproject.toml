@@ -1,86 +1,46 @@
-[tool.poetry]
-name = "sysdig_client"
-version = "1.0.0" # Updated by poetry-dynamic-versioning
+[project]
+name = "sysdig-sdk-python"
+version = "0.19.1" # Updated by poetry-dynamic-versioning
 description = "Python client for Sysdig Platform"
-authors = ["Sysdig Inc. <info@sysdig.com>"]
+authors = [
+  {name = "Sysdig Inc.", email = "info@sysdig.com"},
+]
+readme = "README.md"
 license = "MIT"
-include = ["sysdig_client/py.typed"]
+requires-python = ">=3.9"
+dependencies = [
+  "urllib3 >= 2.1.0, < 3.0.0",
+  "python-dateutil >= 2.8.2",
+  "pydantic >= 2",
+  "typing-extensions >= 4.7.1",
+  "python_dateutil >= 2.5.3"
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
+[dependency-groups]
+dev = [
+  "pytest >= 7.2.1",
+  "pytest-cov >= 2.8.1",
+  "tox >= 3.9.0",
+  "flake8 >= 4.0.0",
+  "types-python-dateutil >= 2.8.19.14",
+  "mypy >= 1.5",
+  "mamba == 0.11.3",
+  "expects == 0.9.0",
+  "PyYAML == 6.0.2",
+  "requests-toolbelt == 1.0.0",
+  "TatSu == 5.8.3",
+  "requests == 2.32.4"
+]
 
-urllib3 = ">= 2.1.0, < 3.0.0"
-python-dateutil = ">= 2.8.2"
-pydantic = ">= 2"
-typing-extensions = ">= 4.7.1"
-
-[tool.poetry.dev-dependencies]
-pytest = ">= 7.2.1"
-pytest-cov = ">= 2.8.1"
-tox = ">= 3.9.0"
-flake8 = ">= 4.0.0"
-types-python-dateutil = ">= 2.8.19.14"
-mypy = ">= 1.5"
-
+[tool.uv]
+default-groups = ["dev"]
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
-[tool.pylint.'MESSAGES CONTROL']
-extension-pkg-whitelist = "pydantic"
+[tool.hatch.version]
+source = "vcs" # Will get the latest git tag to configure this project's version
 
-[tool.mypy]
-files = [
-  "sysdig_client",
-  #"test",  # auto-generated tests
-  "tests", # hand-written tests
-]
-# TODO: enable "strict" once all these individual checks are passing
-# strict = true
-
-# List from: https://mypy.readthedocs.io/en/stable/existing_code.html#introduce-stricter-options
-warn_unused_configs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-
-## Getting these passing should be easy
-strict_equality = true
-extra_checks = true
-
-## Strongly recommend enabling this one as soon as you can
-check_untyped_defs = true
-
-## These shouldn't be too much additional work, but may be tricky to
-## get passing if you use a lot of untyped libraries
-disallow_subclassing_any = true
-disallow_untyped_decorators = true
-disallow_any_generics = true
-
-### These next few are various gradations of forcing use of type annotations
-#disallow_untyped_calls = true
-#disallow_incomplete_defs = true
-#disallow_untyped_defs = true
-#
-### This one isn't too hard to get passing, but return on investment is lower
-#no_implicit_reexport = true
-#
-### This one can be tricky to get passing if you use a lot of untyped libraries
-#warn_return_any = true
-
-[[tool.mypy.overrides]]
-module = [
-  "sysdig_client.configuration",
-]
-warn_unused_ignores = true
-strict_equality = true
-extra_checks = true
-check_untyped_defs = true
-disallow_subclassing_any = true
-disallow_untyped_decorators = true
-disallow_any_generics = true
-disallow_untyped_calls = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
-no_implicit_reexport = true
-warn_return_any = true
+[tool.hatch.build.targets.wheel]
+packages = ["sysdig_client"]

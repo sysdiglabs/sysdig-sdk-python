@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**endpoint** | **str** | URL of the Splunk instance | 
-**source_type** | **str** | Source type to override [Sysdig standard data type to source type mapping](https://docs.sysdig.com/en/forward-splunk#reference-data-categories-mapped-to-source-types) | [optional] 
-**index** | **str** | index to send data to. If unspecified, it will be used the index specified on the HTTP Event Collector configuration on Splunk | [optional] 
-**is_insecure** | **bool** | Skip TLS certificate verification | [optional] 
-**certificate_id** | **int** | ID of a certificate stored in Sysdig&#39;s [Certificates Management tool](#tag/Certificates). Note that the RFC 5425 (TLS) protocol is required for you to see this field | [optional] 
-**token** | **str** | HTTP Event Collector Token | 
+**endpoint** | **str** | URL of the Splunk instance |
+**source_type** | **str** | Source type to override [Sysdig standard data type to source type mapping](https://docs.sysdig.com/en/forward-splunk#reference-data-categories-mapped-to-source-types) | [optional]
+**index** | **str** | index to send data to. If unspecified, it will be used the index specified on the HTTP Event Collector configuration on Splunk | [optional]
+**is_insecure** | **bool** | Skip TLS certificate verification | [optional]
+**certificate_id** | **int** | ID of a certificate stored in Sysdig&#39;s [Certificates Management tool](#tag/Certificates). Note that the RFC 5425 (TLS) protocol is required for you to see this field | [optional]
+**token** | **str** | HTTP Event Collector Token |
 
 ## Example
 

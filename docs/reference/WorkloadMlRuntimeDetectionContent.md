@@ -6,11 +6,11 @@ Workload ML event content
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**EventContentType**](EventContentType.md) |  | 
-**command** | **str** | The command name | 
-**exe** | **str** | The command path | 
-**detected_class_probability** | **float** | The detected class probability (confidence score) | 
-**policy_id** | **int** | ID of the policy that generated the event | 
+**type** | [**EventContentType**](EventContentType.md) |  |
+**command** | **str** | The command name |
+**exe** | **str** | The command path |
+**detected_class_probability** | **float** | The detected class probability (confidence score) |
+**policy_id** | **int** | ID of the policy that generated the event |
 
 ## Example
 

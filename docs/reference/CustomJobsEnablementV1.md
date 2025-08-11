@@ -6,8 +6,8 @@ The enablement status of a custom Prometheus job
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**enabled** | **bool** | Enablement status | 
-**enablement_by_cluster** | **Dict[str, bool]** | Enablement overrides by cluster | [optional] 
+**enabled** | **bool** | Enablement status |
+**enablement_by_cluster** | **Dict[str, bool]** | Enablement overrides by cluster | [optional]
 
 ## Example
 

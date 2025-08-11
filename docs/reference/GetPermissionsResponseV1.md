@@ -6,8 +6,8 @@ Permissions response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**permissions** | [**List[PermissionV1]**](PermissionV1.md) | Set of permissions  | [optional] 
-**total** | **int** | Total number of permissions | [optional] 
+**permissions** | [**List[PermissionV1]**](PermissionV1.md) | Set of permissions  | [optional]
+**total** | **int** | Total number of permissions | [optional]
 
 ## Example
 

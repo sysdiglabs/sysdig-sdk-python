@@ -6,11 +6,11 @@ Policy summary definition.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | The Policy ID | 
-**name** | **str** | human readable policy name. | 
-**identifier** | **str** | policy identifier generated from the name. | 
-**description** | **str** | policy description | [optional] 
-**stages** | **List[str]** | array of stages for the policy. An empty array means the policy is applied only when specifically requested by its identifier. It may be one of the following:   - runtime   - pipeline   - registry  | 
+**id** | **int** | The Policy ID |
+**name** | **str** | human readable policy name. |
+**identifier** | **str** | policy identifier generated from the name. |
+**description** | **str** | policy description | [optional]
+**stages** | **List[str]** | array of stages for the policy. An empty array means the policy is applied only when specifically requested by its identifier. It may be one of the following:   - runtime   - pipeline   - registry  |
 
 ## Example
 

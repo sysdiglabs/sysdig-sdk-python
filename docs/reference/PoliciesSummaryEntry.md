@@ -6,9 +6,9 @@ A Policy summary that indicates whether a policy failed or passed.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | Policy Id | 
-**name** | **str** | Policy Name | 
-**is_passed** | **bool** | True for passed, false for failed | 
+**id** | **int** | Policy Id |
+**name** | **str** | Policy Name |
+**is_passed** | **bool** | True for passed, false for failed |
 
 ## Example
 

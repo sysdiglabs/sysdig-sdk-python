@@ -1,14 +1,14 @@
 # GroupMappingSettingsV1
 
-The request to save group mapping settings. Currently settings for conflict resolution strategies are supported. 
+The request to save group mapping settings. Currently settings for conflict resolution strategies are supported.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**no_mapping_strategy** | **str** | Strategy for handling no mappings.  | 
-**different_roles_same_team_strategy** | **str** | Strategy for handling different roles on the same team.  | 
-**no_mappings_error_redirect_url** | **str** | Redirect URL when NO_MAPPINGS_ERROR_REDIRECT is selected.  | [optional] 
+**no_mapping_strategy** | **str** | Strategy for handling no mappings.  |
+**different_roles_same_team_strategy** | **str** | Strategy for handling different roles on the same team.  |
+**no_mappings_error_redirect_url** | **str** | Redirect URL when NO_MAPPINGS_ERROR_REDIRECT is selected.  | [optional]
 
 ## Example
 

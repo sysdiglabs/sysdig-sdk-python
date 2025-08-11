@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**address** | **str** | Address of the Syslog server | 
-**port** | **int** | port of the syslog server | 
-**message_format** | **str** | The syslog message format. RFC_5425 is TLS only | 
+**address** | **str** | Address of the Syslog server |
+**port** | **int** | port of the syslog server |
+**message_format** | **str** | The syslog message format. RFC_5425 is TLS only |
 **type** | **str** | protocol, tcp or udp (case insensitive) | [optional] [default to 'tcp']
 **is_insecure** | **bool** | Skip TLS certificate verification | [optional] [default to False]
 **formatter** | **str** | The message content format | [optional] [default to 'JSON']
-**certificate_id** | **int** | ID of a certificate stored in Sysdig&#39;s [Certificates Management tool](#tag/Certificates). Note that the RFC 5425 (TLS) protocol is required for you to see this field | [optional] 
+**certificate_id** | **int** | ID of a certificate stored in Sysdig&#39;s [Certificates Management tool](#tag/Certificates). Note that the RFC 5425 (TLS) protocol is required for you to see this field | [optional]
 
 ## Example
 

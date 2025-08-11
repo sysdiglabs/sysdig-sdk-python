@@ -65,7 +65,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **event_id** | **str**| The event id. | 
+ **event_id** | **str**| The event id. |
 
 ### Return type
 
@@ -184,7 +184,7 @@ Retrieves the list of events matching the expressed search criteria.
 The pair `from` and `to` and the `cursor` parameter are mutually exclusive. If you supply a `from` and `to` you must not supply a `cursor` and vice-versa.
 The time criteria is required and can be specified in two different ways:
 - Using `from` and `to`, the list of events within the timeframe (max 2 weeks) will be returned, starting from the most recent ones.
-- Using a `cursor` the events returned will be in the before, after or around the event, depending on the event the cursor is taken from and the cursor type. More details are available in the `cursor` attribute in the response. 
+- Using a `cursor` the events returned will be in the before, after or around the event, depending on the event the cursor is taken from and the cursor type. More details are available in the `cursor` attribute in the response.
 The event content can be filtered using `zones`, to select one or more zones, or with the filter, directly expressing a condition on fields and labels.
 
 
@@ -241,11 +241,11 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **var_from** | **int**|  | [optional] 
- **to** | **int**|  | [optional] 
- **cursor** | **str**|  | [optional] 
- **zones** | [**List[int]**](int.md)|  | [optional] 
- **filter** | **str**|  | [optional] 
+ **var_from** | **int**|  | [optional]
+ **to** | **int**|  | [optional]
+ **cursor** | **str**|  | [optional]
+ **zones** | [**List[int]**](int.md)|  | [optional]
+ **filter** | **str**|  | [optional]
  **limit** | **int**|  | [optional] [default to 25]
 
 ### Return type

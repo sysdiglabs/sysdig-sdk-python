@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**endpoint** | **str** | The URL, including protocol and port (if non standard), to your IBM Cloud Pak for Multicloud Management API endpoint | 
+**endpoint** | **str** | The URL, including protocol and port (if non standard), to your IBM Cloud Pak for Multicloud Management API endpoint |
 **account_id** | **str** | IBM Account ID | [optional] [default to 'id-mycluster-account']
 **provider_id** | **str** | The provider the findings will be associated to | [optional] [default to 'sysdig-secure']
-**note_name** | **str** | The note to use. If unspecified, a note with &#x60;policy-event&#x60; ID will be created and used | [optional] 
+**note_name** | **str** | The note to use. If unspecified, a note with &#x60;policy-event&#x60; ID will be created and used | [optional]
 **is_insecure** | **bool** | Skip TLS certificate verification | [optional] [default to False]
-**api_key** | **str** | IBM Cloud API Key | 
+**api_key** | **str** | IBM Cloud API Key |
 
 ## Example
 

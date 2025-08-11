@@ -5,15 +5,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |   | [optional] 
-**group_name** | **str** | The group name matching the external provider name. | [optional] 
-**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) | The standard team role assigned for the user in this team. **Mutually exclusive with customTeamRoleId**.  | [optional] 
-**custom_team_role_id** | **int** | The custom team role ID assigned for the user in this team. **Mutually exclusive with standardTeamRole**.  | [optional] 
-**is_admin** | **bool** | Flag that indicates if the group is an admin group. | [optional] 
-**team_map** | [**TeamMapV1**](TeamMapV1.md) |  | [optional] 
-**weight** | **int** | The weight of the group mapping that is used to determine the priority - a lower number has higher priority. | [optional] 
-**date_created** | **datetime** | The date in which this group mapping was created in ISO 8601 format. | [optional] 
-**last_updated** | **datetime** | The date in which this group mapping was last updated in ISO 8601 format. | [optional] 
+**id** | **int** |   | [optional]
+**group_name** | **str** | The group name matching the external provider name. | [optional]
+**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) | The standard team role assigned for the user in this team. **Mutually exclusive with customTeamRoleId**.  | [optional]
+**custom_team_role_id** | **int** | The custom team role ID assigned for the user in this team. **Mutually exclusive with standardTeamRole**.  | [optional]
+**is_admin** | **bool** | Flag that indicates if the group is an admin group. | [optional]
+**team_map** | [**TeamMapV1**](TeamMapV1.md) |  | [optional]
+**weight** | **int** | The weight of the group mapping that is used to determine the priority - a lower number has higher priority. | [optional]
+**date_created** | **datetime** | The date in which this group mapping was created in ISO 8601 format. | [optional]
+**last_updated** | **datetime** | The date in which this group mapping was last updated in ISO 8601 format. | [optional]
 
 ## Example
 

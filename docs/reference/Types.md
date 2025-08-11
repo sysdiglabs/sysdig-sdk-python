@@ -1,6 +1,6 @@
 # Types
 
-The entry types to filter. This query parameter can be set multiple times to filter for different entry types. 
+The entry types to filter. This query parameter can be set multiple times to filter for different entry types.
 
 ## Enum
 

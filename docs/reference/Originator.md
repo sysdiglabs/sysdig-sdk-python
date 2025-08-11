@@ -1,6 +1,6 @@
 # Originator
 
-Type of event: - policy - Agent-based runtime threat detection events - profilingDetection - Workload ML detections - falcocloud - Agentless threat detections - admissionController - Kubernetes admission control based posture events 
+Type of event: - policy - Agent-based runtime threat detection events - profilingDetection - Workload ML detections - falcocloud - Agentless threat detections - admissionController - Kubernetes admission control based posture events
 
 ## Enum
 

@@ -6,8 +6,8 @@ The Slack base notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**channel** | **str** | The name of the Slack channel the user selected as a destination for messages. | [optional] 
-**url** | **str** | The Slack webhook URL | 
+**channel** | **str** | The name of the Slack channel the user selected as a destination for messages. | [optional]
+**url** | **str** | The Slack webhook URL |
 
 ## Example
 

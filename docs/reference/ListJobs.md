@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[JobResponse]**](JobResponse.md) | List of Jobs. | 
+**data** | [**List[JobResponse]**](JobResponse.md) | List of Jobs. |
 
 ## Example
 

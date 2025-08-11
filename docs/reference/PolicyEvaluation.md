@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | policy evaluation name | 
-**identifier** | **str** | policy evaluation id | 
-**description** | **str** | policy evaluation description | [optional] 
-**bundles** | [**List[Bundle]**](Bundle.md) |  | [optional] 
-**evaluation** | **str** |  | 
-**created_at** | **str** | datetime of creation | 
-**updated_at** | **str** | datetime of last update | 
+**name** | **str** | policy evaluation name |
+**identifier** | **str** | policy evaluation id |
+**description** | **str** | policy evaluation description | [optional]
+**bundles** | [**List[Bundle]**](Bundle.md) |  | [optional]
+**evaluation** | **str** |  |
+**created_at** | **str** | datetime of creation |
+**updated_at** | **str** | datetime of last update |
 
 ## Example
 

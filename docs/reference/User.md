@@ -6,8 +6,8 @@ The full representation of a User
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **str** | The username of the User | [optional] 
-**groups** | **List[str]** |  | [optional] 
+**username** | **str** | The username of the User | [optional]
+**groups** | **List[str]** |  | [optional]
 
 ## Example
 

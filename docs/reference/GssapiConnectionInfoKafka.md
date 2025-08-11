@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**auth** | **str** | The authentication method to optionally use. Currently supporting only GSSAPI | 
-**principal** | **str** | GSSAPI principal | 
-**realm** | **str** | GSSAPI realm | 
-**service** | **str** | GSSAPI Service name | 
-**krb5** | **str** | Kerberos krb5.conf file content for GSSAPI | 
+**auth** | **str** | The authentication method to optionally use. Currently supporting only GSSAPI |
+**principal** | **str** | GSSAPI principal |
+**realm** | **str** | GSSAPI realm |
+**service** | **str** | GSSAPI Service name |
+**krb5** | **str** | Kerberos krb5.conf file content for GSSAPI |
 
 ## Example
 

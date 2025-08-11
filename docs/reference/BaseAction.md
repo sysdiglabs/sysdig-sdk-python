@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**ActionType**](ActionType.md) |  | 
+**type** | [**ActionType**](ActionType.md) |  |
 
 ## Example
 

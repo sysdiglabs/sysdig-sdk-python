@@ -1,12 +1,12 @@
 # ImageConfigInstructionNotRecommended
 
-Predicate expressing \"the image history contains not recommended instruction (ADD, ...)\". 
+Predicate expressing \"the image history contains not recommended instruction (ADD, ...)\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

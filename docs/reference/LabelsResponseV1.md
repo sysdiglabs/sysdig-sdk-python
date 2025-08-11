@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | **str** | Query status. | [optional] 
-**data** | **List[str]** | List of label names. | [optional] 
-**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional] 
-**infos** | **List[str]** | A set of information messages attached to the response. | [optional] 
+**status** | **str** | Query status. | [optional]
+**data** | **List[str]** | List of label names. | [optional]
+**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional]
+**infos** | **List[str]** | A set of information messages attached to the response. | [optional]
 
 ## Example
 

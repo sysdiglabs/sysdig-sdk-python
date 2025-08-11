@@ -6,8 +6,8 @@ A collection of scopes representing business areas.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**zone_name** | **str** | Zone name | 
-**zone_id** | **int** | Zone ID | [optional] 
+**zone_name** | **str** | Zone name |
+**zone_id** | **int** | Zone ID | [optional]
 
 ## Example
 

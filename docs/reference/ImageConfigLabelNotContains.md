@@ -1,13 +1,13 @@
 # ImageConfigLabelNotContains
 
-Predicate expressing \"the image has the specified label and value\". 
+Predicate expressing \"the image has the specified label and value\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigLabelNotContainsExtra**](ImageConfigLabelNotContainsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigLabelNotContainsExtra**](ImageConfigLabelNotContainsExtra.md) |  |
 
 ## Example
 

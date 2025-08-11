@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | The Bundle ID. | 
-**name** | **str** | The human readable Bundle name. | [optional] 
+**id** | **int** | The Bundle ID. |
+**name** | **str** | The human readable Bundle name. | [optional]
 
 ## Example
 

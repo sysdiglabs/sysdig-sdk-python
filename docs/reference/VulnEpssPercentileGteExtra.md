@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**percentile** | **int** | Percentile value to compare. | [optional] 
+**percentile** | **int** | Percentile value to compare. | [optional]
 
 ## Example
 

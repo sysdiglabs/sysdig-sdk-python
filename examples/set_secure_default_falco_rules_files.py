@@ -21,12 +21,12 @@ from sdcclient import SdSecureClient
 # Parse arguments
 #
 def usage():
-    print(('usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>' % sys.argv[0]))
-    print('-l|--load: load the files to set from a set of files below <path> using load_default_rules_files().')
-    print('-t|--tag: Set a tag for the set of files')
-    print('-c|--content: the (single) file to set')
-    print('if --load is specified, neither --tag nor --content can be specified')
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(("usage: %s [-l|--load <path>] [-t|--tag <tag>] [-c|--content <content>] <sysdig-token>" % sys.argv[0]))
+    print("-l|--load: load the files to set from a set of files below <path> using load_default_rules_files().")
+    print("-t|--tag: Set a tag for the set of files")
+    print("-c|--content: the (single) file to set")
+    print("if --load is specified, neither --tag nor --content can be specified")
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -59,7 +59,7 @@ sdc_token = args[0]
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClient(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClient(sdc_token, "https://secure.sysdig.com")
 
 files_obj = {}
 if load_dir != "":
@@ -71,7 +71,7 @@ if load_dir != "":
         print(res)
         sys.exit(1)
 else:
-    with open(cpath, 'r') as content_file:
+    with open(cpath, "r") as content_file:
         content = content_file.read()
         required_engine_version = 0
         cyaml = yaml.safe_load(content)
@@ -80,18 +80,22 @@ else:
                 try:
                     required_engine_version = int(obj["required_engine_version"])
                 except ValueError:
-                    print(("Required engine version \"{}\" in content {} must be a number".format(
-                        obj["required_engine_version"], cpath)))
+                    print(
+                        (
+                            'Required engine version "{}" in content {} must be a number'.format(
+                                obj["required_engine_version"], cpath
+                            )
+                        )
+                    )
                     sys.exit(1)
         files_obj = {
             "tag": tag,
-            "files": [{
-                "name": os.path.basename(cpath),
-                "variants": {
-                    "required_engine_version": required_engine_version,
-                    "content": content
+            "files": [
+                {
+                    "name": os.path.basename(cpath),
+                    "variants": {"required_engine_version": required_engine_version, "content": content},
                 }
-            }]
+            ],
         }
 
 ok, res = sdclient.set_default_falco_rules_files(files_obj)
@@ -100,7 +104,7 @@ ok, res = sdclient.set_default_falco_rules_files(files_obj)
 # Return the result
 #
 if ok:
-    print('default falco rules files set successfully')
+    print("default falco rules files set successfully")
 else:
     print(res)
     sys.exit(1)

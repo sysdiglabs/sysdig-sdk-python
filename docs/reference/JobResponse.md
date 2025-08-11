@@ -6,28 +6,28 @@ Schema for a job response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Unique identifier for the job. | 
-**user_id** | **int** | ID of the user who created the job. | 
-**team_id** | **int** | ID of the team the job was created under. | 
-**customer_id** | **int** | ID of the user associated with the job. | 
-**iac_task_id** | **int** | ID of the IAC scheduled task. | [optional] 
-**schedule_id** | **str** | ID of the schedule associated with the job | [optional] 
-**report_id** | **int** | ID of the report | 
-**is_report_template** | **bool** | Indicates if the report is a template | 
-**report_format** | **str** | Format of the report | 
-**job_type** | **str** | Type of the job | 
-**job_name** | **str** | Name of the job | [optional] 
-**zones** | **List[int]** | List of zone IDs | 
-**policies** | **List[int]** | List of policy IDs | [optional] 
-**status** | **str** | Status of the job | 
-**timezone** | **str** | Timezone of the request time frame | [optional] 
-**time_frame** | [**TimeFrame**](TimeFrame.md) |  | [optional] 
-**file_name** | **str** | File name of the report | [optional] 
-**file_path** | **str** | File path of the report | [optional] 
-**created_by** | **str** | Email of the user who created the job | 
-**scheduled_on** | **datetime** | Timestamp when the job was scheduled | 
-**started_on** | **datetime** | Timestamp when the job was started | [optional] 
-**completed_on** | **datetime** | Timestamp when the job was completed | [optional] 
+**id** | **str** | Unique identifier for the job. |
+**user_id** | **int** | ID of the user who created the job. |
+**team_id** | **int** | ID of the team the job was created under. |
+**customer_id** | **int** | ID of the user associated with the job. |
+**iac_task_id** | **int** | ID of the IAC scheduled task. | [optional]
+**schedule_id** | **str** | ID of the schedule associated with the job | [optional]
+**report_id** | **int** | ID of the report |
+**is_report_template** | **bool** | Indicates if the report is a template |
+**report_format** | **str** | Format of the report |
+**job_type** | **str** | Type of the job |
+**job_name** | **str** | Name of the job | [optional]
+**zones** | **List[int]** | List of zone IDs |
+**policies** | **List[int]** | List of policy IDs | [optional]
+**status** | **str** | Status of the job |
+**timezone** | **str** | Timezone of the request time frame | [optional]
+**time_frame** | [**TimeFrame**](TimeFrame.md) |  | [optional]
+**file_name** | **str** | File name of the report | [optional]
+**file_path** | **str** | File path of the report | [optional]
+**created_by** | **str** | Email of the user who created the job |
+**scheduled_on** | **datetime** | Timestamp when the job was scheduled |
+**started_on** | **datetime** | Timestamp when the job was started | [optional]
+**completed_on** | **datetime** | Timestamp when the job was completed | [optional]
 
 ## Example
 

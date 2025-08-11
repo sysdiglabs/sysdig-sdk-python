@@ -6,9 +6,9 @@ Summary of query execution metrics and timing information.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**available_after** | **int** | Time taken for results to become available in milliseconds. | 
-**consumed_after** | **int** | Time taken to consume results in milliseconds. | 
-**total_time** | **int** | Total query execution time in milliseconds. | 
+**available_after** | **int** | Time taken for results to become available in milliseconds. |
+**consumed_after** | **int** | Time taken to consume results in milliseconds. |
+**total_time** | **int** | Total query execution time in milliseconds. |
 
 ## Example
 

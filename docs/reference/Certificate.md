@@ -6,13 +6,13 @@ An X-509 certificate
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | The certificate ID. | 
-**certificate_name** | **str** | The certificate Name. | 
-**created** | **datetime** | The timestamp the certificate was created. | 
-**issuer** | **str** | The Distinguished Name of the certificate issuer. | 
-**validity** | [**CertificateValidity**](CertificateValidity.md) |  | 
-**usage** | **int** | The number of services that currently use that certificate. | 
-**fingerprint** | **str** | The certificate fingerprint | 
+**id** | **int** | The certificate ID. |
+**certificate_name** | **str** | The certificate Name. |
+**created** | **datetime** | The timestamp the certificate was created. |
+**issuer** | **str** | The Distinguished Name of the certificate issuer. |
+**validity** | [**CertificateValidity**](CertificateValidity.md) |  |
+**usage** | **int** | The number of services that currently use that certificate. |
+**fingerprint** | **str** | The certificate fingerprint |
 
 ## Example
 

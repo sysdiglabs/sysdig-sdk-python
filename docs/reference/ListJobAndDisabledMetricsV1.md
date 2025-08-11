@@ -6,8 +6,8 @@ Get Disabled Metrics by Job name Response.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**job_name** | **str** | The name of the Job reporting the metric.  | [optional] 
-**metrics** | [**List[MetricV1]**](MetricV1.md) | List of metrics that are disabled for the Job.  | [optional] 
+**job_name** | **str** | The name of the Job reporting the metric.  | [optional]
+**metrics** | [**List[MetricV1]**](MetricV1.md) | List of metrics that are disabled for the Job.  | [optional]
 
 ## Example
 

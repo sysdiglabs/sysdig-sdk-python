@@ -14,6 +14,7 @@ from sysdig_client.api.inhibition_rules_api import InhibitionRulesApi
 from sysdig_client.api.inventory_api import InventoryApi
 from sysdig_client.api.jira_integrations_api import JiraIntegrationsApi
 from sysdig_client.api.metrics_collection_api import MetricsCollectionApi
+from sysdig_client.api.monitor_events_api import MonitorEventsApi
 from sysdig_client.api.notification_channels_api import NotificationChannelsApi
 from sysdig_client.api.permissions_api import PermissionsApi
 from sysdig_client.api.platform_audit_api import PlatformAuditApi
@@ -32,4 +33,3 @@ from sysdig_client.api.user_deactivation_api import UserDeactivationApi
 from sysdig_client.api.users_api import UsersApi
 from sysdig_client.api.vulnerability_management_api import VulnerabilityManagementApi
 from sysdig_client.api.zones_api import ZonesApi
-

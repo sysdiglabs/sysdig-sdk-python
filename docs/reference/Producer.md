@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**produced_at** | **datetime** | time of result production | [optional] 
+**produced_at** | **datetime** | time of result production | [optional]
 
 ## Example
 

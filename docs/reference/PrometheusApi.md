@@ -618,11 +618,11 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **label_name** | **str**| The name of the label to retrieve values for. | 
- **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional] 
- **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional] 
- **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label values. | [optional] 
- **limit** | **int**| The maximum number of returned labels. This is 5,000 by default. To disable the limit, set the value to 0. | [optional] 
+ **label_name** | **str**| The name of the label to retrieve values for. |
+ **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional]
+ **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional]
+ **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label values. | [optional]
+ **limit** | **int**| The maximum number of returned labels. This is 5,000 by default. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -711,10 +711,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional] 
- **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional] 
- **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label names. | [optional] 
- **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional] 
+ **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional]
+ **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional]
+ **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label names. | [optional]
+ **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -874,9 +874,9 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **limit_per_metric** | **int**| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional] 
- **limit** | **int**| The maximum number of metrics to return. To disable the limit, set the value to 0. | [optional] 
- **metric** | **str**| A specific metric name to filter metadata for. If omitted, metadata for all metrics is retrieved. | [optional] 
+ **limit_per_metric** | **int**| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional]
+ **limit** | **int**| The maximum number of metrics to return. To disable the limit, set the value to 0. | [optional]
+ **metric** | **str**| A specific metric name to filter metadata for. If omitted, metadata for all metrics is retrieved. | [optional]
 
 ### Return type
 
@@ -1111,12 +1111,12 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | **str**| The Prometheus expression query string. | 
- **start** | [**QueryTime**](.md)| The inclusive start timestamp of the query range as RFC3339 or a unix timestamp. | 
- **end** | [**QueryTime**](.md)| The inclusive end timestamp of the query range as RFC3339 or a unix timestamp. | 
- **step** | [**GetQueryRangeV1StepParameter**](.md)| The query resolution step width, specified as a duration or a floating-point number of seconds. | 
- **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional] 
- **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional] 
+ **query** | **str**| The Prometheus expression query string. |
+ **start** | [**QueryTime**](.md)| The inclusive start timestamp of the query range as RFC3339 or a unix timestamp. |
+ **end** | [**QueryTime**](.md)| The inclusive end timestamp of the query range as RFC3339 or a unix timestamp. |
+ **step** | [**GetQueryRangeV1StepParameter**](.md)| The query resolution step width, specified as a duration or a floating-point number of seconds. |
+ **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional]
+ **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -1206,10 +1206,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | **str**| The Prometheus expression query string. | 
- **time** | [**QueryTime**](.md)| The evaluation timestamp as RFC3339 or a unix timestamp. If omitted, the current server time is used. | [optional] 
- **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional] 
- **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional] 
+ **query** | **str**| The Prometheus expression query string. |
+ **time** | [**QueryTime**](.md)| The evaluation timestamp as RFC3339 or a unix timestamp. If omitted, the current server time is used. | [optional]
+ **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional]
+ **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -1242,7 +1242,7 @@ Name | Type | Description  | Notes
 
 Rules
 
-The /rules API endpoint returns the list of alerting rules. It also returns the currently active alerts fired by the Prometheus instance of each alerting rule. 
+The /rules API endpoint returns the list of alerting rules. It also returns the currently active alerts fired by the Prometheus instance of each alerting rule.
 \
 Sysdig currently does not support recording rules.
 \
@@ -1304,14 +1304,14 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **type** | **str**| This endpoint only returns alerting rules (&#x60;type&#x3D;alert&#x60;). When absent or empty, only alerting rules are returned. | [optional] 
- **rule_name** | [**List[str]**](str.md)| Only return rules with the given rule name. If repeated, rules with any of the provided names are returned. | [optional] 
- **rule_group** | [**List[str]**](str.md)| Only return rules with the given rule group name. If repeated, rules with any of the provided group names are returned. | [optional] 
- **file** | [**List[str]**](str.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional] 
- **exclude_alerts** | **bool**| This endpoint supports only returning alerting rules (&#x60;exclude_alerts&#x3D;true&#x60;). | [optional] 
- **match** | [**List[str]**](str.md)| Only return rules with configured labels that satisfy the label selectors. | [optional] 
- **group_limit** | **int**| Limit the number of rule groups returned in a single response. | [optional] 
- **group_next_token** | **str**| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional] 
+ **type** | **str**| This endpoint only returns alerting rules (&#x60;type&#x3D;alert&#x60;). When absent or empty, only alerting rules are returned. | [optional]
+ **rule_name** | [**List[str]**](str.md)| Only return rules with the given rule name. If repeated, rules with any of the provided names are returned. | [optional]
+ **rule_group** | [**List[str]**](str.md)| Only return rules with the given rule group name. If repeated, rules with any of the provided group names are returned. | [optional]
+ **file** | [**List[str]**](str.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional]
+ **exclude_alerts** | **bool**| This endpoint supports only returning alerting rules (&#x60;exclude_alerts&#x3D;true&#x60;). | [optional]
+ **match** | [**List[str]**](str.md)| Only return rules with configured labels that satisfy the label selectors. | [optional]
+ **group_limit** | **int**| Limit the number of rule groups returned in a single response. | [optional]
+ **group_next_token** | **str**| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional]
 
 ### Return type
 
@@ -1400,10 +1400,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series to return. You must provide at least one match[] parameter. | 
- **start** | [**QueryTime**](.md)| The inclusive start timestamp of the series query as RFC3339 or a unix timestamp. | [optional] 
- **end** | [**QueryTime**](.md)| The inclusive end timestamp of the series query as RFC3339 or a unix timestamp. | [optional] 
- **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional] 
+ **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series to return. You must provide at least one match[] parameter. |
+ **start** | [**QueryTime**](.md)| The inclusive start timestamp of the series query as RFC3339 or a unix timestamp. | [optional]
+ **end** | [**QueryTime**](.md)| The inclusive end timestamp of the series query as RFC3339 or a unix timestamp. | [optional]
+ **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -2429,10 +2429,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional] 
- **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional] 
- **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label names. | [optional] 
- **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional] 
+ **start** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - This parameter is not supported due to the Sysdig&#39;s specific implementation. | [optional]
+ **end** | [**QueryTime**](.md)| &lt;b&gt;UNSUPPORTED&lt;/b&gt; - Sysdig does not support this parameter. | [optional]
+ **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series from which to read the label names. | [optional]
+ **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -2595,12 +2595,12 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | **str**| The Prometheus expression query string. | 
- **start** | [**QueryTime**](.md)| The inclusive start timestamp of the query range as RFC3339 or a unix timestamp. | 
- **end** | [**QueryTime**](.md)| The inclusive end timestamp of the query range as RFC3339 or a unix timestamp. | 
- **step** | [**GetQueryRangeV1StepParameter**](.md)| The query resolution step width, specified as a duration or a floating-point number of seconds. | 
- **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional] 
- **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional] 
+ **query** | **str**| The Prometheus expression query string. |
+ **start** | [**QueryTime**](.md)| The inclusive start timestamp of the query range as RFC3339 or a unix timestamp. |
+ **end** | [**QueryTime**](.md)| The inclusive end timestamp of the query range as RFC3339 or a unix timestamp. |
+ **step** | [**GetQueryRangeV1StepParameter**](.md)| The query resolution step width, specified as a duration or a floating-point number of seconds. |
+ **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional]
+ **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -2690,10 +2690,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | **str**| The Prometheus expression query string. | 
- **time** | [**QueryTime**](.md)| The evaluation timestamp as RFC3339 or a unix timestamp. If omitted, the current server time is used. | [optional] 
- **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional] 
- **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional] 
+ **query** | **str**| The Prometheus expression query string. |
+ **time** | [**QueryTime**](.md)| The evaluation timestamp as RFC3339 or a unix timestamp. If omitted, the current server time is used. | [optional]
+ **timeout** | **str**| The evaluation timeout. The default is 2 minutes. | [optional]
+ **limit** | **int**| The maximum number of returned series. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -2782,10 +2782,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series to return. You must provide at least one match[] parameter. | 
- **start** | [**QueryTime**](.md)| The inclusive start timestamp of the series query as RFC3339 or a unix timestamp. | [optional] 
- **end** | [**QueryTime**](.md)| The inclusive end timestamp of the series query as RFC3339 or a unix timestamp. | [optional] 
- **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional] 
+ **match** | [**List[str]**](str.md)| A repeated series selector argument that specifies the series to return. You must provide at least one match[] parameter. |
+ **start** | [**QueryTime**](.md)| The inclusive start timestamp of the series query as RFC3339 or a unix timestamp. | [optional]
+ **end** | [**QueryTime**](.md)| The inclusive end timestamp of the series query as RFC3339 or a unix timestamp. | [optional]
+ **limit** | **int**| The maximum number of returned series. The limit is capped at 10,000. To disable the limit, set the value to 0. | [optional]
 
 ### Return type
 
@@ -2853,7 +2853,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.PrometheusApi(api_client)
-    body = None # bytearray | 
+    body = None # bytearray |
 
     try:
         # Ingest metric data (remote write)
@@ -2871,7 +2871,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **bytearray**|  | 
+ **body** | **bytearray**|  |
 
 ### Return type
 

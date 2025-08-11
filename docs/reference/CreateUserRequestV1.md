@@ -6,12 +6,12 @@ Request to create the User
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **str** | The email address of the user. If the activation flow is set, this address will be used to send the activation email.  | 
-**first_name** | **str** | The name of the user.  | [optional] 
-**last_name** | **str** | The surname of the user.  | [optional] 
+**email** | **str** | The email address of the user. If the activation flow is set, this address will be used to send the activation email.  |
+**first_name** | **str** | The name of the user.  | [optional]
+**last_name** | **str** | The surname of the user.  | [optional]
 **is_admin** | **bool** | **True** if the user has Administration permissions.  | [optional] [default to False]
 **bypass_sso_enforcement** | **bool** | When **True**, the user can bypass SSO enforcement.  **Warning:** This allows the user to log in without SSO even when username and password login is disabled.  | [optional] [default to False]
-**products** | [**List[Product]**](Product.md) | The user will be added to the default teams specified by this field. | [optional] 
+**products** | [**List[Product]**](Product.md) | The user will be added to the default teams specified by this field. | [optional]
 
 ## Example
 

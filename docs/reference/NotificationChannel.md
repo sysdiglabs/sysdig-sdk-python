@@ -6,8 +6,8 @@ Schema for a notification channel object
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | Notification channel Id | [optional] 
-**type** | **str** | Notification channel type | [optional] 
+**id** | **int** | Notification channel Id | [optional]
+**type** | **str** | Notification channel type | [optional]
 
 ## Example
 

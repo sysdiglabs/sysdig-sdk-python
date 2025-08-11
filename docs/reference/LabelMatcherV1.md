@@ -6,9 +6,9 @@ Matcher to match alerts to inhibition rules.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**label_name** | **str** | Label to match. | 
-**operator** | **str** | Match operator. | 
-**value** | **str** | Label value to match in case operator is of type equality, or regular expression in case of operator is of type regex. | 
+**label_name** | **str** | Label to match. |
+**operator** | **str** | Match operator. |
+**value** | **str** | Label value to match in case operator is of type equality, or regular expression in case of operator is of type regex. |
 
 ## Example
 

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Jira checkbox field id. | 
-**value** | **str** | Jira checkbox field value. | 
+**id** | **str** | Jira checkbox field id. |
+**value** | **str** | Jira checkbox field value. |
 
 ## Example
 

@@ -6,9 +6,9 @@ Custom Prometheus job name and enablement status
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | Job name | [optional] 
-**enabled** | **bool** | Enablement status | [optional] 
-**enablement_by_cluster** | **Dict[str, bool]** | Enablement overrides by cluster | [optional] 
+**name** | **str** | Job name | [optional]
+**enabled** | **bool** | Enablement status | [optional]
+**enablement_by_cluster** | **Dict[str, bool]** | Enablement overrides by cluster | [optional]
 
 ## Example
 

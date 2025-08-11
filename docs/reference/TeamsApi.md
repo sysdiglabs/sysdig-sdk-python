@@ -74,7 +74,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_team_request_v1** | [**CreateTeamRequestV1**](CreateTeamRequestV1.md)| The payload required to create a new team. | [optional] 
+ **create_team_request_v1** | [**CreateTeamRequestV1**](CreateTeamRequestV1.md)| The payload required to create a new team. | [optional]
 
 ### Return type
 
@@ -159,7 +159,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
 
 ### Return type
 
@@ -245,8 +245,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **user_id** | **int**| The user ID. | 
+ **team_id** | **int**| The team ID. |
+ **user_id** | **int**| The user ID. |
 
 ### Return type
 
@@ -333,7 +333,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
 
 ### Return type
 
@@ -420,8 +420,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **user_id** | **int**| The user ID. | 
+ **team_id** | **int**| The team ID. |
+ **user_id** | **int**| The user ID. |
 
 ### Return type
 
@@ -510,7 +510,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
  **with_admin_users** | **bool**| Include admin users in the response. | [optional] [default to False]
@@ -696,9 +696,9 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **user_id** | **int**| The user ID. | 
- **save_team_user_request_v1** | [**SaveTeamUserRequestV1**](SaveTeamUserRequestV1.md)|  | [optional] 
+ **team_id** | **int**| The team ID. |
+ **user_id** | **int**| The user ID. |
+ **save_team_user_request_v1** | [**SaveTeamUserRequestV1**](SaveTeamUserRequestV1.md)|  | [optional]
 
 ### Return type
 
@@ -789,8 +789,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **update_team_request_v1** | [**UpdateTeamRequestV1**](UpdateTeamRequestV1.md)|  | [optional] 
+ **team_id** | **int**| The team ID. |
+ **update_team_request_v1** | [**UpdateTeamRequestV1**](UpdateTeamRequestV1.md)|  | [optional]
 
 ### Return type
 

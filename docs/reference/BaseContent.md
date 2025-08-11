@@ -6,7 +6,7 @@ Base content for all events
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**EventContentType**](EventContentType.md) |  | 
+**type** | [**EventContentType**](EventContentType.md) |  |
 
 ## Example
 

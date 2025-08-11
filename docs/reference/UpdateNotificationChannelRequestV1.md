@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**NotificationChannelTypeV1**](NotificationChannelTypeV1.md) |  | 
-**version** | **int** | The current version of the resource. | [optional] 
+**type** | [**NotificationChannelTypeV1**](NotificationChannelTypeV1.md) |  |
+**version** | **int** | The current version of the resource. | [optional]
 
 ## Example
 

@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_enabled** | **bool** | Specifies if capture storage is enabled. | 
+**is_enabled** | **bool** | Specifies if capture storage is enabled. |
 **is_encryption_with_provided_key_enabled** | **bool** | Specifies if server-side encryption with provided encryption key (SSE-C) is enabled. | [optional] [default to False]
-**encryption_key** | **str** | AES-256 encryption key to be used for server-side encryption (base64 encoded). | [optional] 
-**buckets** | [**List[BucketConfigurationV1]**](BucketConfigurationV1.md) | The list of buckets where the captures are stored. Currently only one bucket is supported.  | [optional] 
+**encryption_key** | **str** | AES-256 encryption key to be used for server-side encryption (base64 encoded). | [optional]
+**buckets** | [**List[BucketConfigurationV1]**](BucketConfigurationV1.md) | The list of buckets where the captures are stored. Currently only one bucket is supported.  | [optional]
 
 ## Example
 

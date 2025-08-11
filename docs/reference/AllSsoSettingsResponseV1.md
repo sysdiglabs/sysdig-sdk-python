@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[SsoSettingsResponseV1]**](SsoSettingsResponseV1.md) | The list of SSO settings. | [optional] 
+**data** | [**List[SsoSettingsResponseV1]**](SsoSettingsResponseV1.md) | The list of SSO settings. | [optional]
 
 ## Example
 

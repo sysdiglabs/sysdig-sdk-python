@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**credentials_o_auth2** | **str** | The Chronicle v2 OAuth2 credentials | [optional] 
+**credentials_o_auth2** | **str** | The Chronicle v2 OAuth2 credentials | [optional]
 
 ## Example
 

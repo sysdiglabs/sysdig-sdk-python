@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional] 
-**data** | [**List[ListRiskAcceptedResponseAllOfData]**](ListRiskAcceptedResponseAllOfData.md) | List of Accepted Risks | 
+**page** | [**OffsetPaginatedResponsePage**](OffsetPaginatedResponsePage.md) |  | [optional]
+**data** | [**List[ListRiskAcceptedResponseAllOfData]**](ListRiskAcceptedResponseAllOfData.md) | List of Accepted Risks |
 
 ## Example
 

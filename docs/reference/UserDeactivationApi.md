@@ -149,7 +149,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **update_user_deactivation_configuration_request_v1** | [**UpdateUserDeactivationConfigurationRequestV1**](UpdateUserDeactivationConfigurationRequestV1.md)|  | [optional] 
+ **update_user_deactivation_configuration_request_v1** | [**UpdateUserDeactivationConfigurationRequestV1**](UpdateUserDeactivationConfigurationRequestV1.md)|  | [optional]
 
 ### Return type
 

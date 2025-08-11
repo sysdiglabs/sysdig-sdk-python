@@ -6,10 +6,10 @@ Response object containing query results and metadata.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**entities** | [**QueryResponseEntities**](QueryResponseEntities.md) |  | 
-**items** | **List[Dict[str, object]]** | Array of query results based on the query fields. | 
-**id** | **str** | Unique identifier for the query execution. | 
-**summary** | [**QuerySummary**](QuerySummary.md) |  | 
+**entities** | [**QueryResponseEntities**](QueryResponseEntities.md) |  |
+**items** | **List[Dict[str, object]]** | Array of query results based on the query fields. |
+**id** | **str** | Unique identifier for the query execution. |
+**summary** | [**QuerySummary**](QuerySummary.md) |  |
 
 ## Example
 

@@ -12,8 +12,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -23,13 +23,7 @@ sdc_token = sys.argv[1]
 #
 sdclient = SdcClient(sdc_token)
 
-cpu_metric = [
-    {"id": "cpu.used.percent",
-     "aggregations": {
-         "time": "avg",
-         "group": "avg"
-     }
-     }]
+cpu_metric = [{"id": "cpu.used.percent", "aggregations": {"time": "avg", "group": "avg"}}]
 
 #
 # First example: CPU by host name
@@ -37,9 +31,11 @@ cpu_metric = [
 #
 req = [{"id": "host.hostName"}]
 req.extend(cpu_metric)
-ok, res = sdclient.get_data(req,  # metrics list
-                            -600,  # start_ts = 600 seconds ago
-                            0)  # end_ts = now
+ok, res = sdclient.get_data(
+    req,  # metrics list
+    -600,  # start_ts = 600 seconds ago
+    0,
+)  # end_ts = now
 
 if ok:
     data = res
@@ -56,9 +52,11 @@ print(data)
 #
 req = [{"id": "container.name"}]
 req.extend(cpu_metric)
-ok, res = sdclient.get_data(req,  # metrics list
-                            -600,  # start_ts = 600 seconds ago
-                            0)  # end_ts = now
+ok, res = sdclient.get_data(
+    req,  # metrics list
+    -600,  # start_ts = 600 seconds ago
+    0,
+)  # end_ts = now
 
 if ok:
     data = res
@@ -73,10 +71,12 @@ print(data)
 # Third example: CPU average across all hosts
 # datasource_type is set to host since no grouping keys or filters are specified (default would be host anyway)
 #
-ok, res = sdclient.get_data(cpu_metric,  # metrics list
-                            -600,  # start_ts = 600 seconds ago
-                            0,  # end_ts = now
-                            datasource_type='host')  # ask data from hosts
+ok, res = sdclient.get_data(
+    cpu_metric,  # metrics list
+    -600,  # start_ts = 600 seconds ago
+    0,  # end_ts = now
+    datasource_type="host",
+)  # ask data from hosts
 
 if ok:
     data = res
@@ -91,10 +91,12 @@ print(data)
 # Third example: CPU average across all containers
 # datasource_type is set to container since no grouping keys or filters are specified (ovverrides the host default)
 #
-ok, res = sdclient.get_data(cpu_metric,  # metrics list
-                            -600,  # start_ts = 600 seconds ago
-                            0,  # end_ts = now
-                            datasource_type='container')  # ask data from containers
+ok, res = sdclient.get_data(
+    cpu_metric,  # metrics list
+    -600,  # start_ts = 600 seconds ago
+    0,  # end_ts = now
+    datasource_type="container",
+)  # ask data from containers
 
 if ok:
     data = res

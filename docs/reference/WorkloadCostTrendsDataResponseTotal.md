@@ -6,9 +6,9 @@ Aggregated cost values for the current and previous ranges.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**current** | **float** | The total cost for the current range. | [optional] 
-**previous** | **float** | The total cost for the previous range. | [optional] 
-**change** | **float** | The difference between the current and the previous cost periods expressed in percentages. | [optional] 
+**current** | **float** | The total cost for the current range. | [optional]
+**previous** | **float** | The total cost for the previous range. | [optional]
+**change** | **float** | The difference between the current and the previous cost periods expressed in percentages. | [optional]
 
 ## Example
 

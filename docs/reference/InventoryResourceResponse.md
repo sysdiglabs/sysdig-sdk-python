@@ -6,8 +6,8 @@ A paged response of resources that match the filter.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[InventoryResource]**](InventoryResource.md) | The resources that matches the filter | 
-**page** | [**InventoryPage**](InventoryPage.md) |  | 
+**data** | [**List[InventoryResource]**](InventoryResource.md) | The resources that matches the filter |
+**page** | [**InventoryPage**](InventoryPage.md) |  |
 
 ## Example
 

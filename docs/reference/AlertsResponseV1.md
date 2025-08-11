@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | **str** | Request status. | [optional] 
-**data** | [**AlertsResponseV1Data**](AlertsResponseV1Data.md) |  | [optional] 
-**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional] 
-**infos** | **List[str]** | A set of information messages attached to the response. | [optional] 
+**status** | **str** | Request status. | [optional]
+**data** | [**AlertsResponseV1Data**](AlertsResponseV1Data.md) |  | [optional]
+**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional]
+**infos** | **List[str]** | A set of information messages attached to the response. | [optional]
 
 ## Example
 

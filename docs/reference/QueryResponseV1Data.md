@@ -6,8 +6,8 @@ The result of the query.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**result_type** | **str** | Type of the result set. | [optional] 
-**result** | [**QueryResponseV1DataResult**](QueryResponseV1DataResult.md) |  | [optional] 
+**result_type** | **str** | Type of the result set. | [optional]
+**result** | [**QueryResponseV1DataResult**](QueryResponseV1DataResult.md) |  | [optional]
 
 ## Example
 

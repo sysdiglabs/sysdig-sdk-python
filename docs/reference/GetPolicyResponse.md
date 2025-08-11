@@ -6,12 +6,12 @@ A Policy definition
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | the Policy ID | 
-**name** | **str** | human readable policy name | 
-**identifier** | **str** | policy identifier generated from the name | 
-**description** | **str** | policy description | [optional] 
-**bundles** | [**List[BundleRef]**](BundleRef.md) | bundles defining this policy | 
-**stages** | [**List[Stage]**](Stage.md) | array of stages for the policy.  An empty array means the policy is applied only when specifically requested by its identifier.  | 
+**id** | **int** | the Policy ID |
+**name** | **str** | human readable policy name |
+**identifier** | **str** | policy identifier generated from the name |
+**description** | **str** | policy description | [optional]
+**bundles** | [**List[BundleRef]**](BundleRef.md) | bundles defining this policy |
+**stages** | [**List[Stage]**](Stage.md) | array of stages for the policy.  An empty array means the policy is applied only when specifically requested by its identifier.  |
 
 ## Example
 

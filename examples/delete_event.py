@@ -15,9 +15,9 @@ from sdcclient import SdMonitorClient
 
 
 def usage():
-    print(('usage: %s [-e|--event <name>] <sysdig-token>' % sys.argv[0]))
-    print('-e|--event: Name of event to delete')
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s [-e|--event <name>] <sysdig-token>" % sys.argv[0]))
+    print("-e|--event: Name of event to delete")
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 
@@ -53,8 +53,8 @@ if not ok:
 #
 # Delete the first event among the returned ones
 #
-for event in res['events']:
-    print(("Deleting event " + event['name']))
+for event in res["events"]:
+    print(("Deleting event " + event["name"]))
 
     ok, res = sdclient.delete_event(event)
     if not ok:

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**value** | **float** | The threshold for equality comparison with the CVSS Score. | [optional] 
+**value** | **float** | The threshold for equality comparison with the CVSS Score. | [optional]
 
 ## Example
 

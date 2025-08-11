@@ -6,7 +6,7 @@ Cost data representing Workload Rightsizing over a specific date range.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_by_data** | [**List[WorkloadRightsizingDataResponseGroupByDataInner]**](WorkloadRightsizingDataResponseGroupByDataInner.md) | Grouped workload rightsizing data by cluster, namespace, workload, and container. | [optional] 
+**group_by_data** | [**List[WorkloadRightsizingDataResponseGroupByDataInner]**](WorkloadRightsizingDataResponseGroupByDataInner.md) | Grouped workload rightsizing data by cluster, namespace, workload, and container. | [optional]
 
 ## Example
 

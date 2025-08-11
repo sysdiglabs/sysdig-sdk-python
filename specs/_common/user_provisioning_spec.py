@@ -10,8 +10,9 @@ from specs import be_successful_api_call
 
 with description("User Provisioning", "integration") as self:
     with before.each:
-        self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdcClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"), token=os.getenv("SDC_MONITOR_TOKEN")
+        )
         self.user_name = "terraform-test+user@sysdig.com"
 
     with after.each:

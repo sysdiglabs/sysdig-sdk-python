@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_tls_enabled** | **bool** |  | [optional] 
+**is_tls_enabled** | **bool** |  | [optional]
 **is_insecure** | **bool** | Skip TLS certificate verification | [optional] [default to False]
 
 ## Example

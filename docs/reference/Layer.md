@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**index** | **int** | layer&#39;s index | [optional] 
-**digest** | **str** | sha256 digest of the layer | 
-**size** | **int** | size of the layer in bytes | [optional] 
-**command** | **str** | layer command | [optional] 
-**base_images_ref** | **List[str]** | base images refs | [optional] 
+**index** | **int** | layer&#39;s index | [optional]
+**digest** | **str** | sha256 digest of the layer |
+**size** | **int** | size of the layer in bytes | [optional]
+**command** | **str** | layer command | [optional]
+**base_images_ref** | **List[str]** | base images refs | [optional]
 
 ## Example
 

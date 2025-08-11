@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**packages** | [**List[DenyPkgExtraPackagesInner]**](DenyPkgExtraPackagesInner.md) |  | 
+**packages** | [**List[DenyPkgExtraPackagesInner]**](DenyPkgExtraPackagesInner.md) |  |
 
 ## Example
 

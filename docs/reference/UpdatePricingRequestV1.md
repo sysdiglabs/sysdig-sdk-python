@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**PricingType**](PricingType.md) |  | 
-**cluster_name** | **str** | The name of the cluster. Required when &#x60;type&#x60; is &#x60;CLUSTER&#x60;. | [optional] 
-**name** | **str** | The name of the pricing profile. | 
-**unit_pricing** | [**UnitPricingV1**](UnitPricingV1.md) | The unit pricing configuration used to compute costs. | 
-**spot_label** | **str** | The name of a node label that is used to identify the node as a spot node. | [optional] 
-**spot_label_value** | **str** | The value of the spot node label. | [optional] 
-**version** | **int** | The current version of the resource.  | 
+**type** | [**PricingType**](PricingType.md) |  |
+**cluster_name** | **str** | The name of the cluster. Required when &#x60;type&#x60; is &#x60;CLUSTER&#x60;. | [optional]
+**name** | **str** | The name of the pricing profile. |
+**unit_pricing** | [**UnitPricingV1**](UnitPricingV1.md) | The unit pricing configuration used to compute costs. |
+**spot_label** | **str** | The name of a node label that is used to identify the node as a spot node. | [optional]
+**spot_label_value** | **str** | The value of the spot node label. | [optional]
+**version** | **int** | The current version of the resource.  |
 
 ## Example
 

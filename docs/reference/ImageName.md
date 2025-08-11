@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**context_type** | **str** | Matcher type to apply | [optional] 
-**context_value** | **str** | Value to match | [optional] 
+**context_type** | **str** | Matcher type to apply | [optional]
+**context_value** | **str** | Value to match | [optional]
 
 ## Example
 

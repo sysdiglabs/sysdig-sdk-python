@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |   | [optional] 
-**target_type** | **str** | The target type of the Scope | 
-**rules** | **str** | Scoping rules to be applied | [optional] 
+**id** | **int** |   | [optional]
+**target_type** | **str** | The target type of the Scope |
+**rules** | **str** | Scoping rules to be applied | [optional]
 
 ## Example
 

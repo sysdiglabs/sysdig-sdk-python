@@ -72,7 +72,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_group_mapping_request_v1** | [**CreateGroupMappingRequestV1**](CreateGroupMappingRequestV1.md)| The payload required to create group mapping. | [optional] 
+ **create_group_mapping_request_v1** | [**CreateGroupMappingRequestV1**](CreateGroupMappingRequestV1.md)| The payload required to create group mapping. | [optional]
 
 ### Return type
 
@@ -157,7 +157,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **group_mapping_id** | **int**| The group mapping ID. | 
+ **group_mapping_id** | **int**| The group mapping ID. |
 
 ### Return type
 
@@ -244,7 +244,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **group_mapping_id** | **int**| The group mapping ID. | 
+ **group_mapping_id** | **int**| The group mapping ID. |
 
 ### Return type
 
@@ -501,7 +501,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **group_mapping_settings_v1** | [**GroupMappingSettingsV1**](GroupMappingSettingsV1.md)| The payload required to save group mapping settings. | [optional] 
+ **group_mapping_settings_v1** | [**GroupMappingSettingsV1**](GroupMappingSettingsV1.md)| The payload required to save group mapping settings. | [optional]
 
 ### Return type
 
@@ -591,8 +591,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **group_mapping_id** | **int**| The group mapping ID. | 
- **update_group_mapping_request_v1** | [**UpdateGroupMappingRequestV1**](UpdateGroupMappingRequestV1.md)|  | [optional] 
+ **group_mapping_id** | **int**| The group mapping ID. |
+ **update_group_mapping_request_v1** | [**UpdateGroupMappingRequestV1**](UpdateGroupMappingRequestV1.md)|  | [optional]
 
 ### Return type
 

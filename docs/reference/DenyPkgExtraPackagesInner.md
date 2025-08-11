@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | Package name | 
-**version** | **str** | Package version | [optional] 
+**name** | **str** | Package name |
+**version** | **str** | Package version | [optional]
 
 ## Example
 

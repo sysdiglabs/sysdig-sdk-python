@@ -6,7 +6,7 @@ The list of supported integration types
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[IntegrationType]**](IntegrationType.md) |  | 
+**data** | [**List[IntegrationType]**](IntegrationType.md) |  |
 
 ## Example
 

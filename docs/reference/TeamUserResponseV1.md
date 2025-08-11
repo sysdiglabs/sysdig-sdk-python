@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**team_id** | **int** |   | [optional] 
-**user_id** | **int** |   | [optional] 
-**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) |  | [optional] 
-**custom_team_role_id** | **int** |   | [optional] 
+**team_id** | **int** |   | [optional]
+**user_id** | **int** |   | [optional]
+**standard_team_role** | [**TeamRoleV1**](TeamRoleV1.md) |  | [optional]
+**custom_team_role_id** | **int** |   | [optional]
 
 ## Example
 

@@ -6,10 +6,10 @@ Create or update role request
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **str** | Describes the role | [optional] 
-**monitor_permissions** | **List[str]** | Set of Monitor permissions assigned to the role.  Check GET /platform/v1/permissions to obtain the list of available values.  | [optional] 
-**secure_permissions** | **List[str]** | Set of Secure permissions assigned to the role.  Check GET /platform/v1/permissions to obtain the list of available values.  | [optional] 
-**name** | **str** | The display name of the role | 
+**description** | **str** | Describes the role | [optional]
+**monitor_permissions** | **List[str]** | Set of Monitor permissions assigned to the role.  Check GET /platform/v1/permissions to obtain the list of available values.  | [optional]
+**secure_permissions** | **List[str]** | Set of Secure permissions assigned to the role.  Check GET /platform/v1/permissions to obtain the list of available values.  | [optional]
+**name** | **str** | The display name of the role |
 
 ## Example
 

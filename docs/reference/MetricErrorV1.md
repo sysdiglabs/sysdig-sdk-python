@@ -6,9 +6,9 @@ Get Disabled Metrics by Job name Response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**metric_name** | **str** | The metric name which could not be disabled or enabled.  | [optional] 
-**job_name** | **str** | Specifies the name of the job that caused the error.  | [optional] 
-**message** | **str** | Describes the job and metric error.  | [optional] 
+**metric_name** | **str** | The metric name which could not be disabled or enabled.  | [optional]
+**job_name** | **str** | Specifies the name of the job that caused the error.  | [optional]
+**message** | **str** | Describes the job and metric error.  | [optional]
 
 ## Example
 

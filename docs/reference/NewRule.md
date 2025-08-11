@@ -6,8 +6,8 @@ A Rule definition
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rule_type** | **str** |  | 
-**predicates** | [**List[PredicatesInner]**](PredicatesInner.md) | The Predicates defining this Rule | 
+**rule_type** | **str** |  |
+**predicates** | [**List[PredicatesInner]**](PredicatesInner.md) | The Predicates defining this Rule |
 
 ## Example
 

@@ -5,16 +5,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | id of the risk acceptance | 
-**entity_type** | **str** | entity type for the risk | 
-**entity_value** | **str** | entity value relative to the the entity type | 
-**context** | [**List[Context]**](Context.md) |  | 
-**status** | **str** |  | 
-**reason** | **str** | risk acceptance reason | [optional] 
-**description** | **str** | risk acceptance description | [optional] 
-**expiration_date** | **date** |  | 
-**created_at** | **str** | datetime of creation | 
-**updated_at** | **str** | datetime of last update | 
+**id** | **str** | id of the risk acceptance |
+**entity_type** | **str** | entity type for the risk |
+**entity_value** | **str** | entity value relative to the the entity type |
+**context** | [**List[Context]**](Context.md) |  |
+**status** | **str** |  |
+**reason** | **str** | risk acceptance reason | [optional]
+**description** | **str** | risk acceptance description | [optional]
+**expiration_date** | **date** |  |
+**created_at** | **str** | datetime of creation |
+**updated_at** | **str** | datetime of last update |
 
 ## Example
 

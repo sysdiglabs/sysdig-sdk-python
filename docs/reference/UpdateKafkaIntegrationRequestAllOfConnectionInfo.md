@@ -5,18 +5,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**brokers** | **List[str]** | Kafka server endpoint. A Kafka cluster may provide several brokers; it follows the &#39;hostname: port&#39; (without protocol scheme). | 
-**topic** | **str** | Kafka topic where you want to store the forwarded data | 
+**brokers** | **List[str]** | Kafka server endpoint. A Kafka cluster may provide several brokers; it follows the &#39;hostname: port&#39; (without protocol scheme). |
+**topic** | **str** | Kafka topic where you want to store the forwarded data |
 **balancer** | **str** | Algorithm that the client uses to multiplex data between the multiple Brokers. For compatibility with the Java client, Murmur2 is used as the default partitioner | [optional] [default to 'murmur2']
-**compression** | **str** | Compression standard used for the data | [optional] 
-**is_tls_enabled** | **bool** |  | [optional] 
+**compression** | **str** | Compression standard used for the data | [optional]
+**is_tls_enabled** | **bool** |  | [optional]
 **is_insecure** | **bool** | Skip TLS certificate verification | [optional] [default to False]
-**auth** | **str** | The authentication method to optionally use. Currently supporting only GSSAPI | 
-**principal** | **str** | GSSAPI principal | 
-**realm** | **str** | GSSAPI realm | 
-**service** | **str** | GSSAPI Service name | 
-**krb5** | **str** | Kerberos krb5.conf file content for GSSAPI | 
-**keytab** | **str** | base64 encoded Kerberos keytab | [optional] 
+**auth** | **str** | The authentication method to optionally use. Currently supporting only GSSAPI |
+**principal** | **str** | GSSAPI principal |
+**realm** | **str** | GSSAPI realm |
+**service** | **str** | GSSAPI Service name |
+**krb5** | **str** | Kerberos krb5.conf file content for GSSAPI |
+**keytab** | **str** | base64 encoded Kerberos keytab | [optional]
 
 ## Example
 

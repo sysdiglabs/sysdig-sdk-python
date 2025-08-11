@@ -12,15 +12,15 @@ _DASHBOARD_NAME = "test_dashboard_ci"
 
 with description("Dashboards v3", "integration") as self:
     with before.all:
-        self.client = SdMonitorClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                      token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdMonitorClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"), token=os.getenv("SDC_MONITOR_TOKEN")
+        )
 
     with before.each:
         self.cleanup_test_dashboards()
 
     with after.each:
         self.cleanup_test_dashboards()
-
 
     def cleanup_test_dashboards(self):
         ok, res = self.client.get_dashboards()
@@ -31,14 +31,12 @@ with description("Dashboards v3", "integration") as self:
                 call = self.client.delete_dashboard(dashboard)
                 expect(call).to(be_successful_api_call)
 
-
     def create_test_dashboard(self):
         ok, res = self.client.create_dashboard(name=_DASHBOARD_NAME)
         if ok:
             self.test_dashboard = res["dashboard"]
 
         return ok, res
-
 
     with it("is able to create a dashboard with just a name"):
         ok, res = self.client.create_dashboard(name=_DASHBOARD_NAME)
@@ -53,17 +51,16 @@ with description("Dashboards v3", "integration") as self:
             f.flush()
             f.seek(0)
 
-            ok, res = self.client.create_dashboard_from_file(dashboard_name=f"{_DASHBOARD_NAME}_2", filename=f.name,
-                                                             filter=None)
+            ok, res = self.client.create_dashboard_from_file(dashboard_name=f"{_DASHBOARD_NAME}_2", filename=f.name, filter=None)
             expect((ok, res)).to(be_successful_api_call)
 
     with it("is able to create a dashboard from a view"):
         ok, res_view_list = self.client.get_views_list()
         expect((ok, res_view_list)).to(be_successful_api_call)
 
-        call = self.client.create_dashboard_from_view(newdashname=f"{_DASHBOARD_NAME}_2",
-                                                      viewname=res_view_list["dashboardTemplates"][0]["name"],
-                                                      filter=None)
+        call = self.client.create_dashboard_from_view(
+            newdashname=f"{_DASHBOARD_NAME}_2", viewname=res_view_list["dashboardTemplates"][0]["name"], filter=None
+        )
         expect(call).to(be_successful_api_call)
 
     with context("when there are existing dashbords"):
@@ -78,10 +75,12 @@ with description("Dashboards v3", "integration") as self:
         with it("is able to list all the dashboards with the full information"):
             ok, res = self.client.get_dashboards(light=False)
             expect((ok, res)).to(be_successful_api_call)
-            expect(res).to(have_key("dashboards", contain(have_keys("name", "id",
-                                                                    panels=not_(be_empty),
-                                                                    layout=not_(be_empty),
-                                                                    permissions=not_(be_empty)))))
+            expect(res).to(
+                have_key(
+                    "dashboards",
+                    contain(have_keys("name", "id", panels=not_(be_empty), layout=not_(be_empty), permissions=not_(be_empty))),
+                )
+            )
 
         with it("is able to retrieve the test dashboard by its id"):
             ok, res = self.client.get_dashboard(dashboard_id=self.test_dashboard["id"])
@@ -122,9 +121,9 @@ with description("Dashboards v3", "integration") as self:
                 expect(data).to(have_keys(version=equal("v3"), dashboard=equal(self.test_dashboard)))
 
         with it("is able to create a dashboard from template"):
-            call = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
-                                                              template=self.test_dashboard,
-                                                              scope='agent.id = "foo"')
+            call = self.client.create_dashboard_from_template(
+                dashboard_name=f"{_DASHBOARD_NAME}_2", template=self.test_dashboard, scope='agent.id = "foo"'
+            )
             expect(call).to(be_successful_api_call)
 
         with it("is able to make it public"):
@@ -149,16 +148,16 @@ with description("Dashboards v3", "integration") as self:
 
         with context("when it's created with an incorrect scope"):
             with it("fails if the scope is not a string"):
-                ok, res = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
-                                                                     template=self.test_dashboard,
-                                                                     scope={})
+                ok, res = self.client.create_dashboard_from_template(
+                    dashboard_name=f"{_DASHBOARD_NAME}_2", template=self.test_dashboard, scope={}
+                )
                 expect(ok).to(be_false)
                 expect(res).to(equal("Invalid scope format: Expected a list, a string or None"))
 
             with it("fails if the scope has incorrect format"):
-                ok, res = self.client.create_dashboard_from_template(dashboard_name=f"{_DASHBOARD_NAME}_2",
-                                                                     template=self.test_dashboard,
-                                                                     scope="foobarbaz")
+                ok, res = self.client.create_dashboard_from_template(
+                    dashboard_name=f"{_DASHBOARD_NAME}_2", template=self.test_dashboard, scope="foobarbaz"
+                )
                 expect(ok).to(be_false)
                 expect(res).to(start_with("invalid scope: foobarbaz"))
 
@@ -170,13 +169,15 @@ with description("Dashboards v3", "integration") as self:
 
         with context("when creating a dashboard from other dashboard"):
             with it("creates the dashboard correctly if the template exists"):
-                ok, res = self.client.create_dashboard_from_dashboard(newdashname=f"{_DASHBOARD_NAME}_2",
-                                                                      templatename=_DASHBOARD_NAME, filter=None)
+                ok, res = self.client.create_dashboard_from_dashboard(
+                    newdashname=f"{_DASHBOARD_NAME}_2", templatename=_DASHBOARD_NAME, filter=None
+                )
                 expect((ok, res)).to(be_successful_api_call)
 
             with it("returns an error saying the dashboard does not exist"):
-                ok, res = self.client.create_dashboard_from_dashboard(newdashname=f"{_DASHBOARD_NAME}_2",
-                                                                      templatename="NonExistingDashboard", filter=None)
+                ok, res = self.client.create_dashboard_from_dashboard(
+                    newdashname=f"{_DASHBOARD_NAME}_2", templatename="NonExistingDashboard", filter=None
+                )
                 expect(ok).to(be_false)
                 expect(res).to(equal("can't find dashboard NonExistingDashboard to use as a template"))
 
@@ -190,8 +191,8 @@ with description("Dashboards v3", "integration") as self:
             ok, res = self.client.find_dashboard_by(name=self.test_dashboard["name"])
 
             expect((ok, res)).to(be_successful_api_call)
-            expect(res).to(contain(
-                have_key("dashboard", have_keys(id=self.test_dashboard["id"], name=self.test_dashboard["name"])))
+            expect(res).to(
+                contain(have_key("dashboard", have_keys(id=self.test_dashboard["id"], name=self.test_dashboard["name"])))
             )
 
         with context("when we are sharing a dashboard with all teams"):
@@ -258,8 +259,7 @@ with description("Dashboards v3", "integration") as self:
                 _, team = self.client.get_team("Monitor Operations")
 
                 ok_team, res_team = self.client.share_dashboard_with_team(self.test_dashboard, team["id"], "r")
-                ok_team2, res_team2 = self.client.share_dashboard_with_team(res_team["dashboard"],
-                                                                            self.team["team"]["id"], "w")
+                ok_team2, res_team2 = self.client.share_dashboard_with_team(res_team["dashboard"], self.team["team"]["id"], "w")
 
                 expect((ok_team, res_team)).to(be_successful_api_call)
                 expect((ok_team2, res_team2)).to(be_successful_api_call)

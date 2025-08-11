@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | The type of the metric. | 
-**help** | **str** | A brief description of the metric. | 
-**unit** | **str** | The unit of measurement for the metric. | 
+**type** | **str** | The type of the metric. |
+**help** | **str** | A brief description of the metric. |
+**unit** | **str** | The unit of measurement for the metric. |
 
 ## Example
 

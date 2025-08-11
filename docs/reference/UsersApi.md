@@ -71,7 +71,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_user_request_v1** | [**CreateUserRequestV1**](CreateUserRequestV1.md)| The payload required to create a new user. | 
+ **create_user_request_v1** | [**CreateUserRequestV1**](CreateUserRequestV1.md)| The payload required to create a new user. |
  **activation_flow** | **bool**| The activation flow is used to send an invitation email to the user that is being created.\\ \\ **NOTE: it is required to set at least one product in the payload in order to send the appropriate email.**  | [optional] [default to False]
 
 ### Return type
@@ -156,7 +156,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_id** | **int**| The user ID. | 
+ **user_id** | **int**| The user ID. |
 
 ### Return type
 
@@ -243,7 +243,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_id** | **int**| The user ID. | 
+ **user_id** | **int**| The user ID. |
 
 ### Return type
 
@@ -404,7 +404,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.UsersApi(api_client)
     user_id = 56 # int | The user ID.
-    update_user_request_v1 = sysdig_client.UpdateUserRequestV1() # UpdateUserRequestV1 | 
+    update_user_request_v1 = sysdig_client.UpdateUserRequestV1() # UpdateUserRequestV1 |
 
     try:
         # Update User
@@ -422,8 +422,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_id** | **int**| The user ID. | 
- **update_user_request_v1** | [**UpdateUserRequestV1**](UpdateUserRequestV1.md)|  | 
+ **user_id** | **int**| The user ID. |
+ **update_user_request_v1** | [**UpdateUserRequestV1**](UpdateUserRequestV1.md)|  |
 
 ### Return type
 

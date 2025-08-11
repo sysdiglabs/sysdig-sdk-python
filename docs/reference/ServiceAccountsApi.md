@@ -73,7 +73,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_global_service_account_request_v1** | [**CreateGlobalServiceAccountRequestV1**](CreateGlobalServiceAccountRequestV1.md)| The payload required to create a new global service account. | [optional] 
+ **create_global_service_account_request_v1** | [**CreateGlobalServiceAccountRequestV1**](CreateGlobalServiceAccountRequestV1.md)| The payload required to create a new global service account. | [optional]
 
 ### Return type
 
@@ -163,8 +163,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **create_team_service_account_request_v1** | [**CreateTeamServiceAccountRequestV1**](CreateTeamServiceAccountRequestV1.md)| The payload required to create a new team service account. | [optional] 
+ **team_id** | **int**| The team ID. |
+ **create_team_service_account_request_v1** | [**CreateTeamServiceAccountRequestV1**](CreateTeamServiceAccountRequestV1.md)| The payload required to create a new team service account. | [optional]
 
 ### Return type
 
@@ -249,7 +249,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **service_account_id** | **int**| The service account ID. | 
+ **service_account_id** | **int**| The service account ID. |
 
 ### Return type
 
@@ -335,8 +335,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **service_account_id** | **int**| The service account ID. | 
+ **team_id** | **int**| The team ID. |
+ **service_account_id** | **int**| The service account ID. |
 
 ### Return type
 
@@ -424,7 +424,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **service_account_id** | **int**| The service account ID. | 
+ **service_account_id** | **int**| The service account ID. |
 
 ### Return type
 
@@ -602,8 +602,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
- **service_account_id** | **int**| The service account ID. | 
+ **team_id** | **int**| The team ID. |
+ **service_account_id** | **int**| The service account ID. |
 
 ### Return type
 
@@ -693,7 +693,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **team_id** | **int**| The team ID. | 
+ **team_id** | **int**| The team ID. |
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
  **orderby** | **str**| The order by field separated by a colon for the direction | [optional] [default to &#39;&#39;]

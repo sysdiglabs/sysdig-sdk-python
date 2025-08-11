@@ -6,13 +6,13 @@ Kubernetes admission requests-posture checks event content
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**EventContentType**](EventContentType.md) |  | 
-**namespace** | **str** | Kubernetes namespace | [optional] 
-**cluster_name** | **str** | Kubernetes cluster name | [optional] 
-**resource_name** | **str** | Kubernetes resource name | [optional] 
-**resource_kind** | **str** | Kubernetes resource kind | [optional] 
-**zones** | [**List[Zone]**](Zone.md) | List of zones that match the scope of the resource. | [optional] 
-**scan_result** | [**K8sAdmissionReviewContentAllOfScanResult**](K8sAdmissionReviewContentAllOfScanResult.md) |  | 
+**type** | [**EventContentType**](EventContentType.md) |  |
+**namespace** | **str** | Kubernetes namespace | [optional]
+**cluster_name** | **str** | Kubernetes cluster name | [optional]
+**resource_name** | **str** | Kubernetes resource name | [optional]
+**resource_kind** | **str** | Kubernetes resource kind | [optional]
+**zones** | [**List[Zone]**](Zone.md) | List of zones that match the scope of the resource. | [optional]
+**scan_result** | [**K8sAdmissionReviewContentAllOfScanResult**](K8sAdmissionReviewContentAllOfScanResult.md) |  |
 
 ## Example
 

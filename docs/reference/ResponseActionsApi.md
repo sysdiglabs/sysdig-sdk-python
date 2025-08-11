@@ -69,7 +69,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **action_execution_id** | **str**| ID of the action execution | 
+ **action_execution_id** | **str**| ID of the action execution |
 
 ### Return type
 
@@ -156,7 +156,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **action_execution_id** | **str**| ID of the action execution | 
+ **action_execution_id** | **str**| ID of the action execution |
 
 ### Return type
 
@@ -246,12 +246,12 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **caller_id** | **str**|  | [optional] 
- **filter** | **str**|  | [optional] 
+ **caller_id** | **str**|  | [optional]
+ **filter** | **str**|  | [optional]
  **limit** | **int**| The number of items to return | [optional] [default to 25]
  **offset** | **int**| The offset number of items to start with | [optional] [default to 0]
- **var_from** | **int**|  | [optional] 
- **to** | **int**|  | [optional] 
+ **var_from** | **int**|  | [optional]
+ **to** | **int**|  | [optional]
 
 ### Return type
 
@@ -337,7 +337,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **context** | [**Dict[str, str]**](str.md)|  | [optional] 
+ **context** | [**Dict[str, str]**](str.md)|  | [optional]
 
 ### Return type
 
@@ -423,7 +423,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **submit_action_execution_request** | [**SubmitActionExecutionRequest**](SubmitActionExecutionRequest.md)| Configuration for the new integration | 
+ **submit_action_execution_request** | [**SubmitActionExecutionRequest**](SubmitActionExecutionRequest.md)| Configuration for the new integration |
 
 ### Return type
 
@@ -510,8 +510,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **action_execution_id** | **str**| ID of the action execution | 
- **caller_id** | **str**|  | [optional] 
+ **action_execution_id** | **str**| ID of the action execution |
+ **caller_id** | **str**|  | [optional]
 
 ### Return type
 

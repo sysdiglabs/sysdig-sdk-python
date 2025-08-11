@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pull_strings** | **List[str]** |  | [optional] 
+**pull_strings** | **List[str]** |  | [optional]
 
 ## Example
 

@@ -148,7 +148,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **save_capture_storage_configuration_request_v1** | [**SaveCaptureStorageConfigurationRequestV1**](SaveCaptureStorageConfigurationRequestV1.md)|  | [optional] 
+ **save_capture_storage_configuration_request_v1** | [**SaveCaptureStorageConfigurationRequestV1**](SaveCaptureStorageConfigurationRequestV1.md)|  | [optional]
 
 ### Return type
 

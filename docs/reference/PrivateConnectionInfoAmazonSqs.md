@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**access_key** | **str** | Access Key for authenticating on AWS to send data on the queue | [optional] 
-**access_secret** | **str** | Access Secret for authenticating on AWS to send data on the queue | [optional] 
+**access_key** | **str** | Access Key for authenticating on AWS to send data on the queue | [optional]
+**access_secret** | **str** | Access Secret for authenticating on AWS to send data on the queue | [optional]
 
 ## Example
 

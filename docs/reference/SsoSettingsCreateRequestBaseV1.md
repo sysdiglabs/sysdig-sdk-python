@@ -6,7 +6,7 @@ Create Request SSO Settings Base Schema
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**SsoTypeV1**](SsoTypeV1.md) |  | 
+**type** | [**SsoTypeV1**](SsoTypeV1.md) |  |
 
 ## Example
 

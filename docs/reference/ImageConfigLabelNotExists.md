@@ -1,13 +1,13 @@
 # ImageConfigLabelNotExists
 
-Predicate expressing \"the image does not have the specified label\". 
+Predicate expressing \"the image does not have the specified label\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigLabelNotExistsExtra**](ImageConfigLabelNotExistsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigLabelNotExistsExtra**](ImageConfigLabelNotExistsExtra.md) |  |
 
 ## Example
 

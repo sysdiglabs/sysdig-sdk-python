@@ -74,15 +74,15 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **schedule_id** | **str**| ID of the Schedule | 
- **report_id** | **int**| ID of the Report | [optional] 
- **is_report_template** | **str**| Indicates whether the report is a template. | [optional] 
- **completed_on** | **int**| Date the job was completed in epoch milliseconds. | [optional] 
- **job_type** | **str**| Type of the job. | [optional] 
- **status** | **str**| Status of the job. | [optional] 
- **kind** | **str**| Kind of the report. | [optional] 
- **policies** | **str**| List of policy IDs in string format. | [optional] 
- **zones** | **str**| List of zone IDs in string format. | [optional] 
+ **schedule_id** | **str**| ID of the Schedule |
+ **report_id** | **int**| ID of the Report | [optional]
+ **is_report_template** | **str**| Indicates whether the report is a template. | [optional]
+ **completed_on** | **int**| Date the job was completed in epoch milliseconds. | [optional]
+ **job_type** | **str**| Type of the job. | [optional]
+ **status** | **str**| Status of the job. | [optional]
+ **kind** | **str**| Kind of the report. | [optional]
+ **policies** | **str**| List of policy IDs in string format. | [optional]
+ **zones** | **str**| List of zone IDs in string format. | [optional]
 
 ### Return type
 

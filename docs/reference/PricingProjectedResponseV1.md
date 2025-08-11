@@ -6,8 +6,8 @@ The monthly projected cost for a specific cluster.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**cluster_name** | **str** | The name of the cluster. | [optional] 
-**monthly_projected_cost** | **float** | Monthly projected cost. | [optional] 
+**cluster_name** | **str** | The name of the cluster. | [optional]
+**monthly_projected_cost** | **float** | Monthly projected cost. | [optional]
 
 ## Example
 

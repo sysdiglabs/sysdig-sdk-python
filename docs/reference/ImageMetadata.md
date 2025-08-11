@@ -5,16 +5,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pull_string** | **str** | image pull string | 
-**image_id** | **str** | image id | 
-**digest** | **str** | image digest | [optional] 
-**base_os** | **str** | image base os | 
-**size** | **int** | image size in bytes | 
-**os** | **str** | image os | 
-**architecture** | **str** | image architecture | [optional] 
-**labels** | **object** | image labels | [optional] 
-**author** | **str** | image author | [optional] 
-**created_at** | **str** | datetime of creation | 
+**pull_string** | **str** | image pull string |
+**image_id** | **str** | image id |
+**digest** | **str** | image digest | [optional]
+**base_os** | **str** | image base os |
+**size** | **int** | image size in bytes |
+**os** | **str** | image os |
+**architecture** | **str** | image architecture | [optional]
+**labels** | **object** | image labels | [optional]
+**author** | **str** | image author | [optional]
+**created_at** | **str** | datetime of creation |
 
 ## Example
 

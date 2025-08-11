@@ -1,13 +1,13 @@
 # ImageConfigEnvVariableContains
 
-Predicate expressing \"the container has the specified environment variable and value\". 
+Predicate expressing \"the container has the specified environment variable and value\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigEnvVariableContainsExtra**](ImageConfigEnvVariableContainsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigEnvVariableContainsExtra**](ImageConfigEnvVariableContainsExtra.md) |  |
 
 ## Example
 

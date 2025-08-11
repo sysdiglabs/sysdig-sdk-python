@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | **str** | Query status. | [optional] 
-**data** | **Dict[str, List[MetadataResponseV1DataValueInner]]** | Metric metadata indexed by metric name. | [optional] 
-**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional] 
-**infos** | **List[str]** | A set of information messages attached to the response. | [optional] 
+**status** | **str** | Query status. | [optional]
+**data** | **Dict[str, List[MetadataResponseV1DataValueInner]]** | Metric metadata indexed by metric name. | [optional]
+**warnings** | **List[str]** | A set of warning messages attached to the response. | [optional]
+**infos** | **List[str]** | A set of information messages attached to the response. | [optional]
 
 ## Example
 

@@ -1,13 +1,13 @@
 # VulnIsFixableWithAge
 
-Predicate expressing \"the Vulnerability is Fixable and its fix is older than <age> days\". 
+Predicate expressing \"the Vulnerability is Fixable and its fix is older than <age> days\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnIsFixableWithAgeExtra**](VulnIsFixableWithAgeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnIsFixableWithAgeExtra**](VulnIsFixableWithAgeExtra.md) |  |
 
 ## Example
 

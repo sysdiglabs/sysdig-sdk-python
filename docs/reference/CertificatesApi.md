@@ -152,7 +152,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cert_id** | **str**| ID of the certificate | 
+ **cert_id** | **str**| ID of the certificate |
 
 ### Return type
 
@@ -240,7 +240,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cert_id** | **str**| ID of the certificate | 
+ **cert_id** | **str**| ID of the certificate |
 
 ### Return type
 
@@ -327,7 +327,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cert_id** | **str**| ID of the certificate | 
+ **cert_id** | **str**| ID of the certificate |
 
 ### Return type
 
@@ -497,8 +497,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **certificate_file_name** | **bytearray**| The certificate file to be uploaded | 
- **name** | **str**| The name of the certificate that is being uploaded | 
+ **certificate_file_name** | **bytearray**| The certificate file to be uploaded |
+ **name** | **str**| The name of the certificate that is being uploaded |
 
 ### Return type
 

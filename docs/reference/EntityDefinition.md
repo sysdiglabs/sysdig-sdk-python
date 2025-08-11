@@ -6,9 +6,9 @@ Defines the structure and metadata of a field in the query result.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | Type of the entity. | 
-**alias** | **str** | The alias used in the query. | [optional] 
-**definition** | [**EntityDefinitionDefinition**](EntityDefinitionDefinition.md) |  | 
+**type** | **str** | Type of the entity. |
+**alias** | **str** | The alias used in the query. | [optional]
+**definition** | [**EntityDefinitionDefinition**](EntityDefinitionDefinition.md) |  |
 
 ## Example
 

@@ -6,14 +6,14 @@ A paged list of Zones
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |   | [optional] 
-**name** | **str** | The name of the Zone | [optional] 
-**description** | **str** | The description of the Zone | [optional] 
-**author** | **str** | Email of the user who created this Zone | [optional] 
-**last_modified_by** | **str** | Email of the user who last modified the Zone | [optional] 
-**last_updated** | **int** | Timestamp indicating the moment the Zone has been last updated.\\ It is expressed in milliseconds elapsed since January 1, 1970 UTC.  | [optional] 
-**is_system** | **bool** | Boolean value indicating if the Zone is a *System* one | [optional] 
-**scopes** | [**List[ZoneScope]**](ZoneScope.md) | Attached Zone Scopes | [optional] 
+**id** | **int** |   | [optional]
+**name** | **str** | The name of the Zone | [optional]
+**description** | **str** | The description of the Zone | [optional]
+**author** | **str** | Email of the user who created this Zone | [optional]
+**last_modified_by** | **str** | Email of the user who last modified the Zone | [optional]
+**last_updated** | **int** | Timestamp indicating the moment the Zone has been last updated.\\ It is expressed in milliseconds elapsed since January 1, 1970 UTC.  | [optional]
+**is_system** | **bool** | Boolean value indicating if the Zone is a *System* one | [optional]
+**scopes** | [**List[ZoneScope]**](ZoneScope.md) | Attached Zone Scopes | [optional]
 
 ## Example
 

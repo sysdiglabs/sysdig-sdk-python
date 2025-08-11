@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**active_at** | **datetime** | Timestamp when the alert became active. | 
-**annotations** | **Dict[str, str]** | Additional metadata about the alert. | 
-**labels** | **Dict[str, str]** | Key-value pairs identifying the alert. | 
-**state** | **str** | Current state of the alert. | 
-**value** | **str** | The numerical value that triggered the alert. | 
+**active_at** | **datetime** | Timestamp when the alert became active. |
+**annotations** | **Dict[str, str]** | Additional metadata about the alert. |
+**labels** | **Dict[str, str]** | Key-value pairs identifying the alert. |
+**state** | **str** | Current state of the alert. |
+**value** | **str** | The numerical value that triggered the alert. |
 
 ## Example
 

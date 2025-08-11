@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The name of the bucket. | 
-**folder** | **str** | The folder in the bucket where the captures are stored. Name of the folder without any prefix slashes (\&quot;test-folder\&quot; and not \&quot;/test-folder\&quot;). | [optional] 
-**description** | **str** | The description of the bucket. | [optional] 
-**provider_key_id** | **str** | Id of the configured cloud provider account. Could be fetched with /api/providers endpoint. | [optional] 
-**endpoint** | **str** | The endpoint of the bucket. ***Required for S3 compatible storage.*** | [optional] 
-**region** | **str** | The region of the bucket. | [optional] 
+**name** | **str** | The name of the bucket. |
+**folder** | **str** | The folder in the bucket where the captures are stored. Name of the folder without any prefix slashes (\&quot;test-folder\&quot; and not \&quot;/test-folder\&quot;). | [optional]
+**description** | **str** | The description of the bucket. | [optional]
+**provider_key_id** | **str** | Id of the configured cloud provider account. Could be fetched with /api/providers endpoint. | [optional]
+**endpoint** | **str** | The endpoint of the bucket. ***Required for S3 compatible storage.*** | [optional]
+**region** | **str** | The region of the bucket. | [optional]
 **path_style_access** | **bool** | Specifies if the bucket uses path-style access. | [optional] [default to False]
 
 ## Example

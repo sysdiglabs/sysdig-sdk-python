@@ -6,8 +6,8 @@ registry results response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional] 
-**data** | [**List[RegistryResult]**](RegistryResult.md) |  | [optional] 
+**page** | [**VulnerabilityManagementPage**](VulnerabilityManagementPage.md) |  | [optional]
+**data** | [**List[RegistryResult]**](RegistryResult.md) |  | [optional]
 
 ## Example
 

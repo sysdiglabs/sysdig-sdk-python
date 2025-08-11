@@ -1,13 +1,13 @@
 # DenyCve
 
-Predicate expressing \"any of these CVEs is present\". 
+Predicate expressing \"any of these CVEs is present\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**DenyCveExtra**](DenyCveExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**DenyCveExtra**](DenyCveExtra.md) |  |
 
 ## Example
 

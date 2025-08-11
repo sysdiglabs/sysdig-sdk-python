@@ -6,9 +6,9 @@ Container paused automatic action.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**ActionType**](ActionType.md) |  | 
-**is_successful** | **bool** | Whether or not the action was completed successfully. | [optional] 
-**err_msg** | **str** | When &#x60;isSuccessful&#x60; is &#x60;false&#x60;, details on why the action failed.  | [optional] 
+**type** | [**ActionType**](ActionType.md) |  |
+**is_successful** | **bool** | Whether or not the action was completed successfully. | [optional]
+**err_msg** | **str** | When &#x60;isSuccessful&#x60; is &#x60;false&#x60;, details on why the action failed.  | [optional]
 
 ## Example
 

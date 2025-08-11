@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**message** | **str** |  | 
-**details** | **List[object]** |  | [optional] 
+**type** | **str** |  |
+**message** | **str** |  |
+**details** | **List[object]** |  | [optional]
 
 ## Example
 

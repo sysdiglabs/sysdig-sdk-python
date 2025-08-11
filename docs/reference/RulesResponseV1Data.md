@@ -6,7 +6,7 @@ Response payload containing rule groups.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**groups** | [**List[RulesResponseV1DataGroupsInner]**](RulesResponseV1DataGroupsInner.md) | List of rule groups. | [optional] 
+**groups** | [**List[RulesResponseV1DataGroupsInner]**](RulesResponseV1DataGroupsInner.md) | List of rule groups. | [optional]
 
 ## Example
 

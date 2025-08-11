@@ -5,18 +5,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**product** | [**Product**](Product.md) | The product to which SSO settings is applied to. SSO settings are configured per specific product. | [optional] 
-**is_active** | **bool** | Flag to indicate if the SSO settings is active. | [optional] 
-**create_user_on_login** | **bool** | Flag to indicate if the user will be created automatically if not found in the system. | [optional] 
-**is_password_login_enabled** | **bool** | Flag to indicate if the user will be able to login with password. Deprecated: use the API endpoint &#x60;/platform/v1/global-sso-settings&#x60; for this functionality. This is now a global setting: if this flag is defined here and this SSO setting is set to be active, the setting will be applied at global level. | [optional] 
-**is_single_logout_enabled** | **bool** | Flag to indicate if the single logout support is enabled. | [optional] 
-**is_group_mapping_enabled** | **bool** | Flag to indicate if group mapping support is enabled. | [optional] 
-**group_mapping_attribute_name** | **str** | The group mapping attribute name. | [optional] 
-**id** | **int** |   | [optional] 
-**config** | [**SsoSettingsResponseBaseV1**](SsoSettingsResponseBaseV1.md) |  | [optional] 
-**date_created** | **datetime** | The date (in ISO 8601 format) when this SSO config was created. | [optional] 
-**last_updated** | **datetime** | The date (in ISO 8601 format) when this SSO config was last updated. | [optional] 
-**version** | **int** |   | [optional] 
+**product** | [**Product**](Product.md) | The product to which SSO settings is applied to. SSO settings are configured per specific product. | [optional]
+**is_active** | **bool** | Flag to indicate if the SSO settings is active. | [optional]
+**create_user_on_login** | **bool** | Flag to indicate if the user will be created automatically if not found in the system. | [optional]
+**is_password_login_enabled** | **bool** | Flag to indicate if the user will be able to login with password. Deprecated: use the API endpoint &#x60;/platform/v1/global-sso-settings&#x60; for this functionality. This is now a global setting: if this flag is defined here and this SSO setting is set to be active, the setting will be applied at global level. | [optional]
+**is_single_logout_enabled** | **bool** | Flag to indicate if the single logout support is enabled. | [optional]
+**is_group_mapping_enabled** | **bool** | Flag to indicate if group mapping support is enabled. | [optional]
+**group_mapping_attribute_name** | **str** | The group mapping attribute name. | [optional]
+**id** | **int** |   | [optional]
+**config** | [**SsoSettingsResponseBaseV1**](SsoSettingsResponseBaseV1.md) |  | [optional]
+**date_created** | **datetime** | The date (in ISO 8601 format) when this SSO config was created. | [optional]
+**last_updated** | **datetime** | The date (in ISO 8601 format) when this SSO config was last updated. | [optional]
+**version** | **int** |   | [optional]
 
 ## Example
 

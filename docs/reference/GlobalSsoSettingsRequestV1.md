@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_password_login_enabled** | **bool** | Set to &#x60;true&#x60; to enable password login when SSO is enabled, or &#x60;false&#x60; to disable it. | 
+**is_password_login_enabled** | **bool** | Set to &#x60;true&#x60; to enable password login when SSO is enabled, or &#x60;false&#x60; to disable it. |
 
 ## Example
 

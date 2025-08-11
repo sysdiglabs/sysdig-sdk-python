@@ -22,11 +22,11 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 def usage():
-    print(('usage: %s [-j|--json] [-d|--duration <secs>] [-c|--count <number>] <sysdig-token>' % sys.argv[0]))
-    print('-d|--duration: List hosts seen in the last <secs> seconds (default: 3600, ie. last hour)')
-    print('-c|--count: Number of hosts to print (default: 100)')
-    print('-j|--json: Print output as json')
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s [-j|--json] [-d|--duration <secs>] [-c|--count <number>] <sysdig-token>" % sys.argv[0]))
+    print("-d|--duration: List hosts seen in the last <secs> seconds (default: 3600, ie. last hour)")
+    print("-c|--count: Number of hosts to print (default: 100)")
+    print("-j|--json: Print output as json")
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 
@@ -56,10 +56,7 @@ sdclient = SdcClient(sdc_token)
 # - host.hostName. This is a tag, to identify each item of the output
 # - container.count: This is the metric
 #
-metrics = [
-    {"id": "host.hostName"},
-    {"id": "container.count", "aggregations": {"time": "avg", "group": "avg"}}
-]
+metrics = [{"id": "host.hostName"}, {"id": "container.count", "aggregations": {"time": "avg", "group": "avg"}}]
 
 ok, res = sdclient.get_data(
     metrics,  # list of metrics
@@ -67,10 +64,8 @@ ok, res = sdclient.get_data(
     0,  # end time: either a unix timestamp, or a difference from "now" (0 means you need "last X seconds")
     duration,  # sampling time, ie. data granularity;
     # if equal to the time window span then the result will contain a single sample
-    paging={
-        "from": 0,
-        "to": count - 1
-    })
+    paging={"from": 0, "to": count - 1},
+)
 
 if not ok:
     # data fetch failed
@@ -81,13 +76,13 @@ if not ok:
 if print_json:
     print((json.dumps(res)))
 else:
-    data = res['data']
+    data = res["data"]
     output = []
     for i in range(0, len(data)):
         sample = data[i]
-        metrics = sample['d']
+        metrics = sample["d"]
         hostName = metrics[0]
         count = metrics[1]
-        output.append('%s\t%d' % (hostName, count))
+        output.append("%s\t%d" % (hostName, count))
 
-    print('\n'.join(output))
+    print("\n".join(output))

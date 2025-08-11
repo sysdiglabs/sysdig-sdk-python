@@ -6,18 +6,18 @@ Represents a file access operation.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The audit event id. | 
-**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. | 
-**type** | **str** | The entry type | 
-**hostname** | **str** | The Kubernetes hostname. | 
-**container_id** | **str** | The container id. &#x60;containerId&#x60; is present only if the audit event was collected in a container context.  | [optional] 
-**comm** | **str** | The name of the command. | 
-**pid** | **int** | Id of the process owning the connection. | 
-**directory** | **str** | The Directory for the file access. | 
-**filename** | **str** | The Filename involved in file access. | 
-**permissions** | **str** | The Permissions of the file access. | 
-**tty** | **int** | TTY number. | [optional] 
-**labels** | **Dict[str, str]** | Key value pairs of labels. | [optional] 
+**id** | **str** | The audit event id. |
+**timestamp** | **int** | Timestamp the audit event occured, expressed in nanoseconds. |
+**type** | **str** | The entry type |
+**hostname** | **str** | The Kubernetes hostname. |
+**container_id** | **str** | The container id. &#x60;containerId&#x60; is present only if the audit event was collected in a container context.  | [optional]
+**comm** | **str** | The name of the command. |
+**pid** | **int** | Id of the process owning the connection. |
+**directory** | **str** | The Directory for the file access. |
+**filename** | **str** | The Filename involved in file access. |
+**permissions** | **str** | The Permissions of the file access. |
+**tty** | **int** | TTY number. | [optional]
+**labels** | **Dict[str, str]** | Key value pairs of labels. | [optional]
 
 ## Example
 

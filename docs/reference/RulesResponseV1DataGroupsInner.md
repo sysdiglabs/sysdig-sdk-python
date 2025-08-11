@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | Name of the rule group. | 
-**interval** | **str** | Evaluation interval of the rule group. | 
-**rules** | [**List[RulesResponseV1DataGroupsInnerRulesInner]**](RulesResponseV1DataGroupsInnerRulesInner.md) | List of rules in the group. | 
+**name** | **str** | Name of the rule group. |
+**interval** | **str** | Evaluation interval of the rule group. |
+**rules** | [**List[RulesResponseV1DataGroupsInnerRulesInner]**](RulesResponseV1DataGroupsInnerRulesInner.md) | List of rules in the group. |
 
 ## Example
 

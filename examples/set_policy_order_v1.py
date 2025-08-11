@@ -10,9 +10,9 @@ from sdcclient import SdSecureClientV1
 
 
 def usage():
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('Reads json representing new policy evaluation order from standard input')
-    print('You can find your token at https://secure.sysdig.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("Reads json representing new policy evaluation order from standard input")
+    print("You can find your token at https://secure.sysdig.com/#/settings/user")
     sys.exit(1)
 
 
@@ -34,7 +34,7 @@ except Exception as e:
 #
 # Instantiate the SDC client
 #
-sdclient = SdSecureClientV1(sdc_token, 'https://secure.sysdig.com')
+sdclient = SdSecureClientV1(sdc_token, "https://secure.sysdig.com")
 
 #
 # The argument to /api/policies/priorities is the list of ids wrapped
@@ -49,7 +49,7 @@ if not ok:
     sys.exit(1)
 
 obj = res
-obj['priorities']['policyIds'] = priorities_obj
+obj["priorities"]["policyIds"] = priorities_obj
 
 ok, res = sdclient.set_policy_priorities(json.dumps(obj))
 

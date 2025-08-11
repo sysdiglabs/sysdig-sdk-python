@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**value** | **float** | The threshold for greater-than-or-equal comparison with CVSS Score. | [optional] 
+**value** | **float** | The threshold for greater-than-or-equal comparison with CVSS Score. | [optional]
 
 ## Example
 

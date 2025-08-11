@@ -1,13 +1,13 @@
 # EntriesResponse
 
-The response to a GET entries call 
+The response to a GET entries call
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**Page**](Page.md) |  | [optional] 
-**data** | [**List[EntriesResponseDataInner]**](EntriesResponseDataInner.md) | The actual data contained in one of the supported types of entry | [optional] 
+**page** | [**Page**](Page.md) |  | [optional]
+**data** | [**List[EntriesResponseDataInner]**](EntriesResponseDataInner.md) | The actual data contained in one of the supported types of entry | [optional]
 
 ## Example
 

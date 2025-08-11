@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**entity_value** | **str** | A value to match with the entityType | [optional] 
-**expiration_date** | **date** | Date when the accepted risk will expire (in YYYY-MM-DD format) | [optional] 
-**reason** | **str** | Reason for acceptance | [optional] 
-**description** | **str** | Description of why the accepted risk was created | [optional] 
-**stages** | **List[str]** | List of stages where the risk acceptance is applied, empty list enables risk acceptance for all the stages | [optional] 
+**entity_value** | **str** | A value to match with the entityType | [optional]
+**expiration_date** | **date** | Date when the accepted risk will expire (in YYYY-MM-DD format) | [optional]
+**reason** | **str** | Reason for acceptance | [optional]
+**description** | **str** | Description of why the accepted risk was created | [optional]
+**stages** | **List[str]** | List of stages where the risk acceptance is applied, empty list enables risk acceptance for all the stages | [optional]
 
 ## Example
 

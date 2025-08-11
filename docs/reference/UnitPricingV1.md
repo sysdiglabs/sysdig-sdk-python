@@ -6,11 +6,11 @@ The unit pricing configuration used to compute costs.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**cpu** | **float** | Hourly cost of one CPU. | 
-**ram** | **float** | Hourly cost of one GB of RAM. | 
-**storage** | **float** | Hourly cost of one GB of storage. | 
-**spot_cpu** | **float** | Hourly cost of one CPU for a spot node. | [optional] 
-**spot_ram** | **float** | Hourly cost of one GB of RAM for a spot node. | [optional] 
+**cpu** | **float** | Hourly cost of one CPU. |
+**ram** | **float** | Hourly cost of one GB of RAM. |
+**storage** | **float** | Hourly cost of one GB of storage. |
+**spot_cpu** | **float** | Hourly cost of one CPU for a spot node. | [optional]
+**spot_ram** | **float** | Hourly cost of one GB of RAM for a spot node. | [optional]
 
 ## Example
 

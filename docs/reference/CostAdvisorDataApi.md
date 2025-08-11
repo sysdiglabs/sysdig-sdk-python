@@ -49,7 +49,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.CostAdvisorDataApi(api_client)
-    wasted_workload_data_request = sysdig_client.WastedWorkloadDataRequest() # WastedWorkloadDataRequest | 
+    wasted_workload_data_request = sysdig_client.WastedWorkloadDataRequest() # WastedWorkloadDataRequest |
 
     try:
         # Wasted Workload Spend Data
@@ -67,7 +67,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **wasted_workload_data_request** | [**WastedWorkloadDataRequest**](WastedWorkloadDataRequest.md)|  | 
+ **wasted_workload_data_request** | [**WastedWorkloadDataRequest**](WastedWorkloadDataRequest.md)|  |
 
 ### Return type
 
@@ -135,7 +135,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.CostAdvisorDataApi(api_client)
-    workload_cost_trends_data_request = sysdig_client.WorkloadCostTrendsDataRequest() # WorkloadCostTrendsDataRequest | 
+    workload_cost_trends_data_request = sysdig_client.WorkloadCostTrendsDataRequest() # WorkloadCostTrendsDataRequest |
 
     try:
         # Workload Cost Trends Data
@@ -153,7 +153,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workload_cost_trends_data_request** | [**WorkloadCostTrendsDataRequest**](WorkloadCostTrendsDataRequest.md)|  | 
+ **workload_cost_trends_data_request** | [**WorkloadCostTrendsDataRequest**](WorkloadCostTrendsDataRequest.md)|  |
 
 ### Return type
 
@@ -185,7 +185,7 @@ Name | Type | Description  | Notes
 
 Workload Rightsizing Data
 
-Use this API to generate a Workload Rightsizing data for a specified date range, algorithm and optional scope. 
+Use this API to generate a Workload Rightsizing data for a specified date range, algorithm and optional scope.
 The response is automatically grouped by the following Prometheus labels:
       - kube_cluster_name
       - kube_namespace_name
@@ -224,7 +224,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.CostAdvisorDataApi(api_client)
-    workload_rightsizing_data_request = sysdig_client.WorkloadRightsizingDataRequest() # WorkloadRightsizingDataRequest | 
+    workload_rightsizing_data_request = sysdig_client.WorkloadRightsizingDataRequest() # WorkloadRightsizingDataRequest |
 
     try:
         # Workload Rightsizing Data
@@ -242,7 +242,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workload_rightsizing_data_request** | [**WorkloadRightsizingDataRequest**](WorkloadRightsizingDataRequest.md)|  | 
+ **workload_rightsizing_data_request** | [**WorkloadRightsizingDataRequest**](WorkloadRightsizingDataRequest.md)|  |
 
 ### Return type
 

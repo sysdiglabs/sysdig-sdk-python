@@ -1,12 +1,12 @@
 # IpFiltersSettingsV1
 
-Used to configure IP filters settings. 
+Used to configure IP filters settings.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_filtering_enabled** | **bool** | Specifies if IP filtering is enabled. | [optional] 
+**is_filtering_enabled** | **bool** | Specifies if IP filtering is enabled. | [optional]
 
 ## Example
 

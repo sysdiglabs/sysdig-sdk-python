@@ -6,12 +6,12 @@ Registry result
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**result_id** | **str** | Identifier of the scan result | [optional] 
-**image_id** | **str** | Identifier of the image (hash). | [optional] 
-**vendor** | **str** | Identifier the vendor of the image | [optional] 
-**pull_string** | **str** | Name of the scanned asset | [optional] 
-**vuln_total_by_severity** | [**VulnTotalBySeverity**](VulnTotalBySeverity.md) |  | [optional] 
-**created_at** | **str** | datetime of creation | [optional] 
+**result_id** | **str** | Identifier of the scan result | [optional]
+**image_id** | **str** | Identifier of the image (hash). | [optional]
+**vendor** | **str** | Identifier the vendor of the image | [optional]
+**pull_string** | **str** | Name of the scanned asset | [optional]
+**vuln_total_by_severity** | [**VulnTotalBySeverity**](VulnTotalBySeverity.md) |  | [optional]
+**created_at** | **str** | datetime of creation | [optional]
 
 ## Example
 

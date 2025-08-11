@@ -6,16 +6,16 @@ Policy Event
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**EventContentType**](EventContentType.md) |  | 
-**policy_id** | **int** | ID of the policy that generated the event | 
-**rule_name** | **str** | Name of the rule the event is generated after | 
-**rule_type** | **int** | Rule type: - 1 - List matching - process - 2 - List matching - container - 3 - List matching - file - 4 - List matching - network - 5 - List matching - syscall - 6 - Falco - 7 - Drift detection - 8 - Malware detection - 11 - ML - Cryptominer detection - 13 - ML - AWS anomalous login - 14 - ML - Okta anomalous login  | 
-**rule_sub_type** | **int** | Rule subtype: - 1 - List matching - network - inbound - 2 - List matching - network - outbound - 3 - List matching - network - listening - 4 - List matching - file - readwrite - 5 - List matching - file - read only  | 
-**rule_tags** | **List[str]** | The tags attached to the rule | 
-**output** | **str** | Event output, generated after the configured rule | 
-**fields** | [**WorkloadRuntimeDetectionContentAllOfFields**](WorkloadRuntimeDetectionContentAllOfFields.md) |  | 
-**run_book** | **str** | The runbook URL as configured in the policy. | [optional] 
-**origin** | [**PolicyOrigin**](PolicyOrigin.md) |  | [optional] 
+**type** | [**EventContentType**](EventContentType.md) |  |
+**policy_id** | **int** | ID of the policy that generated the event |
+**rule_name** | **str** | Name of the rule the event is generated after |
+**rule_type** | **int** | Rule type: - 1 - List matching - process - 2 - List matching - container - 3 - List matching - file - 4 - List matching - network - 5 - List matching - syscall - 6 - Falco - 7 - Drift detection - 8 - Malware detection - 11 - ML - Cryptominer detection - 13 - ML - AWS anomalous login - 14 - ML - Okta anomalous login  |
+**rule_sub_type** | **int** | Rule subtype: - 1 - List matching - network - inbound - 2 - List matching - network - outbound - 3 - List matching - network - listening - 4 - List matching - file - readwrite - 5 - List matching - file - read only  |
+**rule_tags** | **List[str]** | The tags attached to the rule |
+**output** | **str** | Event output, generated after the configured rule |
+**fields** | [**WorkloadRuntimeDetectionContentAllOfFields**](WorkloadRuntimeDetectionContentAllOfFields.md) |  |
+**run_book** | **str** | The runbook URL as configured in the policy. | [optional]
+**origin** | [**PolicyOrigin**](PolicyOrigin.md) |  | [optional]
 
 ## Example
 

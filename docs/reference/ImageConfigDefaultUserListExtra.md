@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**operator** | **str** |  | 
-**users** | **List[str]** |  | 
+**operator** | **str** |  |
+**users** | **List[str]** |  |
 
 ## Example
 

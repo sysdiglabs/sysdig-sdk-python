@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PoliciesPage**](PoliciesPage.md) |  | 
-**data** | [**List[PolicySummary]**](PolicySummary.md) | Policies collection | 
+**page** | [**PoliciesPage**](PoliciesPage.md) |  |
+**data** | [**List[PolicySummary]**](PolicySummary.md) | Policies collection |
 
 ## Example
 

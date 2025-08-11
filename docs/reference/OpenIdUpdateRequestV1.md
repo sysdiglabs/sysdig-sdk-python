@@ -5,14 +5,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**issuer_url** | **str** | The issuer URL of the OpenID Connect provider. | 
-**client_id** | **str** | The client ID of the OpenID Connect provider. | 
-**is_metadata_discovery_enabled** | **bool** | Flag to indicate if the metadata discovery is enabled. | 
-**metadata** | [**OpenIdMetadataV1**](OpenIdMetadataV1.md) | The metadata of the OpenID Connect provider. | [optional] 
-**group_attribute_name** | **str** | The group attribute name of the OpenID Connect provider. | [optional] 
-**is_additional_scopes_check_enabled** | **bool** | Flag to indicate if the additional scopes verification on login. | 
-**additional_scopes** | **List[str]** | List of additional scopes to be verified on login. | [optional] 
-**client_secret** | **str** | The client secret of the OpenID Connect provider. | 
+**issuer_url** | **str** | The issuer URL of the OpenID Connect provider. |
+**client_id** | **str** | The client ID of the OpenID Connect provider. |
+**is_metadata_discovery_enabled** | **bool** | Flag to indicate if the metadata discovery is enabled. |
+**metadata** | [**OpenIdMetadataV1**](OpenIdMetadataV1.md) | The metadata of the OpenID Connect provider. | [optional]
+**group_attribute_name** | **str** | The group attribute name of the OpenID Connect provider. | [optional]
+**is_additional_scopes_check_enabled** | **bool** | Flag to indicate if the additional scopes verification on login. |
+**additional_scopes** | **List[str]** | List of additional scopes to be verified on login. | [optional]
+**client_secret** | **str** | The client secret of the OpenID Connect provider. |
 
 ## Example
 

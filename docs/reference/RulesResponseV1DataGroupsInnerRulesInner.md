@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | Type of rule (alerting or recording). | 
-**name** | **str** | Name of the rule. | 
-**query** | **str** | PromQL query associated with the rule. | 
-**duration** | **str** | Duration for which the rule must be active before triggering. | [optional] 
-**labels** | **Dict[str, str]** | Labels assigned to the rule. | [optional] 
-**annotations** | **Dict[str, str]** | Annotations providing additional information about the rule. | [optional] 
-**alerts** | [**List[RulesResponseV1DataGroupsInnerRulesInnerAlertsInner]**](RulesResponseV1DataGroupsInnerRulesInnerAlertsInner.md) | List of active alerts for this rule (only for alerting rules). | [optional] 
+**type** | **str** | Type of rule (alerting or recording). |
+**name** | **str** | Name of the rule. |
+**query** | **str** | PromQL query associated with the rule. |
+**duration** | **str** | Duration for which the rule must be active before triggering. | [optional]
+**labels** | **Dict[str, str]** | Labels assigned to the rule. | [optional]
+**annotations** | **Dict[str, str]** | Annotations providing additional information about the rule. | [optional]
+**alerts** | [**List[RulesResponseV1DataGroupsInnerRulesInnerAlertsInner]**](RulesResponseV1DataGroupsInnerRulesInnerAlertsInner.md) | List of active alerts for this rule (only for alerting rules). | [optional]
 
 ## Example
 

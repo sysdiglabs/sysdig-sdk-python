@@ -5,13 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | Issue type field id. | 
-**jira_id** | **str** | Issue type field id on Jira. | 
-**jira_name** | **str** | Jira issue type field name. | 
-**type** | **str** | Issue type field type. | 
-**is_required** | **bool** | Indicates if the field is required. | 
-**has_default_value** | **bool** | Indicates if the field has a default value. | 
-**allowed_values** | [**List[IssueTypeFieldResponseV1AllowedValuesInner]**](IssueTypeFieldResponseV1AllowedValuesInner.md) | Allowed values for the field. | [optional] 
+**id** | **int** | Issue type field id. |
+**jira_id** | **str** | Issue type field id on Jira. |
+**jira_name** | **str** | Jira issue type field name. |
+**type** | **str** | Issue type field type. |
+**is_required** | **bool** | Indicates if the field is required. |
+**has_default_value** | **bool** | Indicates if the field has a default value. |
+**allowed_values** | [**List[IssueTypeFieldResponseV1AllowedValuesInner]**](IssueTypeFieldResponseV1AllowedValuesInner.md) | Allowed values for the field. | [optional]
 
 ## Example
 

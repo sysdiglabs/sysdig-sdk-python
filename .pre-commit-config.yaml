@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: Ruff Format
+        description: Format code with ruff.
+        entry: make fmt
+        language: system
+        stages: ["pre-commit", "pre-push"]
+      - id: ruff-check
+        name: Ruff Check
+        description: Check code style with ruff.
+        entry: make lint
+        language: system
+        stages: ["pre-commit", "pre-push"]

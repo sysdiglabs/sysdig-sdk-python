@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**token** | **str** | HTTP Event Collector Token | [optional] 
+**token** | **str** | HTTP Event Collector Token | [optional]
 
 ## Example
 

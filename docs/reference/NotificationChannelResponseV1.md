@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**customer_id** | **int** | ID of customer that owns the notification channel. | [optional] 
-**id** | **int** | Unique ID of the resource. | [optional] 
-**version** | **int** | The current version of the resource. | [optional] 
-**created_on** | **datetime** | Creation date. | [optional] 
-**modified_on** | **datetime** | Last modification date. | [optional] 
+**type** | **str** |  |
+**customer_id** | **int** | ID of customer that owns the notification channel. | [optional]
+**id** | **int** | Unique ID of the resource. | [optional]
+**version** | **int** | The current version of the resource. | [optional]
+**created_on** | **datetime** | Creation date. | [optional]
+**modified_on** | **datetime** | Last modification date. | [optional]
 
 ## Example
 

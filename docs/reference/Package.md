@@ -5,17 +5,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | scan result package type, example values are:   - os   - rust   - java   - ruby   - javascript   - python   - php   - golang   - C# | 
-**name** | **str** | name of the package | 
-**is_running** | **bool** | whether the package is used by a running process | [optional] 
-**is_removed** | **bool** | whether the package has been removed | [optional] 
-**version** | **str** | version of the affected package | 
-**license** | **str** | license of the package | [optional] 
-**path** | **str** | path of the package | [optional] 
-**suggested_fix** | **str** | suggested fix for the package | [optional] 
-**layer_ref** | **str** | reference to layer | [optional] 
-**risk_accept_refs** | **List[str]** | Reference to the accepted risk. | [optional] 
-**vulnerabilities_refs** | **List[str]** | reference to vulnerabilities of the package | [optional] 
+**type** | **str** | scan result package type, example values are:   - os   - rust   - java   - ruby   - javascript   - python   - php   - golang   - C# |
+**name** | **str** | name of the package |
+**is_running** | **bool** | whether the package is used by a running process | [optional]
+**is_removed** | **bool** | whether the package has been removed | [optional]
+**version** | **str** | version of the affected package |
+**license** | **str** | license of the package | [optional]
+**path** | **str** | path of the package | [optional]
+**suggested_fix** | **str** | suggested fix for the package | [optional]
+**layer_ref** | **str** | reference to layer | [optional]
+**risk_accept_refs** | **List[str]** | Reference to the accepted risk. | [optional]
+**vulnerabilities_refs** | **List[str]** | reference to vulnerabilities of the package | [optional]
 
 ## Example
 

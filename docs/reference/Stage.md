@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | stage name. | 
-**configuration** | [**List[StageConfiguration]**](StageConfiguration.md) | Configurations for the stage. | [optional] 
+**name** | **str** | stage name. |
+**configuration** | [**List[StageConfiguration]**](StageConfiguration.md) | Configurations for the stage. | [optional]
 
 ## Example
 

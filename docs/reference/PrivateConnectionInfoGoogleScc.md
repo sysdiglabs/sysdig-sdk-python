@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data | [optional] 
+**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data | [optional]
 
 ## Example
 

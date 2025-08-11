@@ -6,10 +6,10 @@ Metadata that describes a parameter to be submitted for a Response Action execut
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The name of the parameter. | 
-**description** | **str** | The description of the parameter. | 
-**type** | **str** | The type of an Response Action parameter.\\ It may assume the following values:\\ * string\\ * integer\\ * boolean\\ This list of possible values may grow in the future.  | 
-**required** | **bool** | If &#x60;true&#x60;, the parameter is mandatory. | 
+**name** | **str** | The name of the parameter. |
+**description** | **str** | The description of the parameter. |
+**type** | **str** | The type of an Response Action parameter.\\ It may assume the following values:\\ * string\\ * integer\\ * boolean\\ This list of possible values may grow in the future.  |
+**required** | **bool** | If &#x60;true&#x60;, the parameter is mandatory. |
 
 ## Example
 

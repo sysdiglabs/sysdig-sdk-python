@@ -6,9 +6,9 @@ A supported field for filtering events.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Attribute onto which filtering is supported. | 
-**type** | [**SupportedFilterType**](SupportedFilterType.md) |  | 
-**operands** | [**List[Operand]**](Operand.md) | The list of supported operands for filtering events. | [optional] 
+**id** | **str** | Attribute onto which filtering is supported. |
+**type** | [**SupportedFilterType**](SupportedFilterType.md) |  |
+**operands** | [**List[Operand]**](Operand.md) | The list of supported operands for filtering events. | [optional]
 
 ## Example
 

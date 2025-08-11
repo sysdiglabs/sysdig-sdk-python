@@ -5,15 +5,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**product** | [**Product**](Product.md) | The product to which SSO settings is applied to. SSO settings are configured per specific product. | 
-**is_active** | **bool** | Flag to indicate if the SSO settings is active. | 
-**create_user_on_login** | **bool** | Flag to indicate if the user will be created automatically if not found in the system. | 
-**is_password_login_enabled** | **bool** | Flag to indicate if the user will be able to login with password. Deprecated: use the API endpoint &#x60;/platform/v1/global-sso-settings&#x60; for this functionality. This is now a global setting: if this flag is defined here and this SSO setting is set to be active, the setting will be applied at global level. | [optional] 
-**is_single_logout_enabled** | **bool** | Flag to indicate if the single logout support is enabled. | 
-**is_group_mapping_enabled** | **bool** | Flag to indicate if group mapping support is enabled. | 
-**group_mapping_attribute_name** | **str** | The group mapping attribute name. | [optional] 
-**version** | **int** |   | 
-**config** | [**SsoSettingsUpdateRequestBaseV1**](SsoSettingsUpdateRequestBaseV1.md) |  | 
+**product** | [**Product**](Product.md) | The product to which SSO settings is applied to. SSO settings are configured per specific product. |
+**is_active** | **bool** | Flag to indicate if the SSO settings is active. |
+**create_user_on_login** | **bool** | Flag to indicate if the user will be created automatically if not found in the system. |
+**is_password_login_enabled** | **bool** | Flag to indicate if the user will be able to login with password. Deprecated: use the API endpoint &#x60;/platform/v1/global-sso-settings&#x60; for this functionality. This is now a global setting: if this flag is defined here and this SSO setting is set to be active, the setting will be applied at global level. | [optional]
+**is_single_logout_enabled** | **bool** | Flag to indicate if the single logout support is enabled. |
+**is_group_mapping_enabled** | **bool** | Flag to indicate if group mapping support is enabled. |
+**group_mapping_attribute_name** | **str** | The group mapping attribute name. | [optional]
+**version** | **int** |   |
+**config** | [**SsoSettingsUpdateRequestBaseV1**](SsoSettingsUpdateRequestBaseV1.md) |  |
 
 ## Example
 

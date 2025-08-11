@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | [**NotificationChannelTypeV1**](NotificationChannelTypeV1.md) |  | 
+**type** | [**NotificationChannelTypeV1**](NotificationChannelTypeV1.md) |  |
 
 ## Example
 

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | predicate type | [optional] 
-**extra** | **object** |  | [optional] 
+**type** | **str** | predicate type | [optional]
+**extra** | **object** |  | [optional]
 
 ## Example
 

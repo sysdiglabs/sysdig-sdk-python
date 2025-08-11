@@ -6,8 +6,8 @@ The start and end dates (inclusive) when vulnerabilities were disclosed.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnDisclosureRangeExtra**](VulnDisclosureRangeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnDisclosureRangeExtra**](VulnDisclosureRangeExtra.md) |  |
 
 ## Example
 

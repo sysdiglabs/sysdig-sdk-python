@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**api_key** | **str** | IBM Cloud API Key | [optional] 
+**api_key** | **str** | IBM Cloud API Key | [optional]
 
 ## Example
 

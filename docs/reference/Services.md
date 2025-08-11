@@ -6,10 +6,10 @@ Certificate registrations
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**certificate_id** | **int** | The certificate ID. | 
-**service_type** | **str** | The service type. | 
-**registered_at** | **datetime** | The timestamp the service was configured to use this certificate. | 
-**service_id** | **str** | The integration ID for the service owning the integration that uses the certificate. | 
+**certificate_id** | **int** | The certificate ID. |
+**service_type** | **str** | The service type. |
+**registered_at** | **datetime** | The timestamp the service was configured to use this certificate. |
+**service_id** | **str** | The integration ID for the service owning the integration that uses the certificate. |
 
 ## Example
 

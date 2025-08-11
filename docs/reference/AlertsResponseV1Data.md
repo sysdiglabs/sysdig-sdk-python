@@ -6,7 +6,7 @@ Response payload containing active alerts.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**alerts** | [**List[AlertsResponseV1DataAlertsInner]**](AlertsResponseV1DataAlertsInner.md) | List of currently active alerts. | [optional] 
+**alerts** | [**List[AlertsResponseV1DataAlertsInner]**](AlertsResponseV1DataAlertsInner.md) | List of currently active alerts. | [optional]
 
 ## Example
 

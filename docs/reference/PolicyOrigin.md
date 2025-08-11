@@ -1,6 +1,6 @@
 # PolicyOrigin
 
-The policy author: - `Sysdig` - default and managed policies - `Sysdig UI` - users interacting with Sysdig - `Tuner` - the automated tuner 
+The policy author: - `Sysdig` - default and managed policies - `Sysdig UI` - users interacting with Sysdig - `Tuner` - the automated tuner
 
 ## Enum
 

@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group** | **Dict[str, str]** | Key-value pairs representing the grouping labels. | [optional] 
-**current** | **float** | The cost for the current range within this group. | [optional] 
-**previous** | **float** | The cost for the previous range within this group. | [optional] 
-**change** | **float** | The difference in cost between current and previous ranges for this group. | [optional] 
+**group** | **Dict[str, str]** | Key-value pairs representing the grouping labels. | [optional]
+**current** | **float** | The cost for the current range within this group. | [optional]
+**previous** | **float** | The cost for the previous range within this group. | [optional]
+**change** | **float** | The difference in cost between current and previous ranges for this group. | [optional]
 
 ## Example
 

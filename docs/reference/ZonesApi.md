@@ -70,7 +70,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_zone_request_v1** | [**CreateZoneRequestV1**](CreateZoneRequestV1.md)| Request body for creating a new Zone | 
+ **create_zone_request_v1** | [**CreateZoneRequestV1**](CreateZoneRequestV1.md)| Request body for creating a new Zone |
 
 ### Return type
 
@@ -139,7 +139,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.ZonesApi(api_client)
-    zone_id = 56 # int | 
+    zone_id = 56 # int |
 
     try:
         # Delete Zone
@@ -155,7 +155,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zone_id** | **int**|  | 
+ **zone_id** | **int**|  |
 
 ### Return type
 
@@ -227,7 +227,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.ZonesApi(api_client)
-    zone_id = 56 # int | 
+    zone_id = 56 # int |
     create_zone_request_v1 = sysdig_client.CreateZoneRequestV1() # CreateZoneRequestV1 | Request body for editing an existing zone
 
     try:
@@ -246,8 +246,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zone_id** | **int**|  | 
- **create_zone_request_v1** | [**CreateZoneRequestV1**](CreateZoneRequestV1.md)| Request body for editing an existing zone | 
+ **zone_id** | **int**|  |
+ **create_zone_request_v1** | [**CreateZoneRequestV1**](CreateZoneRequestV1.md)| Request body for editing an existing zone |
 
 ### Return type
 
@@ -317,7 +317,7 @@ configuration = sysdig_client.Configuration(
 with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.ZonesApi(api_client)
-    zone_id = 56 # int | 
+    zone_id = 56 # int |
 
     try:
         # Get Zone
@@ -335,7 +335,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zone_id** | **int**|  | 
+ **zone_id** | **int**|  |
 
 ### Return type
 

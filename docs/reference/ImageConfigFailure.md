@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **str** | image configuration failure description | [optional] 
-**remediation** | **str** | image configuration failure remediation | 
-**arguments** | **object** |  | 
-**package_ref** | **str** | reference to the affected package | [optional] 
-**vulnerability_ref** | **str** | reference to the vulnerability | [optional] 
-**risk_accept_refs** | **List[str]** | list of accepted risks for the failure | [optional] 
+**description** | **str** | image configuration failure description | [optional]
+**remediation** | **str** | image configuration failure remediation |
+**arguments** | **object** |  |
+**package_ref** | **str** | reference to the affected package | [optional]
+**vulnerability_ref** | **str** | reference to the vulnerability | [optional]
+**risk_accept_refs** | **List[str]** | list of accepted risks for the failure | [optional]
 
 ## Example
 

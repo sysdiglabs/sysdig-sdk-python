@@ -1,12 +1,12 @@
 # ImageConfigInstructionIsPkgManager
 
-Predicate expressing \"the image history contains a package manager command (eg. apk, npm, rpm, etc)\". 
+Predicate expressing \"the image history contains a package manager command (eg. apk, npm, rpm, etc)\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

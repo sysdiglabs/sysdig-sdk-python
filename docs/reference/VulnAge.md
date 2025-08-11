@@ -1,13 +1,13 @@
 # VulnAge
 
-Predicate expressing \"the Vulnerability is older than <age> days\" 
+Predicate expressing \"the Vulnerability is older than <age> days\"
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnAgeExtra**](VulnAgeExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnAgeExtra**](VulnAgeExtra.md) |  |
 
 ## Example
 

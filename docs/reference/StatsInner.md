@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**api** | **str** |  | [optional] 
-**count** | **int** |  | [optional] 
+**api** | **str** |  | [optional]
+**count** | **int** |  | [optional]
 
 ## Example
 

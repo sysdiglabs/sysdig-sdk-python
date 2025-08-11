@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**vuln_ids** | **List[str]** |  | [optional] 
+**vuln_ids** | **List[str]** |  | [optional]
 
 ## Example
 

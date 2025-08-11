@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pkg_type** | **str** | The package type, either OS or non-OS. There is no enforcement on the value for future extensibility.  | 
+**pkg_type** | **str** | The package type, either OS or non-OS. There is no enforcement on the value for future extensibility.  |
 
 ## Example
 

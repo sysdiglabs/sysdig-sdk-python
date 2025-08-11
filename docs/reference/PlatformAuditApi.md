@@ -69,10 +69,10 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **var_from** | **int**|  | [optional] 
- **to** | **int**|  | [optional] 
- **cursor** | **str**|  | [optional] 
- **filter** | **str**|  | [optional] 
+ **var_from** | **int**|  | [optional]
+ **to** | **int**|  | [optional]
+ **cursor** | **str**|  | [optional]
+ **filter** | **str**|  | [optional]
  **limit** | **int**|  | [optional] [default to 100]
 
 ### Return type

@@ -6,10 +6,10 @@ Detailed definition of the field.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**def_type** | **str** | Type of the definition. | 
-**name** | **str** | Name of the field. | 
-**type** | **str** | Data type of the field. | 
-**hidden** | **bool** | Indicates if the field is hidden from view. | [optional] 
+**def_type** | **str** | Type of the definition. |
+**name** | **str** | Name of the field. |
+**type** | **str** | Data type of the field. |
+**hidden** | **bool** | Indicates if the field is hidden from view. | [optional]
 
 ## Example
 

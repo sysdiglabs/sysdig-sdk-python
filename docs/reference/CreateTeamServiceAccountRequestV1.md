@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The display name of the Service Account. | 
-**expiration_date** | **int** | Time when the Service Account API key expires, | in number of milliseconds since January 1, 1970, 00:00:00 GMT | [optional] 
-**team_role** | **str** | Team role to be assigned to the team service account. | It can be a string for predefined roles or an id of a custom role. | 
+**name** | **str** | The display name of the Service Account. |
+**expiration_date** | **int** | Time when the Service Account API key expires, | in number of milliseconds since January 1, 1970, 00:00:00 GMT | [optional]
+**team_role** | **str** | Team role to be assigned to the team service account. | It can be a string for predefined roles or an id of a custom role. |
 
 ## Example
 

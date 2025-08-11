@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**is_enabled** | **bool** | Specifies if user deactivation is enabled for this customer. | 
-**number_days_before_deactivation** | **int** | Number of days before inactive users are deactivated.  | 
+**is_enabled** | **bool** | Specifies if user deactivation is enabled for this customer. |
+**number_days_before_deactivation** | **int** | Number of days before inactive users are deactivated.  |
 
 ## Example
 

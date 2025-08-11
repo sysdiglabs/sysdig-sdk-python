@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**scope** | **str** | Scope to apply the policies for the given stage. An empty string or missing property implies the policies are always active. The scope is defined using a query language expression, which is a subset of the full metrics query language used in monitoring.  | [optional] 
+**scope** | **str** | Scope to apply the policies for the given stage. An empty string or missing property implies the policies are always active. The scope is defined using a query language expression, which is a subset of the full metrics query language used in monitoring.  | [optional]
 
 ## Example
 

@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **str** | description of the failure | 
-**package_ref** | **str** | reference to the affected package | [optional] 
-**vulnerability_ref** | **str** | reference to the vulnerability | [optional] 
-**risk_accept_refs** | **List[str]** | list of accepted risks for the failure | [optional] 
+**description** | **str** | description of the failure |
+**package_ref** | **str** | reference to the affected package | [optional]
+**vulnerability_ref** | **str** | reference to the vulnerability | [optional]
+**risk_accept_refs** | **List[str]** | list of accepted risks for the failure | [optional]
 
 ## Example
 

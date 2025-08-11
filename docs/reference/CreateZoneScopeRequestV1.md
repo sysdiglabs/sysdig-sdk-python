@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**target_type** | **str** | The target type of the Scope | 
-**rules** | **str** | Scoping rules to be applied | [optional] 
+**target_type** | **str** | The target type of the Scope |
+**rules** | **str** | Scoping rules to be applied | [optional]
 
 ## Example
 

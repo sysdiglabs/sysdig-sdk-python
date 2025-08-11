@@ -4,7 +4,7 @@ from sdcclient._common import _SdcCommon
 
 
 class ScanningAlertsClientV1(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
+    def __init__(self, token="", sdc_url="https://secure.sysdig.com", ssl_verify=True, custom_headers=None):
         super(ScanningAlertsClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
@@ -27,8 +27,10 @@ class ScanningAlertsClientV1(_SdcCommon):
         def cve_update(alert):
             alert["triggers"]["vuln_update"] = True
 
-    def add_repository_alert(self, name, registry, repository, tag, description="", triggers=None, notification_channels=None, enabled=True):
-        '''
+    def add_repository_alert(
+        self, name, registry, repository, tag, description="", triggers=None, notification_channels=None, enabled=True
+    ):
+        """
         Create a new repository alert
 
         Args:
@@ -59,43 +61,58 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> if not ok:
             >>>    print(f"error creating alert: {res}")
             >>> alert_id = res["alertId"]
-        '''
+        """
         if not triggers:
             triggers = [ScanningAlertsClientV1.RepositoryAlertTrigger.new_image_analyzed]
 
         alert = {
-                'name':                   name,
-                'description':            description,
-                'type':                   'repository',
-                'triggers':               {
-                        "unscanned":       False,
-                        "analysis_update": False,
-                        "vuln_update":     False,
-                        "policy_eval":     False,
-                        "failed":          False
-                },
-                'repositories':           [{
-                        'registry':   registry,
-                        'repository': repository,
-                        'tag':        tag,
-                }],
-                "onlyPassFail":           False,
-                "skipEventSend":          False,
-                'enabled':                enabled,
-                'notificationChannelIds': notification_channels,
+            "name": name,
+            "description": description,
+            "type": "repository",
+            "triggers": {
+                "unscanned": False,
+                "analysis_update": False,
+                "vuln_update": False,
+                "policy_eval": False,
+                "failed": False,
+            },
+            "repositories": [
+                {
+                    "registry": registry,
+                    "repository": repository,
+                    "tag": tag,
+                }
+            ],
+            "onlyPassFail": False,
+            "skipEventSend": False,
+            "enabled": enabled,
+            "notificationChannelIds": notification_channels,
         }
 
         for trigger in triggers:
             trigger(alert)
 
-        res = self.http.post(f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        res = self.http.post(
+            f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
-    def update_repository_alert(self, id, name=None, registry=None, repository=None, tag=None, description=None, triggers=None, notification_channels=None, enabled=None):
-        '''
+    def update_repository_alert(
+        self,
+        id,
+        name=None,
+        registry=None,
+        repository=None,
+        tag=None,
+        description=None,
+        triggers=None,
+        notification_channels=None,
+        enabled=None,
+    ):
+        """
         Updates a repository alert. Fields that are not specified, will not be modified.
 
         Args:
@@ -126,7 +143,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> if not ok:
             >>>    print(f"error updating alert: {res}")
             >>> alert_id = res["alertId"]
-        '''
+        """
         ok, alert = self.get_alert(id)
         if not ok:
             return False, f"unable to retrieve alert by ID {id}: {alert}"
@@ -143,11 +160,11 @@ class ScanningAlertsClientV1(_SdcCommon):
             alert["repositories"][0]["tag"] = tag
         if triggers is not None:
             alert["triggers"] = {
-                    "unscanned":       False,
-                    "analysis_update": False,
-                    "vuln_update":     False,
-                    "policy_eval":     False,
-                    "failed":          False
+                "unscanned": False,
+                "analysis_update": False,
+                "vuln_update": False,
+                "policy_eval": False,
+                "failed": False,
             }
             alert["onlyPassFail"] = False
             for trigger in triggers:
@@ -157,7 +174,9 @@ class ScanningAlertsClientV1(_SdcCommon):
         if enabled is not None:
             alert["enabled"] = enabled
 
-        res = self.http.put(f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        res = self.http.put(
+            f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
@@ -183,7 +202,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             alert["triggers"]["vuln_update"] = True
 
     def add_runtime_alert(self, name, description="", scope="", triggers=None, notification_channels=None, enabled=True):
-        '''
+        """
         Create a new runtime alert
 
         Args:
@@ -210,39 +229,43 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> if not ok:
             >>>    print(f"error creating alert: {res}")
             >>> alert_id = res["alertId"]
-        '''
+        """
         if not triggers:
             triggers = [ScanningAlertsClientV1.RuntimeAlertTrigger.unscanned_image]
 
         alert = {
-                'name':                   name,
-                'description':            description,
-                'type':                   'runtime',
-                'triggers':               {
-                        "unscanned":       False,
-                        "analysis_update": False,
-                        "vuln_update":     False,
-                        "policy_eval":     False,
-                        "failed":          False
-                },
-                'scope':                  scope,
-                "onlyPassFail":           False,
-                "skipEventSend":          False,
-                'enabled':                enabled,
-                'notificationChannelIds': notification_channels,
+            "name": name,
+            "description": description,
+            "type": "runtime",
+            "triggers": {
+                "unscanned": False,
+                "analysis_update": False,
+                "vuln_update": False,
+                "policy_eval": False,
+                "failed": False,
+            },
+            "scope": scope,
+            "onlyPassFail": False,
+            "skipEventSend": False,
+            "enabled": enabled,
+            "notificationChannelIds": notification_channels,
         }
 
         for trigger in triggers:
             trigger(alert)
 
-        res = self.http.post(f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        res = self.http.post(
+            f"{self.url}/api/scanning/v1/alerts", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
-    def update_runtime_alert(self, id, name=None, description=None, scope=None, triggers=None, notification_channels=None, enabled=None):
-        '''
+    def update_runtime_alert(
+        self, id, name=None, description=None, scope=None, triggers=None, notification_channels=None, enabled=None
+    ):
+        """
         Updates a runtime alert. Fields that are not specified, will not be modified.
 
         Args:
@@ -269,7 +292,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> if not ok:
             >>>    print(f"error updating alert: {res}")
             >>> alert_id = res["alertId"]
-        '''
+        """
         ok, alert = self.get_alert(id)
         if not ok:
             return False, f"unable to retrieve alert by ID {id}: {alert}"
@@ -282,11 +305,11 @@ class ScanningAlertsClientV1(_SdcCommon):
             alert["scope"] = scope
         if triggers is not None:
             alert["triggers"] = {
-                    "unscanned":       False,
-                    "analysis_update": False,
-                    "vuln_update":     False,
-                    "policy_eval":     False,
-                    "failed":          False
+                "unscanned": False,
+                "analysis_update": False,
+                "vuln_update": False,
+                "policy_eval": False,
+                "failed": False,
             }
             alert["onlyPassFail"] = False
             for trigger in triggers:
@@ -296,14 +319,16 @@ class ScanningAlertsClientV1(_SdcCommon):
         if enabled is not None:
             alert["enabled"] = enabled
 
-        res = self.http.put(f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify)
+        res = self.http.put(
+            f"{self.url}/api/scanning/v1/alerts/{id}", headers=self.hdrs, data=json.dumps(alert), verify=self.ssl_verify
+        )
         if not self._checkResponse(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
     def get_alert(self, alertid):
-        '''
+        """
         Retrieve the scanning alert with the given id
 
         Args:
@@ -319,7 +344,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> if not ok:
             >>>     print(f"error retrieving alert {alert_id}: {res}")
             >>> alert = res
-        '''
+        """
 
         res = self.http.get(f"{self.url}/api/scanning/v1/alerts/{alertid}", headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -327,7 +352,7 @@ class ScanningAlertsClientV1(_SdcCommon):
         return [True, res.json()]
 
     def list_alerts(self, limit=None, cursor=None):
-        '''
+        """
         List the current set of scanning alerts.
         Args:
             limit(int): Maximum number of alerts in the response.
@@ -348,13 +373,13 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> # Load more alerts
             >>> if res["responseMetadata"] is not None:
             >>>     ok, res = client.list_alerts(cursor=res["responseMetadata"]["next_cursor"])
-        '''
+        """
 
         url = f"{self.url}/api/scanning/v1/alerts"
         if limit:
-            url += '?limit=' + str(limit)
+            url += "?limit=" + str(limit)
             if cursor:
-                url += '&cursor=' + cursor
+                url += "&cursor=" + cursor
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -362,8 +387,10 @@ class ScanningAlertsClientV1(_SdcCommon):
 
         return [True, res.json()]
 
-    def delete_alert(self, policyid):  # FIXME: policyid must be maintained for backwards compatibility reasons with older versions, but should be renamed to id or alert_id
-        '''
+    def delete_alert(
+        self, policyid
+    ):  # FIXME: policyid must be maintained for backwards compatibility reasons with older versions, but should be renamed to id or alert_id
+        """
         Delete the alert with the given id
 
         Args:
@@ -373,7 +400,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> client = ScanningAlertsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
             >>>                                 token=os.getenv("SDC_SECURE_TOKEN"))
             >>> client.delete_alert(alert_id)
-        '''
+        """
 
         res = self.http.delete(f"{self.url}/api/scanning/v1/alerts/{policyid}", headers=self.hdrs, verify=self.ssl_verify)
         if not self._checkResponse(res):
@@ -381,7 +408,7 @@ class ScanningAlertsClientV1(_SdcCommon):
         return [True, res.text]
 
     def add_alert_object(self, object):
-        '''
+        """
         Adds alert object as raw JSON object.
 
         Args:
@@ -407,8 +434,8 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>>     "notificationChannelIds": []
             >>> }
             >>> client.add_alert_object(alert)
-        '''
-        url = self.url + '/api/scanning/v1/alerts'
+        """
+        url = self.url + "/api/scanning/v1/alerts"
         data = json.dumps(object)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
         if not self._checkResponse(res):

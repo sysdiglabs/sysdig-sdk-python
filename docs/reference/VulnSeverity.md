@@ -1,13 +1,13 @@
 # VulnSeverity
 
-Predicate expressing \"the Vulnerability Severity is <level> or higher\". 
+Predicate expressing \"the Vulnerability Severity is <level> or higher\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**VulnSeverityExtra**](VulnSeverityExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**VulnSeverityExtra**](VulnSeverityExtra.md) |  |
 
 ## Example
 

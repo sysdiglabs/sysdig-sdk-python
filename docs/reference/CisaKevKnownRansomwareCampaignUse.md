@@ -1,12 +1,12 @@
 # CisaKevKnownRansomwareCampaignUse
 
-The vulnerability listed in CISA's KEV catalog as actively exploited in ransomware campaigns. 
+The vulnerability listed in CISA's KEV catalog as actively exploited in ransomware campaigns.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
+**type** | **str** |  |
 
 ## Example
 

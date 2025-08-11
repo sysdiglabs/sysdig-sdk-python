@@ -6,8 +6,8 @@ A date range with inclusive start and end dates.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**start_date** | **date** | The beginning of the date range. | 
-**end_date** | **date** | The end of the date range. | 
+**start_date** | **date** | The beginning of the date range. |
+**end_date** | **date** | The end of the date range. |
 
 ## Example
 

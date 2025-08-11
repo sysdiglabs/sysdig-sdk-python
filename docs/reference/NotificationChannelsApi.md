@@ -70,7 +70,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_notification_channel_request_v1** | [**CreateNotificationChannelRequestV1**](CreateNotificationChannelRequestV1.md)| The payload required to create a notification channel | 
+ **create_notification_channel_request_v1** | [**CreateNotificationChannelRequestV1**](CreateNotificationChannelRequestV1.md)| The payload required to create a notification channel |
 
 ### Return type
 
@@ -155,7 +155,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **notification_channel_id** | **int**| The Notification Channel Identifier | 
+ **notification_channel_id** | **int**| The Notification Channel Identifier |
 
 ### Return type
 
@@ -241,7 +241,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **notification_channel_id** | **int**| The Notification Channel Identifier | 
+ **notification_channel_id** | **int**| The Notification Channel Identifier |
 
 ### Return type
 
@@ -417,8 +417,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **notification_channel_id** | **int**| The Notification Channel Identifier | 
- **update_notification_channel_request_v1** | [**UpdateNotificationChannelRequestV1**](UpdateNotificationChannelRequestV1.md)| The payload required to update the notification channel | 
+ **notification_channel_id** | **int**| The Notification Channel Identifier |
+ **update_notification_channel_request_v1** | [**UpdateNotificationChannelRequestV1**](UpdateNotificationChannelRequestV1.md)| The payload required to update the notification channel |
 
 ### Return type
 

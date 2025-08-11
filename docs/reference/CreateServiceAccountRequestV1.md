@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The display name of the Service Account. | [optional] 
-**expiration_date** | **int** | Time when the Service Account API key expires, | in number of milliseconds since January 1, 1970, 00:00:00 GMT | [optional] 
+**name** | **str** | The display name of the Service Account. | [optional]
+**expiration_date** | **int** | Time when the Service Account API key expires, | in number of milliseconds since January 1, 1970, 00:00:00 GMT | [optional]
 
 ## Example
 

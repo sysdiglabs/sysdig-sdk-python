@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[ScheduleResponse]**](ScheduleResponse.md) | List of Schedules. | 
+**data** | [**List[ScheduleResponse]**](ScheduleResponse.md) | List of Schedules. |
 
 ## Example
 

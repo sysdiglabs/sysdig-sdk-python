@@ -6,9 +6,9 @@ Bundle definition
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | The human readable Bundle name | 
-**description** | **str** | Human readable description of this Bundle | [optional] 
-**rules** | [**List[NewRule]**](NewRule.md) | The Rules defining this Bundle | 
+**name** | **str** | The human readable Bundle name |
+**description** | **str** | Human readable description of this Bundle | [optional]
+**rules** | [**List[NewRule]**](NewRule.md) | The Rules defining this Bundle |
 
 ## Example
 

@@ -6,11 +6,11 @@ Create Elasticsearch Integration Request
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | A descriptive name to give to the integration | 
+**name** | **str** | A descriptive name to give to the integration |
 **is_enabled** | **bool** | If the forwarding should be enabled or not | [optional] [default to True]
-**type** | [**IntegrationType**](IntegrationType.md) |  | 
-**channels** | [**List[IntegrationChannel]**](IntegrationChannel.md) | Data types to forward. Must be compatible with the specified Integration type | [optional] 
-**connection_info** | [**CreateElasticsearchIntegrationRequestAllOfConnectionInfo**](CreateElasticsearchIntegrationRequestAllOfConnectionInfo.md) |  | 
+**type** | [**IntegrationType**](IntegrationType.md) |  |
+**channels** | [**List[IntegrationChannel]**](IntegrationChannel.md) | Data types to forward. Must be compatible with the specified Integration type | [optional]
+**connection_info** | [**CreateElasticsearchIntegrationRequestAllOfConnectionInfo**](CreateElasticsearchIntegrationRequestAllOfConnectionInfo.md) |  |
 
 ## Example
 

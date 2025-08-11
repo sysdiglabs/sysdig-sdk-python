@@ -7,7 +7,7 @@ Create Chronicle Integration Connection Info
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **region** | **str** | The target region | [optional] [default to 'us']
-**api_key** | **str** | The Chronicle v1 API key | 
+**api_key** | **str** | The Chronicle v1 API key |
 
 ## Example
 

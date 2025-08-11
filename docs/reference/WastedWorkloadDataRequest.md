@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**date_range** | [**DateRange**](DateRange.md) |  | 
-**scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters | [optional] 
-**group_by** | **List[str]** | Specifies Prometheus labels to group the report data by. By default, the following labels will always be included:   - kube_cluster_name   - kube_namespace_name   - kube_workload_name A maximum of 7 additional custom labels can be specified.  | [optional] 
+**date_range** | [**DateRange**](DateRange.md) |  |
+**scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters | [optional]
+**group_by** | **List[str]** | Specifies Prometheus labels to group the report data by. By default, the following labels will always be included:   - kube_cluster_name   - kube_namespace_name   - kube_workload_name A maximum of 7 additional custom labels can be specified.  | [optional]
 
 ## Example
 

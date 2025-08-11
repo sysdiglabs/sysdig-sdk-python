@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**keytab** | **str** | base64 encoded Kerberos keytab | [optional] 
+**keytab** | **str** | base64 encoded Kerberos keytab | [optional]
 
 ## Example
 

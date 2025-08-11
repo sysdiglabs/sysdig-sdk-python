@@ -6,7 +6,7 @@ LedgersResponse
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[Services]**](Services.md) |  | 
+**data** | [**List[Services]**](Services.md) |  |
 
 ## Example
 

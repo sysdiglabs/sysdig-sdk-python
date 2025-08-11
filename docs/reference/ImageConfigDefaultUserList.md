@@ -6,8 +6,8 @@ Configuration to set the default user for the specified image.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigDefaultUserListExtra**](ImageConfigDefaultUserListExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigDefaultUserListExtra**](ImageConfigDefaultUserListExtra.md) |  |
 
 ## Example
 

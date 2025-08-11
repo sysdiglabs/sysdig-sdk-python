@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | Name of the bundle | [optional] 
-**identifier** | **str** | Identifier of the bundle | [optional] 
-**type** | **str** |  | [optional] 
-**rules** | [**List[Rule]**](Rule.md) |  | [optional] 
+**name** | **str** | Name of the bundle | [optional]
+**identifier** | **str** | Identifier of the bundle | [optional]
+**type** | **str** |  | [optional]
+**rules** | [**List[Rule]**](Rule.md) |  | [optional]
 
 ## Example
 

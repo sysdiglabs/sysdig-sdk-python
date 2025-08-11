@@ -6,8 +6,8 @@ The reason a Response Action failed to execute.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**failure_reason** | **str** | The reason for the failure. | 
-**log_message** | **str** | The log message of the action failure. | 
+**failure_reason** | **str** | The reason for the failure. |
+**log_message** | **str** | The log message of the action failure. |
 
 ## Example
 

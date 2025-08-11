@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**date_range** | [**DateRange**](DateRange.md) |  | 
-**algorithm** | **str** | Aggregation algorithm used for rightsizing analysis. Currently supported values are: - AVG  - P95  - MAX This field is case-sensitive and may support more values in the future.  | 
-**scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters | [optional] 
+**date_range** | [**DateRange**](DateRange.md) |  |
+**algorithm** | **str** | Aggregation algorithm used for rightsizing analysis. Currently supported values are: - AVG  - P95  - MAX This field is case-sensitive and may support more values in the future.  |
+**scope** | [**List[PromqlMatcher]**](PromqlMatcher.md) | A list of PromQL-style filters | [optional]
 
 ## Example
 

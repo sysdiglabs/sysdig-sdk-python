@@ -6,8 +6,8 @@ a Zone
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** | The zone identifier | 
-**name** | **str** | The zone name | 
+**id** | **int** | The zone identifier |
+**name** | **str** | The zone name |
 
 ## Example
 

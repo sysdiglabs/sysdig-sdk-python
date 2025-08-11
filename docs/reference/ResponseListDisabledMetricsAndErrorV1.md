@@ -6,8 +6,8 @@ Get Disabled Metrics by Job name Response
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[ListJobAndDisabledMetricsV1]**](ListJobAndDisabledMetricsV1.md) |  | 
-**errors** | [**List[MetricErrorV1]**](MetricErrorV1.md) |  | 
+**data** | [**List[ListJobAndDisabledMetricsV1]**](ListJobAndDisabledMetricsV1.md) |  |
+**errors** | [**List[MetricErrorV1]**](MetricErrorV1.md) |  |
 
 ## Example
 

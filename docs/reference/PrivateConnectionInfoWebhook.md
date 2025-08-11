@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**secret** | **str** | Secret to use, according to the \&quot;auth\&quot; value. | [optional] 
+**secret** | **str** | Secret to use, according to the \&quot;auth\&quot; value. | [optional]
 
 ## Example
 

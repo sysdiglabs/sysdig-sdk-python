@@ -6,8 +6,8 @@ The IBM Event Notifications notification channel options
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional] 
-**instance_id** | **str** | The IBM Event Notification Service Instance Id | 
+**has_hiding_of_sensitive_info** | **bool** | Whether the notification info should be hidden when notifications are sent to this notification channel | [optional]
+**instance_id** | **str** | The IBM Event Notification Service Instance Id |
 
 ## Example
 

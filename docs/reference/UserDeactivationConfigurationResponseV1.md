@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**customer_id** | **int** | The customer Id.  | [optional] 
-**is_enabled** | **bool** | Specifies if user deactivation is enabled for this customer. | [optional] 
-**number_days_before_deactivation** | **int** | Number of days before inactive users are deactivated.  | [optional] 
+**customer_id** | **int** | The customer Id.  | [optional]
+**is_enabled** | **bool** | Specifies if user deactivation is enabled for this customer. | [optional]
+**number_days_before_deactivation** | **int** | Number of days before inactive users are deactivated.  | [optional]
 
 ## Example
 

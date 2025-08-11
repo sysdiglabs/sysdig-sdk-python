@@ -6,8 +6,8 @@ Get Disabled Metrics by Job name Response.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**metric_name** | **str** | The name of the metric to be disabled or re-enabled.  | [optional] 
-**is_disabled** | **bool** | Set as &#x60;true&#x60; to disable a metric. \\ Set as &#x60;false&#x60; to re-enable a metric.  | [optional] 
+**metric_name** | **str** | The name of the metric to be disabled or re-enabled.  | [optional]
+**is_disabled** | **bool** | Set as &#x60;true&#x60; to disable a metric. \\ Set as &#x60;false&#x60; to re-enable a metric.  | [optional]
 
 ## Example
 

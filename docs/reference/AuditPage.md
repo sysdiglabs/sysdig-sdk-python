@@ -6,9 +6,9 @@ Pagination information.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**total** | **int** | The number of events matching the search criteria. This number is always major or equal to the number of events returned.  | 
-**prev** | **str** | &#x60;prev&#x60; is a string pointing to the previous page of data. Use this as the &#x60;cursor&#x60; to get the previous page of data.  | [optional] 
-**next** | **str** | &#x60;next&#x60; is a string pointing to the next page of data. Use this as the &#x60;cursor&#x60; to scroll paginated results and get the next page of data.  If not included, the current response is the last page.  | [optional] 
+**total** | **int** | The number of events matching the search criteria. This number is always major or equal to the number of events returned.  |
+**prev** | **str** | &#x60;prev&#x60; is a string pointing to the previous page of data. Use this as the &#x60;cursor&#x60; to get the previous page of data.  | [optional]
+**next** | **str** | &#x60;next&#x60; is a string pointing to the next page of data. Use this as the &#x60;cursor&#x60; to scroll paginated results and get the next page of data.  If not included, the current response is the last page.  | [optional]
 
 ## Example
 

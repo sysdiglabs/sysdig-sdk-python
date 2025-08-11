@@ -1,13 +1,13 @@
 # ImageConfigEnvVariableNotExists
 
-Predicate expressing \"the container does not have the specified environment variable\". 
+Predicate expressing \"the container does not have the specified environment variable\".
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** |  | 
-**extra** | [**ImageConfigEnvVariableExistsExtra**](ImageConfigEnvVariableExistsExtra.md) |  | 
+**type** | **str** |  |
+**extra** | [**ImageConfigEnvVariableExistsExtra**](ImageConfigEnvVariableExistsExtra.md) |  |
 
 ## Example
 

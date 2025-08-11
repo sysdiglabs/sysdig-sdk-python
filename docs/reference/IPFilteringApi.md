@@ -72,7 +72,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_ip_filter_v1** | [**CreateIpFilterV1**](CreateIpFilterV1.md)| The payload required to create IP filter. | [optional] 
+ **create_ip_filter_v1** | [**CreateIpFilterV1**](CreateIpFilterV1.md)| The payload required to create IP filter. | [optional]
 
 ### Return type
 
@@ -157,7 +157,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ip_filter_id** | **int**| IP Filter ID. | 
+ **ip_filter_id** | **int**| IP Filter ID. |
 
 ### Return type
 
@@ -245,7 +245,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ip_filter_id** | **int**| IP Filter ID. | 
+ **ip_filter_id** | **int**| IP Filter ID. |
 
 ### Return type
 
@@ -500,7 +500,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ip_filters_settings_v1** | [**IpFiltersSettingsV1**](IpFiltersSettingsV1.md)| The payload required to save IP filters settings. | [optional] 
+ **ip_filters_settings_v1** | [**IpFiltersSettingsV1**](IpFiltersSettingsV1.md)| The payload required to save IP filters settings. | [optional]
 
 ### Return type
 
@@ -573,7 +573,7 @@ with sysdig_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = sysdig_client.IPFilteringApi(api_client)
     ip_filter_id = 56 # int | IP Filter ID.
-    update_ip_filter_v1 = sysdig_client.UpdateIpFilterV1() # UpdateIpFilterV1 | 
+    update_ip_filter_v1 = sysdig_client.UpdateIpFilterV1() # UpdateIpFilterV1 |
 
     try:
         # Update IP Filter
@@ -591,8 +591,8 @@ with sysdig_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ip_filter_id** | **int**| IP Filter ID. | 
- **update_ip_filter_v1** | [**UpdateIpFilterV1**](UpdateIpFilterV1.md)|  | 
+ **ip_filter_id** | **int**| IP Filter ID. |
+ **update_ip_filter_v1** | [**UpdateIpFilterV1**](UpdateIpFilterV1.md)|  |
 
 ### Return type
 

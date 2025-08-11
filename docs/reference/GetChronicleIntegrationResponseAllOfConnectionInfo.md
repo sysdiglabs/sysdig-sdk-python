@@ -6,8 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **region** | **str** | The target region | [optional] [default to 'us']
-**chronicle_customer_id** | **str** | Unique identifier (UUID) corresponding to a particular Chronicle instance | 
-**namespace** | **str** | User-configured environment namespace to identify the data domain the logs originated from | 
+**chronicle_customer_id** | **str** | Unique identifier (UUID) corresponding to a particular Chronicle instance |
+**namespace** | **str** | User-configured environment namespace to identify the data domain the logs originated from |
 
 ## Example
 

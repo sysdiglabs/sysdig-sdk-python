@@ -1,14 +1,14 @@
 # PoliciesPage
 
-Page details, providing both returned and total count of matched elements. 
+Page details, providing both returned and total count of matched elements.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**returned** | **int** | The number returned elements: always less or equal the limit specified in the request.  | 
-**matched** | **int** | Total count of elements matched the provided filter.  | 
-**next** | **str** | Cursor used to retrieve the next page of results. | [optional] 
+**returned** | **int** | The number returned elements: always less or equal the limit specified in the request.  |
+**matched** | **int** | Total count of elements matched the provided filter.  |
+**next** | **str** | Cursor used to retrieve the next page of results. | [optional]
 
 ## Example
 

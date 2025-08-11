@@ -6,7 +6,7 @@ Change Disabled Metrics per JobName
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | [**List[DisableJobsAndMetricsV1]**](DisableJobsAndMetricsV1.md) |  | 
+**data** | [**List[DisableJobsAndMetricsV1]**](DisableJobsAndMetricsV1.md) |  |
 
 ## Example
 

@@ -1,6 +1,0 @@
-[flake8]
-ignore = E501, F821, W504, W605, E303, E126, E131, E241
-show-source = True
-count = True
-statistics = True
-max-line-length=127

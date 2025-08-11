@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**project** | **str** | GCP project ID hosting the target pub/sub | 
-**topic** | **str** | pub/sub topic onto which publish the data | 
-**ordering_key** | **str** | The key to use to order the messages. Required to enable ordered delivery | [optional] 
-**attributes** | [**List[KeyValueObject]**](KeyValueObject.md) | Extra headers to add to the request. Each header mapping requires 2 keys: \&quot;key\&quot; for the header key and \&quot;value\&quot; for its value | [optional] 
-**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data | [optional] 
+**project** | **str** | GCP project ID hosting the target pub/sub |
+**topic** | **str** | pub/sub topic onto which publish the data |
+**ordering_key** | **str** | The key to use to order the messages. Required to enable ordered delivery | [optional]
+**attributes** | [**List[KeyValueObject]**](KeyValueObject.md) | Extra headers to add to the request. Each header mapping requires 2 keys: \&quot;key\&quot; for the header key and \&quot;value\&quot; for its value | [optional]
+**credentials_json** | **str** | JSON credentials for the service account Sysdig will use to send data | [optional]
 
 ## Example
 
