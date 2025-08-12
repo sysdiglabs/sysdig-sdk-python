@@ -29,11 +29,13 @@ def print_prometheus_instant_result(result):
 
     for entry in result:
         timestamp, value = entry.get("value", [None, None])
-        dt = datetime.fromtimestamp(float(timestamp)).isoformat() if timestamp else "N/A"
+        dt = (
+            datetime.fromtimestamp(float(timestamp)).isoformat() if timestamp else "N/A"
+        )
         metric = entry.get("metric", {})
 
         if has_labels:
-            label_str = ', '.join(f'{k}="{v}"' for k, v in sorted(metric.items()))
+            label_str = ", ".join(f'{k}="{v}"' for k, v in sorted(metric.items()))
             print(f"{dt:<25} | {label_str:<40} | {value:>10}")
         else:
             print(f"{dt:<25} | {value:>10}")
@@ -43,8 +45,8 @@ def print_prometheus_instant_result(result):
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <hostname>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -56,11 +58,11 @@ sdclient = SdcClient(sdc_token, hostname)
 # A PromQL query to execute. In this example, we are querying for the total CPU usage
 # of all containers in all pods in the last 10 minutes.
 #
-query = '''
+query = """
 sum (
   avg_over_time(kube_pod_container_resource_requests{resource="cpu"}[10m])
 )
-'''
+"""
 
 #
 # Time:
@@ -93,7 +95,6 @@ if ok:
     #     "resultType": "vector"
     # }
     #
-
 
     #
     # Print summary (what, when)

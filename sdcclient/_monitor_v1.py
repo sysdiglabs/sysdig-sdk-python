@@ -10,78 +10,98 @@ except NameError:
 
 
 class SdMonitorClientV1(SdMonitorClient):
-    '''**Description**
-        Handles dashboards version 1 (ie. up to February 2019). For later Sysdig Monitor versions, please use :class:`~SdMonitorClient` instead.
-    '''
+    """**Description**
+    Handles dashboards version 1 (ie. up to February 2019). For later Sysdig Monitor versions, please use :class:`~SdMonitorClient` instead.
+    """
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True):
+    def __init__(
+        self, token="", sdc_url="https://app.sysdigcloud.com", ssl_verify=True
+    ):
         super(SdMonitorClientV1, self).__init__(token, sdc_url, ssl_verify)
-        self._dashboards_api_version = 'v1'
-        self._dashboards_api_endpoint = '/ui/dashboards'
-        self._default_dashboards_api_endpoint = '/api/defaultDashboards'
+        self._dashboards_api_version = "v1"
+        self._dashboards_api_endpoint = "/ui/dashboards"
+        self._default_dashboards_api_endpoint = "/api/defaultDashboards"
 
-    def create_dashboard_from_template(self, dashboard_name, template, scope, shared=False, public=False,
-                                       annotations={}):
+    def create_dashboard_from_template(
+        self,
+        dashboard_name,
+        template,
+        scope,
+        shared=False,
+        public=False,
+        annotations={},
+    ):
         if scope is not None:
             if not isinstance(scope, basestring):
-                return [False, 'Invalid scope format: Expected a string']
+                return [False, "Invalid scope format: Expected a string"]
 
         #
         # Clean up the dashboard we retireved so it's ready to be pushed
         #
-        template['id'] = None
-        template['version'] = None
-        template['schema'] = 1
-        template['name'] = dashboard_name
-        template['isShared'] = shared
-        template['isPublic'] = public
-        template['publicToken'] = None
+        template["id"] = None
+        template["version"] = None
+        template["schema"] = 1
+        template["name"] = dashboard_name
+        template["isShared"] = shared
+        template["isPublic"] = public
+        template["publicToken"] = None
 
         # set dashboard scope to the specific parameter
         ok, scope_expression = self.convert_scope_string_to_expression(scope)
         if not ok:
             return ok, scope_expression
-        template['filterExpression'] = scope
-        template['scopeExpressionList'] = map(
-            lambda ex: {'operand': ex['operand'], 'operator': ex['operator'], 'value': ex['value'], 'displayName': '',
-                        'isVariable': False}, scope_expression)
+        template["filterExpression"] = scope
+        template["scopeExpressionList"] = map(
+            lambda ex: {
+                "operand": ex["operand"],
+                "operator": ex["operator"],
+                "value": ex["value"],
+                "displayName": "",
+                "isVariable": False,
+            },
+            scope_expression,
+        )
 
-        if 'widgets' in template and template['widgets'] is not None:
+        if "widgets" in template and template["widgets"] is not None:
             # Default dashboards (aka Explore views) specify panels with the property `widgets`,
             # while custom dashboards use `items`
-            template['items'] = list(template['widgets'])
-            del template['widgets']
+            template["items"] = list(template["widgets"])
+            del template["widgets"]
 
         # NOTE: Individual panels might override the dashboard scope, the override will NOT be reset
-        if 'items' in template and template['items'] is not None:
-            for chart in template['items']:
-                if 'overrideFilter' not in chart:
-                    chart['overrideFilter'] = False
+        if "items" in template and template["items"] is not None:
+            for chart in template["items"]:
+                if "overrideFilter" not in chart:
+                    chart["overrideFilter"] = False
 
-                if not chart['overrideFilter']:
+                if not chart["overrideFilter"]:
                     # patch frontend bug to hide scope override warning even when it's not really overridden
-                    chart['scope'] = scope
+                    chart["scope"] = scope
 
                 # if chart scope is equal to dashboard scope, set it as non override
-                chart_scope = chart['scope'] if 'scope' in chart else None
-                chart['overrideFilter'] = chart_scope != scope
+                chart_scope = chart["scope"] if "scope" in chart else None
+                chart["overrideFilter"] = chart_scope != scope
 
-        if 'annotations' in template:
-            template['annotations'].update(annotations)
+        if "annotations" in template:
+            template["annotations"].update(annotations)
         else:
-            template['annotations'] = annotations
+            template["annotations"] = annotations
 
-        template['annotations']['createdByEngine'] = True
+        template["annotations"]["createdByEngine"] = True
 
         #
         # Create the new dashboard
         #
-        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
-                             data=json.dumps({'dashboard': template}), verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + self._dashboards_api_endpoint,
+            headers=self.hdrs,
+            data=json.dumps({"dashboard": template}),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def create_dashboard(self, name):
-        '''
+        """
         **Description**
             Creates an empty dashboard. You can then add panels by using ``add_dashboard_panel``.
 
@@ -93,23 +113,31 @@ class SdMonitorClientV1(SdMonitorClient):
 
         **Example**
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
-        '''
-        dashboard_configuration = {
-            'name': name,
-            'schema': 2,
-            'items': []
-        }
+        """
+        dashboard_configuration = {"name": name, "schema": 2, "items": []}
 
         #
         # Create the new dashboard
         #
-        res = self.http.post(self.url + self._dashboards_api_endpoint, headers=self.hdrs,
-                             data=json.dumps({'dashboard': dashboard_configuration}),
-                             verify=self.ssl_verify)
+        res = self.http.post(
+            self.url + self._dashboards_api_endpoint,
+            headers=self.hdrs,
+            data=json.dumps({"dashboard": dashboard_configuration}),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
-    def add_dashboard_panel(self, dashboard, name, panel_type, metrics, scope=None, sort_by=None, limit=None,
-                            layout=None):
+    def add_dashboard_panel(
+        self,
+        dashboard,
+        name,
+        panel_type,
+        metrics,
+        scope=None,
+        sort_by=None,
+        limit=None,
+        layout=None,
+    ):
         """**Description**
             Adds a panel to the dashboard. A panel can be a time series, or a top chart (i.e. bar chart), or a number panel.
 
@@ -133,19 +161,14 @@ class SdMonitorClientV1(SdMonitorClient):
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
         """
         panel_configuration = {
-            'name': name,
-            'showAs': None,
-            'showAsType': None,
-            'metrics': [],
-            'gridConfiguration': {
-                'col': 1,
-                'row': 1,
-                'size_x': 12,
-                'size_y': 6
-            }
+            "name": name,
+            "showAs": None,
+            "showAsType": None,
+            "metrics": [],
+            "gridConfiguration": {"col": 1, "row": 1, "size_x": 12, "size_y": 6},
         }
 
-        if panel_type == 'timeSeries':
+        if panel_type == "timeSeries":
             #
             # In case of a time series, the current dashboard implementation
             # requires the timestamp to be explicitly specified as "key".
@@ -154,7 +177,7 @@ class SdMonitorClientV1(SdMonitorClient):
             # specify time window and sampling)
             #
             metrics = copy.copy(metrics)
-            metrics.insert(0, {'id': 'timestamp'})
+            metrics.insert(0, {"id": "timestamp"})
 
         #
         # Convert list of metrics to format used by Sysdig Monitor
@@ -163,97 +186,94 @@ class SdMonitorClientV1(SdMonitorClient):
         k_count = 0
         v_count = 0
         for i, metric in enumerate(metrics):
-            property_name = 'v' if 'aggregations' in metric else 'k'
+            property_name = "v" if "aggregations" in metric else "k"
 
-            if property_name == 'k':
+            if property_name == "k":
                 i = k_count
                 k_count += 1
             else:
                 i = v_count
                 v_count += 1
-            property_names[metric['id']] = property_name + str(i)
+            property_names[metric["id"]] = property_name + str(i)
 
-            panel_configuration['metrics'].append({
-                'metricId': metric['id'],
-                'aggregation': metric['aggregations']['time'] if 'aggregations' in metric else None,
-                'groupAggregation': metric['aggregations']['group'] if 'aggregations' in metric else None,
-                'propertyName': property_name + str(i)
-            })
+            panel_configuration["metrics"].append(
+                {
+                    "metricId": metric["id"],
+                    "aggregation": metric["aggregations"]["time"]
+                    if "aggregations" in metric
+                    else None,
+                    "groupAggregation": metric["aggregations"]["group"]
+                    if "aggregations" in metric
+                    else None,
+                    "propertyName": property_name + str(i),
+                }
+            )
 
-        panel_configuration['scope'] = scope
+        panel_configuration["scope"] = scope
         # if chart scope is equal to dashboard scope, set it as non override
-        panel_configuration['overrideFilter'] = ('scope' in dashboard and dashboard['scope'] != scope) or \
-                                                ('scope' not in dashboard and scope is not None)
+        panel_configuration["overrideFilter"] = (
+            "scope" in dashboard and dashboard["scope"] != scope
+        ) or ("scope" not in dashboard and scope is not None)
 
         #
         # Configure panel type
         #
-        if panel_type == 'timeSeries':
-            panel_configuration['showAs'] = 'timeSeries'
-            panel_configuration['showAsType'] = 'line'
+        if panel_type == "timeSeries":
+            panel_configuration["showAs"] = "timeSeries"
+            panel_configuration["showAsType"] = "line"
 
             if limit is not None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
-                }
+                panel_configuration["paging"] = {"from": 0, "to": limit - 1}
 
-        elif panel_type == 'number':
-            panel_configuration['showAs'] = 'summary'
-            panel_configuration['showAsType'] = 'summary'
-        elif panel_type == 'top':
-            panel_configuration['showAs'] = 'top'
-            panel_configuration['showAsType'] = 'bars'
+        elif panel_type == "number":
+            panel_configuration["showAs"] = "summary"
+            panel_configuration["showAsType"] = "summary"
+        elif panel_type == "top":
+            panel_configuration["showAs"] = "top"
+            panel_configuration["showAsType"] = "bars"
 
             if sort_by is None:
-                panel_configuration['sorting'] = [{
-                    'id': 'v0',
-                    'mode': 'desc'
-                }]
+                panel_configuration["sorting"] = [{"id": "v0", "mode": "desc"}]
             else:
-                panel_configuration['sorting'] = [{
-                    'id': property_names[sort_by['metric']],
-                    'mode': sort_by['mode']
-                }]
+                panel_configuration["sorting"] = [
+                    {"id": property_names[sort_by["metric"]], "mode": sort_by["mode"]}
+                ]
 
             if limit is None:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': 10
-                }
+                panel_configuration["paging"] = {"from": 0, "to": 10}
             else:
-                panel_configuration['paging'] = {
-                    'from': 0,
-                    'to': limit - 1
-                }
+                panel_configuration["paging"] = {"from": 0, "to": limit - 1}
 
         #
         # Configure layout
         #
         if layout is not None:
-            panel_configuration['gridConfiguration'] = layout
+            panel_configuration["gridConfiguration"] = layout
 
         #
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
+        dashboard_configuration["id"] = None
 
         #
         # ... and add the new panel
         #
-        dashboard_configuration['items'].append(panel_configuration)
+        dashboard_configuration["items"].append(panel_configuration)
 
         #
         # Update dashboard
         #
-        res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']), headers=self.hdrs,
-                            data=json.dumps({'dashboard': dashboard_configuration}),
-                            verify=self.ssl_verify)
+        res = self.http.put(
+            self.url + self._dashboards_api_endpoint + "/" + str(dashboard["id"]),
+            headers=self.hdrs,
+            data=json.dumps({"dashboard": dashboard_configuration}),
+            verify=self.ssl_verify,
+        )
         return self._request_result(res)
 
     def remove_dashboard_panel(self, dashboard, panel_name):
-        '''**Description**
+        """**Description**
             Removes a panel from the dashboard. The panel to remove is identified by the specified ``name``.
 
         **Arguments**
@@ -264,41 +284,44 @@ class SdMonitorClientV1(SdMonitorClient):
 
         **Example**
             `examples/dashboard.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard.py>`_
-        '''
+        """
         #
         # Clone existing dashboard...
         #
         dashboard_configuration = copy.deepcopy(dashboard)
-        dashboard_configuration['id'] = None
+        dashboard_configuration["id"] = None
 
         #
         # ... find the panel
         #
         def filter_fn(panel):
-            return panel['name'] == panel_name
+            return panel["name"] == panel_name
 
-        panels = list(filter(filter_fn, dashboard_configuration['items']))
+        panels = list(filter(filter_fn, dashboard_configuration["items"]))
 
         if len(panels) > 0:
             #
             # ... and remove it
             #
             for panel in panels:
-                dashboard_configuration['items'].remove(panel)
+                dashboard_configuration["items"].remove(panel)
 
             #
             # Update dashboard
             #
-            res = self.http.put(self.url + self._dashboards_api_endpoint + '/' + str(dashboard['id']),
-                                headers=self.hdrs, data=json.dumps({'dashboard': dashboard_configuration}),
-                                verify=self.ssl_verify)
+            res = self.http.put(
+                self.url + self._dashboards_api_endpoint + "/" + str(dashboard["id"]),
+                headers=self.hdrs,
+                data=json.dumps({"dashboard": dashboard_configuration}),
+                verify=self.ssl_verify,
+            )
             return self._request_result(res)
         else:
-            return [False, 'Not found']
+            return [False, "Not found"]
 
     def _get_dashboard_converters(self):
-        '''**Description**
-            Internal function to return dashboard converters from one version to another one.
-        '''
+        """**Description**
+        Internal function to return dashboard converters from one version to another one.
+        """
         # There's not really a previous version...
         return {}

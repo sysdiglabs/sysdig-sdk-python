@@ -24,7 +24,7 @@ def print_prometheus_results_as_table(results):
 
     for series in results:
         metric = series.get("metric", {})
-        label = ','.join(f'{k}={v}' for k, v in sorted(metric.items()))
+        label = ",".join(f"{k}={v}" for k, v in sorted(metric.items()))
         label_keys.append(label)
         time_series_by_label[label] = {}
 
@@ -54,8 +54,8 @@ def print_prometheus_results_as_table(results):
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <hostname>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -67,11 +67,11 @@ sdclient = SdcClient(sdc_token, hostname)
 # A PromQL query to execute. In this example, we are querying for the total CPU usage
 # of all containers in all pods in the last 10 minutes.
 #
-query = '''
+query = """
 sum (
   avg_over_time(kube_pod_container_resource_requests{resource="cpu"}[10m])
 )
-'''
+"""
 
 #
 # Time window:
@@ -137,7 +137,6 @@ if ok:
     #     "status": "success"
     # }
     #
-
 
     #
     # Print summary (what, when)

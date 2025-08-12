@@ -10,16 +10,30 @@ class ActivityAuditDataSource:
     FILE = "fileaccess"
 
 
-_seconds_to_nanoseconds = 10 ** 9
+_seconds_to_nanoseconds = 10**9
 
 
 class ActivityAuditClientV1(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
-        super(ActivityAuditClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(
+        self,
+        token="",
+        sdc_url="https://secure.sysdig.com",
+        ssl_verify=True,
+        custom_headers=None,
+    ):
+        super(ActivityAuditClientV1, self).__init__(
+            token, sdc_url, ssl_verify, custom_headers
+        )
         self.product = "SDS"
 
-    def list_events(self, from_date=None, to_date=None, scope_filter=None, limit=0,
-                    data_sources=None):
+    def list_events(
+        self,
+        from_date=None,
+        to_date=None,
+        scope_filter=None,
+        limit=0,
+        data_sources=None,
+    ):
         """
         List the events in the Activity Audit.
 
@@ -56,7 +70,7 @@ class ActivityAuditClientV1(_SdcCommon):
         filters = scope_filter if scope_filter else []
         if data_sources:
             quoted_data_sources = [f'"{data_source}"' for data_source in data_sources]
-            data_source_filter = f'type in ({",".join(quoted_data_sources)})'
+            data_source_filter = f"type in ({','.join(quoted_data_sources)})"
             filters.append(data_source_filter)
 
         query_params = {
@@ -66,8 +80,12 @@ class ActivityAuditClientV1(_SdcCommon):
             "filter": " and ".join(filters),
         }
 
-        res = self.http.get(self.url + '/api/v1/activityAudit/events', headers=self.hdrs, verify=self.ssl_verify,
-                            params=query_params)
+        res = self.http.get(
+            self.url + "/api/v1/activityAudit/events",
+            headers=self.hdrs,
+            verify=self.ssl_verify,
+            params=query_params,
+        )
         ok, res = self._request_result(res)
         if not ok:
             return False, res
@@ -75,23 +93,29 @@ class ActivityAuditClientV1(_SdcCommon):
         events = []
 
         # Pagination required by Secure API
-        while "page" in res and \
-                "total" in res["page"] and \
-                res["page"]["total"] > number_of_events_per_query:
+        while (
+            "page" in res
+            and "total" in res["page"]
+            and res["page"]["total"] > number_of_events_per_query
+        ):
             events = events + res["data"]
 
             if 0 < limit < len(events):
-                events = events[0:limit - 1]
+                events = events[0 : limit - 1]
                 break
 
             paginated_query_params = {
                 "limit": number_of_events_per_query,
                 "filter": " and ".join(filters),
-                "cursor": res["page"]["prev"]
+                "cursor": res["page"]["prev"],
             }
 
-            res = self.http.get(self.url + '/api/v1/activityAudit/events', headers=self.hdrs, verify=self.ssl_verify,
-                                params=paginated_query_params)
+            res = self.http.get(
+                self.url + "/api/v1/activityAudit/events",
+                headers=self.hdrs,
+                verify=self.ssl_verify,
+                params=paginated_query_params,
+            )
             ok, res = self._request_result(res)
             if not ok:
                 return False, res
@@ -129,8 +153,10 @@ class ActivityAuditClientV1(_SdcCommon):
         if not traceable_event or not traceable_event["traceable"]:
             return False, "a traceable event must be provided"
 
-        endpoint = f'/api/v1/activityAudit/events/{traceable_event["type"]}/{traceable_event["id"]}/trace'
-        res = self.http.get(self.url + endpoint, headers=self.hdrs, verify=self.ssl_verify)
+        endpoint = f"/api/v1/activityAudit/events/{traceable_event['type']}/{traceable_event['id']}/trace"
+        res = self.http.get(
+            self.url + endpoint, headers=self.hdrs, verify=self.ssl_verify
+        )
         ok, res = self._request_result(res)
         if not ok:
             return False, res

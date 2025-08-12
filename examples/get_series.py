@@ -17,7 +17,10 @@ def render_json_as_table(results):
     keys = list(results[0].keys())
 
     # Calculate the maximum width for each column
-    column_widths = {key: max(len(key), max(len(str(row.get(key, ""))) for row in results)) for key in keys}
+    column_widths = {
+        key: max(len(key), max(len(str(row.get(key, ""))) for row in results))
+        for key in keys
+    }
 
     # Create a horizontal separator
     separator = "+".join("-" * (column_widths[key] + 2) for key in keys)
@@ -28,18 +31,26 @@ def render_json_as_table(results):
     # Create the rows for each JSON object
     rows = []
     for row in results:
-        rows.append("|".join(f" {str(row.get(key, '')).ljust(column_widths[key])} " for key in keys))
+        rows.append(
+            "|".join(
+                f" {str(row.get(key, '')).ljust(column_widths[key])} " for key in keys
+            )
+        )
 
     # Combine everything into a table
-    print(f"+{separator}+\n|{header}|\n+{separator}+\n" + "\n".join(f"|{row}|" for row in rows) + f"\n+{separator}+")
+    print(
+        f"+{separator}+\n|{header}|\n+{separator}+\n"
+        + "\n".join(f"|{row}|" for row in rows)
+        + f"\n+{separator}+"
+    )
 
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -50,16 +61,13 @@ sdclient = SdcClient(sdc_token, hostname)
 #
 # Matchers to filter the series. Example: `up` and `process_start_time_seconds{job="prometheus"}`
 #
-match = [
-    'up',
-    'process_start_time_seconds{job="prometheus"}'
-]
+match = ["up", 'process_start_time_seconds{job="prometheus"}']
 
 #
 # Optional time range
 #
 start = None  # Replace with a timestamp if needed
-end = None    # Replace with a timestamp if needed
+end = None  # Replace with a timestamp if needed
 
 #
 # Optional limit

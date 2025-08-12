@@ -9,19 +9,23 @@ from sdcclient import SdMonitorClient
 
 
 def print_events(data):
-    for event in data['events']:
-        event['sev'] = event.get('severity', 'not set')
-        event['description'] = event.get('description', 'not set')
-        print(('id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s'
-               % event))
+    for event in data["events"]:
+        event["sev"] = event.get("severity", "not set")
+        event["description"] = event.get("description", "not set")
+        print(
+            (
+                "id: %(id)s, time: %(timestamp)d, name: %(name)s, description: %(description)s, severity: %(sev)s"
+                % event
+            )
+        )
 
 
 #
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -45,8 +49,8 @@ else:
 #
 # Get the events before other event
 #
-if len(res['events']) > 0:
-    ok, res = sdclient.get_events(pivot=res['events'][-1]["id"])
+if len(res["events"]) > 0:
+    ok, res = sdclient.get_events(pivot=res["events"][-1]["id"])
 else:
     ok, res = True, {"events": []}
 
@@ -70,7 +74,7 @@ else:
 #
 # Get the events that match a status
 #
-ok, res = sdclient.get_events(status=['triggered', 'unacknowledged'])
+ok, res = sdclient.get_events(status=["triggered", "unacknowledged"])
 
 if ok:
     print_events(res)

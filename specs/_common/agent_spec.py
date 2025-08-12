@@ -33,22 +33,18 @@ log:
 def _agent_configuration():
     return {
         "files": [
-            {
-                "filter": "host.mac = \"08:00:27:de:5b:b9\"",
-                "content": _mysql_app_check()
-            },
-            {
-                "filter": "*",
-                "content": _debug_enabled()
-            }
+            {"filter": 'host.mac = "08:00:27:de:5b:b9"', "content": _mysql_app_check()},
+            {"filter": "*", "content": _debug_enabled()},
         ]
     }
 
 
 with description("Agent", "integration-agent") as self:
     with before.all:
-        self.client = SdcClient(sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
-                                token=os.getenv("SDC_MONITOR_TOKEN"))
+        self.client = SdcClient(
+            sdc_url=os.getenv("SDC_MONITOR_URL", "https://app.sysdigcloud.com"),
+            token=os.getenv("SDC_MONITOR_TOKEN"),
+        )
 
     with it("is able to retrieve the agent configuration"):
         ok, res = self.client.get_agents_config()
@@ -60,8 +56,12 @@ with description("Agent", "integration-agent") as self:
         ok, res = self.client.set_agents_config(_agent_configuration())
 
         expect((ok, res)).to(be_successful_api_call)
-        expect(res).to(have_key("files", contain(have_key("content", contain(_mysql_app_check())))))
-        expect(res).to(have_key("files", contain(have_key("content", contain(_debug_enabled())))))
+        expect(res).to(
+            have_key("files", contain(have_key("content", contain(_mysql_app_check()))))
+        )
+        expect(res).to(
+            have_key("files", contain(have_key("content", contain(_debug_enabled()))))
+        )
 
     with it("is able to clean up the agent configuration"):
         ok, res = self.client.clear_agents_config()
@@ -79,13 +79,17 @@ with description("Agent", "integration-agent") as self:
         ok, res = self.client.get_connected_agents()
 
         expect((ok, res)).to(be_successful_api_call)
-        expect(res).to(contain(have_keys(
-            "customer",
-            "machineId",
-            "hostName",
-            connected=True,
-            attributes=have_keys(
-                "hidden",
-                "version",
+        expect(res).to(
+            contain(
+                have_keys(
+                    "customer",
+                    "machineId",
+                    "hostName",
+                    connected=True,
+                    attributes=have_keys(
+                        "hidden",
+                        "version",
+                    ),
+                )
             )
-        )))
+        )

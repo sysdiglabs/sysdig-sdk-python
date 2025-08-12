@@ -14,8 +14,8 @@ from sdcclient import SdcClient
 #
 json_dumpfilename = None
 if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print(('usage: %s <sysdig-token> [json-dumpfile]' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> [json-dumpfile]" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 elif len(sys.argv) == 3:
     json_dumpfilename = sys.argv[2]
@@ -39,8 +39,8 @@ if not ok:
     print(res)
     sys.exit(1)
 
-for alert in res['alerts']:
-    print(('enabled: %s, name: %s' % (str(alert['enabled']), alert['name'])))
+for alert in res["alerts"]:
+    print(("enabled: %s, name: %s" % (str(alert["enabled"]), alert["name"])))
 
 if json_dumpfilename:
     with open(json_dumpfilename, "w") as f:

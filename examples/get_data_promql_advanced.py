@@ -24,7 +24,7 @@ def print_prometheus_results_as_table(results):
 
     for series in results:
         metric = series.get("metric", {})
-        label = ','.join(f'{k}={v}' for k, v in sorted(metric.items()))
+        label = ",".join(f"{k}={v}" for k, v in sorted(metric.items()))
         label_keys.append(label)
         time_series_by_label[label] = {}
 
@@ -54,8 +54,8 @@ def print_prometheus_results_as_table(results):
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <hostname>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <hostname>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -69,7 +69,7 @@ sdclient = SdcClient(sdc_token, hostname)
 # this by comparing the actual CPU usage of each workload to the CPU limits set for them and
 # then ranks the results to show the top 5.
 #
-query = '''
+query = """
 topk (5,
     sum by (kube_cluster_name, kube_namespace_name, kube_workload_name) (
       rate(
@@ -86,7 +86,7 @@ topk (5,
       }
     )
 )
-'''
+"""
 
 #
 # Time window:
@@ -152,7 +152,6 @@ if ok:
     #     "status": "success"
     # }
     #
-
 
     #
     # Print summary (what, when)

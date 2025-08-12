@@ -9,8 +9,10 @@ from specs import be_successful_api_call
 
 with description("Policy Events v1", "integration") as self:
     with before.each:
-        self.client = PolicyEventsClientV1(sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
-                                           token=os.getenv("SDC_SECURE_TOKEN"))
+        self.client = PolicyEventsClientV1(
+            sdc_url=os.getenv("SDC_SECURE_URL", "https://secure.sysdig.com"),
+            token=os.getenv("SDC_SECURE_TOKEN"),
+        )
     with context("when we try to retrieve policy events from the last 7 days"):
         with it("returns the list of all events happened"):
             week_in_seconds = 7 * 24 * 60 * 60
@@ -20,10 +22,25 @@ with description("Policy Events v1", "integration") as self:
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
             expect(res["data"]).to(
-                contain(have_keys("id", "timestamp", "customerId", "source", "name", "description", "cursor")))
+                contain(
+                    have_keys(
+                        "id",
+                        "timestamp",
+                        "customerId",
+                        "source",
+                        "name",
+                        "description",
+                        "cursor",
+                    )
+                )
+            )
 
         with it("returns the list of all events from a range"):
-            to_sec = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+            to_sec = int(
+                (
+                    datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)
+                ).total_seconds()
+            )
             from_sec = to_sec - (7 * 24 * 60 * 60)
 
             ok, res = self.client.get_policy_events_range(from_sec, to_sec)
@@ -31,12 +48,27 @@ with description("Policy Events v1", "integration") as self:
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
             expect(res["data"]).to(
-                contain(have_keys("id", "timestamp", "customerId", "source", "name", "description", "cursor")))
+                contain(
+                    have_keys(
+                        "id",
+                        "timestamp",
+                        "customerId",
+                        "source",
+                        "name",
+                        "description",
+                        "cursor",
+                    )
+                )
+            )
 
-        with it("returns the list of all events from the last 7 days that match a filter"):
+        with it(
+            "returns the list of all events from the last 7 days that match a filter"
+        ):
             week_in_seconds = 7 * 24 * 60 * 60
 
-            ok, res = self.client.get_policy_events_duration(week_in_seconds, filter='severity in ("4","5")')
+            ok, res = self.client.get_policy_events_duration(
+                week_in_seconds, filter='severity in ("4","5")'
+            )
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
@@ -45,7 +77,9 @@ with description("Policy Events v1", "integration") as self:
         with it("returns an empty list if the filter does not match"):
             week_in_seconds = 7 * 24 * 60 * 60
 
-            ok, res = self.client.get_policy_events_duration(week_in_seconds, filter='severity in ("-1")')
+            ok, res = self.client.get_policy_events_duration(
+                week_in_seconds, filter='severity in ("-1")'
+            )
 
             expect((ok, res)).to(be_successful_api_call)
             expect(res).to(have_keys("ctx", "data"))
@@ -88,4 +122,13 @@ with description("Policy Events v1", "integration") as self:
             ok, res = self.client.get_policy_event(event_id)
 
             expect((ok, res)).to(be_successful_api_call)
-            expect(res).to(have_keys("name", "timestamp", "customerId", "originator", "machineId", id=event_id))
+            expect(res).to(
+                have_keys(
+                    "name",
+                    "timestamp",
+                    "customerId",
+                    "originator",
+                    "machineId",
+                    id=event_id,
+                )
+            )

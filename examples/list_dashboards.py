@@ -11,8 +11,8 @@ from sdcclient import SdMonitorClient
 # Parse arguments
 #
 if len(sys.argv) != 2:
-    print(('usage: %s <sysdig-token>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -34,5 +34,10 @@ if not ok:
     print(res)
     sys.exit(1)
 
-for db in res['dashboards']:
-    print(("Name: %s, # Charts: %d" % (db['name'], len(db['widgets'] if 'widgets' in db else []))))
+for db in res["dashboards"]:
+    print(
+        (
+            "Name: %s, # Charts: %d"
+            % (db["name"], len(db["widgets"] if "widgets" in db else []))
+        )
+    )

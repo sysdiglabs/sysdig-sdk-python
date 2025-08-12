@@ -12,8 +12,8 @@ from sdcclient import SdcClient
 # Parse arguments
 #
 if len(sys.argv) != 3:
-    print(('usage: %s <sysdig-token> <file-name>' % sys.argv[0]))
-    print('You can find your token at https://app.sysdigcloud.com/#/settings/user')
+    print(("usage: %s <sysdig-token> <file-name>" % sys.argv[0]))
+    print("You can find your token at https://app.sysdigcloud.com/#/settings/user")
     sys.exit(1)
 
 sdc_token = sys.argv[1]
@@ -34,8 +34,11 @@ sdclient = SdcClient(sdc_token)
 existing_alerts = {}
 ok, res = sdclient.get_alerts()
 if ok:
-    for alert in res['alerts']:
-        existing_alerts[alert['name']] = {'id': alert['id'], 'version': alert['version']}
+    for alert in res["alerts"]:
+        existing_alerts[alert["name"]] = {
+            "id": alert["id"],
+            "version": alert["version"],
+        }
 else:
     print(res)
     sys.exit(1)
@@ -57,27 +60,34 @@ else:
 created_count = 0
 updated_count = 0
 
-with open(alerts_dump_file, 'r') as f:
+with open(alerts_dump_file, "r") as f:
     j = json.load(f)
-    for a in j['alerts']:
-        if 'notificationChannelIds' in a:
-            for channel_id in a['notificationChannelIds']:
+    for a in j["alerts"]:
+        if "notificationChannelIds" in a:
+            for channel_id in a["notificationChannelIds"]:
                 if channel_id not in existing_notification_channel_ids:
-                    print(('Notification Channel ID ' + str(channel_id) + ' referenced in Alert "' + a[
-                        'name'] + '" does not exist.\n  Restoring without this ID.'))
-                    a['notificationChannelIds'].remove(channel_id)
+                    print(
+                        (
+                            "Notification Channel ID "
+                            + str(channel_id)
+                            + ' referenced in Alert "'
+                            + a["name"]
+                            + '" does not exist.\n  Restoring without this ID.'
+                        )
+                    )
+                    a["notificationChannelIds"].remove(channel_id)
 
         # The Create/Update APIs will validate but actually ignore these fields;
         # to avoid problems, don't submit in the API request
-        for timefield in ['createdOn', 'modifiedOn']:
+        for timefield in ["createdOn", "modifiedOn"]:
             del a[timefield]
 
         # NOTE: when exporting alerts that contain deprecated metrics you will
         # need to remove them from the source json
         # (see https://sysdigdocs.atlassian.net/wiki/spaces/Monitor/pages/205684810/Metrics#Metrics-HeuristicandDeprecatedMetrics)
-        if a['name'] in existing_alerts:
-            a['id'] = existing_alerts[a['name']]['id']
-            a['version'] = existing_alerts[a['name']]['version']
+        if a["name"] in existing_alerts:
+            a["id"] = existing_alerts[a["name"]]["id"]
+            a["version"] = existing_alerts[a["name"]]["version"]
             ok, res = sdclient.update_alert(a)
             updated_count += 1
         else:
@@ -87,5 +97,7 @@ with open(alerts_dump_file, 'r') as f:
             print(res)
             sys.exit(1)
 
-print(f'All Alerts in {alerts_dump_file} restored successfully '
-      f'({str(created_count)} created, {str(updated_count)} updated)')
+print(
+    f"All Alerts in {alerts_dump_file} restored successfully "
+    f"({str(created_count)} created, {str(updated_count)} updated)"
+)
