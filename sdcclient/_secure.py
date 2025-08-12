@@ -10,8 +10,8 @@ class SdSecureClient(FalcoRulesFilesClientOld,
                      PolicyEventsClientOld,
                      PolicyClientV2,
                      _SdcCommon):
-    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None):
-        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(self, token="", sdc_url='https://secure.sysdig.com', ssl_verify=True, custom_headers=None, proxies=None):
+        super(SdSecureClient, self).__init__(token, sdc_url, ssl_verify, custom_headers, proxies)
 
         self.product = "SDS"
         self._policy_v2 = None

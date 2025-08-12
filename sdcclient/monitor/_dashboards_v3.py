@@ -10,8 +10,8 @@ PANEL_VISUALIZATION_NUMBER = "advancedNumber"
 
 
 class DashboardsClientV3(_SdcCommon):
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
-        super(DashboardsClientV3, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None, proxies=None):
+        super(DashboardsClientV3, self).__init__(token, sdc_url, ssl_verify, custom_headers, proxies)
         self.product = "SDC"
         self._dashboards_api_version = 'v3'
         self._dashboards_api_endpoint = '/api/{}/dashboards'.format(self._dashboards_api_version)

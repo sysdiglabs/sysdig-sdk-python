@@ -7,8 +7,8 @@ from sdcclient.monitor import EventsClientV2, DashboardsClientV3
 
 class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
-    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None):
-        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
+    def __init__(self, token="", sdc_url='https://app.sysdigcloud.com', ssl_verify=True, custom_headers=None, proxies=None):
+        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers, proxies)
         self.product = "SDC"
 
     def get_alerts(self) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
