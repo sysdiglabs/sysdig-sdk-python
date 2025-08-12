@@ -13,9 +13,7 @@ class PolicyEventsClientOld(_SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(PolicyEventsClientOld, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(PolicyEventsClientOld, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
     def _get_policy_events_int(self, ctx):
@@ -33,25 +31,15 @@ class PolicyEventsClientOld(_SdcCommon):
                 to=int(ctx["to"]),
                 offset=ctx["offset"],
                 limit=ctx["limit"],
-                sampling="&sampling=%d" % int(ctx["sampling"])
-                if "sampling" in ctx
-                else "",
-                aggregations="&aggregations=%s" % json.dumps(ctx["aggregations"])
-                if "aggregations" in ctx
-                else "",
-                scope="&scopeFilter=%s" % ctx["scopeFilter"]
-                if "scopeFilter" in ctx
-                else "",
-                filter="&eventFilter=%s" % ctx["eventFilter"]
-                if "eventFilter" in ctx
-                else "",
+                sampling="&sampling=%d" % int(ctx["sampling"]) if "sampling" in ctx else "",
+                aggregations="&aggregations=%s" % json.dumps(ctx["aggregations"]) if "aggregations" in ctx else "",
+                scope="&scopeFilter=%s" % ctx["scopeFilter"] if "scopeFilter" in ctx else "",
+                filter="&eventFilter=%s" % ctx["eventFilter"] if "eventFilter" in ctx else "",
             )
         )
 
-        res = self.http.get(
-            policy_events_url, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         # Increment the offset by limit

@@ -11,9 +11,7 @@ class ScanningAlertsClientV1(_SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(ScanningAlertsClientV1, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(ScanningAlertsClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
     class RepositoryAlertTrigger:
@@ -79,9 +77,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             >>> alert_id = res["alertId"]
         """
         if not triggers:
-            triggers = [
-                ScanningAlertsClientV1.RepositoryAlertTrigger.new_image_analyzed
-            ]
+            triggers = [ScanningAlertsClientV1.RepositoryAlertTrigger.new_image_analyzed]
 
         alert = {
             "name": name,
@@ -116,7 +112,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             data=json.dumps(alert),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -201,7 +197,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             data=json.dumps(alert),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -292,7 +288,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             data=json.dumps(alert),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -367,7 +363,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             data=json.dumps(alert),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -396,7 +392,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
@@ -431,7 +427,7 @@ class ScanningAlertsClientV1(_SdcCommon):
                 url += "&cursor=" + cursor
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -456,7 +452,7 @@ class ScanningAlertsClientV1(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.text]
 
@@ -491,7 +487,7 @@ class ScanningAlertsClientV1(_SdcCommon):
         url = self.url + "/api/scanning/v1/alerts"
         data = json.dumps(object)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]

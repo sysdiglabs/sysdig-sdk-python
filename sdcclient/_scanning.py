@@ -26,14 +26,10 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(SdScanningClient, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(SdScanningClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
-    def add_image(
-        self, image, force=False, dockerfile=None, annotations={}, autosubscribe=True
-    ):
+    def add_image(self, image, force=False, dockerfile=None, annotations={}, autosubscribe=True):
         """**Description**
             Add an image to the scanner
 
@@ -52,9 +48,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         payload = {}
         if dockerfile:
-            payload["dockerfile"] = base64.b64encode(dockerfile.encode()).decode(
-                "utf-8"
-            )
+            payload["dockerfile"] = base64.b64encode(dockerfile.encode()).decode("utf-8")
         payload["tag"] = image
         if annotations:
             payload["annotations"] = annotations
@@ -65,10 +59,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             force="&force=true" if force else "",
         )
 
-        res = self.http.post(
-            url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.post(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -88,9 +80,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             return [False, "cannot use input image string: no discovered imageDigest"]
 
         params = {}
-        params["history"] = str(
-            show_history and itype not in ["imageid", "imageDigest"]
-        ).lower()
+        params["history"] = str(show_history and itype not in ["imageid", "imageDigest"]).lower()
         if itype == "tag":
             params["fulltag"] = image
 
@@ -100,10 +90,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "imageDigest": "/{}".format(image),
         }.get(itype, "")
 
-        res = self.http.get(
-            url, params=params, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -120,7 +108,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         """
         url = self.url + "/api/scanning/v1/anchore/images"
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -133,7 +121,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         """
         url = self.url + "/api/scanning/v1/anchore/summaries/imagetags"
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -160,7 +148,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         )
         url = self.url + "/api/scanning/v1/whitelists/global?bundle=default"
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -203,9 +191,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         **Success Return Value**
             A JSON object representing the image metadata.
         """
-        return self._query_image(
-            image, query_group="metadata", query_type=metadata_type
-        )
+        return self._query_image(image, query_group="metadata", query_type=metadata_type)
 
     def query_image_vuln(self, image, vuln_type="", vendor_only=True):
         """**Description**
@@ -219,9 +205,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         **Success Return Value**
             A JSON object representing the image vulnerabilities.
         """
-        return self._query_image(
-            image, query_group="vuln", query_type=vuln_type, vendor_only=vendor_only
-        )
+        return self._query_image(image, query_group="vuln", query_type=vuln_type, vendor_only=vendor_only)
 
     def query_images_by_vulnerability(
         self,
@@ -254,7 +238,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -275,13 +259,11 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             base_url=self.url,
             name=name,
             version="&version={}".format(version) if version else "",
-            package_type="&package_type={}".format(package_type)
-            if package_type
-            else "",
+            package_type="&package_type={}".format(package_type) if package_type else "",
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -299,13 +281,11 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             image_digest=image_digest,
             query_group=query_group,
             query_type=query_type if query_type else "",
-            vendor_only="?vendor_only={}".format(vendor_only)
-            if query_group == "vuln"
-            else "",
+            vendor_only="?vendor_only={}".format(vendor_only) if query_group == "vuln" else "",
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -323,14 +303,12 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         url = self.url + "/api/scanning/v1/anchore/images/" + image_digest
         res = self.http.delete(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
-    def check_image_evaluation(
-        self, image, show_history=False, detail=False, tag=None, policy=None
-    ):
+    def check_image_evaluation(self, image, show_history=False, detail=False, tag=None, policy=None):
         """**Description**
             Check the latest policy evaluation for an image
 
@@ -363,7 +341,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -396,7 +374,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.content]
@@ -412,14 +390,12 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         **Success Return Value**
             The pdf content
         """
-        url = (
-            "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}".format(
-                base_url=self.url, image_digest=image_digest, tag=full_tag
-            )
+        url = "{base_url}/api/scanning/v1/images/{image_digest}/report?tag={tag}".format(
+            base_url=self.url, image_digest=image_digest, tag=full_tag
         )
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.content]
@@ -437,9 +413,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         """
         try:
-            m = MultipartEncoder(
-                fields={"archive_file": (infile, open(infile, "rb"), "text/plain")}
-            )
+            m = MultipartEncoder(fields={"archive_file": (infile, open(infile, "rb"), "text/plain")})
             if sync:
                 url = self.url + "/api/scanning/v1/anchore/import/images"
             else:
@@ -453,7 +427,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
                 "imageName": image_name,
             }
             res = self.http.post(url, data=m, headers=headers, verify=self.ssl_verify)
-            if not self._checkResponse(res):
+            if not self._check_response(res):
                 return [False, self.lasterr]
 
             return [True, res.json() if sync else res.content]
@@ -473,7 +447,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         """
         url = self.url + "/api/scanning/v1/account"
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -497,7 +471,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             detail=detail,
         )
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -529,8 +503,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         if registry_type and registry_type not in registry_types:
             return [
                 False,
-                "input registry type not supported (supported registry_types: "
-                + str(registry_types),
+                "input registry type not supported (supported registry_types: " + str(registry_types),
             ]
         if self._registry_string_is_valid(registry):
             return [
@@ -548,16 +521,10 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "registry_type": registry_type,
             "registry_verify": not insecure,
         }
-        url = (
-            "{base_url}/api/scanning/v1/anchore/registries?validate={validate}".format(
-                base_url=self.url, validate=validate
-            )
-        )
+        url = "{base_url}/api/scanning/v1/anchore/registries?validate={validate}".format(base_url=self.url, validate=validate)
 
-        res = self.http.post(
-            url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.post(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -602,10 +569,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             base_url=self.url, registry=registry, validate=validate
         )
 
-        res = self.http.put(
-            url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.put(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -626,7 +591,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         url = self.url + "/api/scanning/v1/anchore/registries/" + registry
         res = self.http.delete(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -643,7 +608,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         """
         url = self.url + "/api/scanning/v1/anchore/registries"
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -666,7 +631,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         url = self.url + "/api/scanning/v1/anchore/registries/" + registry
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -699,7 +664,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         )
 
         res = self.http.post(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -775,17 +740,15 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + "/api/scanning/v1/policies"
         data = json.dumps(policy)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
 
     def list_policy_bundles(self, detail=False):
-        url = "{base_url}/api/scanning/v1/anchore/policies?detail={detail}".format(
-            base_url=self.url, detail=str(detail)
-        )
+        url = "{base_url}/api/scanning/v1/anchore/policies?detail={detail}".format(base_url=self.url, detail=str(detail))
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -805,7 +768,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             url += "?bundleId=" + bundleid
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -845,7 +808,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + "/api/scanning/v1/policies/" + policyid
         data = json.dumps(policy_description)
         res = self.http.put(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -863,7 +826,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             url += "?bundleId=" + bundleid
 
         res = self.http.delete(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.text]
@@ -911,7 +874,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + "/api/scanning/v1/alerts"
         data = json.dumps(alert)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -936,7 +899,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + "/api/scanning/v1/alerts/" + alertid
         data = json.dumps(alert_description)
         res = self.http.put(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -961,7 +924,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             if subscription_type:
                 url += "subscription_type={}".format(subscription_type)
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1012,7 +975,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             return [False, err]
 
         res = self.http.delete(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1028,10 +991,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "subscription_key": subscription_key,
             "subscription_type": subscription_type,
         }
-        res = self.http.put(
-            url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.put(url, data=json.dumps(payload), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1061,9 +1022,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         """
         return self.get_subscriptions()
 
-    def list_runtime(
-        self, scope="", skip_policy_evaluation=True, start_time=None, end_time=None
-    ):
+    def list_runtime(self, scope="", skip_policy_evaluation=True, start_time=None, end_time=None):
         """**Description**
             List runtime containers
 
@@ -1086,7 +1045,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + "/api/scanning/v1/query/containers"
         data = json.dumps(containers)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1141,10 +1100,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "id": id,
         }
 
-        res = self.http.get(
-            url, params=params, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         json_res = res.json()
@@ -1166,7 +1123,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         data = json.dumps(params)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1175,7 +1132,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         url = self.url + f"/api/scanning/v1/vulnexceptions/{id}"
 
         res = self.http.delete(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, None]
@@ -1187,10 +1144,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "bundleId": "default",
         }
 
-        res = self.http.get(
-            url, params=params, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()]
@@ -1202,10 +1157,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "bundleId": "default",
         }
 
-        res = self.http.get(
-            url, params=params, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         res_json = res.json()
@@ -1226,7 +1179,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
 
         data = json.dumps(params)
         res = self.http.post(url, headers=self.hdrs, data=data, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         res_json = res.json()
@@ -1240,17 +1193,13 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "bundleId": "default",
         }
 
-        res = self.http.delete(
-            url, params=params, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.delete(url, params=params, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, None]
 
-    def update_vulnerability_exception(
-        self, bundle, id, cve, enabled, note, expiration_date
-    ):
+    def update_vulnerability_exception(self, bundle, id, cve, enabled, note, expiration_date):
         url = f"{self.url}/api/scanning/v1/vulnexceptions/{bundle}/vulnerabilities/{id}"
 
         data = {
@@ -1272,7 +1221,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         res_json = res.json()
@@ -1305,10 +1254,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "limit": 100000,
         }
 
-        res = self.http.post(
-            url, data=json.dumps(params), headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.post(url, data=json.dumps(params), headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.content.decode("utf-8")]
@@ -1335,8 +1282,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         except RetryError:
             return [
                 False,
-                "could not retrieve image digest for the given image name, "
-                "ensure that the image has been scanned",
+                "could not retrieve image digest for the given image name, ensure that the image has been scanned",
             ]
 
         url = f"{self.url}/api/scanning/v1/images/{image_digest}/policyEvaluation"
@@ -1344,10 +1290,8 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
             "tag": image_tag,
         }
 
-        res = self.http.get(
-            url, headers=self.hdrs, params=params, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(url, headers=self.hdrs, params=params, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         json_res = res.json()
@@ -1367,11 +1311,7 @@ class SdScanningClient(ScanningAlertsClientV1, _SdcCommon):
         }
 
         if policy_id:
-            policy_results = [
-                result
-                for result in json_res["results"]
-                if result["policyId"] == policy_id
-            ]
+            policy_results = [result for result in json_res["results"] if result["policyId"] == policy_id]
             if policy_results:
                 filtered_result_by_policy_id = policy_results[0]
                 result["policy_id"] = filtered_result_by_policy_id["policyId"]

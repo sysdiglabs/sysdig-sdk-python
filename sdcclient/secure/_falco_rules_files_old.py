@@ -15,9 +15,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(FalcoRulesFilesClientOld, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(FalcoRulesFilesClientOld, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
     # TODO: Remove this one, deprecated
@@ -27,7 +25,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data]
@@ -66,11 +64,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
         if not ok:
             return [False, res]
 
-        local_rules_file = [
-            file
-            for file in res["customFalcoRulesFiles"]["files"]
-            if file["name"] == "falco_rules_local.yaml"
-        ]
+        local_rules_file = [file for file in res["customFalcoRulesFiles"]["files"] if file["name"] == "falco_rules_local.yaml"]
         if len(local_rules_file) == 0:
             return [False, "Expected falco_rules_local.yaml file, but no file found"]
 
@@ -83,7 +77,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             verify=self.ssl_verify,
         )
 
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, (res.json())]
@@ -103,7 +97,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             data=json.dumps(payload[1]),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
@@ -142,11 +136,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
         if not ok:
             return res
 
-        local_rules_file = [
-            file
-            for file in res["customFalcoRulesFiles"]["files"]
-            if file["name"] == "falco_rules_local.yaml"
-        ]
+        local_rules_file = [file for file in res["customFalcoRulesFiles"]["files"] if file["name"] == "falco_rules_local.yaml"]
         if len(local_rules_file) == 0:
             return [False, "Expected falco_rules_local.yaml file, but no file found"]
 
@@ -159,7 +149,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             verify=self.ssl_verify,
         )
 
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         res_json = res.json()
         return [
@@ -179,7 +169,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
 
@@ -293,9 +283,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             except Exception as e:
                 return [
                     False,
-                    "Could not remove existing save dir {}: {}".format(
-                        save_dir, str(e)
-                    ),
+                    "Could not remove existing save dir {}: {}".format(save_dir, str(e)),
                 ]
 
         prefix = os.path.join(save_dir, fsobj["tag"])
@@ -319,22 +307,16 @@ class FalcoRulesFilesClientOld(_SdcCommon):
                 except Exception as e:
                     return [
                         False,
-                        "Could not create file directory {}: {}".format(
-                            fprefix, str(e)
-                        ),
+                        "Could not create file directory {}: {}".format(fprefix, str(e)),
                     ]
                 for variant in fobj["variants"]:
-                    vprefix = os.path.join(
-                        fprefix, str(variant["requiredEngineVersion"])
-                    )
+                    vprefix = os.path.join(fprefix, str(variant["requiredEngineVersion"]))
                     try:
                         os.makedirs(vprefix)
                     except Exception as e:
                         return [
                             False,
-                            "Could not create variant directory {}: {}".format(
-                                vprefix, str(e)
-                            ),
+                            "Could not create variant directory {}: {}".format(vprefix, str(e)),
                         ]
                     cpath = os.path.join(vprefix, "content")
                     try:
@@ -368,7 +350,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
             data=json.dumps(payload[1]),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
@@ -454,9 +436,7 @@ class FalcoRulesFilesClientOld(_SdcCommon):
                             if int(os.path.basename(vpath)) < 0:
                                 return [
                                     False,
-                                    "Variant directory {} must be a positive number".format(
-                                        vpath
-                                    ),
+                                    "Variant directory {} must be a positive number".format(vpath),
                                 ]
                             fobj["variants"].append(
                                 {

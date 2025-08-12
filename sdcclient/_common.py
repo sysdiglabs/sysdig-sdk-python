@@ -73,10 +73,8 @@ class _SdcCommon(object):
             headers.update(custom_headers)
         return headers
 
-    def _checkResponse(self, res):
-        if (
-            res.status_code >= 300
-        ):  # FIXME: Should it be >=400? 301 = Moved Permanently, 302 = Found, 303 = See Other
+    def _check_response(self, res):
+        if res.status_code >= 300:  # FIXME: Should it be >=400? 301 = Moved Permanently, 302 = Found, 303 = See Other
             errorcode = res.status_code
             self.lasterr = None
 
@@ -118,9 +116,7 @@ class _SdcCommon(object):
         **Example**
             `examples/print_user_info.py <https://github.com/draios/python-sdc-client/blob/master/examples/print_user_info.py>`_
         """
-        res = self.http.get(
-            self.url + "/api/user/me", headers=self.hdrs, verify=self.ssl_verify
-        )
+        res = self.http.get(self.url + "/api/user/me", headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_user_token(self):
@@ -130,10 +126,8 @@ class _SdcCommon(object):
         **Success Return Value**
             A string containing the user token.
         """
-        res = self.http.get(
-            self.url + "/api/token", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/token", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         tkinfo = res.json()
 
@@ -151,7 +145,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data["agents"]]
@@ -168,7 +162,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data["total"]]
@@ -211,7 +205,7 @@ class _SdcCommon(object):
             verify=self.ssl_verify,
         )
 
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         ids = []
@@ -246,10 +240,7 @@ class _SdcCommon(object):
                                 ids.append(ch["id"])
                     elif c["type"] == "PAGER_DUTY":
                         opt = ch["options"]
-                        if (
-                            opt["account"] == c["account"]
-                            and opt["serviceName"] == c["serviceName"]
-                        ):
+                        if opt["account"] == c["account"] and opt["serviceName"] == c["serviceName"]:
                             found = True
                             ids.append(ch["id"])
                     elif c["type"] == "SLACK":
@@ -316,7 +307,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, res.json()["notificationChannel"]
@@ -342,7 +333,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
         return True, None
 
@@ -579,15 +570,11 @@ class _SdcCommon(object):
         if "id" not in capture:
             return [False, "Invalid capture format"]
 
-        url = "{url}/api/sysdig/{id}?source={source}".format(
-            url=self.url, id=capture["id"], source=self.product
-        )
+        url = "{url}/api/sysdig/{id}?source={source}".format(url=self.url, id=capture["id"], source=self.product)
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def create_sysdig_capture(
-        self, hostname, capture_name, duration, capture_filter="", folder="/"
-    ):
+    def create_sysdig_capture(self, hostname, capture_name, duration, capture_filter="", folder="/"):
         """**Description**
             Create a new sysdig capture. The capture will be immediately started.
 
@@ -646,11 +633,9 @@ class _SdcCommon(object):
         **Success Return Value**
             The bytes of the scap
         """
-        url = "{url}/api/sysdig/{id}/download?_product={product}".format(
-            url=self.url, id=capture_id, product=self.product
-        )
+        url = "{url}/api/sysdig/{id}/download?_product={product}".format(url=self.url, id=capture_id, product=self.product)
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, res.content
@@ -671,7 +656,7 @@ class _SdcCommon(object):
             verify=self.ssl_verify,
         )
 
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, None
@@ -709,9 +694,7 @@ class _SdcCommon(object):
         )
         return self._request_result(res)
 
-    def create_user_invite(
-        self, user_email, first_name=None, last_name=None, system_role=None
-    ):
+    def create_user_invite(self, user_email, first_name=None, last_name=None, system_role=None):
         """**Description**
             Invites a new user to use Sysdig Monitor. This should result in an email notification to the specified address.
 
@@ -730,10 +713,8 @@ class _SdcCommon(object):
 
         """
         # Look up the list of users to see if this exists, do not create if one exists
-        res = self.http.get(
-            self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         for user in data["users"]:
@@ -776,15 +757,13 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, None]
 
     def get_user(self, user_email):
-        res = self.http.get(
-            self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         for u in res.json()["users"]:
             if u["username"] == user_email:
@@ -798,10 +777,8 @@ class _SdcCommon(object):
         **Success Return Value**
             A list user objects
         """
-        res = self.http.get(
-            self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.json()["users"]]
 
@@ -818,16 +795,12 @@ class _SdcCommon(object):
         }
 
         if firstName is None:
-            reqbody["firstName"] = (
-                user["firstName"] if "firstName" in list(user.keys()) else ""
-            )
+            reqbody["firstName"] = user["firstName"] if "firstName" in list(user.keys()) else ""
         else:
             reqbody["firstName"] = firstName
 
         if lastName is None:
-            reqbody["lastName"] = (
-                user["lastName"] if "lastName" in list(user.keys()) else ""
-            )
+            reqbody["lastName"] = user["lastName"] if "lastName" in list(user.keys()) else ""
         else:
             reqbody["lastName"] = lastName
 
@@ -837,7 +810,7 @@ class _SdcCommon(object):
             data=json.dumps(reqbody),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, "Successfully edited user"]
 
@@ -859,7 +832,7 @@ class _SdcCommon(object):
             url = f"{url}?product={product_filter}"
 
         res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         ret = [t for t in res.json()["teams"] if team_filter in t["name"]]
 
@@ -883,7 +856,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, res.json()["team"]]
@@ -906,7 +879,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         light_team = res.json()["team"]
@@ -919,28 +892,22 @@ class _SdcCommon(object):
         return [True, team_with_memberships]
 
     def get_team_ids(self, teams):
-        res = self.http.get(
-            self.url + "/api/teams", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/teams", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         u = [x for x in res.json()["teams"] if x["name"] in teams]
         return [True, [x["id"] for x in u]]
 
     def _get_user_id_dict(self, users):
-        res = self.http.get(
-            self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         u = [x for x in res.json()["users"] if x["username"] in users]
         return [True, dict((user["username"], user["id"]) for user in u)]
 
     def _get_id_user_dict(self, user_ids):
-        res = self.http.get(
-            self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/users", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         u = [x for x in res.json()["users"] if x["id"] in user_ids]
         return [True, dict((user["id"], user["username"]) for user in u)]
@@ -1003,10 +970,7 @@ class _SdcCommon(object):
             ok, res = self._get_user_id_dict(list(memberships.keys()))
             if not ok:
                 return [False, "Could not fetch IDs for user names"]
-            reqbody["userRoles"] = [
-                {"userId": user_id, "role": memberships[user_name]}
-                for (user_name, user_id) in res.items()
-            ]
+            reqbody["userRoles"] = [{"userId": user_id, "role": memberships[user_name]} for (user_name, user_id) in res.items()]
         else:
             reqbody["users"] = []
 
@@ -1064,15 +1028,9 @@ class _SdcCommon(object):
             "name": name,
             "theme": theme if theme else team["theme"],
             "show": show if show else team["show"],
-            "canUseSysdigCapture": perm_capture
-            if perm_capture
-            else team["canUseSysdigCapture"],
-            "canUseCustomEvents": perm_custom_events
-            if perm_custom_events
-            else team["canUseCustomEvents"],
-            "canUseAwsMetrics": perm_aws_data
-            if perm_aws_data
-            else team["canUseAwsMetrics"],
+            "canUseSysdigCapture": perm_capture if perm_capture else team["canUseSysdigCapture"],
+            "canUseCustomEvents": perm_custom_events if perm_custom_events else team["canUseCustomEvents"],
+            "canUseAwsMetrics": perm_aws_data if perm_aws_data else team["canUseAwsMetrics"],
             "canUseRapidResponse": perm_rapid_response,
             "defaultTeamRole": team["defaultTeamRole"],
             "entryPoint": team["entryPoint"],
@@ -1091,10 +1049,7 @@ class _SdcCommon(object):
             ok, res = self._get_user_id_dict(list(memberships.keys()))
             if not res:
                 return [False, "Could not convert user names to IDs"]
-            reqbody["userRoles"] = [
-                {"userId": user_id, "role": memberships[user_name]}
-                for (user_name, user_id) in res.items()
-            ]
+            reqbody["userRoles"] = [{"userId": user_id, "role": memberships[user_name]} for (user_name, user_id) in res.items()]
         elif "userRoles" in list(team.keys()):
             reqbody["userRoles"] = team["userRoles"]
         else:
@@ -1133,7 +1088,7 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, None]
 
@@ -1265,9 +1220,7 @@ class _SdcCommon(object):
         )
         return self._request_result(res)
 
-    def update_access_key(
-        self, access_key, agent_limit=None, agent_reserved=None, team_id=None
-    ):
+    def update_access_key(self, access_key, agent_limit=None, agent_reserved=None, team_id=None):
         """
         **Description**
             Create a new access key for Sysdig Monitor/Secure
@@ -1328,10 +1281,8 @@ class _SdcCommon(object):
         return self._request_result(res)
 
     def get_agents_config(self):
-        res = self.http.get(
-            self.url + "/api/agents/config", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/agents/config", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data]
@@ -1359,13 +1310,13 @@ class _SdcCommon(object):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         data = res.json()
         return [True, data["token"]["key"]]
 
     def _request_result(self, res):
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, res.json()

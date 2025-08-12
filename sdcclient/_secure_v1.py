@@ -43,7 +43,7 @@ class SdSecureClientV1(SdSecureClient):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, "Policies Deleted"]
@@ -58,9 +58,7 @@ class SdSecureClientV1(SdSecureClient):
         **Success Return Value**
             A JSON object containing the number and details of each policy.
         """
-        res = self.http.get(
-            self.url + "/api/policies", headers=self.hdrs, verify=self.ssl_verify
-        )
+        res = self.http.get(self.url + "/api/policies", headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_policy_priorities(self):

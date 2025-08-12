@@ -18,17 +18,11 @@ class DashboardsClientV3(_SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(DashboardsClientV3, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(DashboardsClientV3, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDC"
         self._dashboards_api_version = "v3"
-        self._dashboards_api_endpoint = "/api/{}/dashboards".format(
-            self._dashboards_api_version
-        )
-        self._default_dashboards_api_endpoint = "/api/{}/dashboards/templates".format(
-            self._dashboards_api_version
-        )
+        self._dashboards_api_endpoint = "/api/{}/dashboards".format(self._dashboards_api_version)
+        self._default_dashboards_api_endpoint = "/api/{}/dashboards/templates".format(self._dashboards_api_version)
 
     def get_views_list(self):
         res = self.http.get(
@@ -36,7 +30,7 @@ class DashboardsClientV3(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, res.json()]
 
@@ -139,9 +133,7 @@ class DashboardsClientV3(_SdcCommon):
             def create_item(configuration):
                 return {"dashboard": configuration}
 
-            dashboards = list(
-                map(create_item, list(filter(filter_fn, res[1]["dashboards"])))
-            )
+            dashboards = list(map(create_item, list(filter(filter_fn, res[1]["dashboards"]))))
             return [True, dashboards]
 
     def create_dashboard_with_configuration(self, configuration):
@@ -282,18 +274,12 @@ class DashboardsClientV3(_SdcCommon):
     # TODO COVER
     def remove_dashboard_panel(self, dashboard, panel_id):
         dboard = copy.deepcopy(dashboard)
-        dboard["panels"] = [
-            panel for panel in dboard["panels"] if panel["id"] != panel_id
-        ]
-        dboard["layout"] = [
-            layout for layout in dboard["layout"] if layout["panelId"] != panel_id
-        ]
+        dboard["panels"] = [panel for panel in dboard["panels"] if panel["id"] != panel_id]
+        dboard["layout"] = [layout for layout in dboard["layout"] if layout["panelId"] != panel_id]
 
         return self.update_dashboard(dboard)
 
-    def create_dashboard_from_template(
-        self, dashboard_name, template, scope=None, shared=False, public=False
-    ):
+    def create_dashboard_from_template(self, dashboard_name, template, scope=None, shared=False, public=False):
         if scope is not None:
             if not isinstance(scope, list) and not isinstance(scope, str):
                 return [
@@ -316,13 +302,8 @@ class DashboardsClientV3(_SdcCommon):
 
         # default dashboards don't have eventsOverlaySettings property
         # make sure to add the default set if the template doesn't include it
-        if (
-            "eventsOverlaySettings" not in template
-            or not template["eventsOverlaySettings"]
-        ):
-            template["eventsOverlaySettings"] = {
-                "filterNotificationsUserInputFilter": ""
-            }
+        if "eventsOverlaySettings" not in template or not template["eventsOverlaySettings"]:
+            template["eventsOverlaySettings"] = {"filterNotificationsUserInputFilter": ""}
 
         # set dashboard scope to the specific parameter
         template["scopeExpressionList"] = []
@@ -368,9 +349,7 @@ class DashboardsClientV3(_SdcCommon):
 
         return self._request_result(res)
 
-    def create_dashboard_from_file(
-        self, dashboard_name, filename, filter=None, shared=False, public=False
-    ):
+    def create_dashboard_from_file(self, dashboard_name, filename, filter=None, shared=False, public=False):
         """
         **Description**
             Create a new dasboard using a dashboard template saved to disk. See :func:`~SdcClient.save_dashboard_to_file` to use the file to create a dashboard (usefl to create and restore backups).
@@ -414,9 +393,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(
-            dashboard_name, dashboard, filter, shared, public
-        )
+        return self.create_dashboard_from_template(dashboard_name, dashboard, filter, shared, public)
 
     def get_dashboard(self, dashboard_id):
         """**Description**
@@ -435,9 +412,7 @@ class DashboardsClientV3(_SdcCommon):
         )
         return self._request_result(res)
 
-    def create_dashboard_from_dashboard(
-        self, newdashname, templatename, filter=None, shared=False, public=False
-    ):
+    def create_dashboard_from_dashboard(self, newdashname, templatename, filter=None, shared=False, public=False):
         """**Description**
             Create a new dasboard using one of the existing dashboards as a template. You will be able to define the scope of the new dasboard.
 
@@ -463,7 +438,7 @@ class DashboardsClientV3(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(dashboard):
+        if not self._check_response(dashboard):
             return [False, self.lasterr]
 
         j = dashboard.json()
@@ -479,9 +454,7 @@ class DashboardsClientV3(_SdcCommon):
                 break
 
         if dboard is None:
-            self.lasterr = (
-                "can't find dashboard " + templatename + " to use as a template"
-            )
+            self.lasterr = "can't find dashboard " + templatename + " to use as a template"
             return [False, self.lasterr]
 
         ok, dboard = self.get_dashboard(dboard["id"])
@@ -490,9 +463,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Create the dashboard
         #
-        return self.create_dashboard_from_template(
-            newdashname, dboard["dashboard"], filter, shared, public
-        )
+        return self.create_dashboard_from_template(newdashname, dboard["dashboard"], filter, shared, public)
 
     def favorite_dashboard(self, dashboard_id, favorite):
         data = {"dashboard": {"favorite": favorite}}
@@ -546,9 +517,7 @@ class DashboardsClientV3(_SdcCommon):
 
         return self.update_dashboard(dboard)
 
-    def create_dashboard_from_view(
-        self, newdashname, viewname, filter, shared=False, public=False
-    ):
+    def create_dashboard_from_view(self, newdashname, viewname, filter, shared=False, public=False):
         """**Description**
             Create a new dasboard using one of the Sysdig Monitor views as a template. You will be able to define the scope of the new dashboard.
 
@@ -583,9 +552,7 @@ class DashboardsClientV3(_SdcCommon):
         #
         # Create the new dashboard
         #
-        return self.create_dashboard_from_template(
-            newdashname, view, filter, shared, public
-        )
+        return self.create_dashboard_from_template(newdashname, view, filter, shared, public)
 
     def save_dashboard_to_file(self, dashboard, filename):
         """
@@ -604,9 +571,7 @@ class DashboardsClientV3(_SdcCommon):
             `examples/dashboard_save_load.py <https://github.com/draios/python-sdc-client/blob/master/examples/dashboard_save_load.py>`_
         """
         with open(filename, "w") as outf:
-            json.dump(
-                {"version": self._dashboards_api_version, "dashboard": dashboard}, outf
-            )
+            json.dump({"version": self._dashboards_api_version, "dashboard": dashboard}, outf)
 
     def delete_dashboard(self, dashboard):
         """**Description**
@@ -629,7 +594,7 @@ class DashboardsClientV3(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         return [True, None]

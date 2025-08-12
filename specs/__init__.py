@@ -1,7 +1,7 @@
 from expects.matchers import Matcher
 
 
-class _be_successful_api_call(Matcher):
+class _BeSuccessfulApiCall(Matcher):
     def _match(self, expect):
         ok, result = expect
         if ok:
@@ -9,4 +9,4 @@ class _be_successful_api_call(Matcher):
         return False, [f"the result is {str(result)}"]
 
 
-be_successful_api_call = _be_successful_api_call()
+be_successful_api_call = _BeSuccessfulApiCall()

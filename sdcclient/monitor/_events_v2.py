@@ -65,9 +65,7 @@ class EventsClientV2(_SdcCommon):
         if direction not in ["before", "after"]:
             return (
                 False,
-                "Invalid direction '{}', must be either 'before' or 'after'".format(
-                    direction
-                ),
+                "Invalid direction '{}', must be either 'before' or 'after'".format(direction),
             )
 
         if from_s is not None and isinstance(from_s, datetime):
@@ -150,13 +148,11 @@ class EventsClientV2(_SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return [False, self.lasterr]
         return [True, None]
 
-    def post_event(
-        self, name, description=None, severity=None, event_filter=None, tags=None
-    ):
+    def post_event(self, name, description=None, severity=None, event_filter=None, tags=None):
         """**Description**
             Send an event to Sysdig Monitor. The events you post are available in the Events tab in the Sysdig Monitor UI and can be overlied to charts.
 

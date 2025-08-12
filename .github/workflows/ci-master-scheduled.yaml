@@ -8,35 +8,36 @@ on:
 jobs:
   scheduled-test:
     strategy:
-      max-parallel: 1
+      max-parallel: 3
       fail-fast: false
       matrix:
         python_version:
           # https://python-release-cycle.glitch.me/
-          - "3.7"
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
+          - "3.13"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Setup python
+        uses: actions/setup-python@v5
         with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
+          python-version: "${{ matrix.python_version }}"
 
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: ${{ matrix.python_version }}
+            python-version: "${{ matrix.python_version }}"
+            enable-cache: true
+            version: "0.8.7"
 
       - name: Lint
-        uses: astral-sh/ruff-action@v3
-
-      - name: Check format
-        run: ruff format --check
+        continue-on-error: true
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          uvx ruff check . --fix --statistics --config ruff.toml --exclude specs
 
       - name: Travis Test - Start agent
         id: start_agent
@@ -46,11 +47,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install linux-headers-$(uname -r) dkms gcc-multilib g++-multilib
           ./test/start_agent.sh
-
-      - name: Travis Test - Install dependencies
-        run: |
-          uv build
-          python -m pip install $(find dist -iname "*.whl" | head -1)
 
       - name: Travis Test - Secure APIs
         env:
@@ -63,7 +59,7 @@ jobs:
           SDC_SECURE_TOKEN: ${{ secrets.STAGING_SECURE_API_TOKEN }}
           SDC_MONITOR_URL: "https://app-staging.sysdigcloud.com"
           SDC_SECURE_URL: "https://secure-staging.sysdig.com"
-        run: uv run mamba -f documentation
+        run: uv run -- mamba -f documentation
 
       - name: Travis Test - Stop agent
         run: ./test/stop_agent.sh

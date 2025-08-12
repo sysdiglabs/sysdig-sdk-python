@@ -11,28 +11,21 @@ class PolicyEventsClientV1(_SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(PolicyEventsClientV1, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(PolicyEventsClientV1, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDS"
 
     def _get_policy_events_int(self, ctx):
         limit = ctx.get("limit", 50)
-        policy_events_url = (
-            self.url
-            + "/api/v1/secureEvents?limit={limit}{frm}{to}{filter}{cursor}".format(
-                limit=limit,
-                frm=f"&from={int(ctx['from']):d}" if "from" in ctx else "",
-                to=f"&to={int(ctx['to']):d}" if "to" in ctx else "",
-                filter=f"&filter={ctx['filter']}" if "filter" in ctx else "",
-                cursor=f"&cursor={ctx['cursor']}" if "cursor" in ctx else "",
-            )
+        policy_events_url = self.url + "/api/v1/secureEvents?limit={limit}{frm}{to}{filter}{cursor}".format(
+            limit=limit,
+            frm=f"&from={int(ctx['from']):d}" if "from" in ctx else "",
+            to=f"&to={int(ctx['to']):d}" if "to" in ctx else "",
+            filter=f"&filter={ctx['filter']}" if "filter" in ctx else "",
+            cursor=f"&cursor={ctx['cursor']}" if "cursor" in ctx else "",
         )
 
-        res = self.http.get(
-            policy_events_url, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return [False, self.lasterr]
 
         ctx = {"limit": limit, "cursor": res.json()["page"].get("prev", None)}
@@ -87,11 +80,7 @@ class PolicyEventsClientV1(_SdcCommon):
             `examples/get_secure_policy_events.py <https://github.com/draios/python-sdc-client/blob/master/examples/get_secure_policy_events.py>`_
 
         """
-        to_sec = int(
-            (
-                datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)
-            ).total_seconds()
-        )
+        to_sec = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
         from_sec = to_sec - (int(duration_sec))
 
         return self.get_policy_events_range(from_sec, to_sec, filter)
@@ -145,10 +134,8 @@ class PolicyEventsClientV1(_SdcCommon):
         """
         policy_events_url = f"{self.url}/api/v1/secureEvents/{event_id}"
 
-        res = self.http.get(
-            policy_events_url, headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(policy_events_url, headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, res.json()

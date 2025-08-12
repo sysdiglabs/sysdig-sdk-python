@@ -14,9 +14,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         ssl_verify=True,
         custom_headers=None,
     ):
-        super(SdMonitorClient, self).__init__(
-            token, sdc_url, ssl_verify, custom_headers
-        )
+        super(SdMonitorClient, self).__init__(token, sdc_url, ssl_verify, custom_headers)
         self.product = "SDC"
 
     def get_alerts(self) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
@@ -33,14 +31,10 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             >>> for alert in res['alerts']:
             >>>     print(f'enabled: {str(alert["enabled"])}, name: {alert["name"]}' )
         """
-        res = self.http.get(
-            self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify
-        )
+        res = self.http.get(self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
-    def get_notifications(
-        self, from_ts, to_ts, state=None, resolved=None
-    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+    def get_notifications(self, from_ts, to_ts, state=None, resolved=None) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
         """
         Returns the list of Sysdig Monitor alert notifications.
 
@@ -85,13 +79,11 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             params=params,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
         return True, res.json()
 
-    def update_notification_resolution(
-        self, notification, resolved
-    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+    def update_notification_resolution(self, notification, resolved) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
         """
         Updates the resolution status of an alert notification.
 
@@ -174,10 +166,8 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
         #
         # Get the list of alerts from the server
         #
-        res = self.http.get(
-            self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify
-        )
-        if not self._checkResponse(res):
+        res = self.http.get(self.url + "/api/alerts", headers=self.hdrs, verify=self.ssl_verify)
+        if not self._check_response(res):
             return False, self.lasterr
         res.json()
 
@@ -185,8 +175,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             if None in (name, description, severity, for_atleast_s, condition):
                 return (
                     False,
-                    "Must specify a full Alert object or all parameters: "
-                    "name, description, severity, for_atleast_s, condition",
+                    "Must specify a full Alert object or all parameters: name, description, severity, for_atleast_s, condition",
                 )
             else:
                 #
@@ -207,9 +196,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
                 if segmentby:
                     alert_json["alert"]["segmentBy"] = segmentby
-                    alert_json["alert"]["segmentCondition"] = {
-                        "type": segment_condition
-                    }
+                    alert_json["alert"]["segmentCondition"] = {"type": segment_condition}
 
                 if annotations:
                     alert_json["alert"]["annotations"] = annotations
@@ -287,7 +274,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, None
@@ -309,7 +296,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         data = res.json()
@@ -334,9 +321,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             'corrupted groupConfigurations API response, missing "explore" entry',
         )
 
-    def set_explore_grouping_hierarchy(
-        self, new_hierarchy
-    ) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
+    def set_explore_grouping_hierarchy(self, new_hierarchy) -> Union[Tuple[bool, str], Tuple[bool, Any]]:
         """**Description**
             Changes the grouping hierarchy in the Explore panel of the current user.
 
@@ -354,7 +339,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
             data=json.dumps(body),
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
         else:
             return True, None
@@ -391,9 +376,7 @@ class SdMonitorClient(DashboardsClientV3, EventsClientV2, _SdcCommon):
 
             if matches.group("operator") == "in":
                 list_value = matches.group("value").strip(" ()")
-                value_matches = re.findall(
-                    "(:?'[^',]+')|(:?\"[^\",]+\")|(:?[,]+)", list_value
-                )
+                value_matches = re.findall("(:?'[^',]+')|(:?\"[^\",]+\")|(:?[,]+)", list_value)
 
                 if len(value_matches) == 0:
                     return False, "invalid scope value list format"

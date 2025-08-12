@@ -459,9 +459,7 @@ class SdSecureClient(
         **Success Return Value**
             A JSON list with the representation of each compliance task.
         """
-        res = self.http.get(
-            self.url + "/api/complianceTasks", headers=self.hdrs, verify=self.ssl_verify
-        )
+        res = self.http.get(self.url + "/api/complianceTasks", headers=self.hdrs, verify=self.ssl_verify)
         return self._request_result(res)
 
     def get_compliance_task(self, id):
@@ -481,9 +479,7 @@ class SdSecureClient(
         )
         return self._request_result(res)
 
-    def update_compliance_task(
-        self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None
-    ):
+    def update_compliance_task(self, id, name=None, module_name=None, schedule=None, scope=None, enabled=None):
         """**Description**
             Update an existing compliance task.
 
@@ -531,7 +527,7 @@ class SdSecureClient(
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, None
@@ -591,7 +587,7 @@ class SdSecureClient(
             headers=self.hdrs,
             verify=self.ssl_verify,
         )
-        if not self._checkResponse(res):
+        if not self._check_response(res):
             return False, self.lasterr
 
         return True, res.text
@@ -712,9 +708,7 @@ class SdSecureClient(
         }
         """
 
-        matched_profiles = self.__get_matched_profileIDs(
-            profileId, image_profiles["profiles"]
-        )
+        matched_profiles = self.__get_matched_profile_ids(profileId, image_profiles["profiles"])
 
         # Profile ID not found
         if len(matched_profiles) == 0:
@@ -723,9 +717,7 @@ class SdSecureClient(
         # Principal workflow. Profile ID found
         elif len(matched_profiles) == 1:
             # Matched id. Return information
-            url = "{url}/api/v1/profiling/profiles/{profileId}".format(
-                url=self.url, profileId=matched_profiles[0]["profileId"]
-            )
+            url = "{url}/api/v1/profiling/profiles/{profileId}".format(url=self.url, profileId=matched_profiles[0]["profileId"])
 
             res = self.http.get(url, headers=self.hdrs, verify=self.ssl_verify)
             return self._request_result(res)
@@ -734,7 +726,7 @@ class SdSecureClient(
         elif len(matched_profiles) >= 2:
             return [False, matched_profiles]
 
-    def __get_matched_profileIDs(self, requested_profile, profile_list):
+    def __get_matched_profile_ids(self, requested_profile, profile_list):
         """
         **Description**
             Helper function for  retrieving the list of matching profile
@@ -828,10 +820,7 @@ class SdSecureClient(
             # get the length of the substring to match
             str_len_match = min(len(profile), request_len)
 
-            if (
-                profile["profileId"][0:str_len_match]
-                == requested_profile[0:str_len_match]
-            ):
+            if profile["profileId"][0:str_len_match] == requested_profile[0:str_len_match]:
                 matched_profiles.append(profile)
 
         return matched_profiles

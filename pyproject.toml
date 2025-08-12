@@ -4,7 +4,8 @@ name = "sdcclient"
 dynamic = ["version"] # Will be configured by the tool.hatch.version.source in this file.
 description = "Python client for Sysdig Platform"
 authors = [{ name = "Sysdig Inc.", email = "info@sysdig.com" }]
-requires-python = "~=3.10"
+requires-python = ">=3.10"
+readme = "README.md"
 license = "MIT"
 dependencies = [
     "requests~=2.31",
@@ -29,6 +30,10 @@ dev = [
     "flake8>=3.8.4,<4",
     "coverage~=6.2",
 ]
+
+[tool.uv]
+default-groups = ["dev"]
+
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
