@@ -5,7 +5,7 @@ def convert_scope_string_to_expression(scope=None):
     if scope is None or not scope:
         return [True, []]
 
-    _SCOPE_GRAMMAR = """
+    _SCOPE_GRAMMAR = r"""
         @@grammar::CALC
 
         start = expression $ ;
